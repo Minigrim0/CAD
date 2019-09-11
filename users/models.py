@@ -10,9 +10,8 @@ class Profile(models.Model):
             autant des profils étudiants que des profils coach
     """
 
+    # Both type of account
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-
-    # Both accounts type
     phone_number = models.IntegerField(
         null=True, blank=True, verbose_name="numéro de téléphone", default=0)
     account_type = models.CharField(
@@ -24,11 +23,9 @@ class Profile(models.Model):
     birthDate = models.DateField(
         auto_now=False, auto_now_add=False, default="2019-01-01",
         verbose_name="Date de naissance")
-
     notifications_nb = models.IntegerField(
         null=True, blank=True, default=0,
         verbose_name="Nombre de notifications")
-
     Maths_course = models.BooleanField(
         default=False, verbose_name="Maths")
     Chimie_course = models.BooleanField(
@@ -37,14 +34,14 @@ class Profile(models.Model):
         default=False, verbose_name="Physique")
     Francais_course = models.BooleanField(
         default=False, verbose_name="Francais")
-
     secret_key = models.CharField(
         null=True, blank=True, default="", max_length=20,
         verbose_name="Clé unique pour l'utilisateur")
+    # User has verified his account via mail
     verifiedAccount = models.BooleanField(
         default=False, verbose_name="A vérifié son addresse mail")
-
-    # Current level for student - Course level for coach
+    # Represents school level for student
+    # Represents either if coach give course to humanité or primaire
     school_level = models.CharField(
         null=True, blank=True, default="None", max_length=50,
         verbose_name="Souhaite donner cours en")
@@ -56,21 +53,18 @@ class Profile(models.Model):
     tutor_firstName = models.CharField(
         null=True, blank=True, default="inconnu", max_length=50,
         verbose_name="Prénom du tuteur")
-
     NeedsVisit = models.BooleanField(
         default=False, verbose_name="Désire une visite pédagogique ?")
     comments = models.TextField(
         null=True, blank=True, verbose_name="Commentaires",
         default="Aucun commentaire")
-
-    # . -> sépare les jours, / sépare les valeurs
-    # => 0/0/0 = Pas de cours ce jour là
     wanted_schedule = models.CharField(
         null=True, blank=True, default="",
         verbose_name="Horaire", max_length=42)
-
+    # Amount left for the student to pay courses
     balance = models.IntegerField(
         null=True, blank=True, verbose_name="Solde", default=0)
+    # User as payed the two first hours of course
     confirmed_account = models.BooleanField(
         default=False, verbose_name="A payé ses 2 premières heures de cours")
 
@@ -109,19 +103,35 @@ class Profile(models.Model):
 
 
 class studentRequest(models.Model):
+    """
+        Modèle studentRequest:
+            => Représente une recherche de coach de la part d'un etudiant
+    """
+
+    # represents the user who made the request
     student = models.OneToOneField(User, on_delete=models.CASCADE)
+    # represents the coaches who accepted this request
     coaches = models.ManyToManyField(Profile)
 
 
 class Notification(models.Model):
+    """
+        Modèle Notification:
+            => Représente une notification envoyée à un utilisateur
+    """
+
+    # represents the user whom the notifiaction is for
     user = models.ForeignKey(User)
 
+    # Name of the author of the notification
     author = models.CharField(
         blank=True, null=True,  max_length=50,
         verbose_name="Auteur de la notification")
+    # Title of the notification
     title = models.CharField(
         blank=True, null=True, max_length=50,
         verbose_name="Titre de la notification")
+    # body of the notification (Html)
     content = models.TextField(
         blank=True, null=True, verbose_name="Contenu de la notification")
 
@@ -130,14 +140,22 @@ DEFAULT_ID = 1
 
 
 class FollowElement(models.Model):
+    """
+        Modèle FollowElement:
+            => Représente un élément du suivit de l'élève
+    """
+
+    # students whom this followElement is for
     student = models.ForeignKey(User, blank=True, default=DEFAULT_ID)
+    # Name of the coach who wrote this followElement
     coach = models.CharField(
         null=True, blank=True, max_length=110,
         default="Erreur lors de la recherche du coach")
-
+    # date of the writing of this FollowElement
     date = models.DateTimeField(
         default=utils.timezone.now, blank=True,
         verbose_name="Date et heure du cours")
+    # comments of the coach about the course represented by this FollowElement
     comments = models.TextField(
         null=True, blank=True, default="Pas de commentaires",
         verbose_name="Commentaires du cours")
