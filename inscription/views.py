@@ -122,7 +122,7 @@ def studentRegister(request):
                 newNotif.save()
                 profil.notifications_nb += 1
 
-            profil.setAccountType("student")
+            profil.account_type = "Etudiant"
             profil.phone_number = form["tutorPhoneNumber"]
             profil.address = form["StudentAddress"]
 
@@ -273,7 +273,7 @@ def coachRegister(request):
 
             profil = Profile(user=user)
 
-            profil.setAccountType("coach")
+            profil.account_type = "Coach"
             profil.phone_number = form["coachPhoneNumber"]
             profil.address = form["C_Address"]
 

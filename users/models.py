@@ -4,6 +4,12 @@ from django import utils
 
 
 class Profile(models.Model):
+    """
+        Modèle Profile:
+            => Extension du modèle User, est utilisé pour sauvegarder les infos
+            autant des profils étudiants que des profils coach
+    """
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     # Both accounts type
@@ -90,12 +96,6 @@ class Profile(models.Model):
     nbStudents = models.IntegerField(
         null=True, blank=True, verbose_name="nombre d'étudiants qu'à ce coach",
         default=0)
-
-    def setAccountType(self, type):
-        if type == "student":
-            self.account_type = "Etudiant"
-        elif type == "coach":
-            self.account_type = "Coach"
 
     def __repr__(self):
         string = "Nom : {} ".format(self.user.first_name)
