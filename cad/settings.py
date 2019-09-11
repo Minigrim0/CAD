@@ -74,7 +74,7 @@ TEMPLATES = [
 ]
 
 ADMINS = (
-    ('Minigrimo','florent.grimau@outlook.com'),
+    ('Minigrimo', 'florent.grimau@outlook.com'),
 )
 
 WSGI_APPLICATION = 'cad.wsgi.application'
@@ -104,13 +104,16 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 

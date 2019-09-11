@@ -3,3 +3,4 @@ Articles.backup/*
 */migrations/*
 db.sqlite3
 */__pycache__/*
+cad/assets/test.html
