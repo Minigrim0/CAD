@@ -54,6 +54,14 @@ def connect(request):
         return HttpResponseRedirect('/05/')
 
 
+def create_notif(user, title, content, author):
+    newNotif = Notification(user=user)
+    newNotif.title = title
+    newNotif.content = content
+    newNotif.author = author
+    newNotif.save()
+
+
 def studentRegister(request):
     if request.method == "POST":
         try:
@@ -97,14 +105,13 @@ def studentRegister(request):
                     except Exception:
                         profil.wanted_schedule += "0/0/0."
             else:
-                newNotif = Notification(user=user)
-                newNotif.author = "L'équipe CAD"
-                newNotif.title = "Profil incomplet"
-                newNotif.content = "N'oubliez pas de compléter votre profil "
-                newNotif.content += "nous communiquant vos disponibilités, "
-                newNotif.content += "autrement, nous ne pourront pas trouver "
-                newNotif.content += "des coaches adaptés."
-                newNotif.save()
+                author = "L'équipe CAD"
+                title = "Profil incomplet"
+                content = "N'oubliez pas de compléter votre profil "
+                content += "nous communiquant vos disponibilités, "
+                content += "autrement, nous ne pourront pas trouver "
+                content += "des coaches adaptés."
+                create_notif(user, title, content, author)
                 profil.notifications_nb += 1
 
             profil.account_type = "Etudiant"
@@ -126,15 +133,14 @@ def studentRegister(request):
                 if "Needed"+course in form.keys():
                     exec("profil." + course + "_course = True")
 
-            newNotif = Notification(user=user)
-            newNotif.author = "L'équipe CAD"
-            newNotif.title = "Bienvenue parmis nous !"
-            newNotif.content = "Au nom de toute l'équipe de CAD, "
-            newNotif.content += "nous vous souhaitons la bienvenue ! "
-            newNotif.content += "N'oubliez pas que vous pouvez nous contacter "
-            newNotif.content += "si vous avez le moindre soucis via ce "
-            newNotif.content += "<a href='/contact/'>formulaire</a> !"
-            newNotif.save()
+            author = "L'équipe CAD"
+            title = "Bienvenue parmis nous !"
+            content = "Au nom de toute l'équipe de CAD, "
+            content += "nous vous souhaitons la bienvenue ! "
+            content += "N'oubliez pas que vous pouvez nous contacter "
+            content += "si vous avez le moindre soucis via ce "
+            content += "<a href='/contact/'>formulaire</a> !"
+            create_notif(user, title, content, author)
             profil.notifications_nb += 1
             profil.save()
 
