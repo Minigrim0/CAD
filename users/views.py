@@ -173,7 +173,7 @@ def modifyUser(request):
 def requestView(request, id=0):
     if id != 0:
         allowed = request.user.profile.account_type == "Coach"
-        allowed = allowed or request.user.is_superuser()
+        allowed = allowed or request.user.is_superuser
         if request.user.is_authenticated() and allowed:
             student_request = studentRequest.objects.get(id=id)
             user = student_request.student
@@ -193,13 +193,17 @@ def requestView(request, id=0):
                 return render(request, "users/requestsAdmin.html", locals())
             else:
                 return HttpResponseRedirect("/05/")
+        else:
+            return HttpResponseRedirect("/05/")
 
 
 def chooseCoach(request):
     if request.method != "POST":
-        return HttpResponseRedirect("/05/")
+        print("went through here")
+        return HttpResponse("/05/")
 
-    return HttpResponse("Yay")
+    print("went through here")
+    return HttpResponse("Yay-{}-{}".format(request.POST['coach'], request.POST['id']))
 
 
 def requestManage(request):

@@ -23,11 +23,6 @@
   <!-- Custom styles for this template -->
   <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
 
-  <!--
-  <script src="{% static 'js/P5/p5.min.js'              %}"></script>
-  <script src="{% static 'js/P5/addons/p5.dom.min.js'   %}"></script>
-  <script src="{% static 'js/P5/addons/p5.sound.min.js' %}"></script>
-  -->
 </head>
 
 <body id="page-top">
@@ -85,23 +80,27 @@
 
               <p>Coaches ayant accepté :</p>
 
-              <div class="row">
-                {% for coach in request.coaches.all %}
-                  <div class="card col-md-2" style="width: 18rem;margin: 2px;">
-                    <div class="card-body">
-                      <h4 class="card-title text-center">{{ coach.user.first_name }} {{ coach.user.last_name }}</h4>
-                      <p class="card-text">Enseigne :
-                        {% if coach.Maths_course %}
-                          Maths
+              <div class="spinner-border" id="spin_{{ request.id }}" role="status" style="display: none;">
+                <span class="sr-only">Loading...</span>
+              </div>
+              <div id="total_{{ request.id }}">
+                <div class="row" id="coaches_{{ request.id }}">
+                  {% for coach in request.coaches.all %}
+                    <div class="card col-md-2" id="card_{{ request.id }}_{{ coach.user.username }}" style="width: 18rem;margin: 2px;">
+                      <div class="card-body">
+                        <h4 class="card-title text-center">{{ coach.user.first_name }} {{ coach.user.last_name }}</h4>
+                        <p class="card-text">Enseigne :
+                          {% if coach.Maths_course %}
+                            Maths
                           {% endif %}
                           {% if coach.Chimie_course %}
-                          Chimie
+                            Chimie
                           {% endif %}
                           {% if coach.Physique_course %}
-                          Physique
+                            Physique
                           {% endif %}
                           {% if coach.Francais_course %}
-                          Francais
+                            Francais
                           {% endif %}
                         </p>
 
@@ -136,13 +135,13 @@
                         </div>
 
                         <div class="card-footer row">
-                          <div class="col-md-6">
+                          <div class="btn-group" role="group" aria-label="actions">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ coach.user.username }}Modal">
                               Détails
                             </button>
-                          </div>
-                          <div class="col-md-6">
-                            <button type="button" class="btn btn-success" onclick="" name="accept">Choisir</button>
+                            <div class="choose">
+                              <button type="button" class="btn btn-success" onclick="chooseCoach('{{ coach.user.username }}', '{{ request.id }}')" name="accept">Choisir</button>
+                            </div>
                           </div>
                         </div>
 
@@ -150,15 +149,12 @@
                     </div>
                   {% endfor %}
                 </div>
+              </div>
             </li>
           {% endfor %}
         </ul>
-
       </div>
     </section>
-    <script>
-      var currentUser = "{{ user.username }}";
-    </script>
   </div>
 
   <!-- Bootstrap core JavaScript -->
@@ -169,10 +165,41 @@
   <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
   <script src="{% static 'js/resume.min.js' %}"></script>
-  <script src="{% static 'js/schedule.js' %}"></script>
+
   <script>
-    var id = createSched("{{ user.username }}");
-    scheds[id].setSchedule("{{ user.profile.wanted_schedule }}");
+    function chooseCoach(coach, id){
+      document.getElementById("coaches_"+id).style = "filter: opacity(10%);";
+      document.getElementById("spin_"+id).style.display = "block";
+      var Url = "127.0.0.1:8000/users/choose/";
+
+      $.post(
+        Url,
+        {
+          id : id,
+          coach : coach,
+          csrfmiddlewaretoken: '{{ csrf_token }}'
+        },
+        function(data, status){
+          if(status == "success"){
+            document.getElementById("coaches_"+id).style = "filter: opacity(100%);";;
+            document.getElementById("spin_"+id).style.display = "none";
+
+            var cards = document.getElementsByClassName("card");
+            for(var x=0;x<cards.length;x++){
+              if(cards[x].id == "card_" + id + "_" + coach){
+                cards[x].style = "filter: opacity(100%)";
+                cards[x].getElementsByClassName("choose")[0].style.display = "none";
+              }else if(cards[x].id.search("card_" + id + "_") != -1){
+                cards[x].style = "filter: opacity(25%)";
+                cards[x].getElementsByClassName("choose")[0].style.display = "none";
+              }
+            }
+          }else{
+            document.getElementById("coaches_"+id).style = "filter: opacity(0%);";
+          }
+        }
+      );
+    }
   </script>
 
 </body>
