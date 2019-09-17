@@ -4,10 +4,33 @@ from django.http import HttpResponseRedirect
 from django.contrib.admin.views.decorators import staff_member_required
 import datetime
 
+from users.models import studentRequest
+
 
 @staff_member_required
 def adminPage(request):
-    users = User.objects.all()
+    nbr_accounts = len(User.objects.all())
+    nbr_students = len(User.objects.filter(profile__account_type="Etudiant"))
+    nbr_coaches = len(User.objects.filter(profile__account_type="Coach"))
+    nbr_other = nbr_accounts - nbr_students - nbr_coaches
+
+    nbr_requests = len(studentRequest.objects.all())
+    return render(request, "admin/admin.html", locals())
+
+
+@staff_member_required
+def userAdminView(request, string=""):
+    print(string)
+    if string == "":
+        users = User.objects.all()
+    elif string == "students":
+        users = User.objects.filter(profile__account_type="Etudiant")
+    elif string == "coaches":
+        users = User.objects.filter(profile__account_type="Coach")
+    else:
+        users = User.objects.all().exclude(profile__account_type="Coach")
+        users = users.exclude(profile__account_type="Etudiant")
+
     firstUser = users[0].username
 
     level_ = {'5': 'Langue maternelle',
@@ -26,7 +49,7 @@ def adminPage(request):
         "i_langLevel": level_,
         "i_lang": lang_}
 
-    return render(request, 'admin/admin.html', vars_)
+    return render(request, 'admin/userAdmin.html', vars_)
 
 
 @staff_member_required
