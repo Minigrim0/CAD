@@ -96,13 +96,14 @@ def modifyUser(request):
                 usr.last_name = form["lastName"]
                 usr.email = form["mail"]
                 usr.save()
+                profile = usr.profile()
 
                 try:
                     type = usr.profile.account_type
 
-                    usr.profile.phone_number = form["phone_number"]
-                    usr.profile.address = form["address"]
-                    usr.profile.birthDate = serializeDate(form["birthDate"])
+                    profile.phone_number = form["phone_number"]
+                    profile.address = form["address"]
+                    profile.birthDate = serializeDate(form["birthDate"])
 
                     for course in ["Maths", "Chimie", "Physique", "Francais"]:
                         if course+"_Course" in form.keys():
@@ -111,7 +112,7 @@ def modifyUser(request):
                             exec("usr.profile." + course + "_course = False")
 
                     if type == "Etudiant":
-                        usr.profile.wanted_schedule = ""
+                        profile.wanted_schedule = ""
                         days_array = [
                             'Monday',
                             'Tuesday',
@@ -125,32 +126,32 @@ def modifyUser(request):
                             id = "course " + day
                             try:
                                 if form[id] == 'on':
-                                    usr.profile.wanted_schedule += "1/"
-                                    usr.profile.wanted_schedule += form[
+                                    profile.wanted_schedule += "1/"
+                                    profile.wanted_schedule += form[
                                         day+"Start"] + "/"
-                                    usr.profile.wanted_schedule += form[
+                                    profile.wanted_schedule += form[
                                         day+"End"] + "."
                             except KeyError:
-                                usr.profile.wanted_schedule += "0/0/0."
+                                profile.wanted_schedule += "0/0/0."
 
-                        usr.profile.NeedsVisit = False
+                        profile.NeedsVisit = False
                         if form["Visit"] != "NoVisit":
-                            usr.profile.NeedsVisit = True
+                            profile.NeedsVisit = True
 
-                        usr.profile.comments = form["comments"]
+                        profile.comments = form["comments"]
 
-                        usr.profile.tutor_firstName = form["tutorFirstName"]
-                        usr.profile.tutor_name = form["tutorName"]
+                        profile.tutor_firstName = form["tutorFirstName"]
+                        profile.tutor_name = form["tutorName"]
                     elif type == "Coach":
-                        usr.profile.school = form["school"]
-                        usr.profile.IBAN = form["IBAN"]
-                        usr.profile.nationalRegisterID = form["natRegID"]
+                        profile.school = form["school"]
+                        profile.IBAN = form["IBAN"]
+                        profile.nationalRegisterID = form["natRegID"]
 
-                        usr.profil.French_level = form["Frenchlevel"]
-                        usr.profil.English_level = form["Englishlevel"]
-                        usr.profil.Dutch_level = form["Dutchlevel"]
+                        profile.French_level = form["Frenchlevel"]
+                        profile.English_level = form["Englishlevel"]
+                        profile.Dutch_level = form["Dutchlevel"]
 
-                    usr.profile.save()
+                    profile.save()
 
                 except Exception as e:
                     print("Error :", e)
@@ -165,9 +166,9 @@ def modifyUser(request):
 
         except Exception as e:
             print("Error :", e)
-            return HttpResponseRedirect('/')
+            return HttpResponseRedirect('/05/')
     else:
-        return HttpResponseRedirect('/')
+        return HttpResponseRedirect('/05/')
 
 
 def requestView(request, id=0):
@@ -203,7 +204,8 @@ def chooseCoach(request):
         return HttpResponse("/05/")
 
     print("went through here")
-    return HttpResponse("Yay-{}-{}".format(request.POST['coach'], request.POST['id']))
+    return HttpResponse(
+        "Yay-{}-{}".format(request.POST['coach'], request.POST['id']))
 
 
 def requestManage(request):
