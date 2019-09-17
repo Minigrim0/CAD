@@ -90,7 +90,7 @@
     <div class="collapse navbar-collapse text-left" id="navbarSupportedContent">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a href="/administration" class="nav-link">retour</a>
+          <a href="/administration/" class="nav-link">retour</a>
         </li>
         {% for user in a_users %}
           <li class="nav-item">
@@ -177,7 +177,7 @@
             </div>
 
             <div class="container">
-              <form method="post" action="modify/">{% csrf_token %}
+              <form method="post" action="/administration/modify/">{% csrf_token %}
                 {{form.as_p}}
 
                 <input type="hidden" name="username" value="{{ user.username }}">
@@ -489,14 +489,25 @@
                   <div class="form-group col-md-3">
                     <button type="submit" onclick="setHtmlForm()" class="btn btn-success" name="modify">Enregistrer les modifications</button>
                   </div>
-                  <div class="form-group col-md-3">
-                    <button type="button" onclick="showConfirm('{{ user.username }}')" class="btn btn-danger"  name="deleteFirst">Supprimer l'utilisateur</button>
-                  </div>
-                  <div class="form-group col-md-3">
-                    <div style="display: none;" id="Confirm-Button-{{ user.username }}">
-                      <button type="submit" onclick="setHtmlForm()" class="btn btn-danger" name="delete">Confirmer la suppression de l'utilisateur</button>
+                  {% if user.is_active %}
+                    <div class="form-group col-md-3">
+                      <button type="button" onclick="showConfirm('{{ user.username }}')" class="btn btn-danger"  name="deleteFirst">Désactiver l'utilisateur</button>
                     </div>
-                  </div>
+                    <div class="form-group col-md-3">
+                      <div style="display: none;" id="Confirm-Button-{{ user.username }}">
+                        <button type="submit" class="btn btn-danger" name="delete">Confirmer la désactivation de l'utilisateur</button>
+                      </div>
+                    </div>
+                  {% else %}
+                    <div class="form-group col-md-3">
+                      <button type="button" onclick="showConfirm('{{ user.username }}')" class="btn btn-danger"  name="deleteFirst">Suprimer l'utilisateur</button>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <div style="display: none;" id="Confirm-Button-{{ user.username }}">
+                        <button type="submit" class="btn btn-danger" name="delete">Confirmer la suppression de l'utilisateur</button>
+                      </div>
+                    </div>
+                  {% endif %}
                   {% if user.is_active == False %}
                     <div class="form-group col-md-3">
                       <button type="submit" class="btn btn-success" name="reactivate">Réactiver l'utilisateur</button>
