@@ -3,11 +3,12 @@ from default.models import Article
 
 ARTICLE_DISPLAY_SIZE = 75
 
+
 class ArticleAdmin(admin.ModelAdmin):
-    list_display  = ('name', 'date', 'content_preview')
-    list_filter   = ('name', 'date')
+    list_display = ('name', 'date', 'content_preview')
+    list_filter = ('name', 'date')
     date_hierachy = 'date'
-    ordering      = ('date', )
+    ordering = ('date', )
     search_fields = ('title', 'subTitle', 'content')
 
     fields = ('title', 'subTitle', 'content')
@@ -20,5 +21,6 @@ class ArticleAdmin(admin.ModelAdmin):
             return text
 
     content_preview.short_description = u'Titre de la section'
+
 
 admin.site.register(Article, ArticleAdmin)
