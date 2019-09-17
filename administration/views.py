@@ -172,7 +172,7 @@ def modifyUser(request):
                     print("Error :", e)
 
                 # Redirect to administration
-                return HttpResponseRedirect("/administration")
+                return HttpResponseRedirect("/administration/users/")
             elif "reactivate" in form.keys():
                 print("user is reactive")
                 return HttpResponseRedirect(
@@ -185,9 +185,9 @@ def modifyUser(request):
                 else:
                     print("user deleted")
                     usr.delete()  # Completely deletes it
-                return HttpResponseRedirect("/administration")
+                return HttpResponseRedirect("/administration/users/")
         except Exception as e:  # In case an error occurs
             print(e)  # Print it
-            return HttpResponseRedirect('/administration')
+            return HttpResponseRedirect('/administration/users')
     else:
-        return HttpResponseRedirect('/administration')
+        return HttpResponseRedirect('/administration/users/')

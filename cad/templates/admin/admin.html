@@ -44,25 +44,25 @@
           </a>
         </li>
         <li class="nav-item justify-content-between align-items-center">
-          <a href="users/" class="nav-link">
+          <a href="/administration/users/" class="nav-link">
             Tous
             <span class="badge badge-primary badge-pill">{{ nbr_accounts }}</span>
           </a>
         </li>
         <li class="nav-item justify-content-between align-items-center">
-          <a href="users/students/" class="nav-link">
+          <a href="/administration/users/students/" class="nav-link">
             - Etudiants
             <span class="badge badge-primary badge-pill">{{ nbr_students }}</span>
           </a>
         </li>
         <li class="nav-item justify-content-between align-items-center">
-          <a href="users/coaches/" class="nav-link">
+          <a href="/administration/users/coaches/" class="nav-link">
             - Coaches
             <span class="badge badge-primary badge-pill">{{ nbr_coaches }}</span>
           </a>
         </li>
         <li class="nav-item justify-content-between align-items-center">
-          <a href="users/other/" class="nav-link">
+          <a href="/administration/users/other/" class="nav-link">
             - Autre
             <span class="badge badge-primary badge-pill">{{ nbr_other }}</span>
           </a>
@@ -85,6 +85,43 @@
         <h2 class="mb-2">
           Administration :
         </h2>
+
+        <hr class="m-2">
+
+        <h3 class="mb-2">
+          Utilisateurs :
+        </h3>
+        <div class="col-lg-10 text-justify">
+          <p>
+            Les comptes des utilisateurs possèdent plusieurs champs spéciaux.
+            <br>
+            <br>
+            - La <span class="text-primary">balance</span> de l'utilisateur représente, dans le cas d'un élève, le montant
+            qu'il lui reste (à dépenser en cours). Dans le cas d'un coach, elle sera nulle et le restera.
+            <br>
+            - Le type de compte de l'utilisateur ne peut être changé. Pour le modifier, soit demander à l'utilisateur de
+            se refaire un compte, soit aller <a href="/admin/auth/user/">ici</a> (non recommandé).
+            <br>
+            - Un utilisateur ne peut jamais réellement supprimer son compte.
+            <br>
+            Il peut le désactiver et c'est à l'administrateur de confirmer la suppression. Pour ce faire, simplement aller sur la page de l'utilisateur,
+            et cliquer sur <span style="color: red;">'supprimer l'utilisateur'</span>. Pour le réactiver, simplement cliquer sur
+            <span style="color: green;">'Réactiver l'utilisateur'</span>.
+            Les comptes activés ou désactivés sont visible dans la barre de navigation avec les icones à côté des noms d'utilisateur :
+            <ul>
+              <li>
+                <i class="fas fa-user-check"></i> Représente un utilisateur actif
+              </li>
+              <li>
+                <i class="fas fa-user-times"></i> Représente un utilisateur inactif
+              </li>
+            </ul>
+          </p>
+        </div>
+
+        <h3 class="mb-2">
+          Requêtes :
+        </h3>
 
       </div>
     </section>
