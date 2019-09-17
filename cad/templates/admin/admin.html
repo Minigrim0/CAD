@@ -117,11 +117,46 @@
               </li>
             </ul>
           </p>
+          <br>
+          <h4>
+            Création, confirmation et vérification de compte
+          </h4>
+          <p style="text-decoration: underline;font-weight: bold;">
+            Pour un <span style="color: green;">Étudiant</span> :
+          </p>
+          <p>
+            Un compte est <span style="color: red;">créé</span> une fois que l'étudiant à remplit le formulaire d'inscription.
+            Il reçoit à ce moment-là un mail, avec un lien unique, lui permettant de <span style="color: red;">vérifier</span> son compte.
+            Ce lien l'emmènera vers une page qui lui demandera de payer soit 100 soit 50€ (en fonction de s'il a choisi d'avoir une visite pédagogique).
+            Une fois le montant payé, son compte est <span style="color: red;">vérifié</span> et une requête est créée afin de lui trouver un coach.
+          </p>
+          <p style="text-decoration: underline;font-weight: bold;">
+            Pour un <span style="color: green;">Coach</span> :
+            <p>
+              Un compte est <span style="color: red;">créé</span> une fois que le coach à remplit le formulaire d'inscription.
+              Il reçoit à ce moment-là un mail, avec un lien unique, lui permettant de <span style="color: red;">vérifier</span> son compte.
+              Une fois qu'il a cliqué sur ce lien, son compte est prêt à recevoir des requêtes d'étudiants.
+            </p>
+          </p>
         </div>
 
+        <hr class="mb-0">
         <h3 class="mb-2">
           Requêtes :
         </h3>
+        <div class="col-lg-10 text-justify">
+          <p>
+            Les requêtes représentent les recherches de coach par les étudiants.
+            Elles sont créées automatiquement une fois qu'un étudiant à <span style="color: red;">créé</span>,
+            <span style="color: red;">confirmé</span> et <span style="color: red;">vérifié</span> son compte.
+            <br>
+            Les requêtes ne sont envoyées qu'au coaches correspondant aux critères de recherche. Un coach proposant des cours de Maths ne recevra pas
+            de requête concernant un élève qui désire des cours de francais par exemple.
+            <br>
+            L'administrateur peut, lorsqu'il le souhaite, cloturer la requête, en choisissant quel coach donnera cours à l'élève. Ce coach recevra une
+            notification l'avertissant qu'il a été choisit, et les autres une notification les remerciant de s'être proposé.
+          </p>
+        </div>
 
       </div>
     </section>
