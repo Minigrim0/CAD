@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'send_notif',            users.views.send_notif),
     url(r'me/follow',             users.views.followView),
     url(r'me',                    users.views.userView),
+    url(r'choose',                users.views.chooseCoach),
     url(r'manage_requests/',      users.views.requestManage),
     url(r'requests/(?P<id>\d+)/', users.views.requestView),
     url(r'requests/',             users.views.requestView),
