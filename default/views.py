@@ -49,7 +49,8 @@ def home(request, param=""):
         votre message, réessayez plus tard")
     elif param == "10":
         dico_["a_Failed"].append("Votre paiement a été annulé, n'oubliez pas \
-        de le compléter au plus vite, afin de pouvoir commencer a suivre des cours avec nos coaches !")
+        de le compléter au plus vite, afin de pouvoir commencer a suivre des \
+        cours avec nos coaches !")
     elif param == "11":
         dico_["a_Success"].append("Merci d'avoir complété votre inscription ! \
         Nous allons de ce pas chercher un coach pour vous !")

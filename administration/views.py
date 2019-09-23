@@ -5,6 +5,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 import datetime
 
 from users.models import studentRequest
+from default.models import Article
 
 
 @staff_member_required
@@ -16,6 +17,26 @@ def adminPage(request):
 
     nbr_requests = len(studentRequest.objects.all())
     return render(request, "admin/admin.html", locals())
+
+
+@staff_member_required
+def articleAdminView(request):
+    articles = Article.objects.all()
+
+    return render(request, "admin/articlesAdmin.html", locals())
+
+
+@staff_member_required
+def articleAdminModify(request):
+    if request.method == "POST":
+        form = request.POST
+        article = Article.objects.get(id=int(form['id']))
+        article.title = form['title'].replace("\r", " ")
+        article.subTitle = form['subTitle'].replace("\r", " ")
+        article.content = form['Content'].replace("\r", " ")
+        article.save()
+
+    return HttpResponseRedirect("/administration/articles/")
 
 
 @staff_member_required
@@ -141,8 +162,10 @@ def modifyUser(request):
                             try:
                                 if form[id] == 'on':
                                     profile.wanted_schedule += "1/"
-                                    profile.wanted_schedule += form[day+"Start"] + "/"
-                                    profile.wanted_schedule += form[day+"End"] + "."
+                                    profile.wanted_schedule += form[
+                                        day+"Start"] + "/"
+                                    profile.wanted_schedule += form[
+                                        day+"End"] + "."
                             except KeyError:
                                 usr.profile.wanted_schedule += "0/0/0."
 

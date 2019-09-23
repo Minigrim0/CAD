@@ -76,7 +76,7 @@
             <div class="row">
               <div class="col-md-8">
                 {% if user.username == a_user.username %}
-                  <form method="post" action="../modify/">{% csrf_token %}
+                  <form method="post" action="/users/modify/">{% csrf_token %}
                     {{form.as_p}}
 
                     <input type="hidden" name="username" value="{{ user.username }}">
@@ -341,25 +341,25 @@
                                     <label class="radio-inline">
                                       {% if idl == "French" %}
                                         {% if idlev == a_user.profile.French_level  %}
-                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idl }}_{{ idlev }}" checked>
+                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
                                         {% else %}
-                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idl }}_{{ idlev }}">
+                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
                                         {% endif %}
                                       {% endif %}
 
                                       {% if idl == "Dutch" %}
                                         {% if idlev == a_user.profile.Dutch_level %}
-                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idl }}_{{ idlev }}" checked>
+                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
                                         {% else %}
-                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idl }}_{{ idlev }}">
+                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
                                         {% endif %}
                                       {% endif %}
 
                                       {% if idl == "English" %}
                                         {% if idlev == a_user.profile.English_level %}
-                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idl }}_{{ idlev }}" checked>
+                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
                                         {% else %}
-                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idl }}_{{ idlev }}">
+                                          <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
                                         {% endif %}
                                       {% endif %}
                                     </label>
