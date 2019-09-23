@@ -97,7 +97,7 @@
             {% if user.is_active %}
               <a href="#" onclick="toggle('{{ user.username }}')" class="nav-link"><i class="fas fa-user-check"> {{ user.username|truncatechars:12 }}</i></a>
             {% else %}
-              <a href="#" onclick="toggle('{{ user.username }}')" class="nav-link"><i class="fas fa-user-times"> {{ user.username|truncatechars:12 }}</i></a>
+              <a href="#" onclick="toggle('{{ user.username }}')" class="nav-link"><i class="fas fa-user-slash"> {{ user.username|truncatechars:12 }}</i></a>
             {% endif %}
           </li>
         {% endfor %}

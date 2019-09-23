@@ -62,6 +62,28 @@ def create_notif(user, title, content, author):
     newNotif.save()
 
 
+def getSchedule(profil, form):
+    days_array = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday']
+
+    for day in days_array:
+        id = "course " + day
+        try:
+            if form[id] == 'on':
+                profil.wanted_schedule += "1/"
+                profil.wanted_schedule += form[day+"Start"] + "/"
+                profil.wanted_schedule += form[day+"End"] + "."
+        except Exception:
+            profil.wanted_schedule += "0/0/0."
+    profil.save()
+
+
 def studentRegister(request):
     if request.method == "POST":
         try:
@@ -85,25 +107,10 @@ def studentRegister(request):
 
             profil.secret_key = secrets.token_hex(20)
             profil.wanted_schedule = ""
-            if "isMobileUser" not in form.keys():
-                days_array = [
-                    'Monday',
-                    'Tuesday',
-                    'Wednesday',
-                    'Thursday',
-                    'Friday',
-                    'Saturday',
-                    'Sunday']
+            profil.save()
 
-                for day in days_array:
-                    id = "course " + day
-                    try:
-                        if form[id] == 'on':
-                            profil.wanted_schedule += "1/"
-                            profil.wanted_schedule += form[day+"Start"] + "/"
-                            profil.wanted_schedule += form[day+"End"] + "."
-                    except Exception:
-                        profil.wanted_schedule += "0/0/0."
+            if "isMobileUser" not in form.keys():
+                getSchedule(profil, form)
             else:
                 author = "L'équipe CAD"
                 title = "Profil incomplet"
@@ -126,8 +133,7 @@ def studentRegister(request):
             profil.tutor_name = form["tutorName"]
             profil.tutor_firstName = form["tutorFirstName"]
             profil.NeedsVisit = False
-            if form["Visit"] != "NoVisit":
-                profil.NeedsVisit = True
+            profil.NeedsVisit = form["Visit"] != "NoVisit"
 
             for course in ["Maths", "Chimie", "Physique", "Francais"]:
                 if "Needed"+course in form.keys():
@@ -205,9 +211,8 @@ def pay_later(request, string=""):
     newNotif = Notification(user=user)
     newNotif.author = "L'équipe CAD"
     newNotif.title = "Paiement en attente"
-    newNotif.content = "N'oubliez pas de payer vos cours !"
-    newNotif.content += "Nous vous enverrons un rappel dans 2 jours si nous "
-    newNotif.content += "n'avons rien reçu d'ici là"
+    newNotif.content = "N'oubliez pas de payer vos cours ! Nous vous \
+        enverrons un rappel dans 2 jours si nous n'avons rien reçu d'ici là"
     newNotif.save()
     user.profil.notifications_nb += 1
     user.profil.save()
@@ -224,9 +229,8 @@ def thanks(request, string=""):
 
     # Si le compte est déjà confirmé, l'utilisateur ne doit plus accéder
     # à cette page
-
-    if user.profile.confirmed_account:
-        return HttpResponseRedirect("/05/")
+    # if user.profile.confirmed_account:
+    #     return HttpResponseRedirect("/05/")
 
     # L'utilisateur a confirmé son compte
     # Compte vérifié et confirmé
@@ -299,14 +303,11 @@ def sendNotifToCoaches(student):
     # Receive Profile type object
     coaches = Profile.objects.filter(account_type="Coach")
     for coach in coaches:
-        maths_bool = coach.Maths_course == student.Maths_course
-        chimie_bool = coach.Chimie_course == student.Chimie_course
-        physique_bool = coach.Physique_course == student.Physique_course
-        francais_bool = coach.Francais_course == student.Francais_course
-        compatible = maths_bool
-        compatible = compatible or chimie_bool
-        compatible = compatible or physique_bool
-        compatible = compatible or francais_bool
+        bMaths = coach.Maths_course == student.Maths_course
+        bChimie = coach.Chimie_course == student.Chimie_course
+        bPhysique = coach.Physique_course == student.Physique_course
+        bFrancais = coach.Francais_course == student.Francais_course
+        compatible = bMaths or bChimie or bPhysique or bFrancais
         if coach.school_level == "high":
             same_study_lev = ("eme" in student.school_level)
             same_study_lev = same_study_lev or ("ere" in student.school_level)
@@ -324,8 +325,8 @@ def sendNotifToCoaches(student):
                 student.user.first_name, student.user.last_name)
             newNotif.content += "!\nVous pouvez cliquer "
             newNotif.content += "<a href='/users/requests/{}/'>ici</a>".format(
-                str(student.user.studentrequest.id))
-            newNotif.content += "pour voir le profil de l'etudiant"
+                student.user.studentrequest.id)
+            newNotif.content += " pour voir le profil de l'etudiant"
             newNotif.save()
             coach.notifications_nb += 1
             coach.save()

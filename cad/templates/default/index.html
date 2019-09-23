@@ -196,7 +196,7 @@
             <div class="col-md-3">
               <a class="btn btn-primary" href="/users/me" role="button">
                 Mon compte
-                <span class="badge badge-light">{{ user.profile.notifications_nb }}</span>
+                <span class="badge badge-light">{{ nb_notif }}</span>
               </a>
             </div>
             {% if user.profile.account_type == "Administrateur" %}
@@ -211,8 +211,8 @@
         </div>
         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#footerCollapse" aria-expanded="false" aria-controls="collapseExample">
           <span class="carret">Connecté en tant que {{ user.username}}
-            {% if user.profile.notifications_nb > 0 %}
-              <span class="badge badge-light">{{ user.profile.notifications_nb }}</span>
+            {% if nb_notif > 0 %}
+              <span class="badge badge-light">{{ nb_notif }}</span>
             {% endif %}
            ^</span>
         </button>

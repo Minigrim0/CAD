@@ -426,7 +426,7 @@
                         }
                       </script>
 
-                      {% if user.profile.notifications_nb == 0 %}
+                      {% if nb_notifs == 0 %}
                         <p>Pas de notifications</p>
                       {% else %}
                         {% for notification in notifications %}
