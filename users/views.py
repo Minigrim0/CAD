@@ -25,6 +25,7 @@ def userView(request):
         'English': 'Anglais'}
 
     notifications = a_user.notification_set.all()
+    nb_notifs = a_user.notification_set.count()
 
     return render(request, 'users/user.html', locals())
 
@@ -102,10 +103,8 @@ def ModifyDays(profile, form):
         try:
             if form[id] == 'on':
                 profile.wanted_schedule += "1/"
-                profile.wanted_schedule += form[
-                    day+"Start"] + "/"
-                profile.wanted_schedule += form[
-                    day+"End"] + "."
+                profile.wanted_schedule += form[day+"Start"] + "/"
+                profile.wanted_schedule += form[day+"End"] + "."
         except KeyError:
             profile.wanted_schedule += "0/0/0."
     profile.save()
@@ -194,6 +193,7 @@ def requestView(request, id=0):
         allowed = allowed or request.user.is_superuser
         if request.user.is_authenticated() and allowed:
             student_request = studentRequest.objects.get(id=id)
+            student_request_closed = studentRequest.objects.get(id=id)
             user = student_request.student
             coach = request.user
             coaches = [
@@ -206,7 +206,10 @@ def requestView(request, id=0):
     else:
         if request.user.is_authenticated():
             if request.user.is_superuser:
-                student_requests = studentRequest.objects.all()
+                student_requests = studentRequest.objects.all().exclude(
+                    is_closed=True)
+                student_requests_closed = studentRequest.objects.all().exclude(
+                    is_closed=False)
 
                 return render(request, "users/requestsAdmin.html", locals())
             else:
@@ -215,15 +218,51 @@ def requestView(request, id=0):
             return HttpResponseRedirect("/05/")
 
 
+def thanksCoaches(coaches):
+    author = "L'équipe CAD"
+    title = "Merci d'avoir répondu présent"
+    content = "Merci d'avoir répondu présent à la requête de {} {}. \
+    Malheureusement, vous n'avez pas été choisit pour donner cours à \
+    cet étudiant. Mais ne vous en faites pas, voitre tour viendra !"
+    for coach in coaches:
+        new_notif = Notification(
+            user=coach.user, author=author, title=title, content=content)
+        new_notif.save()
+
+
 def chooseCoach(request):
     if request.method != "POST":
         return HttpResponse("/05/")
 
-    for x in range(9999):
-        print(x)
+    query = request.POST
 
-    return HttpResponse(
-        "Yay-{}-{}".format(request.POST['coach'], request.POST['id']))
+    s_request = studentRequest.objects.get(id=query['id'])
+    coach = s_request.coaches.get(user__username=query["coach"])
+    other_coaches = s_request.coaches.all().exclude(
+        user__username=query["coach"])
+
+    s_request.is_closed = True
+    s_request.choosenCoach = coach.user.username
+    student = s_request.student
+    student.coach = coach
+    coach.nbStudents += 1
+
+    s_request.save()
+    student.save()
+    coach.save()
+
+    author = "L'équipe CAD"
+    title = "Félicitations !"
+    content = "Vous avez été choisit pour enseigner à {} {} ! Vous pouvez \
+    vous rendre sur votre profil pour retrouver les coordonées de cet \
+    étudiant".format(student.first_name, student.last_name)
+    new_Notif = Notification(
+        user=coach.user, author=author, title=title, content=content)
+    new_Notif.save()
+
+    thanksCoaches(other_coaches)
+
+    return HttpResponse("success")
 
 
 def requestManage(request):

@@ -6,6 +6,7 @@ from users.models import Profile
 
 class ProfileInline(admin.StackedInline):
     model = Profile
+    fk_name = "user"
 
 
 class CoachAdmin(UserAdmin):

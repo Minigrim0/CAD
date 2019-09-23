@@ -44,30 +44,60 @@
           </a>
         </li>
         <li class="nav-item justify-content-between align-items-center">
-          <a href="/administration/users/" class="nav-link">
-            Tous
+          <a class="nav-link" data-toggle="collapse" onclick="toggleFAS()" href="#accounts" aria-expanded="false" aria-controls="accounts">
+            <i id="fas" class="fas fa-angle-right"></i>
+            Comptes
             <span class="badge badge-primary badge-pill">{{ nbr_accounts }}</span>
-          </a>
-        </li>
-        <li class="nav-item justify-content-between align-items-center">
-          <a href="/administration/users/students/" class="nav-link">
-            - Etudiants
-            <span class="badge badge-primary badge-pill">{{ nbr_students }}</span>
-          </a>
-        </li>
-        <li class="nav-item justify-content-between align-items-center">
-          <a href="/administration/users/coaches/" class="nav-link">
-            - Coaches
-            <span class="badge badge-primary badge-pill">{{ nbr_coaches }}</span>
-          </a>
-        </li>
-        <li class="nav-item justify-content-between align-items-center">
-          <a href="/administration/users/other/" class="nav-link">
-            - Autre
-            <span class="badge badge-primary badge-pill">{{ nbr_other }}</span>
-          </a>
-        </li>
 
+            <script>
+              function toggleFAS(){
+                var div = document.getElementById("fas")
+                if (div.classList.contains("fa-angle-right")) {
+                  div.classList.remove("fa-angle-right");
+                  div.classList.add("fa-angle-down");
+                }else{
+                  div.classList.remove("fa-angle-down");
+                  div.classList.add("fa-angle-right");
+                }
+              }
+
+            </script>
+          </a>
+        </li>
+        <div id="accounts" class="collapse">
+          <li class="nav-item justify-content-between align-items-center">
+            <ul>
+              <li class="nav-item justify-content-between align-items-center">
+                <a href="/administration/users/" class="nav-link">
+                  <i class="fas fa-circle"></i>
+                  Tous
+                  <span class="badge badge-primary badge-pill">{{ nbr_accounts }}</span>
+                </a>
+              </li>
+              <li class="nav-item justify-content-between align-items-center">
+                <a href="/administration/users/students/" class="nav-link">
+                  <i class="fas fa-circle"></i>
+                  Etudiants
+                  <span class="badge badge-primary badge-pill">{{ nbr_students }}</span>
+                </a>
+              </li>
+              <li class="nav-item justify-content-between align-items-center">
+                <a href="/administration/users/coaches/" class="nav-link">
+                  <i class="fas fa-circle"></i>
+                  Coaches
+                  <span class="badge badge-primary badge-pill">{{ nbr_coaches }}</span>
+                </a>
+              </li>
+              <li class="nav-item justify-content-between align-items-center">
+                <a href="/administration/users/other/" class="nav-link">
+                  <i class="fas fa-circle"></i>
+                  Autre
+                  <span class="badge badge-primary badge-pill">{{ nbr_other }}</span>
+                </a>
+              </li>
+            </ul>
+          </li>
+        </div>
         <li class="nav-item justify-content-between align-items-center">
           <a href="/users/requests/" class="nav-link">
             Requêtes
@@ -119,7 +149,7 @@
                 <i class="fas fa-user-check"></i> Représente un utilisateur actif
               </li>
               <li>
-                <i class="fas fa-user-times"></i> Représente un utilisateur inactif
+                <i class="fas fa-user-slash"></i> Représente un utilisateur inactif
               </li>
             </ul>
           </p>
