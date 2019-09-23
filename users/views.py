@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from administration.views import serializeDate
-from users.models import Notification, studentRequest
+from users.models import Notification, studentRequest, Profile
 
 
 def userView(request):
@@ -86,83 +86,100 @@ def disconnect(request):
     return HttpResponseRedirect("/06/")
 
 
+def ModifyDays(profile, form):
+    profile.wanted_schedule = ""
+    days_array = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday']
+
+    for day in days_array:
+        id = "course " + day
+        try:
+            if form[id] == 'on':
+                profile.wanted_schedule += "1/"
+                profile.wanted_schedule += form[
+                    day+"Start"] + "/"
+                profile.wanted_schedule += form[
+                    day+"End"] + "."
+        except KeyError:
+            profile.wanted_schedule += "0/0/0."
+    profile.save()
+
+
+def ModifyStudent(profile, form):
+    ModifyDays(profile, form)
+
+    profile.NeedsVisit = False
+    if form["Visit"] != "NoVisit":
+        profile.NeedsVisit = True
+
+    profile.comments = form["comments"]
+
+    profile.tutor_firstName = form["tutorFirstName"]
+    profile.tutor_name = form["tutorName"]
+    profile.save()
+
+
+def ModifyCoach(profile, form):
+    profile.school = form["school"]
+    profile.IBAN = form["IBAN"]
+    profile.nationalRegisterID = form["natRegID"]
+    profile.French_level = form["Frenchlevel"]
+    profile.English_level = form["Englishlevel"]
+    profile.Dutch_level = form["Dutchlevel"]
+
+    profile.save()
+
+
 def modifyUser(request):
     if request.method == "POST":
         try:
             form = request.POST
-            if "modify" in form.keys():
-                usr = User.objects.get(username=form["username"])
-                usr.first_name = form["firstName"]
-                usr.last_name = form["lastName"]
-                usr.email = form["mail"]
-                usr.save()
-                profile = usr.profile()
-
-                try:
-                    type = usr.profile.account_type
-
-                    profile.phone_number = form["phone_number"]
-                    profile.address = form["address"]
-                    profile.birthDate = serializeDate(form["birthDate"])
-
-                    for course in ["Maths", "Chimie", "Physique", "Francais"]:
-                        if course+"_Course" in form.keys():
-                            exec("usr.profile." + course + "_course = True")
-                        else:
-                            exec("usr.profile." + course + "_course = False")
-
-                    if type == "Etudiant":
-                        profile.wanted_schedule = ""
-                        days_array = [
-                            'Monday',
-                            'Tuesday',
-                            'Wednesday',
-                            'Thursday',
-                            'Friday',
-                            'Saturday',
-                            'Sunday']
-
-                        for day in days_array:
-                            id = "course " + day
-                            try:
-                                if form[id] == 'on':
-                                    profile.wanted_schedule += "1/"
-                                    profile.wanted_schedule += form[
-                                        day+"Start"] + "/"
-                                    profile.wanted_schedule += form[
-                                        day+"End"] + "."
-                            except KeyError:
-                                profile.wanted_schedule += "0/0/0."
-
-                        profile.NeedsVisit = False
-                        if form["Visit"] != "NoVisit":
-                            profile.NeedsVisit = True
-
-                        profile.comments = form["comments"]
-
-                        profile.tutor_firstName = form["tutorFirstName"]
-                        profile.tutor_name = form["tutorName"]
-                    elif type == "Coach":
-                        profile.school = form["school"]
-                        profile.IBAN = form["IBAN"]
-                        profile.nationalRegisterID = form["natRegID"]
-
-                        profile.French_level = form["Frenchlevel"]
-                        profile.English_level = form["Englishlevel"]
-                        profile.Dutch_level = form["Dutchlevel"]
-
-                    profile.save()
-
-                except Exception as e:
-                    print("Error :", e)
-
-                return HttpResponseRedirect("/users/me")
-            else:
+            if "delete" in form.keys():
                 usr = User.objects.get(username=form["username"])
                 usr.is_active = False
                 usr.save()
                 logout(request)
                 return HttpResponseRedirect("/12/")
+
+            usr = User.objects.get(username=form["username"])
+            usr.first_name = form["firstName"]
+            usr.last_name = form["lastName"]
+            usr.email = form["mail"]
+            usr.save()
+            profile = usr.profile
+
+            try:
+                type = usr.profile.account_type
+            except Exception as e:
+                print("Error :", e)
+                profile = Profile(user=usr)
+                profile.save()
+                type = usr.profile.account_type
+
+            profile.phone_number = form["phone_number"]
+            profile.address = form["address"]
+            profile.birthDate = serializeDate(form["birthDate"])
+
+            for course in ["Maths", "Chimie", "Physique", "Francais"]:
+                if course+"_Course" in form.keys():
+                    exec("profile." + course + "_course = True")
+                else:
+                    exec("profile." + course + "_course = False")
+
+            profile.save()
+
+            if type == "Etudiant":
+                ModifyStudent(profile, form)
+            elif type == "Coach":
+                ModifyCoach(profile, form)
+
+            return HttpResponseRedirect("/users/me")
 
         except Exception as e:
             print("Error :", e)
@@ -200,10 +217,11 @@ def requestView(request, id=0):
 
 def chooseCoach(request):
     if request.method != "POST":
-        print("went through here")
         return HttpResponse("/05/")
 
-    print("went through here")
+    for x in range(9999):
+        print(x)
+
     return HttpResponse(
         "Yay-{}-{}".format(request.POST['coach'], request.POST['id']))
 
