@@ -61,7 +61,7 @@ def home(request, param=""):
         dico_["a_Success"].append("Votre compte à bien été confirmé ! Vous \
         allez pouvoir commencer à donner cours !")
 
-    if request.user.is_authenticated:
+    if not request.user.is_anonymous:
         dico_["nb_notif"] = request.user.notification_set.count()
 
     return render(request, 'default/index.html', dico_)
