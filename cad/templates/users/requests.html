@@ -1,151 +1,157 @@
 <!DOCTYPE html>
 <html lang="fr">
 
-  {% load static %}
+{% load static %}
 
 <head>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>CAD</title>
+    <title>CAD</title>
 
-  <!-- Bootstrap core CSS -->
-  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
-  <!-- Custom fonts for this template -->
-  <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
-  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
 
-  <!-- Custom styles for this template -->
-  <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
 
-  <script src="{% static 'js/P5/p5.min.js'              %}"></script>
-  <script src="{% static 'js/P5/addons/p5.dom.min.js'   %}"></script>
-  <script src="{% static 'js/P5/addons/p5.sound.min.js' %}"></script>
+    <script src="{% static 'js/P5/p5.min.js'              %}"></script>
+    <script src="{% static 'js/P5/addons/p5.dom.min.js'   %}"></script>
+    <script src="{% static 'js/P5/addons/p5.sound.min.js' %}"></script>
 </head>
 
 <body id="page-top">
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-    <a class="navbar-brand js-scroll-trigger" href="#page-top">
-      <span class="d-block d-lg-none">Cours à domicile</span>
-      <span class="d-none d-lg-block">
-        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
-      </span>
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a href="/" class="nav-link">Accueil</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-
-  <div class="container-fluid">
-
-    <section class="p-3 p-lg-5 align-items-center">
-      <div id="container">
-
-        <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-
-        <div class="form-group row col-md-12">
-          <label for="sketch-holder-{{ user.username }}" class="col-sm-3 col-form-label">Tranches horaires de l'étudiant :</label>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+            <span class="d-block d-lg-none">Cours à domicile</span>
+            <span class="d-none d-lg-block">
+                <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
+            </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">Accueil</a>
+                </li>
+            </ul>
         </div>
-        <div class="form-group row col-md-12">
-          <div class="col-sm-9" id="sketch-holder-{{ user.username }}">
-          </div>
-        </div>
+    </nav>
 
-        <div class="form-group row col-md-12">
-          <label for="sketch-holder-{{ user.username }}" class="col-sm-3 col-form-label">Cours désirés :</label>
-        </div>
+    <div class="container-fluid">
 
-        <ul>
-          {% if user.profile.Maths_course %}
-            <li>Maths</li>
-          {% endif %}
+        <section class="p-3 p-lg-5 align-items-center">
+            {% if student_request.is_closed %}
+            <h2 class="text text-danger">Cette requête est fermée</h2>
+            {% else %}
+            <div id="container">
 
-          {% if user.profile.Chimie_course %}
-            <li>Chimie</li>
-          {% endif %}
+                <h2>{{ user.first_name }} {{ user.last_name }}</h2>
 
-          {% if user.profile.Physique_course %}
-            <li>Physique</li>
-          {% endif %}
+                <div class="form-group row col-md-12">
+                    <label for="sketch-holder-{{ user.username }}" class="col-sm-3 col-form-label">Tranches horaires de l'étudiant :</label>
+                </div>
+                <div class="form-group row col-md-12">
+                    <div class="col-sm-9" id="sketch-holder-{{ user.username }}">
+                    </div>
+                </div>
 
-          {% if user.profile.Francais_course %}
-            <li>Francais</li>
-          {% endif %}
-        </ul>
+                <div class="form-group row col-md-12">
+                    <label for="sketch-holder-{{ user.username }}" class="col-sm-3 col-form-label">Cours désirés :</label>
+                </div>
 
+                <ul>
+                    {% if user.profile.Maths_course %}
+                    <li>Maths</li>
+                    {% endif %}
+
+                    {% if user.profile.Chimie_course %}
+                    <li>Chimie</li>
+                    {% endif %}
+
+                    {% if user.profile.Physique_course %}
+                    <li>Physique</li>
+                    {% endif %}
+
+                    {% if user.profile.Francais_course %}
+                    <li>Francais</li>
+                    {% endif %}
+                </ul>
+
+                <script>
+                    const Url = "/users/manage_requests/";
+
+                    //Makes a request to remove the notification with the specified ID
+                    //Has to be an id related to the current user's notification
+                    function _post(id, decision, coach) {
+                        $.post(
+                            Url, {
+                                id: id,
+                                decision: decision,
+                                coach: coach,
+                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            function(data, status) {
+                                console.log(data);
+                                console.log(status);
+                            }
+                        );
+                        document.getElementById("buttons").style.display = "none";
+                        document.getElementById("dejarepondu").style.display = "block";
+                    }
+                </script>
+
+                {% if not request.user.username in coaches %}
+                <div id="buttons">
+                    {% else %}
+                    <div id="buttons" style="display: none;">
+                        {% endif %}
+                        <button type="button" class="btn btn-success" onclick="_post({{ student_request.id }}, 'true' , {{ coach.id }})" name="accept">Accepter l'offre</button>
+                        <button type="button" class="btn btn-danger" onclick="_post({{ student_request.id }}, 'false', {{ coach.id }})" name="refuses">Refuser l'offre</button>
+                    </div>
+                    {% if not request.user.username in coaches %}
+                    <div id="dejarepondu" style="display: none;">
+                        {% else %}
+                        <div id="dejarepondu">
+                            {% endif %}
+                            <p style="color:red;">Vous avez déjà répondu à cette requete</p>
+                        </div>
+
+                    </div>
+                    {% endif %}
+        </section>
         <script>
-          const Url="/users/manage_requests/";
-
-          //Makes a request to remove the notification with the specified ID
-          //Has to be an id related to the current user's notification
-          function _post(id, decision, coach){
-            $.post(
-              Url,
-              {
-                id : id,
-                decision : decision,
-                coach : coach,
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-              },
-              function(data, status){
-                console.log(data);
-                console.log(status);
-              }
-            );
-            document.getElementById("buttons").style.display = "none";
-            document.getElementById("dejarepondu").style.display = "block";
-          }
+            var currentUser = "{{ user.username }}";
         </script>
+    </div>
 
-        {% if not request.user.username in coaches %}
-          <div id="buttons">
-        {% else %}
-          <div id="buttons" style="display: none;">
-        {% endif %}
-          <button type="button" class="btn btn-success" onclick="_post({{ student_request.id }}, 'true' , {{ coach.id }})" name="accept">Accepter l'offre</button>
-          <button type="button" class="btn btn-danger"  onclick="_post({{ student_request.id }}, 'false', {{ coach.id }})" name="refuses">Refuser l'offre</button>
-        </div>
-        {% if not request.user.username in coaches %}
-          <div id="dejarepondu" style="display: none;">
-        {% else %}
-          <div id="dejarepondu">
-        {% endif %}
-          <p style="color:red;">Vous avez déjà répondu à cette requete</p>
-        </div>
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
-      </div>
-    </section>
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <script src="{% static 'js/resume.min.js' %}"></script>
+    {% if not student_request.is_closed %}
+    <script src="{% static 'js/schedule.js' %}"></script>
     <script>
-      var currentUser = "{{ user.username }}";
+        var id = createSched("{{ user.username }}");
+        scheds[id].setSchedule("{{ user.profile.wanted_schedule }}");
     </script>
-  </div>
-
-  <!-- Bootstrap core JavaScript -->
-  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
-  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
-  <!-- Plugin JavaScript -->
-  <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-
-  <script src="{% static 'js/resume.min.js' %}"></script>
-  <script src="{% static 'js/schedule.js' %}"></script>
-  <script>
-    var id = createSched("{{ user.username }}");
-    scheds[id].setSchedule("{{ user.profile.wanted_schedule }}");
-  </script>
+    {% endif %}
 
 </body>
+
 </html>

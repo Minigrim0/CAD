@@ -23,9 +23,6 @@ class Profile(models.Model):
     birthDate = models.DateField(
         auto_now=False, auto_now_add=False, default="2019-01-01",
         verbose_name="Date de naissance")
-    notifications_nb = models.IntegerField(
-        null=True, blank=True, default=0,
-        verbose_name="Nombre de notifications")
     Maths_course = models.BooleanField(
         default=False, verbose_name="Maths")
     Chimie_course = models.BooleanField(
@@ -67,6 +64,8 @@ class Profile(models.Model):
     # User as payed the two first hours of course
     confirmed_account = models.BooleanField(
         default=False, verbose_name="A payé ses 2 premières heures de cours")
+    coach = models.ForeignKey(
+        User, null=True, related_name="Coach", on_delete=models.CASCADE)
 
     # Coach
     school = models.CharField(
@@ -112,6 +111,9 @@ class studentRequest(models.Model):
     student = models.OneToOneField(User, on_delete=models.CASCADE)
     # represents the coaches who accepted this request
     coaches = models.ManyToManyField(Profile)
+    is_closed = models.BooleanField(default=False)
+    choosenCoach = models.CharField(
+        null=True, default='Pas encore de coach choisit', max_length=100)
 
 
 class Notification(models.Model):
