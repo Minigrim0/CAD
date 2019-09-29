@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from administration.views import serializeDate
-from users.models import Notification, studentRequest
+from users.models import Notification, studentRequest, Profile
 
 
 def userView(request):
@@ -25,6 +25,7 @@ def userView(request):
         'English': 'Anglais'}
 
     notifications = a_user.notification_set.all()
+    nb_notifs = a_user.notification_set.count()
 
     return render(request, 'users/user.html', locals())
 
@@ -86,83 +87,98 @@ def disconnect(request):
     return HttpResponseRedirect("/06/")
 
 
+def ModifyDays(profile, form):
+    profile.wanted_schedule = ""
+    days_array = [
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday',
+        'Sunday']
+
+    for day in days_array:
+        id = "course " + day
+        try:
+            if form[id] == 'on':
+                profile.wanted_schedule += "1/"
+                profile.wanted_schedule += form[day+"Start"] + "/"
+                profile.wanted_schedule += form[day+"End"] + "."
+        except KeyError:
+            profile.wanted_schedule += "0/0/0."
+    profile.save()
+
+
+def ModifyStudent(profile, form):
+    ModifyDays(profile, form)
+
+    profile.NeedsVisit = False
+    if form["Visit"] != "NoVisit":
+        profile.NeedsVisit = True
+
+    profile.comments = form["comments"]
+
+    profile.tutor_firstName = form["tutorFirstName"]
+    profile.tutor_name = form["tutorName"]
+    profile.save()
+
+
+def ModifyCoach(profile, form):
+    profile.school = form["school"]
+    profile.IBAN = form["IBAN"]
+    profile.nationalRegisterID = form["natRegID"]
+    profile.French_level = form["Frenchlevel"]
+    profile.English_level = form["Englishlevel"]
+    profile.Dutch_level = form["Dutchlevel"]
+
+    profile.save()
+
+
 def modifyUser(request):
     if request.method == "POST":
         try:
             form = request.POST
-            if "modify" in form.keys():
-                usr = User.objects.get(username=form["username"])
-                usr.first_name = form["firstName"]
-                usr.last_name = form["lastName"]
-                usr.email = form["mail"]
-                usr.save()
-                profile = usr.profile()
-
-                try:
-                    type = usr.profile.account_type
-
-                    profile.phone_number = form["phone_number"]
-                    profile.address = form["address"]
-                    profile.birthDate = serializeDate(form["birthDate"])
-
-                    for course in ["Maths", "Chimie", "Physique", "Francais"]:
-                        if course+"_Course" in form.keys():
-                            exec("usr.profile." + course + "_course = True")
-                        else:
-                            exec("usr.profile." + course + "_course = False")
-
-                    if type == "Etudiant":
-                        profile.wanted_schedule = ""
-                        days_array = [
-                            'Monday',
-                            'Tuesday',
-                            'Wednesday',
-                            'Thursday',
-                            'Friday',
-                            'Saturday',
-                            'Sunday']
-
-                        for day in days_array:
-                            id = "course " + day
-                            try:
-                                if form[id] == 'on':
-                                    profile.wanted_schedule += "1/"
-                                    profile.wanted_schedule += form[
-                                        day+"Start"] + "/"
-                                    profile.wanted_schedule += form[
-                                        day+"End"] + "."
-                            except KeyError:
-                                profile.wanted_schedule += "0/0/0."
-
-                        profile.NeedsVisit = False
-                        if form["Visit"] != "NoVisit":
-                            profile.NeedsVisit = True
-
-                        profile.comments = form["comments"]
-
-                        profile.tutor_firstName = form["tutorFirstName"]
-                        profile.tutor_name = form["tutorName"]
-                    elif type == "Coach":
-                        profile.school = form["school"]
-                        profile.IBAN = form["IBAN"]
-                        profile.nationalRegisterID = form["natRegID"]
-
-                        profile.French_level = form["Frenchlevel"]
-                        profile.English_level = form["Englishlevel"]
-                        profile.Dutch_level = form["Dutchlevel"]
-
-                    profile.save()
-
-                except Exception as e:
-                    print("Error :", e)
-
-                return HttpResponseRedirect("/users/me")
-            else:
+            if "delete" in form.keys():
                 usr = User.objects.get(username=form["username"])
                 usr.is_active = False
                 usr.save()
                 logout(request)
                 return HttpResponseRedirect("/12/")
+
+            usr = User.objects.get(username=form["username"])
+            usr.first_name = form["firstName"]
+            usr.last_name = form["lastName"]
+            usr.email = form["mail"]
+            usr.save()
+            profile = usr.profile
+
+            try:
+                type = usr.profile.account_type
+            except Exception as e:
+                print("Error :", e)
+                profile = Profile(user=usr)
+                profile.save()
+                type = usr.profile.account_type
+
+            profile.phone_number = form["phone_number"]
+            profile.address = form["address"]
+            profile.birthDate = serializeDate(form["birthDate"])
+
+            for course in ["Maths", "Chimie", "Physique", "Francais"]:
+                if course+"_Course" in form.keys():
+                    exec("profile." + course + "_course = True")
+                else:
+                    exec("profile." + course + "_course = False")
+
+            profile.save()
+
+            if type == "Etudiant":
+                ModifyStudent(profile, form)
+            elif type == "Coach":
+                ModifyCoach(profile, form)
+
+            return HttpResponseRedirect("/users/me")
 
         except Exception as e:
             print("Error :", e)
@@ -177,6 +193,7 @@ def requestView(request, id=0):
         allowed = allowed or request.user.is_superuser
         if request.user.is_authenticated() and allowed:
             student_request = studentRequest.objects.get(id=id)
+            student_request_closed = studentRequest.objects.get(id=id)
             user = student_request.student
             coach = request.user
             coaches = [
@@ -189,7 +206,10 @@ def requestView(request, id=0):
     else:
         if request.user.is_authenticated():
             if request.user.is_superuser:
-                student_requests = studentRequest.objects.all()
+                student_requests = studentRequest.objects.all().exclude(
+                    is_closed=True)
+                student_requests_closed = studentRequest.objects.all().exclude(
+                    is_closed=False)
 
                 return render(request, "users/requestsAdmin.html", locals())
             else:
@@ -198,14 +218,52 @@ def requestView(request, id=0):
             return HttpResponseRedirect("/05/")
 
 
+def thanksCoaches(coaches, student):
+    author = "L'équipe CAD"
+    title = "Merci d'avoir répondu présent"
+    content = "Merci d'avoir répondu présent à la requête de {} {}. \
+    Malheureusement, vous n'avez pas été choisit pour donner cours à \
+    cet étudiant. Mais ne vous en faites pas, voitre tour viendra !".format(
+        student.first_name, student.last_name)
+    for coach in coaches:
+        new_notif = Notification(
+            user=coach.user, author=author, title=title, content=content)
+        new_notif.save()
+
+
 def chooseCoach(request):
     if request.method != "POST":
-        print("went through here")
         return HttpResponse("/05/")
 
-    print("went through here")
-    return HttpResponse(
-        "Yay-{}-{}".format(request.POST['coach'], request.POST['id']))
+    query = request.POST
+
+    s_request = studentRequest.objects.get(id=query['id'])
+    coach = s_request.coaches.get(user__username=query["coach"])
+    other_coaches = s_request.coaches.all().exclude(
+        user__username=query["coach"])
+
+    s_request.is_closed = True
+    s_request.choosenCoach = coach.user.username
+    student = s_request.student
+    student.coach = coach
+    coach.nbStudents += 1
+
+    s_request.save()
+    student.save()
+    coach.save()
+
+    author = "L'équipe CAD"
+    title = "Félicitations !"
+    content = "Vous avez été choisit pour enseigner à {} {} ! Vous pouvez \
+    vous rendre sur votre profil pour retrouver les coordonées de cet \
+    étudiant".format(student.first_name, student.last_name)
+    new_Notif = Notification(
+        user=coach.user, author=author, title=title, content=content)
+    new_Notif.save()
+
+    thanksCoaches(other_coaches, student)
+
+    return HttpResponse("success")
 
 
 def requestManage(request):

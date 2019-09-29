@@ -1,107 +1,108 @@
 <!DOCTYPE html>
 <html lang="fr">
 
-  {% load static %}
+{% load static %}
 
 <head>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <title>CAD - mon suivi</title>
+    <title>CAD - mon suivi</title>
 
-  <!-- Bootstrap core CSS -->
-  <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
-  <!-- Custom fonts for this template -->
-  <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
-  <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
 
-  <!-- Custom styles for this template -->
-  <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
 </head>
 
 <body id="page-top">
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-    <a class="navbar-brand js-scroll-trigger" href="#page-top">
-      <span class="d-block d-lg-none">Cours à domicile</span>
-      <span class="d-none d-lg-block">
-        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
-      </span>
-    </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a href="/" class="nav-link">Accueil</a>
-        </li>
-        <li class="nav-item">
-          <a href="../" class="nav-link">Mon compte</a>
-        </li>
-      </ul>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+            <span class="d-block d-lg-none">Cours à domicile</span>
+            <span class="d-none d-lg-block">
+                <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
+            </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/" class="nav-link">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/users/me/" class="nav-link">Mon compte</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+
+        <section class="p-3 p-lg-5 align-items-center">
+            <div id="container">
+
+                <h2>Mon Suivi</h2>
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <ul class="list-group">
+                                <li class="list-group-item">Date</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-8">
+                            <ul class="list-group">
+                                <li class="list-group-item">Commentaires</li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-2">
+                            <ul class="list-group">
+                                <li class="list-group-item">Coach</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <ul class="list-group">
+                                {% for elem in followelement_set %}
+                                <li class="list-group-item">{{ elem.date|date:"SHORT_DATE_FORMAT" }} - {{ elem.date|time:"H\hi" }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-lg-8">
+                            <ul class="list-group">
+                                {% for elem in followelement_set %}
+                                <li class="list-group-item">{{ elem.comments|safe }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="col-lg-2">
+                            <ul class="list-group">
+                                {% for elem in followelement_set %}
+                                <li class="list-group-item">{{ elem.coach }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
     </div>
-  </nav>
-
-  <div class="container-fluid">
-
-    <section class="p-3 p-lg-5 align-items-center">
-      <div id="container">
-
-        <h2>Mon Suivi</h2>
-        <div class="col-lg-12">
-          <div class="row">
-            <div class="col-lg-2">
-              <ul class="list-group">
-                <li class="list-group-item">Date</li>
-              </ul>
-            </div>
-            <div class="col-lg-8">
-              <ul class="list-group">
-                <li class="list-group-item">Commentaires</li>
-              </ul>
-            </div>
-            <div class="col-lg-2">
-              <ul class="list-group">
-                <li class="list-group-item">Coach</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-12">
-          <div class="row">
-            <div class="col-lg-2">
-              <ul class="list-group">
-                {% for elem in followelement_set %}
-                  <li class="list-group-item">{{ elem.date|date:"SHORT_DATE_FORMAT" }} - {{ elem.date|time:"H\hi" }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-            <div class="col-lg-8">
-              <ul class="list-group">
-                {% for elem in followelement_set %}
-                  <li class="list-group-item">{{ elem.comments|safe }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-            <div class="col-lg-2">
-              <ul class="list-group">
-                {% for elem in followelement_set %}
-                  <li class="list-group-item">{{ elem.coach }}</li>
-                {% endfor %}
-              </ul>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-  </div>
 </body>
+
 </html>
