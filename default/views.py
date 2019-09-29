@@ -61,8 +61,10 @@ def home(request, param=""):
         dico_["a_Success"].append("Votre compte à bien été confirmé ! Vous \
         allez pouvoir commencer à donner cours !")
 
-    if not request.user.is_anonymous:
+    try:
         dico_["nb_notif"] = request.user.notification_set.count()
+    except Exception as e:
+        print("Unauthenticated user :", e)
 
     return render(request, 'default/index.html', dico_)
 

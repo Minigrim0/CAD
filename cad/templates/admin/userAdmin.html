@@ -552,13 +552,10 @@
 
             function setupUsr(thing) {
                 document.getElementById(thing + "_div").style.display = "none";
-            } {
-                %
-                for user in a_users %
             }
-            setupUsr("{{ user.username }}"); {
-                % endfor %
-            }
+            {% for user in a_users %}
+            setupUsr("{{ user.username }}");
+            {% endfor %}
 
             toggle("{{ a_firstUserUsername }}");
             currentUser = "{{ a_firstUserUsername }}";
