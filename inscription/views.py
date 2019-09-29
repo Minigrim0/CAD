@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User, Group
 from users.models import Profile, Notification, FollowElement, studentRequest
@@ -119,7 +119,6 @@ def studentRegister(request):
                 content += "autrement, nous ne pourront pas trouver "
                 content += "des coaches adaptés."
                 create_notif(user, title, content, author)
-                profil.notifications_nb += 1
 
             profil.account_type = "Etudiant"
             profil.phone_number = form["tutorPhoneNumber"]
@@ -147,7 +146,6 @@ def studentRegister(request):
             content += "si vous avez le moindre soucis via ce "
             content += "<a href='/contact/'>formulaire</a> !"
             create_notif(user, title, content, author)
-            profil.notifications_nb += 1
             profil.save()
 
             try:
@@ -185,22 +183,29 @@ def confirmation(request, string=""):
 
     # L'utilisateur a vérifié son adresse mail
     # Compte vérifié mais pas confirmé
-    user.profile.verified_account = True
-    user.profile.save()
+    profile = user.profile
 
-    if user.profile.account_type == "Etudiant":
+    profile.verified_account = True
+    profile.save()
+
+    if profile.account_type == "Etudiant":
         return render(request, 'default/payment.html', locals())
     else:
-        user.profile.confirmed_account = True
-        user.profile.save()
+        profile.confirmed_account = True
+        profile.save()
         return HttpResponseRedirect("/13/")
 
 
-def pay_later(request, string=""):
-    user = getUser(string)
+def paymentView(request):
+    user = request.user
+    return render(request, "default/payment.html", locals())
+
+
+def pay_later(request):
+    user = request.user
 
     # token manquant ou non valide
-    if string == "" or user is None:
+    if user is None:
         return HttpResponseRedirect("/05/")
 
     # Si le compte est déjà confirmé,
@@ -211,26 +216,26 @@ def pay_later(request, string=""):
     newNotif = Notification(user=user)
     newNotif.author = "L'équipe CAD"
     newNotif.title = "Paiement en attente"
-    newNotif.content = "N'oubliez pas de payer vos cours ! Nous vous \
-        enverrons un rappel dans 2 jours si nous n'avons rien reçu d'ici là"
+    newNotif.content = "N'oubliez pas de <a href='/connexion/payment/'>\
+    payer</a> vos cours ! Nous vous enverrons un rappel dans 2 jours si \
+    nous n'avons rien reçu d'ici là"
     newNotif.save()
-    user.profil.notifications_nb += 1
-    user.profil.save()
+    user.profile.save()
 
     return HttpResponseRedirect("/10/")
 
 
-def thanks(request, string=""):
-    user = getUser(string)
+def thanks(request):
+    user = request.user
 
     # token manquant ou non valide
-    if string == "" or user is None:
+    if user is None:
         return HttpResponseRedirect("/05/")
 
     # Si le compte est déjà confirmé, l'utilisateur ne doit plus accéder
     # à cette page
-    # if user.profile.confirmed_account:
-    #     return HttpResponseRedirect("/05/")
+    if user.profile.confirmed_account:
+        return HttpResponseRedirect("/05/")
 
     # L'utilisateur a confirmé son compte
     # Compte vérifié et confirmé
@@ -242,7 +247,7 @@ def thanks(request, string=""):
 
     sendNotifToCoaches(user.profile)
 
-    return HttpResponse("/11/")
+    return HttpResponseRedirect("/11/")
 
 
 def getUser(token):
@@ -328,5 +333,4 @@ def sendNotifToCoaches(student):
                 student.user.studentrequest.id)
             newNotif.content += " pour voir le profil de l'etudiant"
             newNotif.save()
-            coach.notifications_nb += 1
             coach.save()
