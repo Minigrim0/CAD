@@ -1,21 +1,29 @@
 function toggleConnexion() {
     document.getElementById("ConnexionForm").style.display = "block";
+    document.getElementById("TypeConnexion").classList.add("active");
     document.getElementById("InscriptionForm").style.display = "none";
+    document.getElementById("TypeRegister").classList.remove("active");
 }
 
 function toggleInscription() {
     document.getElementById("ConnexionForm").style.display = "none";
+    document.getElementById("TypeConnexion").classList.remove("active");
     document.getElementById("InscriptionForm").style.display = "block";
+    document.getElementById("TypeRegister").classList.add("active");
 }
 
 function toggleRegisterStudent() {
     document.getElementById("studentRegister").style.display = "block";;
+    document.getElementById("AsStudent").classList.add("active");
     document.getElementById("coachRegister").style.display = "none";
+    document.getElementById("AsCoach").classList.remove("active");
 }
 
 function toggleRegisterCoach() {
     document.getElementById("studentRegister").style.display = "none";
+    document.getElementById("AsStudent").classList.remove("active");
     document.getElementById("coachRegister").style.display = "block";
+    document.getElementById("AsCoach").classList.add("active");
 
     document.getElementById("French_3").checked = true;
     document.getElementById("Dutch_3").checked = true;

@@ -60,9 +60,13 @@
                     Devenez coach ou élève
                 </div>
                 <div class="subheading mb-2 text-center">
-                    <div class="btn-group btn-group-md" role="group" aria-label="Inscription">
-                        <button type="button" class="btn btn-secondary" onclick="toggleConnexion()">Connexion</button>
-                        <button type="button" class="btn btn-secondary" onclick="toggleInscription()">Inscription</button>
+                    <div class="btn-group btn-group-toggle mb-2">
+                        <label id="TypeConnexion" class="btn btn-secondary active">
+                            <input type="radio" id="RegisterType" onclick="toggleConnexion()" checked>Connexion</button>
+                        </label>
+                        <label id="TypeRegister" class="btn btn-secondary">
+                            <input type="radio" id="RegisterType" onclick="toggleInscription()">Inscription</button>
+                        </label>
                     </div>
                 </div>
 
@@ -96,12 +100,12 @@
                 <div id="InscriptionForm" style="display: none;">
                     <div class="container text-center">
                         <h3 class="mb-2">S'inscrire en tant que</h3>
-                        <div class="btn-group btn-group-toggle mb-2" data-toggle="buttons">
-                            <label class="btn btn-secondary active">
-                                <input type="radio" name="registrationType" onchange="toggleRegisterStudent()" id="Student" autocomplete="off" checked> Etudiant
+                        <div class="btn-group btn-group-toggle mb-2">
+                            <label id="AsStudent" class="btn btn-secondary active">
+                                <input type="radio" onclick="toggleRegisterStudent()" checked> Etudiant
                             </label>
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="registrationType" onchange="toggleRegisterCoach()" id="Coach" autocomplete="off"> Coach
+                            <label id="AsCoach" class="btn btn-secondary">
+                                <input type="radio" onclick="toggleRegisterCoach()"> Coach
                             </label>
                         </div>
 
