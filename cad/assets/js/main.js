@@ -44,36 +44,60 @@ function checkPass() {
     }
 
     if (pass != passConf) {
-        document.getElementById("errorLab").innerHTML = "Les mots de passe ne sont pas identiques !";
+        document.getElementById("notGoodPass").innerHTML = "Les mots de passe ne sont pas identiques !";
+    } else if (pass.length == 0) {
+        document.getElementById("notGoodPass").innerHTML = "ce champ est obligatoire !";
     } else if (pass.length < 8) {
-        document.getElementById("errorLab").innerHTML = "Le mot de passe est trop court !";
+        document.getElementById("notGoodPass").innerHTML = "Le mot de passe est trop court !";
     } else {
-        document.getElementById("errorLab").innerHTML = "";
+        document.getElementById("notGoodPass").innerHTML = "";
         return true;
     }
     return false;
 }
 
 function checkCoordinates() {
+    phoneno = /^\(?([0-9]{3,4})\)?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})$/;
+    phone = document.getElementById("phoneNumber").value.match(phoneno);
+    phone = phone == null ? false : true;
     address = document.getElementById("Address").value != "";
     mail = validateEmail(document.getElementById("mail").value);
-    phone = document.getElementById("phoneNumber").value != "";
+    courses = document.getElementById("math").checked
+        || document.getElementById("chemistry").checked
+        || document.getElementById("physics").checked
+        || document.getElementById("french").checked;
 
-    if (!mail) {
-        document.getElementById("mailError").innerHTML = "Cette addresse mail n'est pas correcte !";
-    } else {
-        document.getElementById("mailError").innerHTML = "";
-    }
-    return phone && address && mail;
+    document.getElementById("notGoodPhone").innerHTML = "";
+    document.getElementById("notGoodAddress").innerHTML = "";
+    document.getElementById("mailError").innerHTML = "";
+    document.getElementById("notGoodCourse").innerHTML = "";
+    if (!phone) document.getElementById("notGoodPhone").innerHTML = "Ce numero de telephone n'est pas correct";
+    if (!address) document.getElementById("notGoodAddress").innerHTML = "Ce champ est obligatoire !";
+    if (!mail) document.getElementById("mailError").innerHTML = "Cette adresse mail n'est pas correcte !";
+    if (!courses) document.getElementById("notGoodCourse").innerHTML = "Vous devez choisir au moins un cours !";
+
+    return phone
+        && address
+        && mail
+        && courses;
 }
 
 function checkNames() {
-    name = document.getElementById("name") != "";
-    firstName = document.getElementById("firstName") != "";
-    tutorName = document.getElementById("tutorName") != "";
-    tutorFirstName = document.getElementById("tutorFirstName") != "";
+    firstName = document.getElementById("firstName").value != "";
+    lastName = document.getElementById("lastName").value != "";
+    tutorFirstName = document.getElementById("tutorFirstName").value != "";
+    tutorLastName = document.getElementById("tutorLastName").value != "";
 
-    return name && firstName && tutorName && tutorFirstName;
+    document.getElementById("notGoodFirstName").innerHTML = "";
+    document.getElementById("notGoodLastName").innerHTML = "";
+    document.getElementById("notGoodTutorFirstName").innerHTML = "";
+    document.getElementById("notGoodTutorLastName").innerHTML = "";
+    if(!firstName) document.getElementById("notGoodFirstName").innerHTML = "Ce champ est obligatoire !";
+    if(!lastName) document.getElementById("notGoodLastName").innerHTML = "Ce champ est obligatoire !";
+    if(!lastName) document.getElementById("notGoodTutorFirstName").innerHTML = "Ce champ est obligatoire !";
+    if(!lastName) document.getElementById("notGoodTutorLastName").innerHTML = "Ce champ est obligatoire !";
+
+    return lastName && firstName && tutorName && tutorFirstName;
 }
 
 function validateEmail(email) {
@@ -81,30 +105,15 @@ function validateEmail(email) {
     return re.test(String(email).toLowerCase());
 }
 
-function checkBirth() {
-    birthDate = document.getElementById("birthDate").value != "";
-    return birthDate;
-}
-
-function checkCourses() {
-    math = document.getElementById("checkMath").checked;
-    chem = document.getElementById("checkChemistry").checked;
-    phys = document.getElementById("checkPhysics").checked;
-    fren = document.getElementById("checkFrench").checked;
-
-    if (!math && !chem && !phys && !fren) {
-        return false;
-    }
-    return true;
-}
-
 function validate() {
-    if (checkPass() && checkNames() && checkBirth() && checkCoordinates() && checkCourses()) {
-        document.getElementById("registerErrors").innerHTML = "";
-        return true;
-    }
-    document.getElementById("registerErrors").innerHTML = "Certains champs obligatoires n'ont pas été remplis ou le mot de passe n'est pas correct !";
-    return false;
+    var checked = checkPass();
+    checked = checkNames()       && checked;
+    checked = checkCoordinates() && checked;
+    document.getElementById("registerErrors").innerHTML = "";
+    if (!checked) document.getElementById("registerErrors").innerHTML = "\
+        Certains champs obligatoires n'ont pas été remplis ou \
+        les mots de passe ne correspondent pas !";
+    return checked;
 }
 
 //COACH CHECKS
@@ -136,9 +145,10 @@ function checkC_Pass() {
 
 function checkC_Coordinates() {
     phoneno = /^\(?([0-9]{3,4})\)?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})$/;
+    phone = document.getElementById("C_phoneNumber").value.match(phoneno);
+    phone = phone == null ? false : true;
     address = document.getElementById("C_Address").value != "";
     mail = validateEmail(document.getElementById("C_mail").value);
-    phone = document.getElementById("C_phoneNumber").value.match(phoneno);
     iban = document.getElementById("C_IBAN").value != "";
     natreg_number = document.getElementById("C_IBAN").value != "";
     courses = document.getElementById("C_math").checked
@@ -146,24 +156,29 @@ function checkC_Coordinates() {
         || document.getElementById("C_physics").checked
         || document.getElementById("C_french").checked;
     school = document.getElementById("C_School").value != "";
-    school = document.getElementById("C_IBAN").value != "";
 
-    document.getElementById("C_mailError").innerHTML = "";
-    document.getElementById("C_notGoodNRN").innerHTML = "";
-    document.getElementById("C_notGoodAddress").innerHTML = "";
     document.getElementById("C_notGoodPhone").innerHTML = "";
+    document.getElementById("C_notGoodAddress").innerHTML = "";
+    document.getElementById("C_mailError").innerHTML = "";
+    document.getElementById("C_notGoodIBAN").innerHTML = "";
+    document.getElementById("C_notGoodNRN").innerHTML = "";
     document.getElementById("C_notGoodCourse").innerHTML = "";
     document.getElementById("C_notGoodSchool").innerHTML = "";
-    document.getElementById("C_notGoodIBAN").innerHTML = "";
-    if (!mail) document.getElementById("C_mailError").innerHTML = "Cette addresse mail n'est pas correcte !";
-    if (!natreg_number) document.getElementById("C_notGoodNRN").innerHTML = "Ce champ est obligatoire !";
-    if (!address) document.getElementById("C_notGoodAddress").innerHTML = "Ce champ est obligatoire !";
     if (!phone) document.getElementById("C_notGoodPhone").innerHTML = "Ce numero de telephone n'est pas correct";
-    if (!phone) document.getElementById("C_notGoodCourse").innerHTML = "Vous devez choisir au moins un cours !";
-    if (!phone) document.getElementById("C_notGoodSchool").innerHTML = "Ce champ est obligatoire !";
-    if (!phone) document.getElementById("C_notGoodIBAN").innerHTML = "Ce champ est obligatoire !";
+    if (!address) document.getElementById("C_notGoodAddress").innerHTML = "Ce champ est obligatoire !";
+    if (!mail) document.getElementById("C_mailError").innerHTML = "Cette addresse mail n'est pas correcte !";
+    if (!iban) document.getElementById("C_notGoodIBAN").innerHTML = "Ce champ est obligatoire !";
+    if (!natreg_number) document.getElementById("C_notGoodNRN").innerHTML = "Ce champ est obligatoire !";
+    if (!courses) document.getElementById("C_notGoodCourse").innerHTML = "Vous devez choisir au moins un cours !";
+    if (!school) document.getElementById("C_notGoodSchool").innerHTML = "Ce champ est obligatoire !";
 
-    return phone && address && mail && iban;
+    return phone
+        && address
+        && mail
+        && iban
+        && natreg_number
+        && courses
+        && school;
 }
 
 function checkC_Names() {
@@ -180,21 +195,9 @@ function checkC_Names() {
     return lastName && firstName;
 }
 
-function checkC_Birth() {
-    birthDate = document.getElementById("C_birthDate");
-    if (birthDate.value == ""){
-        document.getElementById("C_notGoodBirth").innerHTML = "Ce champ est obligatoire !";
-        return false
-    }
-    document.getElementById("C_notGoodBirth").innerHTML = "";
-
-    return true;
-}
-
 function C_validate() {
     var checked = checkC_Pass();
     checked = checkC_Names()       && checked;
-    checked = checkC_Birth()       && checked;
     checked = checkC_Coordinates() && checked;
     if (checked) {
         return true;
