@@ -281,36 +281,67 @@
                                 <!-- Coach name and first name -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="name">Nom du Coach<span style="color:red;">*</span></label>
-                                        <input type="text" class="form-control" id="C_name" name="C_name" placeholder="Nom">
+                                        <label for="C_firstName">
+                                            Prénom du Coach
+                                            <span style="color:red;">
+                                                *
+                                            </span>
+                                        </label>
+                                        <input type="text" class="form-control" id="C_firstName" name="firstName">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodFirstName">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputPassword4">Prénom du Coach<span style="color:red;">*</span></label>
-                                        <input type="text" class="form-control" id="C_firstName" name="C_firstName" placeholder="Prénom">
+                                        <label for="C_lastName">
+                                            Nom du Coach
+                                            <span style="color:red;">
+                                                *
+                                            </span>
+                                        </label>
+                                        <input type="text" class="form-control" id="C_lastName" name="lastName">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodLastName">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
                                 <!-- Coach password and confirmation -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="C_passwd">Choisissez un mot de passe (min. 8 caract.)<span style="color:red;">*</span></label>
-                                        <input type="password" class="form-control" name="C_password" id="C_passwd">
-                                        <span style="color:red;"><label for="C_passwd" id="C_errorLab"></label></span>
+                                        <label for="C_password">
+                                            Choisissez un mot de passe (min. 8 caract.)
+                                            <span style="color:red;">
+                                                *
+                                            </span>
+                                        </label>
+                                        <input type="password" class="form-control" name="password" id="C_password">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodPass">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="C_passwdConf">Confirmez le mot de passe<span style="color:red;">*</span></label>
+                                        <label for="C_passConf">
+                                            Confirmez le mot de passe
+                                            <span style="color:red;">
+                                                *
+                                            </span>
+                                        </label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                    <div id="C_passwdNM">
+                                                    <div id="C_passNoMatch" >
                                                         <span style="color:red;">X</span>
                                                     </div>
-                                                    <div id="C_passwdM" style="display: none;">
+                                                    <div id="C_passMatch" style="display: none;">
                                                         <span style="color:green;">V</span>
                                                     </div>
                                                 </span>
                                             </div>
-                                            <input type="password" class="form-control" id="C_passwdConf" onchange="checkC_Pass()">
+                                            <input type="password" class="form-control" id="C_passConf" name="passwordConf" onchange="checkC_Pass()">
                                         </div>
                                     </div>
                                 </div>
@@ -320,17 +351,29 @@
                                     <div class="form-group col-md-6">
                                         <label for="bday">Date de naissance du Coach<span style="color:red;">*</span></label>
                                         <input type="date" class="form-control" value="value=" 2001-01-01"" name="coachbday" id="C_birthDate">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodBirth">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="class">Numéro de registre national<span style="color:red;">*</span></label>
                                         <input class="form-control" type="text" name="coachNationalRegister" id="C_nationalRegister">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodNRN">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
                                 <!-- Coach Address -->
                                 <div class="form-group">
                                     <label for="C_Address">Adresse du Coach<span style="color:red;">*</span></label>
-                                    <input type="text" class="form-control" id="C_Address" name="C_Address" placeholder="Ex : Bvd Anspach 350">
+                                    <input type="text" class="form-control" id="C_Address" name="Address" placeholder="Ex : Bvd Anspach 350">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodAddress">
+                                        </label>
+                                    </span>
                                 </div>
 
                                 <!-- Coach mail and phone -->
@@ -338,11 +381,18 @@
                                     <div class="form-group col-md-6">
                                         <label for="C_mail">Adresse mail<span style="color:red;">*</span></label>
                                         <input type="mail" class="form-control" id="C_mail" name="C_mailAddress">
-                                        <span style="color:red;"><label id="C_mailError"></label></span>
+                                        <span style="color:red;">
+                                            <label id="C_mailError">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="C_phoneNumber">téléphone<span style="color:red;">*</span></label>
-                                        <input type="tel" id="C_phoneNumber" class="form-control" name="coachPhoneNumber">
+                                        <input type="text" id="C_phoneNumber" class="form-control" name="coachPhoneNumber" placeholder="04XX/XX.XX.XX">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodPhone">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -372,6 +422,10 @@
                                             <input type="checkbox" class="custom-control-input" name="GivesFrancais" value="GivesFrancais" id="C_french">
                                             <label class="custom-control-label" for="C_french">Français</label>
                                         </div>
+                                        <span style="color:red;">
+                                            <label id="C_notGoodCourse">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -380,6 +434,10 @@
                                     <div class="form-group col-md-6">
                                         <label for="comment">Formation suivie et nom de l'université/institution</label>
                                         <input type="text" id="C_School" placeholder="Ecole" class="form-control" name="coachSchool">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodSchool">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="class">Vous voulez donner cours en<span style="color:red;">*</span></label>
@@ -423,6 +481,10 @@
                                 <div class="form-group">
                                     <label for="Address">Numéro de compte en banque<span style="color:red;">*</span></label>
                                     <input type="text" class="form-control" name="C_IBAN" id="C_IBAN" placeholder="BEXXXXXXXXXXXXXXXXXXXXXXXXX">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodIBAN">
+                                        </label>
+                                    </span>
                                 </div>
 
                                 <span style="color:red;"><label id="C_registerErrors"></label></span><br>

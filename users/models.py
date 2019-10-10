@@ -43,7 +43,21 @@ class Profile(models.Model):
         null=True, blank=True, default="None", max_length=50,
         verbose_name="Souhaite donner cours en")
 
+    def __repr__(self):
+        string = "Nom : {} ".format(self.user.first_name)
+        string += "{}\n".format(self.user.last_name)
+        string += "Role : {}\n".format(self.account_type)
+        if self.account_type == "Coach":
+            string += "Donne cours en " + self.school_level + "\n"
+        else:
+            string += "Est en " + self.school_level + "\n"
+        return string
+
+
+class StudentAccount(models.Model):
     # Student
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+
     tutor_name = models.CharField(
         null=True, blank=True, default="inconnu", max_length=50,
         verbose_name="Nom du tuteur")
@@ -67,7 +81,11 @@ class Profile(models.Model):
     coach = models.ForeignKey(
         User, null=True, related_name="Coach", on_delete=models.CASCADE)
 
+
+class CoachAccount(models.Model):
     # Coach
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+
     school = models.CharField(
         null=True, blank=True, default="None",  max_length=50,
         verbose_name="Ecole")
@@ -89,16 +107,6 @@ class Profile(models.Model):
     nbStudents = models.IntegerField(
         null=True, blank=True, verbose_name="nombre d'étudiants qu'à ce coach",
         default=0)
-
-    def __repr__(self):
-        string = "Nom : {} ".format(self.user.first_name)
-        string += "{}\n".format(self.user.last_name)
-        string += "Role : {}\n".format(self.account_type)
-        if self.account_type == "Coach":
-            string += "Donne cours en " + self.school_level + "\n"
-        else:
-            string += "Est en " + self.school_level + "\n"
-        return string
 
 
 class studentRequest(models.Model):
@@ -136,7 +144,9 @@ class Notification(models.Model):
     # body of the notification (Html)
     content = models.TextField(
         blank=True, null=True, verbose_name="Contenu de la notification")
-
+    # Date of the creation
+    date_created = models.DateField(
+        auto_now_add=True, null=True)
 
 DEFAULT_ID = 1
 
