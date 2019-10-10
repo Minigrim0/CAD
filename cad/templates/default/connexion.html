@@ -99,18 +99,24 @@
                 <!-- General registration form -->
                 <div id="InscriptionForm" style="display: none;">
                     <div class="container text-center">
-                        <h3 class="mb-2">S'inscrire en tant que</h3>
-                        <div class="btn-group btn-group-toggle mb-2">
-                            <label id="AsStudent" class="btn btn-secondary active">
-                                <input type="radio" onclick="toggleRegisterStudent()" checked> Etudiant
-                            </label>
-                            <label id="AsCoach" class="btn btn-secondary">
-                                <input type="radio" onclick="toggleRegisterCoach()"> Coach
-                            </label>
-                        </div>
+                        <h4 class="mb-2">
+                            S'inscrire en tant que :
+                            <div class="btn-group btn-group-toggle mb-2">
+                                <label id="AsStudent" class="btn btn-secondary active">
+                                    <input type="radio" onclick="toggleRegisterStudent()" checked> Etudiant
+                                </label>
+                                <label id="AsCoach" class="btn btn-secondary">
+                                    <input type="radio" onclick="toggleRegisterCoach()"> Coach
+                                </label>
+                            </div>
+                        </h4>
 
                         <div class="subheading mb-2 text-center">
-                            <h6 class="mb-1"><span style="color:red;">* = obligatoire</span></h6>
+                            <h6 class="mb-1">
+                                <span style="color:red;">
+                                    (* = obligatoire)
+                                </span>
+                            </h6>
                         </div>
 
                         <!-- Student registration -->
@@ -120,12 +126,20 @@
                                 <!-- Student name and first name -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="name">Nom de l'élève<span style="color:red;">*</span></label>
-                                        <input type="text" class="form-control" name="name" id="name" placeholder="Nom">
-                                    </div>
-                                    <div class="form-group col-md-6">
                                         <label for="firstName">Prénom de l'élève<span style="color:red;">*</span></label>
                                         <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Prénom">
+                                        <span style="color:red;">
+                                            <label id="notGoodFirstName">
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="lastName">Nom de l'élève<span style="color:red;">*</span></label>
+                                        <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Nom">
+                                        <span style="color:red;">
+                                            <label id="notGoodLastName">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -134,7 +148,10 @@
                                     <div class="form-group col-md-6">
                                         <label for="passwd">Choisissez un mot de passe (min. 8 caract.)<span style="color:red;">*</span></label>
                                         <input type="password" class="form-control" name="passwd" id="passwd">
-                                        <span style="color:red;"><label for="passwd" id="errorLab"></label></span>
+                                        <span style="color:red;">
+                                            <label for="passwd" id="notGoodPass">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="passwdConf">Confirmez le mot de passe<span style="color:red;">*</span></label>
@@ -157,11 +174,15 @@
                                 <!-- Birth date and current school level -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="bday">Date de naissance de l'élève<span style="color:red;">*</span></label>
-                                        <input type="date" class="form-control" value="2001-01-01" name="bday" id="birthDate">
+                                        <label for="birthDate">Date de naissance de l'élève<span style="color:red;">*</span></label>
+                                        <input type="date" class="form-control" value="2001-01-01" name="birthday" id="birthDate">
+                                        <span style="color:red;">
+                                            <label id="notGoodBirth">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="class">Classe de l'élève<span style="color:red;">*</span></label>
+                                        <label for="schoolLevel">Classe de l'élève<span style="color:red;">*</span></label>
                                         <select class="form-control" id="schoolLevel" name="schoolLevel">
                                             <option value="primary">Primaire</option>
                                             <option value="1ere">1ère humanité</option>
@@ -177,19 +198,31 @@
                                 <!-- Tutor name and first name -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="tutorName">Nom d'une personne responsable'<span style="color:red;">*</span></label>
-                                        <input type="text" class="form-control" id="tutorName" name="tutorName" placeholder="Nom du responsable">
-                                    </div>
-                                    <div class="form-group col-md-6">
                                         <label for="tutorFirstName">Prénom d'une personne responsable<span style="color:red;">*</span></label>
                                         <input type="text" class="form-control" id="tutorFirstName" name="tutorFirstName" placeholder="Prénom du responsable">
+                                        <span style="color:red;">
+                                            <label id="notGoodTutorFirstName">
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="tutorLastName">Nom d'une personne responsable'<span style="color:red;">*</span></label>
+                                        <input type="text" class="form-control" id="tutorLastName" name="tutorLastName" placeholder="Nom du responsable">
+                                        <span style="color:red;">
+                                            <label id="notGoodTutorLastName">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
                                 <!-- Student Address -->
                                 <div class="form-group">
                                     <label for="Address">Adresse de l'étudiant (où seront donnés les cours)<span style="color:red;">*</span></label>
-                                    <input type="text" class="form-control" name="StudentAddress" id="Address" placeholder="Ex : Bvd Anspach 350">
+                                    <input type="text" class="form-control" name="Address" id="Address" placeholder="Ex : Bvd Anspach 350">
+                                    <span style="color:red;">
+                                        <label id="notGoodAddress">
+                                        </label>
+                                    </span>
                                 </div>
 
                                 <!-- Tutor mail and phone -->
@@ -197,11 +230,18 @@
                                     <div class="form-group col-md-6">
                                         <label for="mail">Adresse mail<span style="color:red;">*</span></label>
                                         <input type="mail" class="form-control" id="mail" name="mailAddress">
-                                        <span style="color:red;"><label id="mailError"></label></span>
+                                        <span style="color:red;">
+                                            <label id="mailError">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="phoneNumber">téléphone du responsable<span style="color:red;">*</span></label>
-                                        <input type="tel" id="phoneNumber" class="form-control" name="tutorPhoneNumber">
+                                        <input type="tel" id="phoneNumber" class="form-control" name="PhoneNumber">
+                                        <span style="color:red;">
+                                            <label id="notGoodPhone">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -213,24 +253,28 @@
 
                                     <div class="form-group col-md-6" id="courses">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="NeededMaths" id="checkMath">
+                                            <input type="checkbox" class="custom-control-input" name="maths" id="math">
                                             <label class="custom-control-label" for="checkMath">Mathématiques</label>
                                         </div>
 
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="NeededChimie" id="checkChemistry">
+                                            <input type="checkbox" class="custom-control-input" name="chimie" id="chemistry">
                                             <label class="custom-control-label" for="checkChemistry">Chimie</label>
                                         </div>
 
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="NeededPhysique" id="checkPhysics">
+                                            <input type="checkbox" class="custom-control-input" name="physique" id="physics">
                                             <label class="custom-control-label" for="checkPhysics">Physique</label>
                                         </div>
 
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="NeededFrancais" id="checkFrench">
+                                            <input type="checkbox" class="custom-control-input" name="francais" id="french">
                                             <label class="custom-control-label" for="checkFrench">Français</label>
                                         </div>
+                                        <span style="color:red;">
+                                            <label id="notGoodCourse">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -249,7 +293,7 @@
                                     </div>
 
                                     <div class="form-group col-md-6">
-                                        <label for="comment">Remarques éventuelles</label>
+                                        <label for="comments">Remarques éventuelles</label>
                                         <input type="text" id="comments" placeholder="Commentaires : " class="form-control" name="comments">
                                     </div>
                                 </div>
@@ -354,7 +398,7 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="bday">Date de naissance du Coach<span style="color:red;">*</span></label>
-                                        <input type="date" class="form-control" value="value=" 2001-01-01"" name="coachbday" id="C_birthDate">
+                                        <input type="date" class="form-control" value="2000-01-01" name="birthday" id="C_birthDate">
                                         <span style="color:red;">
                                             <label id="C_notGoodBirth">
                                             </label>
@@ -362,7 +406,7 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="class">Numéro de registre national<span style="color:red;">*</span></label>
-                                        <input class="form-control" type="text" name="coachNationalRegister" id="C_nationalRegister">
+                                        <input class="form-control" type="text" name="NationalRegisterNumber" id="C_nationalRegister">
                                         <span style="color:red;">
                                             <label id="C_notGoodNRN">
                                             </label>
