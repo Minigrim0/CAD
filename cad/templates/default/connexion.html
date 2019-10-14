@@ -121,7 +121,11 @@
 
                         <!-- Student registration -->
                         <div id="studentRegister">
-                            <form onsubmit="return validate();" method="post" action="studentRegister/">{% csrf_token %}
+                            <form onsubmit="return validate();" method="post" action="register/">
+                                {% csrf_token %}
+
+                                <!-- Account type -->
+                                <input type="hidden" name="accountType" value="Etudiant">
 
                                 <!-- Student name and first name -->
                                 <div class="form-row">
@@ -299,7 +303,6 @@
                                 </div>
 
                                 <!-- Student disponibilities -->
-
                                 <div class="form-group row col-md-12 text-center">
                                     <label for="sketch-holder-new_user">Moments de disponibilités (soyez le plus large possible)<span style="color:red;">*</span></label>
                                     <div class="col-md-12" id="sketch-holder-new_user">
@@ -325,7 +328,12 @@
 
                         <!-- Coach registration -->
                         <div id="coachRegister" style="display: none;">
-                            <form onsubmit="return C_validate();" method="post" action="coachRegister/">{% csrf_token %}
+                            <form onsubmit="return C_validate();" method="post" action="register/">
+                                {% csrf_token %}
+
+                                <!-- Account type -->
+                                <input type="hidden" name="accountType" value="coach">
+
                                 <!-- Coach name and first name -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
