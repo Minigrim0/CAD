@@ -2,14 +2,12 @@ from django.conf.urls import url
 import inscription.views
 
 urlpatterns = [
-    url(r'^studentRegister/$',
-        inscription.views.studentRegister),
     url(r'^studentRegister/confirm/(?P<string>[\w\-]+)/$',
         inscription.views.confirmation),
     url(r'^payment/$',
         inscription.views.paymentView),
-    url(r'^coachRegister/$',
-        inscription.views.coachRegister),
+    url(r'^register/$',
+        inscription.views.register),
     url(r'^connect/$',
         inscription.views.connect),
     url(r'^paylater/$',

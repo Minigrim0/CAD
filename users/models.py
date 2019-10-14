@@ -41,7 +41,7 @@ class Profile(models.Model):
     # Represents either if coach give course to humanité or primaire
     school_level = models.CharField(
         null=True, blank=True, default="None", max_length=50,
-        verbose_name="Souhaite donner cours en")
+        verbose_name="Niveau scolaire")
 
     def __repr__(self):
         string = "Nom : {} ".format(self.user.first_name)
@@ -89,21 +89,18 @@ class CoachAccount(models.Model):
     school = models.CharField(
         null=True, blank=True, default="None",  max_length=50,
         verbose_name="Ecole")
-
     French_level = models.CharField(
         null=True, blank=True, default="Inconnu", max_length=50)
     English_level = models.CharField(
         null=True, blank=True, default="Inconnu", max_length=50)
     Dutch_level = models.CharField(
         null=True, blank=True, default="Inconnu", max_length=50)
-
     IBAN = models.CharField(
         null=True, blank=True, verbose_name="numéro de compte IBAN",
         default="inconnu", max_length=50)
     nationalRegisterID = models.CharField(
         null=True, blank=True, verbose_name="numéro de registre national",
         default="Inconnu", max_length=50)
-
     nbStudents = models.IntegerField(
         null=True, blank=True, verbose_name="nombre d'étudiants qu'à ce coach",
         default=0)
@@ -121,7 +118,7 @@ class studentRequest(models.Model):
     coaches = models.ManyToManyField(Profile)
     is_closed = models.BooleanField(default=False)
     choosenCoach = models.CharField(
-        null=True, default='Pas encore de coach choisit', max_length=100)
+        null=True, default='Pas encore de coach choisi', max_length=100)
 
 
 class Notification(models.Model):
@@ -147,6 +144,7 @@ class Notification(models.Model):
     # Date of the creation
     date_created = models.DateField(
         auto_now_add=True, null=True)
+
 
 DEFAULT_ID = 1
 
