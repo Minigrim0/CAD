@@ -1,16 +1,18 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from administration.views import serializeDate
 from users.models import Notification, studentRequest, Profile
 
 
+@login_required(login_url='/connexion/')
 def userView(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/05/")
 
-    a_user = request.user
+    user = request.user
 
     i_langLevel = {
         '5': 'Langue maternelle',
@@ -24,18 +26,27 @@ def userView(request):
         'Dutch': 'Néerlandais',
         'English': 'Anglais'}
 
-    notifications = a_user.notification_set.all()
-    nb_notifs = a_user.notification_set.count()
+    notifications = user.notification_set.all()
+    nb_notifs = user.notification_set.count()
 
     return render(request, 'users/user.html', locals())
 
 
+@login_required(login_url='/connexion/')
 def followView(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/05/")
 
     a_user = request.user
     followelement_set = a_user.followelement_set.all()
+
+    return render(request, 'users/follow.html', locals())
+
+
+@login_required(redirect_field_name='/05/')
+def studentsView(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect("/05/")
 
     return render(request, 'users/follow.html', locals())
 
@@ -51,7 +62,6 @@ def send_notif(request):
         _notif.content = request.POST["content"]
         _notif.author = request.POST["sender"]
         _notif.save()
-        user.profile.notifications_nb += 1
 
         user.profile.save()
 
@@ -82,11 +92,13 @@ def remove_notif(request):
     return HttpResponseRedirect("/05/")
 
 
+@login_required(redirect_field_name='/05/')
 def disconnect(request):
     logout(request)
     return HttpResponseRedirect("/06/")
 
 
+@login_required(redirect_field_name='/05/')
 def ModifyDays(profile, form):
     profile.wanted_schedule = ""
     days_array = [
@@ -110,6 +122,7 @@ def ModifyDays(profile, form):
     profile.save()
 
 
+@login_required(redirect_field_name='/05/')
 def ModifyStudent(profile, form):
     ModifyDays(profile, form)
 
@@ -124,6 +137,7 @@ def ModifyStudent(profile, form):
     profile.save()
 
 
+@login_required(redirect_field_name='/05/')
 def ModifyCoach(profile, form):
     profile.school = form["school"]
     profile.IBAN = form["IBAN"]
@@ -135,6 +149,7 @@ def ModifyCoach(profile, form):
     profile.save()
 
 
+@login_required(redirect_field_name='/05/')
 def modifyUser(request):
     if request.method == "POST":
         try:
@@ -187,6 +202,7 @@ def modifyUser(request):
         return HttpResponseRedirect('/05/')
 
 
+@login_required(redirect_field_name='/05/')
 def requestView(request, id=0):
     if id != 0:
         allowed = request.user.profile.account_type == "Coach"
@@ -218,6 +234,7 @@ def requestView(request, id=0):
             return HttpResponseRedirect("/05/")
 
 
+@login_required(redirect_field_name='/05/')
 def thanksCoaches(coaches, student):
     author = "L'équipe CAD"
     title = "Merci d'avoir répondu présent"
