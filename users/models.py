@@ -12,8 +12,9 @@ class Profile(models.Model):
 
     # Both type of account
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_number = models.IntegerField(
-        null=True, blank=True, verbose_name="numéro de téléphone", default=0)
+    phone_number = models.CharField(
+        null=True, blank=True, verbose_name="numéro de téléphone",
+        default="", max_length=10)
     account_type = models.CharField(
         null=True, blank=True, default="unknown", max_length=50,
         verbose_name="Role")

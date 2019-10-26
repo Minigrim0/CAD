@@ -88,7 +88,7 @@ def createStudentProfile(user, form):
 
     student_profile = StudentAccount(profile=user.profile)
 
-    student_profile.tutor_name = form["tutorName"]
+    student_profile.tutor_name = form["tutorLastName"]
     student_profile.tutor_firstName = form["tutorFirstName"]
     student_profile.NeedsVisit = form["Visit"] != "NoVisit"
     student_profile.comments = form["comments"]
@@ -131,8 +131,8 @@ def coachRegister(user, form):
     coach_profile.French_level = form["Frenchlevel"]
     coach_profile.English_level = form["Englishlevel"]
     coach_profile.Dutch_level = form["Dutchlevel"]
-    coach_profile.IBAN = form["C_IBAN"]
-    coach_profile.nationalRegisterID = form["coachNationalRegister"]
+    coach_profile.IBAN = form["IBAN"]
+    coach_profile.nationalRegisterID = form["NationalRegisterNumber"]
 
     coach_profile.save()
 
@@ -142,21 +142,21 @@ def register(request):
         return HttpResponseRedirect('/05/')
     try:
         form = request.POST
-        username = form["name"] + "_" + form['firstName']
+        username = form["lastName"] + "_" + form['firstName']
         email = form["mailAddress"]
         password = form["passwd"]
         user = User.objects.create(username=username, email=email)
         user.set_password(password)
         user.groups.add(Group.objects.get(name=form["accountType"]))
         user.first_name = form["firstName"]
-        user.last_name = form["name"]
+        user.last_name = form["lastName"]
         user.save()
 
         profile = Profile(user=user)
         profile.phone_number = form["PhoneNumber"]
         profile.account_type = form['accountType']
         profile.address = form["Address"]
-        YMDdate = form["bday"].split("-")
+        YMDdate = form["birthday"].split("-")
         birthDate = date(int(YMDdate[0]), int(YMDdate[1]), int(YMDdate[2]))
         profile.birthDate = birthDate
 
@@ -171,6 +171,8 @@ def register(request):
         profile.save()
         if profile.account_type == "Etudiant":
             createStudentProfile(user, form)
+        elif profile.account_type == "Coach":
+            coachRegister(user, form)
 
         # Envoyer un mail de confirmation avec comme lien,
         # studentRegister/confirm/<Token_unique>
@@ -185,7 +187,7 @@ def register(request):
 
     except Exception as e:
         print("Error creating an account :", e)
-        username = form["name"] + "_" + form['firstName']
+        username = form["lastName"] + "_" + form['firstName']
         usr = User.objects.get(username=username)
         usr.delete()
         return HttpResponseRedirect('/02/')
