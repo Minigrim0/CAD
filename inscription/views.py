@@ -2,7 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User, Group
-from users.models import Profile, Notification, FollowElement, studentRequest, StudentAccount, CoachAccount
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
+
+from users.models import Profile, Notification, FollowElement, \
+    studentRequest, StudentAccount, CoachAccount
+from default.models import Mail
+from cad.settings import EMAIL_HOST_USER
 from datetime import date
 import secrets
 
@@ -174,8 +181,16 @@ def register(request):
         elif profile.account_type == "Coach":
             coachRegister(user, form)
 
-        # Envoyer un mail de confirmation avec comme lien,
-        # studentRegister/confirm/<Token_unique>
+        mail = Mail.objects.get(id=1)
+        res = send_mail(
+            mail.clean_header,
+            mail.formatted_content(user),
+            EMAIL_HOST_USER,
+            [email])
+        if res == 1:
+            print('Mail sent')
+        else:
+            print('Error')
 
         try:  # Try to connect the student directly
             user = authenticate(
@@ -195,29 +210,33 @@ def register(request):
     return HttpResponseRedirect('/01/')
 
 
+@login_required(login_url='/connexion/')
 def confirmation(request, string=""):
     user = getUser(string)
     # token manquant ou non valide
     if string == "" or user is None:
         return HttpResponseRedirect("/05/")
 
-    # Si le compte est déjà confirmé,
-    # l'utilisateur ne doit plus accéder à cette page
-    if user.profile.confirmed_account:
+    # Si la personne qui confirme le compte
+    # n'est pas l'utilisateur concerné
+    if user.username != request.user.username:
         return HttpResponseRedirect("/05/")
 
+    # Si le compte est déjà confirmé,
+    # l'utilisateur ne doit plus accéder à cette page
+    if user.profile.verifiedAccount:
+        return HttpResponseRedirect("/14/")
+
     # L'utilisateur a vérifié son adresse mail
-    # Compte vérifié mais pas confirmé
+    # => Compte vérifié mais pas confirmé
     profile = user.profile
 
-    profile.verified_account = True
+    profile.verifiedAccount = True
     profile.save()
 
     if profile.account_type == "Etudiant":
-        return render(request, 'default/payment.html', locals())
+        return HttpResponseRedirect(reverse("paymentView"))
     else:
-        profile.confirmed_account = True
-        profile.save()
         return HttpResponseRedirect("/13/")
 
 

@@ -44,6 +44,19 @@ class Profile(models.Model):
         null=True, blank=True, default="None", max_length=50,
         verbose_name="Niveau scolaire")
 
+    @property
+    def courses(self):
+        msg = ""
+        if self.Maths_course:
+            msg += "Maths, "
+        if self.Chimie_course:
+            msg += "Chimie, "
+        if self.Physique_course:
+            msg += "Physique, "
+        if self.Francais_course:
+            msg += "Francais "
+        return msg
+
     def __repr__(self):
         string = "Nom : {} ".format(self.user.first_name)
         string += "{}\n".format(self.user.last_name)

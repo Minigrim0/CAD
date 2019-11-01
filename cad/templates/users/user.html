@@ -132,7 +132,7 @@
                                         <div class="form-group row col-md-12">
                                             <label for="account_type" class="col-sm-3 col-form-label">Type de compte :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control type_account" name="account_type" id="account_type" value="{{ user.profile.account_type }}">
+                                                <input type="text" class="form-control type_account" name="account_type" id="account_type" value="{{ user.profile.account_type }}" disabled>
                                             </div>
                                         </div>
 
@@ -334,7 +334,7 @@
                                             <div class="container text-center">
                                                 <label for="gridLang">Niveaux de langues :</label>
                                                 <div class="row" id="gridLang">
-                                                    <label class="col custom-control-inline">/</label>
+                                                    <label class="col">/</label>
                                                     {% for idlev, level in i_langLevel.items %}
                                                     <div class="col">
                                                         <label>{{ level }}</label>

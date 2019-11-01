@@ -9,10 +9,9 @@ from users.models import Notification, studentRequest, Profile
 
 @login_required(login_url='/connexion/')
 def userView(request):
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect("/05/")
-
     user = request.user
+    notifications = user.notification_set.all()
+    nb_notifs = user.notification_set.count()
 
     i_langLevel = {
         '5': 'Langue maternelle',
@@ -25,9 +24,6 @@ def userView(request):
         'French': 'Francais',
         'Dutch': 'Néerlandais',
         'English': 'Anglais'}
-
-    notifications = user.notification_set.all()
-    nb_notifs = user.notification_set.count()
 
     return render(request, 'users/user.html', locals())
 
@@ -98,7 +94,6 @@ def disconnect(request):
     return HttpResponseRedirect("/06/")
 
 
-@login_required(redirect_field_name='/05/')
 def ModifyDays(profile, form):
     profile.wanted_schedule = ""
     days_array = [
@@ -122,31 +117,27 @@ def ModifyDays(profile, form):
     profile.save()
 
 
-@login_required(redirect_field_name='/05/')
 def ModifyStudent(profile, form):
-    ModifyDays(profile, form)
+    studentAccount = profile.studentaccount
 
-    profile.NeedsVisit = False
-    if form["Visit"] != "NoVisit":
-        profile.NeedsVisit = True
+    ModifyDays(studentAccount, form)
 
-    profile.comments = form["comments"]
-
-    profile.tutor_firstName = form["tutorFirstName"]
-    profile.tutor_name = form["tutorName"]
-    profile.save()
+    studentAccount.comments = form["comments"]
+    studentAccount.NeedsVisit = form["Visit"] != "NoVisit"
+    studentAccount.tutor_firstName = form["tutorFirstName"]
+    studentAccount.tutor_name = form["tutorName"]
+    studentAccount.save()
 
 
-@login_required(redirect_field_name='/05/')
 def ModifyCoach(profile, form):
-    profile.school = form["school"]
-    profile.IBAN = form["IBAN"]
-    profile.nationalRegisterID = form["natRegID"]
-    profile.French_level = form["Frenchlevel"]
-    profile.English_level = form["Englishlevel"]
-    profile.Dutch_level = form["Dutchlevel"]
-
-    profile.save()
+    coachAccount = profile.coachaccount
+    coachAccount.school = form["school"]
+    coachAccount.French_level = form["Frenchlevel"]
+    coachAccount.English_level = form["Englishlevel"]
+    coachAccount.Dutch_level = form["Dutchlevel"]
+    coachAccount.IBAN = form["IBAN"]
+    coachAccount.nationalRegisterID = form["natRegID"]
+    coachAccount.save()
 
 
 @login_required(redirect_field_name='/05/')
@@ -214,7 +205,6 @@ def requestView(request, id=0):
             coach = request.user
             coaches = [
                 coach.user.username for coach in student_request.coaches.all()]
-            print(coaches)
 
             return render(request, "users/requests.html", locals())
         else:
@@ -234,7 +224,6 @@ def requestView(request, id=0):
             return HttpResponseRedirect("/05/")
 
 
-@login_required(redirect_field_name='/05/')
 def thanksCoaches(coaches, student):
     author = "L'équipe CAD"
     title = "Merci d'avoir répondu présent"
@@ -244,10 +233,14 @@ def thanksCoaches(coaches, student):
         student.first_name, student.last_name)
     for coach in coaches:
         new_notif = Notification(
-            user=coach.user, author=author, title=title, content=content)
+            user=coach.user,
+            author=author,
+            title=title,
+            content=content)
         new_notif.save()
 
 
+@login_required(redirect_field_name='/05/')
 def chooseCoach(request):
     if request.method != "POST":
         return HttpResponse("/05/")
