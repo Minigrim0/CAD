@@ -60,6 +60,8 @@ def home(request, param=""):
     elif param == "13":
         dico_["a_Success"].append("Votre compte à bien été confirmé ! Vous \
         allez pouvoir commencer à donner cours !")
+    elif param == "14":
+        dico_["a_Failed"].append("Vous avez déjà confirmé votre compte !")
 
     try:
         dico_["nb_notif"] = request.user.notification_set.count()

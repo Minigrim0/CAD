@@ -97,7 +97,7 @@ function checkNames() {
     if(!lastName) document.getElementById("notGoodTutorFirstName").innerHTML = "Ce champ est obligatoire !";
     if(!lastName) document.getElementById("notGoodTutorLastName").innerHTML = "Ce champ est obligatoire !";
 
-    return lastName && firstName && tutorName && tutorFirstName;
+    return lastName && firstName && tutorLastName && tutorFirstName;
 }
 
 function validateEmail(email) {
