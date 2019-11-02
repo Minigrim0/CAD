@@ -12,8 +12,9 @@ class Profile(models.Model):
 
     # Both type of account
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    phone_number = models.IntegerField(
-        null=True, blank=True, verbose_name="numéro de téléphone", default=0)
+    phone_number = models.CharField(
+        null=True, blank=True, verbose_name="numéro de téléphone",
+        default="", max_length=10)
     account_type = models.CharField(
         null=True, blank=True, default="unknown", max_length=50,
         verbose_name="Role")
@@ -41,9 +42,36 @@ class Profile(models.Model):
     # Represents either if coach give course to humanité or primaire
     school_level = models.CharField(
         null=True, blank=True, default="None", max_length=50,
-        verbose_name="Souhaite donner cours en")
+        verbose_name="Niveau scolaire")
 
+    @property
+    def courses(self):
+        msg = ""
+        if self.Maths_course:
+            msg += "Maths, "
+        if self.Chimie_course:
+            msg += "Chimie, "
+        if self.Physique_course:
+            msg += "Physique, "
+        if self.Francais_course:
+            msg += "Francais "
+        return msg
+
+    def __repr__(self):
+        string = "Nom : {} ".format(self.user.first_name)
+        string += "{}\n".format(self.user.last_name)
+        string += "Role : {}\n".format(self.account_type)
+        if self.account_type == "Coach":
+            string += "Donne cours en " + self.school_level + "\n"
+        else:
+            string += "Est en " + self.school_level + "\n"
+        return string
+
+
+class StudentAccount(models.Model):
     # Student
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+
     tutor_name = models.CharField(
         null=True, blank=True, default="inconnu", max_length=50,
         verbose_name="Nom du tuteur")
@@ -62,43 +90,40 @@ class Profile(models.Model):
     balance = models.IntegerField(
         null=True, blank=True, verbose_name="Solde", default=0)
     # User as payed the two first hours of course
-    confirmed_account = models.BooleanField(
-        default=False, verbose_name="A payé ses 2 premières heures de cours")
     coach = models.ForeignKey(
         User, null=True, related_name="Coach", on_delete=models.CASCADE)
+    confirmedAccount = models.BooleanField(
+        default=False, verbose_name="A payé ses 2 premières heures de cours")
+    zip = models.CharField(
+        default='0000', max_length=4, blank=True)
+    ville = models.CharField(
+        max_length=50, default="None", blank=True)
 
+
+class CoachAccount(models.Model):
     # Coach
+    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
+
     school = models.CharField(
         null=True, blank=True, default="None",  max_length=50,
         verbose_name="Ecole")
-
     French_level = models.CharField(
         null=True, blank=True, default="Inconnu", max_length=50)
     English_level = models.CharField(
         null=True, blank=True, default="Inconnu", max_length=50)
     Dutch_level = models.CharField(
         null=True, blank=True, default="Inconnu", max_length=50)
-
     IBAN = models.CharField(
         null=True, blank=True, verbose_name="numéro de compte IBAN",
         default="inconnu", max_length=50)
     nationalRegisterID = models.CharField(
         null=True, blank=True, verbose_name="numéro de registre national",
         default="Inconnu", max_length=50)
-
     nbStudents = models.IntegerField(
         null=True, blank=True, verbose_name="nombre d'étudiants qu'à ce coach",
         default=0)
-
-    def __repr__(self):
-        string = "Nom : {} ".format(self.user.first_name)
-        string += "{}\n".format(self.user.last_name)
-        string += "Role : {}\n".format(self.account_type)
-        if self.account_type == "Coach":
-            string += "Donne cours en " + self.school_level + "\n"
-        else:
-            string += "Est en " + self.school_level + "\n"
-        return string
+    confirmedAccount = models.TextField(
+        default="-----", blank=True, verbose_name="Engagé")
 
 
 class studentRequest(models.Model):
@@ -113,7 +138,7 @@ class studentRequest(models.Model):
     coaches = models.ManyToManyField(Profile)
     is_closed = models.BooleanField(default=False)
     choosenCoach = models.CharField(
-        null=True, default='Pas encore de coach choisit', max_length=100)
+        null=True, default='Pas encore de coach choisi', max_length=100)
 
 
 class Notification(models.Model):
@@ -136,6 +161,9 @@ class Notification(models.Model):
     # body of the notification (Html)
     content = models.TextField(
         blank=True, null=True, verbose_name="Contenu de la notification")
+    # Date of the creation
+    date_created = models.DateField(
+        auto_now_add=True, null=True)
 
 
 DEFAULT_ID = 1

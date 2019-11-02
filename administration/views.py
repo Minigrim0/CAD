@@ -5,7 +5,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 import datetime
 
 from users.models import studentRequest, Profile
-from default.models import Article
+from default.models import Article, Mail
 
 
 @staff_member_required
@@ -14,15 +14,48 @@ def adminPage(request):
     nbr_students = len(User.objects.filter(profile__account_type="Etudiant"))
     nbr_coaches = len(User.objects.filter(profile__account_type="Coach"))
     nbr_other = nbr_accounts - nbr_students - nbr_coaches
-
     nbr_requests = len(studentRequest.objects.all().exclude(is_closed=True))
+
     return render(request, "admin/admin.html", locals())
+
+
+@staff_member_required
+def mailAdminView(request):
+    mails = Mail.objects.all()
+    return render(request, 'admin/mailsAdmin.html', locals())
+
+
+@staff_member_required
+def mailAdminModify(request):
+    if request.method == "POST":
+        form = request.POST
+        mail = Mail.objects.get(id=int(form['id']))
+        mail.name = form['name'].replace("\r", " ")
+        mail.subject = form['subject'].replace("\r", " ")
+        mail.content = form['content'].replace("\r", " ")
+        mail.save()
+
+    return HttpResponseRedirect("/administration/mails/")
+
+
+@staff_member_required
+def mailAdminCreate(request):
+    if request.method == "POST":
+        form = request.POST
+        mail = Mail()
+        mail.name = form['name'].replace("\r", " ")
+        mail.subject = form['subject'].replace("\r", " ")
+        mail.content = form['content'].replace("\r", " ")
+        mail.save()
+
+        return HttpResponseRedirect("/administration/mails/")
+    else:
+        return render(request, 'admin/mailsAdminCreate.html',)
 
 
 @staff_member_required
 def articleAdminView(request):
     articles = Article.objects.all()
-
     return render(request, "admin/articlesAdmin.html", locals())
 
 

@@ -2,7 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User, Group
-from users.models import Profile, Notification, FollowElement, studentRequest
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
+
+from users.models import Profile, Notification, FollowElement, \
+    studentRequest, StudentAccount, CoachAccount
+from default.models import Mail
+from cad.settings import EMAIL_HOST_USER
 from datetime import date
 import secrets
 
@@ -62,7 +69,7 @@ def create_notif(user, title, content, author):
     newNotif.save()
 
 
-def getSchedule(profil, form):
+def getSchedule(student_profile, form):
     days_array = [
         'Monday',
         'Tuesday',
@@ -76,123 +83,162 @@ def getSchedule(profil, form):
         id = "course " + day
         try:
             if form[id] == 'on':
-                profil.wanted_schedule += "1/"
-                profil.wanted_schedule += form[day+"Start"] + "/"
-                profil.wanted_schedule += form[day+"End"] + "."
+                student_profile.wanted_schedule += "1/"
+                student_profile.wanted_schedule += form[day+"Start"] + "/"
+                student_profile.wanted_schedule += form[day+"End"] + "."
         except Exception:
-            profil.wanted_schedule += "0/0/0."
-    profil.save()
+            student_profile.wanted_schedule += "0/0/0."
+    student_profile.save()
 
 
-def studentRegister(request):
-    if request.method == "POST":
-        try:
-            form = request.POST
-            username = form["name"] + "_" + form['firstName']
-            email = form["mailAddress"]
-            password = form["passwd"]
-            user = User.objects.create(username=username, email=email)
-            user.set_password(password)
-            user.groups.add(Group.objects.get(name="Etudiant"))
-            user.first_name = form["firstName"]
-            user.last_name = form["name"]
-            user.save()
-            profil = Profile(user=user)
+def createStudentProfile(user, form):
 
-            # Follow Element creation
-            folElem = FollowElement(student=user)
-            folElem.coach = "L'Equipe CAD"
-            folElem.comments = "Inscription sur le site CAD - cours à domicile"
-            folElem.save()
+    student_profile = StudentAccount(profile=user.profile)
 
-            profil.secret_key = secrets.token_hex(20)
-            profil.wanted_schedule = ""
-            profil.save()
+    student_profile.tutor_name = form["tutorLastName"]
+    student_profile.tutor_firstName = form["tutorFirstName"]
+    student_profile.NeedsVisit = form["Visit"] != "NoVisit"
+    student_profile.comments = form["comments"]
+    student_profile.zip = form["zip"]
+    student_profile.ville = form["city"]
+    student_profile.wanted_schedule = ""
+    student_profile.save()
 
-            if "isMobileUser" not in form.keys():
-                getSchedule(profil, form)
-            else:
-                author = "L'équipe CAD"
-                title = "Profil incomplet"
-                content = "N'oubliez pas de compléter votre profil "
-                content += "nous communiquant vos disponibilités, "
-                content += "autrement, nous ne pourront pas trouver "
-                content += "des coaches adaptés."
-                create_notif(user, title, content, author)
+    if "isMobileUser" not in form.keys():
+        getSchedule(student_profile, form)
+    else:
+        author = "L'équipe CAD"
+        title = "Profil incomplet"
+        content = "N'oubliez pas de compléter votre profil \
+            en nous communiquant vos disponibilités, \
+            autrement, nous ne pourront pas trouver \
+            des coaches adaptés."
+        create_notif(user, title, content, author)
 
-            profil.account_type = "Etudiant"
-            profil.phone_number = form["tutorPhoneNumber"]
-            profil.address = form["StudentAddress"]
+    author = "L'équipe CAD"
+    title = "Bienvenue parmis nous !"
+    content = "Au nom de toute l'équipe de CAD, \
+        nous vous souhaitons la bienvenue ! \
+        N'oubliez pas que vous pouvez nous contacter \
+        si vous avez le moindre soucis via ce \
+        <a href='/contact/'>formulaire</a> !"
 
-            YMDdate = form["bday"].split("-")
-            birthDate = date(int(YMDdate[0]), int(YMDdate[1]), int(YMDdate[2]))
-            profil.birthDate = birthDate
+    create_notif(user, title, content, author)
+    student_profile.save()
 
-            profil.school_level = form["schoolLevel"]
-            profil.tutor_name = form["tutorName"]
-            profil.tutor_firstName = form["tutorFirstName"]
-            profil.NeedsVisit = False
-            profil.NeedsVisit = form["Visit"] != "NoVisit"
+    # Follow Element creation
+    folElem = FollowElement(student=user)
+    folElem.coach = "L'Equipe CAD"
+    folElem.comments = "Inscription sur le site CAD - cours à domicile"
+    folElem.save()
 
-            for course in ["Maths", "Chimie", "Physique", "Francais"]:
-                if "Needed"+course in form.keys():
-                    exec("profil." + course + "_course = True")
 
-            author = "L'équipe CAD"
-            title = "Bienvenue parmis nous !"
-            content = "Au nom de toute l'équipe de CAD, "
-            content += "nous vous souhaitons la bienvenue ! "
-            content += "N'oubliez pas que vous pouvez nous contacter "
-            content += "si vous avez le moindre soucis via ce "
-            content += "<a href='/contact/'>formulaire</a> !"
-            create_notif(user, title, content, author)
-            profil.save()
+def coachRegister(user, form):
 
-            try:
-                user = authenticate(
-                    username=user.username, password=form["passwd"])
-                if user:
-                    login(request, user)
-            except Exception as e:
-                print("Error : ", e)
+    coach_profile = CoachAccount(profile=user.profile)
+    coach_profile.school = form["coachSchool"]
+    coach_profile.French_level = form["Frenchlevel"]
+    coach_profile.English_level = form["Englishlevel"]
+    coach_profile.Dutch_level = form["Dutchlevel"]
+    coach_profile.IBAN = form["IBAN"]
+    coach_profile.nationalRegisterID = form["NationalRegisterNumber"]
 
-            # Envoyer un mail de confirmation avec comme lien,
-            # studentRegister/confirm/<Token_unique>
+    coach_profile.save()
 
+
+def register(request):
+    if request.method != "POST":
+        return HttpResponseRedirect('/05/')
+    try:
+        form = request.POST
+        username = form["lastName"] + "_" + form['firstName']
+        email = form["mailAddress"]
+        password = form["passwd"]
+        user = User.objects.create(username=username, email=email)
+        user.set_password(password)
+        user.groups.add(Group.objects.get(name=form["accountType"]))
+        user.first_name = form["firstName"]
+        user.last_name = form["lastName"]
+        user.save()
+
+        profile = Profile(user=user)
+        profile.phone_number = form["PhoneNumber"]
+        profile.account_type = form['accountType']
+        profile.address = form["Address"]
+        YMDdate = form["birthday"].split("-")
+        birthDate = date(int(YMDdate[0]), int(YMDdate[1]), int(YMDdate[2]))
+        profile.birthDate = birthDate
+
+        for course in ["Maths", "Chimie", "Physique", "Francais"]:
+            if "Course_"+course in form.keys():
+                exec("profile." + course + "_course = True")
+
+        profile.secret_key = secrets.token_hex(20)
+        profile.verifiedAccount = False
+        profile.school_level = form["schoolLevel"]
+
+        profile.save()
+        if profile.account_type == "Etudiant":
+            createStudentProfile(user, form)
+        elif profile.account_type == "Coach":
+            coachRegister(user, form)
+
+        mail = Mail.objects.get(id=1)
+        res = send_mail(
+            mail.clean_header,
+            mail.formatted_content(user),
+            EMAIL_HOST_USER,
+            [email])
+        if res == 1:
+            print('Mail sent')
+        else:
+            print('Error')
+
+        try:  # Try to connect the student directly
+            user = authenticate(
+                username=user.username, password=form["passwd"])
+            if user:
+                login(request, user)
         except Exception as e:
-            print("Error creating an account :", e)
-            username = form["name"] + "_" + form['firstName']
-            usr = User.objects.get(username=username)
-            usr.delete()
-            return HttpResponseRedirect('/02/')
+            print("Error : ", e)
 
-        return HttpResponseRedirect('/01/')
-    return HttpResponseRedirect('/05/')
+    except Exception as e:
+        print("Error creating an account :", e)
+        username = form["lastName"] + "_" + form['firstName']
+        usr = User.objects.get(username=username)
+        usr.delete()
+        return HttpResponseRedirect('/02/')
+
+    return HttpResponseRedirect('/01/')
 
 
+@login_required(login_url='/connexion/')
 def confirmation(request, string=""):
     user = getUser(string)
     # token manquant ou non valide
     if string == "" or user is None:
         return HttpResponseRedirect("/05/")
 
-    # Si le compte est déjà confirmé,
-    # l'utilisateur ne doit plus accéder à cette page
-    if user.profile.confirmed_account:
+    # Si la personne qui confirme le compte
+    # n'est pas l'utilisateur concerné
+    if user.username != request.user.username:
         return HttpResponseRedirect("/05/")
 
+    # Si le compte est déjà confirmé,
+    # l'utilisateur ne doit plus accéder à cette page
+    if user.profile.verifiedAccount:
+        return HttpResponseRedirect("/14/")
+
     # L'utilisateur a vérifié son adresse mail
-    # Compte vérifié mais pas confirmé
+    # => Compte vérifié mais pas confirmé
     profile = user.profile
 
-    profile.verified_account = True
+    profile.verifiedAccount = True
     profile.save()
 
     if profile.account_type == "Etudiant":
-        return render(request, 'default/payment.html', locals())
+        return HttpResponseRedirect(reverse("paymentView"))
     else:
-        profile.confirmed_account = True
-        profile.save()
         return HttpResponseRedirect("/13/")
 
 
@@ -216,9 +262,9 @@ def pay_later(request):
     newNotif = Notification(user=user)
     newNotif.author = "L'équipe CAD"
     newNotif.title = "Paiement en attente"
-    newNotif.content = "N'oubliez pas de <a href='/connexion/payment/'>\
-    payer</a> vos cours ! Nous vous enverrons un rappel dans 2 jours si \
-    nous n'avons rien reçu d'ici là"
+    newNotif.content = "N'oubliez pas de <a href='/connexion/payment\
+        /'>payer</a> vos cours ! Nous vous enverrons un rappel\
+        dans 2 jours si nous n'avons rien reçu d'ici là"
     newNotif.save()
     user.profile.save()
 
@@ -229,12 +275,12 @@ def thanks(request):
     user = request.user
 
     # token manquant ou non valide
-    if user is None:
+    if user is None or user.profile.account_type != "Etudiant":
         return HttpResponseRedirect("/05/")
 
     # Si le compte est déjà confirmé, l'utilisateur ne doit plus accéder
     # à cette page
-    if user.profile.confirmed_account:
+    if user.profile.studentaccount.confirmedAccount:
         return HttpResponseRedirect("/05/")
 
     # L'utilisateur a confirmé son compte
@@ -255,53 +301,6 @@ def getUser(token):
         if user.profile.secret_key == token:
             return user
     return None
-
-
-def coachRegister(request):
-    if request.method == "POST":
-        form = request.POST
-        try:
-            username = form["C_name"] + '_' + form['C_firstName']
-            email = form["C_mailAddress"]
-            password = form["C_password"]
-            user = User.objects.create(username=username, email=email)
-            user.set_password(password)
-            user.groups.add(Group.objects.get(name="Coach"))
-            user.first_name = form["C_firstName"]
-            user.last_name = form["C_name"]
-            user.save()
-
-            profil = Profile(user=user)
-
-            profil.account_type = "Coach"
-            profil.phone_number = form["coachPhoneNumber"]
-            profil.address = form["C_Address"]
-
-            YMDdate = form["coachbday"].split("-")
-            birthDate = date(int(YMDdate[0]), int(YMDdate[1]), int(YMDdate[2]))
-            profil.birthDate = birthDate
-
-            profil.school_level = form["courseLevel"]
-            profil.school = form["coachSchool"]
-            profil.IBAN = form["C_IBAN"]
-            profil.nationalRegisterID = form["coachNationalRegister"]
-            profil.confirmed_account = True
-
-            for course in ["Maths", "Chimie", "Physique", "Francais"]:
-                if "Gives"+course in form.keys():
-                    exec("profil." + course + "_course = True")
-
-            profil.French_level = form["Frenchlevel"]
-            profil.English_level = form["Englishlevel"]
-            profil.Dutch_level = form["Dutchlevel"]
-
-            profil.save()
-        except Exception as e:
-            print("Error :", e)
-            return HttpResponseRedirect("/02/")
-
-        return HttpResponseRedirect('/01/')
-    return HttpResponseRedirect('/05/')
 
 
 def sendNotifToCoaches(student):
