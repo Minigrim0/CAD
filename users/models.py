@@ -90,10 +90,14 @@ class StudentAccount(models.Model):
     balance = models.IntegerField(
         null=True, blank=True, verbose_name="Solde", default=0)
     # User as payed the two first hours of course
-    confirmed_account = models.BooleanField(
-        default=False, verbose_name="A payé ses 2 premières heures de cours")
     coach = models.ForeignKey(
         User, null=True, related_name="Coach", on_delete=models.CASCADE)
+    confirmedAccount = models.BooleanField(
+        default=False, verbose_name="A payé ses 2 premières heures de cours")
+    zip = models.CharField(
+        default='0000', max_length=4, blank=True)
+    ville = models.CharField(
+        max_length=50, default="None", blank=True)
 
 
 class CoachAccount(models.Model):
@@ -118,6 +122,8 @@ class CoachAccount(models.Model):
     nbStudents = models.IntegerField(
         null=True, blank=True, verbose_name="nombre d'étudiants qu'à ce coach",
         default=0)
+    confirmedAccount = models.TextField(
+        default="-----", blank=True, verbose_name="Engagé")
 
 
 class studentRequest(models.Model):
