@@ -57,9 +57,10 @@ function checkPass() {
 }
 
 function checkCoordinates() {
-    phoneno = /^\(?([0-9]{3,4})\)?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})$/;
-    phone = document.getElementById("phoneNumber").value.match(phoneno);
-    phone = phone == null ? false : true;
+    //phoneno = /^\(?([0-9]{3,4})\)?[/. ]{,1}?([0-9]{2})?[/. ]{,1}?([0-9]{2})?[/. ]{,1}?([0-9]{2})$/;
+    //phone = document.getElementById("phoneNumber").value.match(phoneno);
+    phone = true; //phone == null ? false : true;
+
     address = document.getElementById("Address").value != "";
     mail = validateEmail(document.getElementById("mail").value);
     courses = document.getElementById("math").checked
