@@ -79,7 +79,7 @@
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-md-8">
-                                <form method="post" action="/users/modify/">
+                                <form>
                                     {% csrf_token %}
 
                                     <input type="hidden" name="username" value="{{ user.username }}">
@@ -89,42 +89,42 @@
                                         <div class="form-group row col-md-12">
                                             <label for="firstName" class="col-sm-3 col-form-label">Prénom :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="firstName" id="firstName" value="{{ user.first_name}}">
+                                                <input type="text" class="form-control" name="firstName" id="firstName" value="{{ user.first_name}}" disabled>
                                             </div>
                                         </div>
                                         <!-- Last Name -->
                                         <div class="form-group row col-md-12">
                                             <label for="lastName" class="col-sm-3 col-form-label">Nom :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="lastName" id="lastName" Value="{{ user.last_name }}">
+                                                <input type="text" class="form-control" name="lastName" id="lastName" Value="{{ user.last_name }}" disabled>
                                             </div>
                                         </div>
                                         <!-- Email -->
                                         <div class="form-group row col-md-12">
                                             <label for="mail" class="col-sm-3 col-form-label">Email :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="mail" id="mail" Value="{{ user.email }}">
+                                                <input type="text" class="form-control" name="mail" id="mail" Value="{{ user.email }}" disabled>
                                             </div>
                                         </div>
                                         <!-- Phone -->
                                         <div class="form-group row col-md-12">
                                             <label for="phone" class="col-sm-3 col-form-label">Téléphone :</label>
                                             <div class="col-sm-9">
-                                                <input type="tel" class="form-control" name="phone_number" id="phone" Value="{{ user.profile.phone_number }}">
+                                                <input type="tel" class="form-control" name="phone_number" id="phone" Value="{{ user.profile.phone_number }}" disabled>
                                             </div>
                                         </div>
                                         <!-- Address -->
                                         <div class="form-group row col-md-12">
                                             <label for="Address" class="col-sm-3 col-form-label">Adresse :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="address" id="Address" Value="{{ user.profile.address }}">
+                                                <input type="text" class="form-control" name="address" id="Address" Value="{{ user.profile.address }}" disabled>
                                             </div>
                                         </div>
                                         <!-- Birthday -->
                                         <div class="form-group row col-md-12">
                                             <label for="birthDate" class="col-sm-3 col-form-label">Date de naissance:</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="birthDate" id="birthDate" value="{{ user.profile.birthDate }}">
+                                                <input type="text" class="form-control" name="birthDate" id="birthDate" value="{{ user.profile.birthDate }}" disabled>
                                             </div>
                                         </div>
 
@@ -140,14 +140,14 @@
                                         <div class="form-group row col-md-12">
                                             <label for="tutorName" class="col-sm-3 col-form-label">Nom du tuteur :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="tutorName" id="tutorName" value="{{ user.profile.studentaccount.tutor_name }}">
+                                                <input type="text" class="form-control" name="tutorName" id="tutorName" value="{{ user.profile.studentaccount.tutor_name }}" disabled>
                                             </div>
                                         </div>
 
                                         <div class="form-group row col-md-12">
                                             <label for="tutorFirstName" class="col-sm-3 col-form-label">Prénom du tuteur :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="tutorFirstName" id="tutorFirstName" value="{{ user.profile.studentaccount.tutor_firstName }}">
+                                                <input type="text" class="form-control" name="tutorFirstName" id="tutorFirstName" value="{{ user.profile.studentaccount.tutor_firstName }}" disabled>
                                             </div>
                                         </div>
 
@@ -156,12 +156,12 @@
                                             <div class="col-sm-9">
                                                 <div class="form-check">
                                                     {% if user.profile.Maths_course %}
-                                                    <input class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course" checked>
+                                                    <input disabled class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course" checked>
                                                     <label class="form-check-label" for="Maths_Course">
                                                         Maths
                                                     </label>
                                                     {% else %}
-                                                    <input class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course">
+                                                    <input disabled class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course">
                                                     <label class="form-check-label" for="Maths_Course">
                                                         Maths
                                                     </label>
@@ -170,12 +170,12 @@
 
                                                 <div class="form-check">
                                                     {% if user.profile.Chimie_course %}
-                                                    <input class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course" checked>
+                                                    <input disabled class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course" checked>
                                                     <label class="form-check-label" for="Chimie_Course">
                                                         Chimie
                                                     </label>
                                                     {% else %}
-                                                    <input class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course">
+                                                    <input disabled class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course">
                                                     <label class="form-check-label" for="Chimie_Course">
                                                         Chimie
                                                     </label>
@@ -184,12 +184,12 @@
 
                                                 <div class="form-check">
                                                     {% if user.profile.Physique_course %}
-                                                    <input class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course" checked>
+                                                    <input disabled class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course" checked>
                                                     <label class="form-check-label" for="Physique_Course">
                                                         Physique
                                                     </label>
                                                     {% else %}
-                                                    <input class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course">
+                                                    <input disabled class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course">
                                                     <label class="form-check-label" for="Physique_Course">
                                                         Physique
                                                     </label>
@@ -198,12 +198,12 @@
 
                                                 <div class="form-check">
                                                     {% if user.profile.Francais_course %}
-                                                    <input class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course" checked>
+                                                    <input disabled class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course" checked>
                                                     <label class="form-check-label" for="Francais_Course">
                                                         Français
                                                     </label>
                                                     {% else %}
-                                                    <input class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course">
+                                                    <input disabled class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course">
                                                     <label class="form-check-label" for="Francais_Course">
                                                         Français
                                                     </label>
@@ -215,17 +215,17 @@
                                         <div class="from-group col-md-12">
                                             <label for="radioVisit">Désire une visite pédagogique : </label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="Visit" value="NeedsVisit" {% if user.profile.studentaccount.NeedsVisit %} checked {% endif %}>Oui
+                                                <input disabled type="radio" name="Visit" value="NeedsVisit" {% if user.profile.studentaccount.NeedsVisit %} checked {% endif %}>Oui
                                             </label>
                                             <label class="radio-inline">
-                                                <input type="radio" name="Visit" value="NoVisit" {% if user.profile.studentaccount.NeedsVisit %} # {% else %} checked {% endif %}>Non
+                                                <input disabled type="radio" name="Visit" value="NoVisit" {% if user.profile.studentaccount.NeedsVisit %} # {% else %} checked {% endif %}>Non
                                             </label>
                                         </div>
 
                                         <div class="form-group row col-md-12">
                                             <label for="comments" class="col-sm-3 col-form-label">Commentaires :</label>
                                             <div class="col-sm-9">
-                                                <input type="textarea" class="form-control" name="comments" id="comments" placeholder="Pas de Commentaires" value="{{ user.profile.studentaccount.comments }}">
+                                                <input disabled type="textarea" class="form-control" name="comments" id="comments" placeholder="Pas de Commentaires" value="{{ user.profile.studentaccount.comments }}">
                                             </div>
                                         </div>
 
@@ -242,12 +242,12 @@
                                             <div class="col-sm-9">
                                                 <div class="form-check">
                                                     {% if user.profile.Maths_course %}
-                                                    <input class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course" checked>
+                                                    <input disabled class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course" checked>
                                                     <label class="form-check-label" for="Maths_Course">
                                                         Maths
                                                     </label>
                                                     {% else %}
-                                                    <input class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course">
+                                                    <input disabled class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course">
                                                     <label class="form-check-label" for="Maths_Course">
                                                         Maths
                                                     </label>
@@ -256,12 +256,12 @@
 
                                                 <div class="form-check">
                                                     {% if user.profile.Chimie_course %}
-                                                    <input class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course" checked>
+                                                    <input disabled class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course" checked>
                                                     <label class="form-check-label" for="Chimie_Course">
                                                         Chimie
                                                     </label>
                                                     {% else %}
-                                                    <input class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course">
+                                                    <input disabled class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course">
                                                     <label class="form-check-label" for="Chimie_Course">
                                                         Chimie
                                                     </label>
@@ -270,12 +270,12 @@
 
                                                 <div class="form-check">
                                                     {% if user.profile.Physique_course %}
-                                                    <input class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course" checked>
+                                                    <input disabled class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course" checked>
                                                     <label class="form-check-label" for="Physique_Course">
                                                         Physique
                                                     </label>
                                                     {% else %}
-                                                    <input class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course">
+                                                    <input disabled class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course">
                                                     <label class="form-check-label" for="Physique_Course">
                                                         Physique
                                                     </label>
@@ -284,12 +284,12 @@
 
                                                 <div class="form-check">
                                                     {% if user.profile.Francais_course %}
-                                                    <input class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course" checked>
+                                                    <input disabled class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course" checked>
                                                     <label class="form-check-label" for="Francais_Course">
                                                         Français
                                                     </label>
                                                     {% else %}
-                                                    <input class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course">
+                                                    <input disabled class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course">
                                                     <label class="form-check-label" for="Francais_Course">
                                                         Français
                                                     </label>
@@ -302,9 +302,9 @@
                                             <label for="school_level" class="col-sm-3 col-form-label">Souhaite donner cours en :</label>
                                             <div class="col-sm-9">
                                                 {% if user.profile.coachaccount.school_level == "high" %}
-                                                <input type="text" class="form-control" name="school_level" id="school_level" value="Humanité">
+                                                <input disabled type="text" class="form-control" name="school_level" id="school_level" value="Humanité">
                                                 {% else %}
-                                                <input type="text" class="form-control" name="school_level" id="school_level" value="Primaire">
+                                                <input disabled type="text" class="form-control" name="school_level" id="school_level" value="Primaire">
                                                 {% endif %}
                                             </div>
                                         </div>
@@ -312,21 +312,21 @@
                                         <div class="form-group row col-md-12">
                                             <label for="school" class="col-sm-3 col-form-label">Ecole du coach :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="school" id="school" value="{{ user.profile.coachaccount.school }}">
+                                                <input disabled type="text" class="form-control" name="school" id="school" value="{{ user.profile.coachaccount.school }}">
                                             </div>
                                         </div>
 
                                         <div class="form-group row col-md-12">
                                             <label for="IBAN" class="col-sm-3 col-form-label">Compte en banque :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="IBAN" id="IBAN" value="{{ user.profile.coachaccount.IBAN }}">
+                                                <input disabled type="text" class="form-control" name="IBAN" id="IBAN" value="{{ user.profile.coachaccount.IBAN }}">
                                             </div>
                                         </div>
 
                                         <div class="form-group row col-md-12">
                                             <label for="natRegID" class="col-sm-3 col-form-label">Numéro de registre national :</label>
                                             <div class="col-sm-9">
-                                                <input type="text" class="form-control" name="natRegID" id="natRegID" value="{{ user.profile.coachaccount.nationalRegisterID }}">
+                                                <input disabled type="text" class="form-control" name="natRegID" id="natRegID" value="{{ user.profile.coachaccount.nationalRegisterID }}">
                                             </div>
                                         </div>
 
@@ -350,25 +350,25 @@
                                                         <label class="radio-inline">
                                                             {% if idl == "French" %}
                                                                 {% if idlev == user.profile.coachaccount.French_level  %}
-                                                                <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
+                                                                <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
                                                                 {% else %}
-                                                                <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
+                                                                <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
                                                                 {% endif %}
                                                             {% endif %}
 
                                                             {% if idl == "Dutch" %}
                                                                 {% if idlev == user.profile.coachaccount.Dutch_level %}
-                                                                <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
+                                                                <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
                                                                 {% else %}
-                                                                <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
+                                                                <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
                                                                 {% endif %}
                                                             {% endif %}
 
                                                             {% if idl == "English" %}
                                                                 {% if idlev == user.profile.coachaccount.English_level %}
-                                                                <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
+                                                                <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
                                                                 {% else %}
-                                                                <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
+                                                                <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
                                                                 {% endif %}
                                                             {% endif %}
                                                         </label>
@@ -381,20 +381,6 @@
                                             </div>
                                         </div>
                                         {% endif %}
-                                    </div>
-
-                                    <div class="form-row">
-                                        <div class="form-group col-md-4">
-                                            <button type="submit" onclick="setHtmlForm()" class="btn btn-success" name="modify">Enregistrer</button>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <button type="button" onclick="showConfirm('{{ user.username }}')" class="btn btn-danger" name="deleteFirst">Supprimer mon compte</button>
-                                        </div>
-                                        <div class="form-group col-md-4">
-                                            <div style="display: none;" id="Confirm-Button-{{ user.username }}">
-                                                <button type="submit" onclick="setHtmlForm()" class="btn btn-danger" name="delete">Confirmer la suppression de mon compte</button>
-                                            </div>
-                                        </div>
                                     </div>
                                 </form>
 
