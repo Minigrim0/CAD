@@ -117,6 +117,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = ***REMOVED***
+EMAIL_HOST_USER = 'cadcoursadomicile@gmail.com'
+EMAIL_HOST_PASSWORD = 'azereza12!'
+
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
