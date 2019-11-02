@@ -99,6 +99,8 @@ def createStudentProfile(user, form):
     student_profile.tutor_firstName = form["tutorFirstName"]
     student_profile.NeedsVisit = form["Visit"] != "NoVisit"
     student_profile.comments = form["comments"]
+    student_profile.zip = form["zip"]
+    student_profile.ville = form["city"]
     student_profile.wanted_schedule = ""
     student_profile.save()
 
@@ -273,12 +275,12 @@ def thanks(request):
     user = request.user
 
     # token manquant ou non valide
-    if user is None:
+    if user is None or user.profile.account_type != "Etudiant":
         return HttpResponseRedirect("/05/")
 
     # Si le compte est déjà confirmé, l'utilisateur ne doit plus accéder
     # à cette page
-    if user.profile.confirmed_account:
+    if user.profile.studentaccount.confirmedAccount:
         return HttpResponseRedirect("/05/")
 
     # L'utilisateur a confirmé son compte
