@@ -36,7 +36,7 @@ def connexion(request):
         'Dutch': 'Néerlandais',
         'English': 'Anglais'}
 
-    return render(request, 'default/connexion.html', locals())
+    return render(request, 'connexion.html', locals())
 
 
 def connect(request):
@@ -244,7 +244,7 @@ def confirmation(request, string=""):
 
 def paymentView(request):
     user = request.user
-    return render(request, "default/payment.html", locals())
+    return render(request, "payment.html", locals())
 
 
 def pay_later(request):
