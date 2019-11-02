@@ -1,17 +1,14 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.contrib.auth import authenticate, login
+from default.models import Mail
+from cad.settings import EMAIL_HOST_USER
+from datetime import date
+import secrets
+from users.models import Profile, Notification, FollowElement, \
+    studentRequest, StudentAccount, CoachAccount
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
-from datetime import date
-import secrets
-
-from cad.settings import EMAIL_HOST_USER
-from default.models import Mail
-from users.models import Profile, Notification, FollowElement, \
-    studentRequest, StudentAccount, CoachAccount
 
 
 def create_notif(user, title, content, author):

@@ -68,7 +68,7 @@ def home(request, param=""):
     except Exception as e:
         print("Unauthenticated user :", e)
 
-    return render(request, 'default/index.html', dico_)
+    return render(request, 'index.html', dico_)
 
 
 def contactView(request):
@@ -85,4 +85,4 @@ def contactView(request):
     else:
         form = contactForm()
 
-    return render(request, 'default/contact.html', locals())
+    return render(request, 'contact.html', locals())
