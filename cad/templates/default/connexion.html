@@ -60,9 +60,13 @@
                     Devenez coach ou élève
                 </div>
                 <div class="subheading mb-2 text-center">
-                    <div class="btn-group btn-group-md" role="group" aria-label="Inscription">
-                        <button type="button" class="btn btn-secondary" onclick="toggleConnexion()">Connexion</button>
-                        <button type="button" class="btn btn-secondary" onclick="toggleInscription()">Inscription</button>
+                    <div class="btn-group btn-group-toggle mb-2">
+                        <label id="TypeConnexion" class="btn btn-secondary active">
+                            <input type="radio" id="RegisterType" onclick="toggleConnexion()" checked>Connexion</button>
+                        </label>
+                        <label id="TypeRegister" class="btn btn-secondary">
+                            <input type="radio" id="RegisterType" onclick="toggleInscription()">Inscription</button>
+                        </label>
                     </div>
                 </div>
 
@@ -95,33 +99,51 @@
                 <!-- General registration form -->
                 <div id="InscriptionForm" style="display: none;">
                     <div class="container text-center">
-                        <h3 class="mb-2">S'inscrire en tant que</h3>
-                        <div class="btn-group btn-group-toggle mb-2" data-toggle="buttons">
-                            <label class="btn btn-secondary active">
-                                <input type="radio" name="registrationType" onchange="toggleRegisterStudent()" id="Student" autocomplete="off" checked> Etudiant
-                            </label>
-                            <label class="btn btn-secondary">
-                                <input type="radio" name="registrationType" onchange="toggleRegisterCoach()" id="Coach" autocomplete="off"> Coach
-                            </label>
-                        </div>
+                        <h4 class="mb-2">
+                            S'inscrire en tant que :
+                            <div class="btn-group btn-group-toggle mb-2">
+                                <label id="AsStudent" class="btn btn-secondary active">
+                                    <input type="radio" onclick="toggleRegisterStudent()" checked> Etudiant
+                                </label>
+                                <label id="AsCoach" class="btn btn-secondary">
+                                    <input type="radio" onclick="toggleRegisterCoach()"> Coach
+                                </label>
+                            </div>
+                        </h4>
 
                         <div class="subheading mb-2 text-center">
-                            <h6 class="mb-1"><span style="color:red;">* = obligatoire</span></h6>
+                            <h6 class="mb-1">
+                                <span style="color:red;">
+                                    (* = obligatoire)
+                                </span>
+                            </h6>
                         </div>
 
                         <!-- Student registration -->
                         <div id="studentRegister">
-                            <form onsubmit="return validate();" method="post" action="studentRegister/">{% csrf_token %}
+                            <form onsubmit="return validate();" method="post" action="register/">
+                                {% csrf_token %}
+
+                                <!-- Account type -->
+                                <input type="hidden" name="accountType" value="Etudiant">
 
                                 <!-- Student name and first name -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="name">Nom de l'élève<span style="color:red;">*</span></label>
-                                        <input type="text" class="form-control" name="name" id="name" placeholder="Nom">
-                                    </div>
-                                    <div class="form-group col-md-6">
                                         <label for="firstName">Prénom de l'élève<span style="color:red;">*</span></label>
                                         <input type="text" class="form-control" name="firstName" id="firstName" placeholder="Prénom">
+                                        <span style="color:red;">
+                                            <label id="notGoodFirstName">
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="lastName">Nom de l'élève<span style="color:red;">*</span></label>
+                                        <input type="text" class="form-control" name="lastName" id="lastName" placeholder="Nom">
+                                        <span style="color:red;">
+                                            <label id="notGoodLastName">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -130,7 +152,10 @@
                                     <div class="form-group col-md-6">
                                         <label for="passwd">Choisissez un mot de passe (min. 8 caract.)<span style="color:red;">*</span></label>
                                         <input type="password" class="form-control" name="passwd" id="passwd">
-                                        <span style="color:red;"><label for="passwd" id="errorLab"></label></span>
+                                        <span style="color:red;">
+                                            <label for="passwd" id="notGoodPass">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="passwdConf">Confirmez le mot de passe<span style="color:red;">*</span></label>
@@ -153,11 +178,15 @@
                                 <!-- Birth date and current school level -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="bday">Date de naissance de l'élève<span style="color:red;">*</span></label>
-                                        <input type="date" class="form-control" value="2001-01-01" name="bday" id="birthDate">
+                                        <label for="birthDate">Date de naissance de l'élève<span style="color:red;">*</span></label>
+                                        <input type="date" class="form-control" value="2001-01-01" name="birthday" id="birthDate">
+                                        <span style="color:red;">
+                                            <label id="notGoodBirth">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="class">Classe de l'élève<span style="color:red;">*</span></label>
+                                        <label for="schoolLevel">Classe de l'élève<span style="color:red;">*</span></label>
                                         <select class="form-control" id="schoolLevel" name="schoolLevel">
                                             <option value="primary">Primaire</option>
                                             <option value="1ere">1ère humanité</option>
@@ -173,19 +202,49 @@
                                 <!-- Tutor name and first name -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="tutorName">Nom d'une personne responsable'<span style="color:red;">*</span></label>
-                                        <input type="text" class="form-control" id="tutorName" name="tutorName" placeholder="Nom du responsable">
-                                    </div>
-                                    <div class="form-group col-md-6">
                                         <label for="tutorFirstName">Prénom d'une personne responsable<span style="color:red;">*</span></label>
                                         <input type="text" class="form-control" id="tutorFirstName" name="tutorFirstName" placeholder="Prénom du responsable">
+                                        <span style="color:red;">
+                                            <label id="notGoodTutorFirstName">
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="tutorLastName">Nom d'une personne responsable'<span style="color:red;">*</span></label>
+                                        <input type="text" class="form-control" id="tutorLastName" name="tutorLastName" placeholder="Nom du responsable">
+                                        <span style="color:red;">
+                                            <label id="notGoodTutorLastName">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
                                 <!-- Student Address -->
-                                <div class="form-group">
-                                    <label for="Address">Adresse de l'étudiant (où seront donnés les cours)<span style="color:red;">*</span></label>
-                                    <input type="text" class="form-control" name="StudentAddress" id="Address" placeholder="Ex : Bvd Anspach 350">
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="tutorFirstName">Ville<span style="color:red;">*</span></label>
+                                        <input type="text" class="form-control" id="city" name="city" placeholder="Ex: Bruxelles">
+                                        <span style="color:red;">
+                                            <label id="notGoodCity">
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="tutorLastName">Code postal<span style="color:red;">*</span></label>
+                                        <input type="text" class="form-control" id="zip" name="zip" placeholder="Ex: 1000">
+                                        <span style="color:red;">
+                                            <label id="ZIPbad">
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="Address">Rue et numéro<span style="color:red;">*</span></label>
+                                        <input type="text" class="form-control" name="Address" id="Address" placeholder="Ex : Bvd Anspach 350">
+                                        <span style="color:red;">
+                                            <label id="notGoodAddress">
+                                            </label>
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <!-- Tutor mail and phone -->
@@ -193,11 +252,18 @@
                                     <div class="form-group col-md-6">
                                         <label for="mail">Adresse mail<span style="color:red;">*</span></label>
                                         <input type="mail" class="form-control" id="mail" name="mailAddress">
-                                        <span style="color:red;"><label id="mailError"></label></span>
+                                        <span style="color:red;">
+                                            <label id="mailError">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="phoneNumber">téléphone du responsable<span style="color:red;">*</span></label>
-                                        <input type="tel" id="phoneNumber" class="form-control" name="tutorPhoneNumber">
+                                        <input type="tel" id="phoneNumber" class="form-control" name="PhoneNumber" placeholder="04XX/XX.XX.XX">
+                                        <span style="color:red;">
+                                            <label id="notGoodPhone">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -209,24 +275,28 @@
 
                                     <div class="form-group col-md-6" id="courses">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="NeededMaths" id="checkMath">
+                                            <input id="checkMath" type="checkbox" class="custom-control-input" name="Course_Maths" id="math">
                                             <label class="custom-control-label" for="checkMath">Mathématiques</label>
                                         </div>
 
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="NeededChimie" id="checkChemistry">
+                                            <input id="checkChemistry" type="checkbox" class="custom-control-input" name="Course_Chimie" id="chemistry">
                                             <label class="custom-control-label" for="checkChemistry">Chimie</label>
                                         </div>
 
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="NeededPhysique" id="checkPhysics">
+                                            <input id="checkPhysics" type="checkbox" class="custom-control-input" name="Course_Physique" id="physics">
                                             <label class="custom-control-label" for="checkPhysics">Physique</label>
                                         </div>
 
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="NeededFrancais" id="checkFrench">
+                                            <input id="checkFrench" type="checkbox" class="custom-control-input" name="Course_Francais" id="french">
                                             <label class="custom-control-label" for="checkFrench">Français</label>
                                         </div>
+                                        <span style="color:red;">
+                                            <label id="notGoodCourse">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -245,13 +315,12 @@
                                     </div>
 
                                     <div class="form-group col-md-6">
-                                        <label for="comment">Remarques éventuelles</label>
+                                        <label for="comments">Remarques éventuelles</label>
                                         <input type="text" id="comments" placeholder="Commentaires : " class="form-control" name="comments">
                                     </div>
                                 </div>
 
                                 <!-- Student disponibilities -->
-
                                 <div class="form-group row col-md-12 text-center">
                                     <label for="sketch-holder-new_user">Moments de disponibilités (soyez le plus large possible)<span style="color:red;">*</span></label>
                                     <div class="col-md-12" id="sketch-holder-new_user">
@@ -271,46 +340,82 @@
                                 </div>
 
                                 <span style="color:red;"><label id="registerErrors"></label></span><br>
-                                <button type="submit" onclick="setHtmlForm()" class="btn btn-primary">Créer un compte en tant qu'<span style="color:red">étudiant</span></button>
+                                <button type="submit" onclick="setHtmlForm()" class="btn btn-primary">Créer un compte</button>
                             </form>
                         </div>
 
                         <!-- Coach registration -->
                         <div id="coachRegister" style="display: none;">
-                            <form onsubmit="return C_validate();" method="post" action="coachRegister/">{% csrf_token %}
+                            <form onsubmit="return C_validate();" method="post" action="register/">
+                                {% csrf_token %}
+
+                                <!-- Account type -->
+                                <input type="hidden" name="accountType" value="Coach">
+
                                 <!-- Coach name and first name -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="name">Nom du Coach<span style="color:red;">*</span></label>
-                                        <input type="text" class="form-control" id="C_name" name="C_name" placeholder="Nom">
+                                        <label for="C_firstName">
+                                            Prénom du Coach
+                                            <span style="color:red;">
+                                                *
+                                            </span>
+                                        </label>
+                                        <input type="text" class="form-control" id="C_firstName" name="firstName">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodFirstName">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="inputPassword4">Prénom du Coach<span style="color:red;">*</span></label>
-                                        <input type="text" class="form-control" id="C_firstName" name="C_firstName" placeholder="Prénom">
+                                        <label for="C_lastName">
+                                            Nom du Coach
+                                            <span style="color:red;">
+                                                *
+                                            </span>
+                                        </label>
+                                        <input type="text" class="form-control" id="C_lastName" name="lastName">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodLastName">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
                                 <!-- Coach password and confirmation -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="C_passwd">Choisissez un mot de passe (min. 8 caract.)<span style="color:red;">*</span></label>
-                                        <input type="password" class="form-control" name="C_password" id="C_passwd">
-                                        <span style="color:red;"><label for="C_passwd" id="C_errorLab"></label></span>
+                                        <label for="C_password">
+                                            Choisissez un mot de passe (min. 8 caract.)
+                                            <span style="color:red;">
+                                                *
+                                            </span>
+                                        </label>
+                                        <input type="password" class="form-control" name="passwd" id="C_password">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodPass">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="C_passwdConf">Confirmez le mot de passe<span style="color:red;">*</span></label>
+                                        <label for="C_passConf">
+                                            Confirmez le mot de passe
+                                            <span style="color:red;">
+                                                *
+                                            </span>
+                                        </label>
                                         <div class="input-group mb-3">
                                             <div class="input-group-prepend">
                                                 <span class="input-group-text">
-                                                    <div id="C_passwdNM">
+                                                    <div id="C_passNoMatch" >
                                                         <span style="color:red;">X</span>
                                                     </div>
-                                                    <div id="C_passwdM" style="display: none;">
+                                                    <div id="C_passMatch" style="display: none;">
                                                         <span style="color:green;">V</span>
                                                     </div>
                                                 </span>
                                             </div>
-                                            <input type="password" class="form-control" id="C_passwdConf" onchange="checkC_Pass()">
+                                            <input type="password" class="form-control" id="C_passConf" name="passwordConf" onchange="checkC_Pass()">
                                         </div>
                                     </div>
                                 </div>
@@ -319,30 +424,49 @@
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="bday">Date de naissance du Coach<span style="color:red;">*</span></label>
-                                        <input type="date" class="form-control" value="value=" 2001-01-01"" name="coachbday" id="C_birthDate">
+                                        <input type="date" class="form-control" value="2000-01-01" name="birthday" id="C_birthDate">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodBirth">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="class">Numéro de registre national<span style="color:red;">*</span></label>
-                                        <input class="form-control" type="text" name="coachNationalRegister" id="C_nationalRegister">
+                                        <input class="form-control" type="text" name="NationalRegisterNumber" id="C_nationalRegister">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodNRN">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
                                 <!-- Coach Address -->
                                 <div class="form-group">
                                     <label for="C_Address">Adresse du Coach<span style="color:red;">*</span></label>
-                                    <input type="text" class="form-control" id="C_Address" name="C_Address" placeholder="Ex : Bvd Anspach 350">
+                                    <input type="text" class="form-control" id="C_Address" name="Address" placeholder="Ex : Bvd Anspach 350">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodAddress">
+                                        </label>
+                                    </span>
                                 </div>
 
                                 <!-- Coach mail and phone -->
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <label for="C_mail">Adresse mail<span style="color:red;">*</span></label>
-                                        <input type="mail" class="form-control" id="C_mail" name="C_mailAddress">
-                                        <span style="color:red;"><label id="C_mailError"></label></span>
+                                        <input type="mail" class="form-control" id="C_mail" name="mailAddress">
+                                        <span style="color:red;">
+                                            <label id="C_mailError">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="C_phoneNumber">téléphone<span style="color:red;">*</span></label>
-                                        <input type="tel" id="C_phoneNumber" class="form-control" name="coachPhoneNumber">
+                                        <input type="text" id="C_phoneNumber" class="form-control" name="PhoneNumber" placeholder="04XX/XX.XX.XX">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodPhone">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -354,24 +478,28 @@
 
                                     <div class="form-group col-md-6" id="C_courses">
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="GivesMaths" value="GivesMaths" id="C_math">
+                                            <input type="checkbox" class="custom-control-input" name="Course_Maths" value="GivesMaths" id="C_math">
                                             <label class="custom-control-label" for="C_math">Mathématiques</label>
                                         </div>
 
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="GivesChimie" value="GivesChimie" id="C_chemistry">
+                                            <input type="checkbox" class="custom-control-input" name="Course_Chimie" value="GivesChimie" id="C_chemistry">
                                             <label class="custom-control-label" for="C_chemistry">Chimie</label>
                                         </div>
 
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="GivesPhysique" value="GivesPhysique" id="C_physics">
+                                            <input type="checkbox" class="custom-control-input" name="Course_Physique" value="GivesPhysique" id="C_physics">
                                             <label class="custom-control-label" for="C_physics">Physique</label>
                                         </div>
 
                                         <div class="custom-control custom-checkbox custom-control-inline">
-                                            <input type="checkbox" class="custom-control-input" name="GivesFrancais" value="GivesFrancais" id="C_french">
+                                            <input type="checkbox" class="custom-control-input" name="Course_Francais" value="GivesFrancais" id="C_french">
                                             <label class="custom-control-label" for="C_french">Français</label>
                                         </div>
+                                        <span style="color:red;">
+                                            <label id="C_notGoodCourse">
+                                            </label>
+                                        </span>
                                     </div>
                                 </div>
 
@@ -380,10 +508,14 @@
                                     <div class="form-group col-md-6">
                                         <label for="comment">Formation suivie et nom de l'université/institution</label>
                                         <input type="text" id="C_School" placeholder="Ecole" class="form-control" name="coachSchool">
+                                        <span style="color:red;">
+                                            <label id="C_notGoodSchool">
+                                            </label>
+                                        </span>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="class">Vous voulez donner cours en<span style="color:red;">*</span></label>
-                                        <select class="form-control" name="courseLevel">
+                                        <select class="form-control" name="schoolLevel">
                                             <option value="elem">Primaire</option>
                                             <option value="high">humanité</option>
                                         </select>
@@ -422,11 +554,17 @@
                                 <!-- IBAN -->
                                 <div class="form-group">
                                     <label for="Address">Numéro de compte en banque<span style="color:red;">*</span></label>
-                                    <input type="text" class="form-control" name="C_IBAN" id="C_IBAN" placeholder="BEXXXXXXXXXXXXXXXXXXXXXXXXX">
+                                    <input type="text" class="form-control" name="IBAN" id="C_IBAN" placeholder="BEXXXXXXXXXXXXXXXXXXXXXXXXX">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodIBAN">
+                                        </label>
+                                    </span>
                                 </div>
 
                                 <span style="color:red;"><label id="C_registerErrors"></label></span><br>
-                                <button type="submit" class="btn btn-primary">Créer un compte en tant que <span style="color:red">coach</span></button>
+                                <button type="submit" class="btn btn-primary">
+                                    Créer un compte
+                                </button>
                             </form>
                         </div>
 

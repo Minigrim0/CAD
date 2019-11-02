@@ -109,6 +109,12 @@
                         Articles
                     </a>
                 </li>
+
+                <li class="nav-item justify-content-between align-items-center">
+                    <a href="/administration/mails/" class="nav-link">
+                        Templates de mails
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -175,7 +181,7 @@
                     </p>
                 </div>
 
-                <hr class="mb-0">
+                <hr class="mb-1">
                 <h3 class="mb-2">
                     Requêtes :
                 </h3>
@@ -190,6 +196,112 @@
                         <br>
                         L'administrateur peut, lorsqu'il le souhaite, cloturer la requête, en choisissant quel coach donnera cours à l'élève. Ce coach recevra une
                         notification l'avertissant qu'il a été choisit, et les autres une notification les remerciant de s'être proposé.
+                    </p>
+                </div>
+
+                <hr class="mb-1">
+                <h3 class="mb-2">
+                    Articles :
+                </h3>
+                <div class="col-lg-10 text-justify">
+                    <p>
+                        Les articles représentent les sept 'onglets' de la page d'accueil. Il sont modifiables, mais il faut faire attention aux balises
+                        <span class="text-primary">HTML</span>. Ces balises représentent des classes de bootstrap, et il est conseillé de ne toucher qu'au texte,
+                        et de modifier les balises seuleument si l'on est sûr de ce que l'on fait.
+                    </p>
+                </div>
+
+                <hr class="mb-1">
+                <h3 class="mb-2">
+                    Mails :
+                </h3>
+                <div class="col-lg-10 text-justify">
+                    <p>
+                        <span style="color: red;">/!\ Les templates suivent des règles particulières /!\</span>. Du au fait que les mails sont des templates,
+                        destinés à être envoyés à plusieurs personnes, il faut pouvoir rendre ces mails personalisés. C'est pourquoi, il existe X balises spécifiques
+                        aux mails. Par exemple, pour insérer le nom et prénom de l'utilisateur concerné par le mail, il faut utiliser les balises
+                        <span style="color: green">&lt;LASTNAME&gt;</span> et
+                        <span style="color: green">&lt;FIRSTNAME&gt;</span>.
+                        <br>
+                        <br>
+                        Liste de balises :
+                        <div class="container-fluid">
+                            <table class="table table-striped">
+                                <head>
+                                    <th class="col-md-6">
+                                        <span style="color: purple;">
+                                            Balise
+                                        </span>
+                                    </th>
+                                    <th class="col-md-6">
+                                        <span style="color: purple;">
+                                            Valeur
+                                        </span>
+                                    </th>
+                                </head>
+                                <tr>
+                                    <td class="col-md-6">
+                                        <span style="color: green">
+                                            &lt;FIRSTNAME&gt;
+                                        </span>
+                                    </td>
+                                    <td class="col-md-6">
+                                        <span style="color: black">
+                                            Prénom de l'élève
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-6">
+                                        <span style="color: green">
+                                            &lt;LASTNAME&gt;
+                                        </span>
+                                    </td>
+                                    <td class="col-md-6">
+                                        Nom de famille de l'élève
+                                    </td>
+                                </tr>
+                                <tr>
+                                <td class="col-md-6">
+                                        <span style="color: green">
+                                            &lt;BIRTHDATE&gt;
+                                        </span>
+                                    </td>
+                                    <td class="col-md-6">
+                                        Date de naissance (jj/mm/yyyy)
+                                    </td>
+                                </tr>
+                                <tr>
+                                <td class="col-md-6">
+                                        <span style="color: green">
+                                            &lt;COURSES&gt;
+                                        </span>
+                                    </td>
+                                    <td class="col-md-6">
+                                        Cours demandés (cours1, cours2, ...)
+                                    </td>
+                                </tr>
+                                <tr>
+                                <td class="col-md-6">
+                                        <span style="color: green">
+                                            &lt;SCHOOLLEVEL&gt;
+                                        </span>
+                                    </td>
+                                    <td class="col-md-6">
+                                        Niveau scolaire (1ere humanité, ...)
+                                    </td>
+                                </tr>
+                                <td class="col-md-6">
+                                        <span style="color: green">
+                                            &lt;SECRETKEY&gt;
+                                        </span>
+                                    </td>
+                                    <td class="col-md-6">
+                                        Clé secrete du compte, pour les confirmations, etc...
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </p>
                 </div>
 
