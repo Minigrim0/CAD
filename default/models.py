@@ -19,7 +19,6 @@ class Mail(models.Model):
     name = models.CharField(max_length=150, default="Mail template")
     subject = models.CharField(max_length=150, default="CAD - Cours à domicile")
     content = models.TextField(default="None")
-    mail_from = models.EmailField(default="cadcoursadomicile@ymail.com")
 
     def formatted_content(self, user):
         content = self.content

@@ -33,7 +33,6 @@ def mailAdminModify(request):
         mail.name = form['name'].replace("\r", " ")
         mail.subject = form['subject'].replace("\r", " ")
         mail.content = form['content'].replace("\r", " ")
-        mail.mail_from = form['mail_from'].replace("\r", " ")
         mail.save()
 
     return HttpResponseRedirect("/administration/mails/")
@@ -47,7 +46,6 @@ def mailAdminCreate(request):
         mail.name = form['name'].replace("\r", " ")
         mail.subject = form['subject'].replace("\r", " ")
         mail.content = form['content'].replace("\r", " ")
-        mail.mail_from = form['mail_from'].replace("\r", " ")
         mail.save()
 
         return HttpResponseRedirect("/administration/mails/")
