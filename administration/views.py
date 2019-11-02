@@ -16,13 +16,13 @@ def adminPage(request):
     nbr_other = nbr_accounts - nbr_students - nbr_coaches
     nbr_requests = len(studentRequest.objects.all().exclude(is_closed=True))
 
-    return render(request, "admin/admin.html", locals())
+    return render(request, "admin.html", locals())
 
 
 @staff_member_required
 def mailAdminView(request):
     mails = Mail.objects.all()
-    return render(request, 'admin/mailsAdmin.html', locals())
+    return render(request, 'mailsAdmin.html', locals())
 
 
 @staff_member_required
@@ -50,13 +50,13 @@ def mailAdminCreate(request):
 
         return HttpResponseRedirect("/administration/mails/")
     else:
-        return render(request, 'admin/mailsAdminCreate.html',)
+        return render(request, 'mailsAdminCreate.html',)
 
 
 @staff_member_required
 def articleAdminView(request):
     articles = Article.objects.all()
-    return render(request, "admin/articlesAdmin.html", locals())
+    return render(request, "articlesAdmin.html", locals())
 
 
 @staff_member_required
@@ -103,7 +103,7 @@ def userAdminView(request, string=""):
         "i_langLevel": level_,
         "i_lang": lang_}
 
-    return render(request, 'admin/userAdmin.html', vars_)
+    return render(request, 'userAdmin.html', vars_)
 
 
 @staff_member_required
