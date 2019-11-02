@@ -60,23 +60,13 @@
                     {% if usr.profile.NeedsVisit %}
                     Un montant total de 100€ vous est demandé afin de terminer la création de votre compte,
                     ce montant couvre les deux premières heures de cours avec un de nos coaches, ainsi que la visite pédagogique demandée.
-                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                        <input type="hidden" name="cmd" value="_s-xclick">
-                        <input type="hidden" value="127.0.0.1:8000/connexion/paylater/{{ user.profile.secret_key }}" name="cancel_return">
-                        <input type="hidden" name="hosted_button_id" value="PYG5UGSF5YNZC">
-                        <input type="image" src="https://www.paypalobjects.com/fr_FR/BE/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal, le réflexe sécurité pour payer en ligne">
-                        <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
-                    </form>
+
+                    Vous pouvez payer cet accompte sur BE22 7310 4019 4347
                     {% else %}
                     Un montant total de 50€ vous est demandé afin de terminer la création de votre compte,
                     ce montant couvre les deux premières heures de cours avec un de nos coaches.
-                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-                        <input type="hidden" name="cmd" value="_s-xclick">
-                        <input type="hidden" value="127.0.0.1:8000/connexion/paylater/{{ user.profile.secret_key }}" name="cancel_return">
-                        <input type="hidden" name="hosted_button_id" value="UZSASKZCBN2WQ">
-                        <input type="image" src="https://www.paypalobjects.com/fr_FR/BE/i/btn/btn_paynowCC_LG.gif" border="0" name="submit" alt="PayPal, le réflexe sécurité pour payer en ligne">
-                        <img alt="" border="0" src="https://www.paypalobjects.com/fr_FR/i/scr/pixel.gif" width="1" height="1">
-                    </form>
+                    <hr>
+                    <div style="font-weight: bold;">Vous pouvez payer cet accompte sur le compte BE22 7310 4019 4347</div>
                     {% endif %}
                 </p>
 
