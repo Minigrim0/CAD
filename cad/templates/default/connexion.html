@@ -220,13 +220,31 @@
                                 </div>
 
                                 <!-- Student Address -->
-                                <div class="form-group">
-                                    <label for="Address">Adresse de l'étudiant (où seront donnés les cours)<span style="color:red;">*</span></label>
-                                    <input type="text" class="form-control" name="Address" id="Address" placeholder="Ex : Bvd Anspach 350">
-                                    <span style="color:red;">
-                                        <label id="notGoodAddress">
-                                        </label>
-                                    </span>
+                                <div class="form-row">
+                                    <div class="form-group col-md-4">
+                                        <label for="tutorFirstName">Ville<span style="color:red;">*</span></label>
+                                        <input type="text" class="form-control" id="city" name="city" placeholder="Ex: Bruxelles">
+                                        <span style="color:red;">
+                                            <label id="notGoodCity">
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="tutorLastName">Code postal<span style="color:red;">*</span></label>
+                                        <input type="text" class="form-control" id="zip" name="zip" placeholder="Ex: 1000">
+                                        <span style="color:red;">
+                                            <label id="ZIPbad">
+                                            </label>
+                                        </span>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="Address">Rue et numéro<span style="color:red;">*</span></label>
+                                        <input type="text" class="form-control" name="Address" id="Address" placeholder="Ex : Bvd Anspach 350">
+                                        <span style="color:red;">
+                                            <label id="notGoodAddress">
+                                            </label>
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <!-- Tutor mail and phone -->
@@ -322,7 +340,7 @@
                                 </div>
 
                                 <span style="color:red;"><label id="registerErrors"></label></span><br>
-                                <button type="submit" onclick="setHtmlForm()" class="btn btn-primary">Créer un compte en tant qu'<span style="color:red">étudiant</span></button>
+                                <button type="submit" onclick="setHtmlForm()" class="btn btn-primary">Créer un compte</button>
                             </form>
                         </div>
 
@@ -545,10 +563,7 @@
 
                                 <span style="color:red;"><label id="C_registerErrors"></label></span><br>
                                 <button type="submit" class="btn btn-primary">
-                                    Créer un compte en tant que
-                                    <span style="color:red">
-                                        coach
-                                    </span>
+                                    Créer un compte
                                 </button>
                             </form>
                         </div>
