@@ -27,6 +27,7 @@ class Mail(models.Model):
         content = content.replace("<BIRTHDATE>", str(user.profile.birthDate))
         content = content.replace("<COURSES>", str(user.profile.courses))
         content = content.replace("<SCHOOLLEVEL>", str(user.profile.birthDate))
+        content = content.replace("<SECRETKEY>", str(user.profile.secret_key))
         return content
 
     @property
