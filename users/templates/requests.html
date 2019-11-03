@@ -78,8 +78,8 @@
                 {% endif %}
             </ul>
 
-            <label for="wanted_schedule" class="col-sm-12 col-form-label">Tranches horaires de l'étudiant :</label>
-            <textarea disabled class="col-md-12" name="wanted_schedule" rows="5">{{ student_request.student.profile.studentaccount.wanted_schedule }}</textarea>
+            <label class="col-sm-12 col-form-label">Tranches horaires de l'étudiant :</label>
+            <textarea disabled class="col-md-12" rows="5">{{ student_request.student.profile.studentaccount.wanted_schedule }}</textarea>
 
             <p>Location : {{student_request.student.profile.studentaccount.zip}} {{student_request.student.profile.studentaccount.ville}}</p>
 

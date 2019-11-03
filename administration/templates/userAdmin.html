@@ -23,10 +23,6 @@
     <!-- Custom styles for this template -->
     <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
 
-    <script src="{% static 'js/P5/p5.min.js'              %}"></script>
-    <script src="{% static 'js/P5/addons/p5.dom.min.js'   %}"></script>
-    <script src="{% static 'js/P5/addons/p5.sound.min.js' %}"></script>
-
     <script>
         const Url = "/users/send_notif/";
 
@@ -131,7 +127,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Envoyer une notification à {{ user.first_name }} {{ user.last_name }}</h5>
+                                    <h5 class="modal-title" id="SendNotifLabel">Envoyer une notification à {{ user.first_name }} {{ user.last_name }}</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -146,8 +142,7 @@
                                             </div>
                                             <div class="form-group row col-sm-12">
                                                 <div class="col-sm-12">
-                                                    <textarea class="form-control" placeholder="contenu de la notification" id="notifContent{{ user.username }}" rows="3">
-                            </textarea>
+                                                    <textarea class="form-control" placeholder="contenu de la notification" id="notifContent{{ user.username }}" rows="3"></textarea>
                                                 </div>
                                             </div>
                                             <div class="form-group row col-sm-12">
@@ -174,7 +169,6 @@
 
                     <div class="container">
                         <form method="post" action="/administration/modify/">{% csrf_token %}
-                            {{form.as_p}}
 
                             <input type="hidden" name="username" value="{{ user.username }}">
 
@@ -347,12 +341,8 @@
                                 </div>
 
                                 <div class="form-group row col-md-12">
-                                    <label for="sketch-holder-{{ user.username }}" class="col-sm-2 col-form-label">Horaire désiré :</label>
-                                    <div class="col-sm-10" id="sketch-holder-{{ user.username }}">
-                                        {% if user.profile.wanted_schedule == "" or user.profile.wanted_schedule == "0/0/0.0/0/0.0/0/0.0/0/0.0/0/0.0/0/0.0/0/0." %}
-                                        <span style="color:red">Cet utilisateur n'as pas encore définit son horaire</span>
-                                        {% endif %}
-                                    </div>
+                                    <label for="wanted-schedule-{{ user.username }}" class="col-sm-2 col-form-label">Horaire désiré :</label>
+                                    <textarea class="col-sm-10" id="wanted-schedule-{{ user.username }}" rows="5">{{ user.profile.studentaccount.wanted_schedule }}</textarea>
                                 </div>
 
                                 {% elif user.profile.account_type == "Coach" %}
@@ -622,15 +612,6 @@
 
     <!-- Custom scripts for this template -->
     <script src="{% static 'js/resume.min.js' %}"></script>
-    <script src="{% static 'js/schedule.js' %}"></script>
-    {% for user in a_users %}
-    {% if user.profile.account_type == "Etudiant" %}
-    <script>
-        var id = createSched("{{ user.username }}");
-        scheds[id].setSchedule("{{ user.profile.wanted_schedule }}");
-    </script>
-    {% endif %}
-    {% endfor %}
 
 
 </body>

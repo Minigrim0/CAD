@@ -1,17 +1,3 @@
-function toggleConnexion() {
-    document.getElementById("ConnexionForm").style.display = "block";
-    document.getElementById("TypeConnexion").classList.add("active");
-    document.getElementById("InscriptionForm").style.display = "none";
-    document.getElementById("TypeRegister").classList.remove("active");
-}
-
-function toggleInscription() {
-    document.getElementById("ConnexionForm").style.display = "none";
-    document.getElementById("TypeConnexion").classList.remove("active");
-    document.getElementById("InscriptionForm").style.display = "block";
-    document.getElementById("TypeRegister").classList.add("active");
-}
-
 function toggleRegisterStudent() {
     document.getElementById("studentRegister").style.display = "block";;
     document.getElementById("AsStudent").classList.add("active");
