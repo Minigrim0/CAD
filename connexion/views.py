@@ -5,13 +5,10 @@ from django.contrib.auth.models import User
 
 
 def connexion(request):
-    return render(request, 'connexion.html', locals())
-
-
-def connect(request):
-    if request.method == "POST":
+    if request.method != "POST":
+        return render(request, 'connexion.html', locals())
+    else:
         form = request.POST
-
         email = form["coMail"]
         password = form["coPass"]
 
@@ -25,6 +22,3 @@ def connect(request):
             print("Error : ", e)
 
         return HttpResponseRedirect("/04/")
-
-    else:
-        return HttpResponseRedirect('/05/')
