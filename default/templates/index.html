@@ -223,7 +223,10 @@
         {% else %}
         <footer style="bottom: 0; position: fixed" class="container-fluid footer-collapse px-1 py-3">
             <button class="btn btn-primary" type="button">
-                <a href="/connexion/"><span style="color: white;">Connexion/inscription</span></a>
+                <a href="{% url "connect_home" %}"><span style="color: white;">Connexion</span></a>
+            </button>
+            <button class="btn btn-primary" type="button">
+                <a href="{% url "register" %}"><span style="color: white;">inscription</span></a>
             </button>
         </footer>
         {% endif %}
