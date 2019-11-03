@@ -67,6 +67,10 @@ class Profile(models.Model):
             string += "Est en " + self.school_level + "\n"
         return string
 
+    def __str__(self):
+        return "{} {}'s profile".format(
+            self.user.first_name, self.user.last_name)
+
 
 class StudentAccount(models.Model):
     # Student
@@ -122,8 +126,8 @@ class CoachAccount(models.Model):
     nbStudents = models.IntegerField(
         null=True, blank=True, verbose_name="nombre d'étudiants qu'à ce coach",
         default=0)
-    confirmedAccount = models.TextField(
-        default="-----", blank=True, verbose_name="Engagé")
+    confirmedAccount = models.CharField(
+        default="-----", blank=True, verbose_name="Engagé", max_length=20)
 
 
 class studentRequest(models.Model):
