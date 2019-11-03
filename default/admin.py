@@ -1,5 +1,5 @@
 from django.contrib import admin
-from default.models import Article
+from default.models import Article, Mail
 
 ARTICLE_DISPLAY_SIZE = 75
 
@@ -23,4 +23,17 @@ class ArticleAdmin(admin.ModelAdmin):
     content_preview.short_description = u'Titre de la section'
 
 
+class MailAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'subject')
+    list_filter = ('id', 'name', 'subject')
+    ordering = ('-id', )
+    search_fields = ('name', 'subject', 'id')
+
+    fields = (
+        ('name', 'subject'),
+        ('content'),
+    )
+
+
 admin.site.register(Article, ArticleAdmin)
+admin.site.register(Mail, MailAdmin)
