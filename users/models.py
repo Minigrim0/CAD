@@ -193,3 +193,9 @@ class FollowElement(models.Model):
     comments = models.TextField(
         null=True, blank=True, default="Pas de commentaires",
         verbose_name="Commentaires du cours")
+
+
+class Transaction(models.Model):
+    student = models.ForeignKey(StudentAccount)
+    amount = models.IntergerField(blank=False, default=0)
+    date = models.DateTimeField(auto_now_add=True, null=True)
