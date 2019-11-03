@@ -5,27 +5,6 @@ from django.contrib.auth.models import User
 
 
 def connexion(request):
-    i_day = {
-        'Monday': 'Lundi',
-        'Tuesday': 'Mardi',
-        'Wednesday': 'Mercredi',
-        'Thursday': 'Jeudi',
-        'Friday': 'Vendredi',
-        'Saturday': 'Samedi',
-        'Sunday': 'Dimanche'}
-
-    i_langLevel = {
-        '5': 'Langue maternelle',
-        '4': 'Très bon',
-        '3': 'Bon',
-        '2': 'Notions de base',
-        '1': 'Aucun'}
-
-    i_lang = {
-        'French': 'Francais',
-        'Dutch': 'Néerlandais',
-        'English': 'Anglais'}
-
     return render(request, 'connexion.html', locals())
 
 
