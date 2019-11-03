@@ -25,7 +25,7 @@ def userView(request):
         'Dutch': 'Néerlandais',
         'English': 'Anglais'}
 
-    return render(request, 'users/user.html', locals())
+    return render(request, 'user.html', locals())
 
 
 @login_required(login_url='/connexion/')
@@ -36,7 +36,7 @@ def followView(request):
     a_user = request.user
     followelement_set = a_user.followelement_set.all()
 
-    return render(request, 'users/follow.html', locals())
+    return render(request, 'follow.html', locals())
 
 
 @login_required(redirect_field_name='/05/')
@@ -44,9 +44,10 @@ def studentsView(request):
     if not request.user.is_authenticated():
         return HttpResponseRedirect("/05/")
 
-    return render(request, 'users/follow.html', locals())
+    return render(request, 'students.html', locals())
 
 
+@login_required
 def send_notif(request):
     # Sends a notification to a user
     if request.method == "POST":
@@ -67,6 +68,7 @@ def send_notif(request):
     return HttpResponse("failed")
 
 
+@login_required
 def remove_notif(request):
     if request.method == "POST":
         try:
@@ -94,105 +96,6 @@ def disconnect(request):
     return HttpResponseRedirect("/06/")
 
 
-def ModifyDays(profile, form):
-    profile.wanted_schedule = ""
-    days_array = [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday']
-
-    for day in days_array:
-        id = "course " + day
-        try:
-            if form[id] == 'on':
-                profile.wanted_schedule += "1/"
-                profile.wanted_schedule += form[day+"Start"] + "/"
-                profile.wanted_schedule += form[day+"End"] + "."
-        except KeyError:
-            profile.wanted_schedule += "0/0/0."
-    profile.save()
-
-
-def ModifyStudent(profile, form):
-    studentAccount = profile.studentaccount
-
-    ModifyDays(studentAccount, form)
-
-    studentAccount.comments = form["comments"]
-    studentAccount.NeedsVisit = form["Visit"] != "NoVisit"
-    studentAccount.tutor_firstName = form["tutorFirstName"]
-    studentAccount.tutor_name = form["tutorName"]
-    studentAccount.save()
-
-
-def ModifyCoach(profile, form):
-    coachAccount = profile.coachaccount
-    coachAccount.school = form["school"]
-    coachAccount.French_level = form["Frenchlevel"]
-    coachAccount.English_level = form["Englishlevel"]
-    coachAccount.Dutch_level = form["Dutchlevel"]
-    coachAccount.IBAN = form["IBAN"]
-    coachAccount.nationalRegisterID = form["natRegID"]
-    coachAccount.save()
-
-
-@login_required(redirect_field_name='/05/')
-def modifyUser(request):
-    if request.method == "POST":
-        try:
-            form = request.POST
-            if "delete" in form.keys():
-                usr = User.objects.get(username=form["username"])
-                usr.is_active = False
-                usr.save()
-                logout(request)
-                return HttpResponseRedirect("/12/")
-
-            usr = User.objects.get(username=form["username"])
-            usr.first_name = form["firstName"]
-            usr.last_name = form["lastName"]
-            usr.email = form["mail"]
-            usr.save()
-            profile = usr.profile
-
-            try:
-                type = usr.profile.account_type
-            except Exception as e:
-                print("Error :", e)
-                profile = Profile(user=usr)
-                profile.save()
-                type = usr.profile.account_type
-
-            profile.phone_number = form["phone_number"]
-            profile.address = form["address"]
-            profile.birthDate = serializeDate(form["birthDate"])
-
-            for course in ["Maths", "Chimie", "Physique", "Francais"]:
-                if course+"_Course" in form.keys():
-                    exec("profile." + course + "_course = True")
-                else:
-                    exec("profile." + course + "_course = False")
-
-            profile.save()
-
-            if type == "Etudiant":
-                ModifyStudent(profile, form)
-            elif type == "Coach":
-                ModifyCoach(profile, form)
-
-            return HttpResponseRedirect("/users/me")
-
-        except Exception as e:
-            print("Error :", e)
-            return HttpResponseRedirect('/05/')
-    else:
-        return HttpResponseRedirect('/05/')
-
-
 @login_required(redirect_field_name='/05/')
 def requestView(request, id=0):
     if id != 0:
@@ -206,7 +109,7 @@ def requestView(request, id=0):
             coaches = [
                 coach.user.username for coach in student_request.coaches.all()]
 
-            return render(request, "users/requests.html", locals())
+            return render(request, "requests.html", locals())
         else:
             return HttpResponseRedirect("/05/")
     else:
@@ -217,7 +120,7 @@ def requestView(request, id=0):
                 student_requests_closed = studentRequest.objects.all().exclude(
                     is_closed=False)
 
-                return render(request, "users/requestsAdmin.html", locals())
+                return render(request, "requestsAdmin.html", locals())
             else:
                 return HttpResponseRedirect("/05/")
         else:
