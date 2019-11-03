@@ -83,9 +83,9 @@ class StudentAccount(models.Model):
     comments = models.TextField(
         null=True, blank=True, verbose_name="Commentaires",
         default="Aucun commentaire")
-    wanted_schedule = models.CharField(
+    wanted_schedule = models.TextField(
         null=True, blank=True, default="",
-        verbose_name="Horaire", max_length=42)
+        verbose_name="Horaire")
     # Amount left for the student to pay courses
     balance = models.IntegerField(
         null=True, blank=True, verbose_name="Solde", default=0)
@@ -148,7 +148,7 @@ class Notification(models.Model):
     """
 
     # represents the user whom the notifiaction is for
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     # Name of the author of the notification
     author = models.CharField(

@@ -28,6 +28,9 @@ class Mail(models.Model):
         content = content.replace("<COURSES>", str(user.profile.courses))
         content = content.replace("<SCHOOLLEVEL>", str(user.profile.birthDate))
         content = content.replace("<SECRETKEY>", str(user.profile.secret_key))
+        content = content.replace(
+            "<CONFIRMLINK>",
+            "127.0.0.1:8000/inscription/confirm/" + user.profile.secret_key)
         return content
 
     @property

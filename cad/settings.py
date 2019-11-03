@@ -60,7 +60,9 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
                     "cad/templates/",
-                    "inscription/templates/"
+                    "inscription/templates/",
+                    "connexion/templates/",
+                    "users/templates/",
                 ],
         'APP_DIRS': True,
         'OPTIONS': {

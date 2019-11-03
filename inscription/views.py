@@ -44,8 +44,7 @@ def getSchedule(student_profile, form):
     student_profile.save()
 
 
-def createStudentProfile(user, form):
-
+def studentRegister(user, form):
     student_profile = StudentAccount(profile=user.profile)
 
     student_profile.tutor_name = form["tutorLastName"]
@@ -54,29 +53,7 @@ def createStudentProfile(user, form):
     student_profile.comments = form["comments"]
     student_profile.zip = form["zip"]
     student_profile.ville = form["city"]
-    student_profile.wanted_schedule = ""
-    student_profile.save()
-
-    if "isMobileUser" not in form.keys():
-        getSchedule(student_profile, form)
-    else:
-        author = "L'équipe CAD"
-        title = "Profil incomplet"
-        content = "N'oubliez pas de compléter votre profil \
-            en nous communiquant vos disponibilités, \
-            autrement, nous ne pourront pas trouver \
-            des coaches adaptés."
-        create_notif(user, title, content, author)
-
-    author = "L'équipe CAD"
-    title = "Bienvenue parmis nous !"
-    content = "Au nom de toute l'équipe de CAD, \
-        nous vous souhaitons la bienvenue ! \
-        N'oubliez pas que vous pouvez nous contacter \
-        si vous avez le moindre soucis via ce \
-        <a href='/contact/'>formulaire</a> !"
-
-    create_notif(user, title, content, author)
+    student_profile.wanted_schedule = form["schedule"]
     student_profile.save()
 
     # Follow Element creation
@@ -87,7 +64,6 @@ def createStudentProfile(user, form):
 
 
 def coachRegister(user, form):
-
     coach_profile = CoachAccount(profile=user.profile)
     coach_profile.school = form["coachSchool"]
     coach_profile.French_level = form["Frenchlevel"]
@@ -101,7 +77,7 @@ def coachRegister(user, form):
 
 def register(request):
     if request.method != "POST":
-        return HttpResponseRedirect('/05/')
+        return render(request, "inscription.html")
     try:
         form = request.POST
         username = form["lastName"] + "_" + form['firstName']
@@ -132,28 +108,29 @@ def register(request):
 
         profile.save()
         if profile.account_type == "Etudiant":
-            createStudentProfile(user, form)
+            studentRegister(user, form)
         elif profile.account_type == "Coach":
             coachRegister(user, form)
 
-        mail = Mail.objects.get(id=1)
-        res = send_mail(
-            mail.clean_header,
-            mail.formatted_content(user),
-            EMAIL_HOST_USER,
-            [email])
-        if res == 1:
-            print('Mail sent')
-        else:
-            print('Error')
+        author = "L'équipe CAD"
+        title = "Bienvenue parmis nous !"
+        content = "Au nom de toute l'équipe de CAD, \
+            nous vous souhaitons la bienvenue ! \
+            N'oubliez pas que vous pouvez nous contacter \
+            si vous avez le moindre soucis via ce \
+            <a href='/contact/'>formulaire</a> !"
 
-        try:  # Try to connect the student directly
-            user = authenticate(
-                username=user.username, password=form["passwd"])
-            if user:
-                login(request, user)
-        except Exception as e:
-            print("Error : ", e)
+        create_notif(user, title, content, author)
+
+        mail = Mail.objects.get(id=1)
+        send_mail(
+            mail.clean_header, mail.formatted_content(user), EMAIL_HOST_USER,
+            [email])
+
+        user = authenticate(
+            username=user.username, password=form["passwd"])
+        if user:
+            login(request, user)
 
     except Exception as e:
         print("Error creating an account :", e)

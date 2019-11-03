@@ -31,7 +31,7 @@
 <body id="page-top">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+        <a class="navbar-brand js-scroll-trigger" href="/#page-top">
             <span class="d-block d-lg-none">Cours à domicile</span>
             <span class="d-none d-lg-block">
                 <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
@@ -46,7 +46,7 @@
                     <a href="/" class="nav-link js-scroll-trigger">Accueil</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/" class="nav-link js-scroll-trigger">Inscription</a>
+                    <a href="{% url "connect_home" %}" class="nav-link js-scroll-trigger">Connexion</a>
                 </li>
             </ul>
         </div>
@@ -57,50 +57,14 @@
         <section class="p-3 p-lg-5 d-flex align-items-center">
             <div class="container">
                 <h2 class="mb-2 text-center">
-                    Connexion / inscription
+                    Inscription
                 </h2>
                 <div class="subheading mb-1 text-center">
                     Devenez coach ou élève
                 </div>
-                <div class="subheading mb-2 text-center">
-                    <div class="btn-group btn-group-toggle mb-2">
-                        <label id="TypeConnexion" class="btn btn-secondary active">
-                            <input type="radio" id="RegisterType" onclick="toggleConnexion()" checked>Connexion</button>
-                        </label>
-                        <label id="TypeRegister" class="btn btn-secondary">
-                            <input type="radio" id="RegisterType" onclick="toggleInscription()">Inscription</button>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Connexion page -->
-                <div id="ConnexionForm">
-                    <div class="container text-center" id="ConnexionForm">
-                        <form method="post" action="connect/">{% csrf_token %}
-                            {{form.as_p}}
-                            <div class="form-group">
-                                <label for="connexionEmail">Addresse mail</label>
-                                <div class="col-xs-4">
-                                    <input type="email" name="coMail" class="form-control" id="connexionEmail" aria-describedby="emailHelp" placeholder="Addresse Mail">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="connexionPassword">Mot de Passe</label>
-                                <div class="col-xs-4">
-                                    <input type="password" name="coPass" class="form-control" id="connexionPassword" placeholder="Mot de passe">
-                                </div>
-                            </div>
-                            <div class="form-check mb-2">
-                                <input type="checkbox" class="form-check-input" id="rememberCheck">
-                                <label class="form-check-label" for="Check">Se souvenir de moi</label>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Se connecter</button>
-                        </form>
-                    </div>
-                </div>
 
                 <!-- General registration form -->
-                <div id="InscriptionForm" style="display: none;">
+                <div id="InscriptionForm">
                     <div class="container text-center">
                         <h4 class="mb-2">
                             S'inscrire en tant que :
@@ -124,7 +88,7 @@
 
                         <!-- Student registration -->
                         <div id="studentRegister">
-                            <form onsubmit="return validate();" method="post" action="register/">
+                            <form onsubmit="return validate();" method="post" action="">
                                 {% csrf_token %}
 
                                 <!-- Account type -->
@@ -325,10 +289,8 @@
 
                                 <!-- Student disponibilities -->
                                 <div class="form-group row col-md-12 text-center">
-                                    <label for="sketch-holder-new_user">Moments de disponibilités (soyez le plus large possible)<span style="color:red;">*</span></label>
-                                    <div class="col-md-12" id="sketch-holder-new_user">
-
-                                    </div>
+                                    <label for="schedule">Moments de disponibilités (soyez le plus large possible)<span style="color:red;">*</span></label>
+                                    <textarea id="schedule" name="schedule" class="col-md-12" rows="5"></textarea>
                                 </div>
 
                                 <!-- Needs visit ? -->
@@ -343,13 +305,13 @@
                                 </div>
 
                                 <span style="color:red;"><label id="registerErrors"></label></span><br>
-                                <button type="submit" onclick="setHtmlForm()" class="btn btn-primary">Créer un compte</button>
+                                <button type="submit" class="btn btn-primary">Créer un compte</button>
                             </form>
                         </div>
 
                         <!-- Coach registration -->
                         <div id="coachRegister" style="display: none;">
-                            <form onsubmit="return C_validate();" method="post" action="register/">
+                            <form onsubmit="return C_validate();" method="post" action="">
                                 {% csrf_token %}
 
                                 <!-- Account type -->
@@ -509,7 +471,7 @@
                                 <!-- Coach University -->
                                 <div class="form-row text-center">
                                     <div class="form-group col-md-6">
-                                        <label for="comment">Formation suivie et nom de l'université/institution</label>
+                                        <label for="coachSchool">Formation suivie et nom de l'université/institution</label>
                                         <input type="text" id="C_School" placeholder="Ecole" class="form-control" name="coachSchool">
                                         <span style="color:red;">
                                             <label id="C_notGoodSchool">
@@ -591,7 +553,6 @@
     <script src="{% static 'js/resume.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
 
-    <script src="{% static 'js/schedule.js' %}"></script>
     <script>
         var currentUser = "new_user";
         var id = createSched("new_user");
