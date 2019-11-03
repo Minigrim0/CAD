@@ -145,6 +145,7 @@ def thanksCoaches(coaches, student):
 
 @login_required(redirect_field_name='/05/')
 def chooseCoach(request):
+    print("Got the request")
     if request.method != "POST":
         return HttpResponse("/05/")
 
@@ -159,11 +160,13 @@ def chooseCoach(request):
     s_request.choosenCoach = coach.user.username
     student = s_request.student
     student.coach = coach
-    coach.nbStudents += 1
+    ca = coach.coachaccount
+    ca.nbStudents += 1
 
     s_request.save()
     student.save()
     coach.save()
+    ca.save()
 
     author = "L'équipe CAD"
     title = "Félicitations !"

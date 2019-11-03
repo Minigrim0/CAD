@@ -77,7 +77,27 @@ def coachRegister(user, form):
 
 def register(request):
     if request.method != "POST":
-        return render(request, "inscription.html")
+        i_day = {
+            'Monday': 'Lundi',
+            'Tuesday': 'Mardi',
+            'Wednesday': 'Mercredi',
+            'Thursday': 'Jeudi',
+            'Friday': 'Vendredi',
+            'Saturday': 'Samedi',
+            'Sunday': 'Dimanche'}
+
+        i_langLevel = {
+            '5': 'Langue maternelle',
+            '4': 'Très bon',
+            '3': 'Bon',
+            '2': 'Notions de base',
+            '1': 'Aucun'}
+
+        i_lang = {
+            'French': 'Francais',
+            'Dutch': 'Néerlandais',
+            'English': 'Anglais'}
+        return render(request, "inscription.html", locals())
     try:
         form = request.POST
         username = form["lastName"] + "_" + form['firstName']
@@ -215,8 +235,9 @@ def thanks(request):
 
     # L'utilisateur a confirmé son compte
     # Compte vérifié et confirmé
-    user.profile.confirmed_account = True
-    user.profile.save()
+    studa = user.profile.studentaccount
+    studa.confirmedAccount = True
+    studa.save()
 
     newRequest = studentRequest(student=user)
     newRequest.save()

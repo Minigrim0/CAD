@@ -173,96 +173,109 @@ def modifyDays(profile, form):
 
 
 def modifyStudent(profile, form):
-    modifyDays(profile, form)
 
-    profile.NeedsVisit = False
+    sa = profile.studentaccount
+    sa.NeedsVisit = False
     if form["Visit"] != "NoVisit":
-        profile.NeedsVisit = True
+        sa.NeedsVisit = True
 
-    profile.comments = form["comments"]
+    sa.comments = form["comments"]
 
-    profile.tutor_firstName = form["tutorFirstName"]
-    profile.tutor_name = form["tutorName"]
-    profile.save()
+    sa.tutor_firstName = form["tutorFirstName"]
+    sa.tutor_name = form["tutorLastName"]
+
+    if "confirmedAccount" in form.keys():
+        sa.confirmedAccount = True
+    else:
+        sa.confirmedAccount = False
+    sa.save()
 
 
 def modifyCoach(profile, form):
-    profile.school = form["school"]
-    profile.IBAN = form["IBAN"]
-    profile.nationalRegisterID = form["natRegID"]
+    ca = profile.coachaccount
 
-    profile.French_level = form["Frenchlevel"]
-    profile.English_level = form["Englishlevel"]
-    profile.Dutch_level = form["Dutchlevel"]
-    profile.save()
+    ca.school = form["school"]
+    ca.IBAN = form["IBAN"]
+    ca.nationalRegisterID = form["natRegID"]
+
+    ca.French_level = form["Frenchlevel"]
+    ca.English_level = form["Englishlevel"]
+    ca.Dutch_level = form["Dutchlevel"]
+
+    ca.confirmedAccount = form["status"]
+    ca.save()
 
 
 @staff_member_required
 def modifyUser(request):
     # Check if the way the user accessed this url is correct
-    if request.method == "POST":
-        try:
-            form = request.POST
-            # If the admin wants to 'delete' the user
-            if "delete" in form.keys():
-                usr = User.objects.get(username=form["username"])
-                # First step, deactivate the user's account
-                if usr.is_active:
-                    usr.is_active = False
-                    usr.save()
-                # If already deactivated : delete
-                else:
-                    print("user deleted")
-                    usr.delete()
+    if request.method != "POST":
+        return HttpResponseRedirect('/administration/users/')
 
-                return HttpResponseRedirect("/administration/users/")
-
-            # If the admin wants to re-activate the user's account
-            elif "reactivate" in form.keys():
-                print("user is reactive")
-                return HttpResponseRedirect(
-                    "/administration/reactivate/"+form["username"])
-
-            # Else, the admin wants to modify the user
+    try:
+        form = request.POST
+        # If the admin wants to 'delete' the user
+        if "delete" in form.keys():
             usr = User.objects.get(username=form["username"])
-            usr.first_name = form["firstName"]
-            usr.last_name = form["lastName"]
-            usr.email = form["mail"]
-            usr.save()  # Saves basic user model
-            profile = usr.profile
+            # First step, deactivate the user's account
+            if usr.is_active:
+                usr.is_active = False
+                usr.save()
+            # If already deactivated : delete
+            else:
+                print("user deleted")
+                usr.delete()
 
-            try:  # Checks if the user as a profile extension
-                type = profile.account_type  # Get account type to try
-            except Exception as e:
-                print("Error :", e)
-                profile = Profile(user=usr)
-                profile.save()
-                type = usr.profile.account_type
-
-            # Modifications that apply for all type of account
-            profile.phone_number = form["phone_number"]
-            profile.address = form["address"]
-            profile.birthDate = serializeDate(form["birthDate"])
-
-            for course in ["Maths", "Chimie", "Physique", "Francais"]:
-                if course+"_Course" in form.keys():
-                    exec("profile." + course + "_course = True")
-                else:
-                    exec("profile." + course + "_course = False")
-            profile.save()
-
-            # Modifications that only apply to student type account
-            if type == "Etudiant":
-                modifyStudent(profile, form)
-            # Modifications that only apply to coach type account
-            elif type == "Coach":
-                modifyCoach(profile, form)
-
-            # Redirect to administration
             return HttpResponseRedirect("/administration/users/")
 
-        except Exception as e:  # In case an error occurs
-            print(e)  # Print it
-            return HttpResponseRedirect('/administration/users')
-    else:
-        return HttpResponseRedirect('/administration/users/')
+        # If the admin wants to re-activate the user's account
+        elif "reactivate" in form.keys():
+            return HttpResponseRedirect(
+                "/administration/reactivate/"+form["username"])
+
+        # Else, the admin wants to modify the user
+        usr = User.objects.get(username=form["username"])
+        usr.first_name = form["firstName"]
+        usr.last_name = form["lastName"]
+        usr.email = form["mail"]
+        usr.save()  # Saves basic user model
+        profile = usr.profile
+
+        try:  # Checks if the user as a profile extension
+            type = profile.account_type  # Get account type to try
+        except Exception as e:
+            print("Error :", e)
+            profile = Profile(user=usr)
+            profile.save()
+            type = usr.profile.account_type
+
+        # Modifications that apply for all type of account
+        profile.phone_number = form["phone_number"]
+        profile.address = form["address"]
+        profile.birthDate = serializeDate(form["birthDate"])
+
+        if "verifiedAccount" in form.keys():
+            profile.verifiedAccount = True
+        else:
+            profile.verifiedAccount = False
+
+        for course in ["Maths", "Chimie", "Physique", "Francais"]:
+            if course+"_Course" in form.keys():
+                exec("profile." + course + "_course = True")
+            else:
+                exec("profile." + course + "_course = False")
+        profile.save()
+
+        # Modifications that only apply to student type account
+        if type == "Etudiant":
+            modifyStudent(profile, form)
+        # Modifications that only apply to coach type account
+        elif type == "Coach":
+            modifyCoach(profile, form)
+
+        # Redirect to administration
+        return HttpResponseRedirect("/administration/users/")
+
+    except Exception as e:  # In case an error occurs
+        print("Error :", e)  # Print it
+        return HttpResponseRedirect('/administration/users')
