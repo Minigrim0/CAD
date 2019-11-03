@@ -40,7 +40,7 @@
 <body id="page-top">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+        <a class="navbar-brand js-scroll-trigger" href="/">
             <span class="d-block d-lg-none">Cours à domicile</span>
             <span class="d-none d-lg-block">
                 <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
@@ -129,12 +129,25 @@
                                                 {% endif %}
                                             </p>
 
+                                            <div class="card-footer row">
+                                                <div class="btn-group" role="group" aria-label="actions">
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Detail{{ coach.user.username }}">
+                                                        Détails
+                                                    </button>
+                                                    <div class="choose">
+                                                        <button type="button" class="btn btn-success" onclick="chooseCoach('{{ coach.user.username }}', '{{ request.id }}')" name="accept">
+                                                            Choisir
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <!-- Modal -->
-                                            <div class="modal fade" id="{{ coach.user.username }}Modal" tabindex="-1" role="dialog" aria-labelledby="CoachPreview" aria-hidden="true">
+                                            <div class="modal fade" id="Detail{{ coach.user.username }}" tabindex="-1" role="dialog" aria-labelledby="DetailLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">{{ coach.user.first_name }} {{ coach.user.last_name }}</h5>
+                                                            <h5 class="modal-title" id="DetailLabel">{{ coach.user.first_name }} {{ coach.user.last_name }}</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
@@ -159,17 +172,6 @@
                                                 </div>
                                             </div>
 
-                                            <div class="card-footer row">
-                                                <div class="btn-group" role="group" aria-label="actions">
-                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ coach.user.username }}Modal">
-                                                        Détails
-                                                    </button>
-                                                    <div class="choose">
-                                                        <button type="button" class="btn btn-success" onclick="chooseCoach('{{ coach.user.username }}', '{{ request.id }}')" name="accept">Choisir</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                         </div>
                                     </div>
                                     {% empty %}
@@ -182,6 +184,8 @@
                         <h4>Pas de requêtes pour le moment...</h4>
                         {% endfor %}
                     </ul>
+
+
                 </div>
 
                 <div id="Closed" style="display: none;">
@@ -306,7 +310,7 @@
         function chooseCoach(coach, id) {
             document.getElementById("coaches_" + id).style = "filter: opacity(10%);";
             document.getElementById("spin_" + id).style.display = "block";
-            var Url = "127.0.0.1:8000/users/choose/";
+            var Url = "/users/choose/";
 
             $.post(
                 Url, {
