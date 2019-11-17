@@ -63,31 +63,24 @@
 
     <div class="container-fluid p-0">
 
+
         <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="home">
             <div class="w-100">
-                <div class="collapse" id="Alerts_div">
-                    {% for success in a_Success %}
-                    <div class="alert alert-success" role="alert">
-                        {{ success }}
+                {% if messages %}
+                    {% for message in messages %}
+                    <div
+                        {% if message.tags %}
+                            {% if message.tags == "error" %}
+                            class="alert alert-danger"
+                            {% else %}
+                            class="alert alert-{{ message.tags }}"
+                            {% endif %}
+                        {% endif %}
+                    >
+                        {{ message }}
                     </div>
                     {% endfor %}
-
-                    {% for fails in a_Failed %}
-                    <div class="alert alert-danger" role="alert">
-                        {{ fails }}
-                    </div>
-                    {% endfor %}
-
-                    {% if user.is_authenticated %}
-                    {% if user.profile.account_type == "Etudiant" %}
-                    {% if user.profile.wanted_schedule == "" or user.profile.wanted_schedule == "0/0/0.0/0/0.0/0/0.0/0/0.0/0/0.0/0/0.0/0/0." %}
-                    <div class="alert alert-danger" role="alert">
-                        <a href="/users/{{ user.username }}">N'oubliez pas de compléter votre compte !</a>
-                    </div>
-                    {% endif %}
-                    {% endif %}
-                    {% endif %}
-                </div>
+                {% endif %}
 
                 <h1 class="mb-0">
                     {{ a_home.title   |safe }}
@@ -242,8 +235,6 @@
 
     <!-- Custom scripts for this template -->
     <script src="{% static 'js/resume.min.js' %}"></script>
-    <script src="{% static 'js/index.js' %}"></script>
-
 </body>
 
 </html>

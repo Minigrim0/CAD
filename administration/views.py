@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.contrib.admin.views.decorators import staff_member_required
@@ -109,7 +110,7 @@ def userAdminView(request, string=""):
 @staff_member_required
 def reactivate(request, string=""):
     if string == "":
-        return HttpResponseRedirect("/05/")
+        return HttpResponseRedirect(reverse("Error_view"))
 
     usr = User.objects.get(username=string)
     usr.is_active = True
