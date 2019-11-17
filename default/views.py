@@ -16,21 +16,21 @@ def home(request, param=""):
     about = Article.objects.filter(name="About")
     contact = Article.objects.filter(name="Contact")
 
-    dico_ = {'a_home':    home[0],
-             'a_info':    info[0],
-             'a_video':   video[0],
-             'a_coaches': coaches[0],
-             'a_about':   about[0],
-             'a_contact': contact[0],
-             'a_Success': [],
-             'a_Failed': []}
+    dico = {
+        'a_home': home[0],
+        'a_info': info[0],
+        'a_video': video[0],
+        'a_coaches': coaches[0],
+        'a_about': about[0],
+        'a_contact': contact[0],
+         }
 
     try:
-        dico_["nb_notif"] = request.user.notification_set.count()
+        dico["nb_notif"] = request.user.notification_set.count()
     except Exception as e:
         print("Unauthenticated user :", e)
 
-    return render(request, 'index.html', dico_)
+    return render(request, 'index.html', dico)
 
 
 def contactView(request):
