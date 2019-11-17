@@ -1,11 +1,14 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+
 from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
+
 from datetime import date
 import secrets
 

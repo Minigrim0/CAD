@@ -1,12 +1,16 @@
 from django.shortcuts import render
+from django.core.urlresolvers import reverse
+
 from django.http import HttpResponse,\
     HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
+
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
+
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+
 from users.models import Notification, studentRequest, Transaction
 
 
