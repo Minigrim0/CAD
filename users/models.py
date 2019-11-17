@@ -10,7 +10,6 @@ class Profile(models.Model):
             autant des profils étudiants que des profils coach
     """
 
-    # Both type of account
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(
         null=True, blank=True, verbose_name="numéro de téléphone",
@@ -200,6 +199,12 @@ class FollowElement(models.Model):
 
 
 class Transaction(models.Model):
+    """
+        Modèle transaction:
+            => Représente un ajout d'argent par un administrateur sur le compte
+            d'un étudiant ou la dépense d'un étudiant pour payment d'un cours
+    """
+
     student = models.ForeignKey(StudentAccount)
     amount = models.IntegerField(blank=False, default=0)
     date = models.DateTimeField(auto_now_add=True, null=True)
