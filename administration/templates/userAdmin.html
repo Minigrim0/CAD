@@ -24,7 +24,8 @@
     <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
 
     <script>
-        const Url = "/users/send_notif/";
+        const Url = "{% url "send_notif" %}";
+        const UrlBalance = "{% url "modify_balance" %}";
 
         //Makes a request to remove the notification with the specified ID
         //Has to be an id related to the current user's notification
@@ -209,14 +210,12 @@
                                         <input type="text" class="form-control" name="birthDate" id="birthDate" value="{{ user.profile.birthDate }}">
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="account_type" class="col-sm-2 col-form-label">Type de compte :</label>
                                     <div class="col-sm-10">
                                         <input type="text" readonly class="form-control type_account" name="account_type" id="account_type" value="{{ user.profile.account_type }}">
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="account_type" class="col-sm-2 col-form-label">Adresse mail vérifé :</label>
                                     <div class="col-sm-10">
@@ -239,21 +238,18 @@
                                         {% endif %}
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="tutorLastName" class="col-sm-2 col-form-label">Nom du tuteur :</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="tutorLastName" id="tutorLastName" value="{{ user.profile.studentaccount.tutor_name }}">
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="tutorFirstName" class="col-sm-2 col-form-label">Prénom du tuteur :</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="tutorFirstName" id="tutorFirstName" value="{{ user.profile.studentaccount.tutor_firstName }}">
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label class="col-sm-2 col-form-label">Cours demandés :</label>
                                     <div class="col-sm-10">
@@ -315,14 +311,19 @@
 
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="comments" class="col-sm-2 col-form-label">Balance :</label>
-                                    <div class="col-sm-10">
-                                        <input type="number" class="form-control" name="balance" id="balance" value="{{ user.profile.studentaccount.balance }}">
+                                    <div class="col-sm-8">
+                                        <input type="number" class="form-control" name="balance" id="balance{{ user.username }}" value="{{ user.profile.studentaccount.balance }}" disabled>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#UpdateBalance{{ user.username }}">
+                                            <i class="fas fa-plus">
+                                                Augmenter
+                                            </i>
+                                        </button>
                                     </div>
                                 </div>
-
                                 <div class="from-group col-md-12">
                                     <label for="radioVisit">Désire une visite pédagogique : </label>
                                     <label class="radio-inline">
@@ -332,14 +333,12 @@
                                         <input type="radio" name="Visit" value="NoVisit" {% if user.profile.NeedsVisit %} # {% else %} checked {% endif %}>Non
                                     </label>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="comments" class="col-sm-2 col-form-label">Commentaires :</label>
                                     <div class="col-sm-10">
                                         <input type="textarea" class="form-control" name="comments" id="comments" placeholder="Pas de Commentaires" value="{{ user.profile.comments }}">
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="wanted-schedule-{{ user.username }}" class="col-sm-2 col-form-label">Horaire désiré :</label>
                                     <textarea class="col-sm-10" id="wanted-schedule-{{ user.username }}" rows="5">{{ user.profile.studentaccount.wanted_schedule }}</textarea>
@@ -374,7 +373,6 @@
                                         </select>
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label class="col-sm-2 col-form-label">Souhaite donner cours de :</label>
                                     <div class="col-sm-10">
@@ -435,7 +433,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="school_level" class="col-sm-2 col-form-label">Souhaite donner cours en :</label>
                                     <div class="col-sm-10">
@@ -446,28 +443,24 @@
                                         {% endif %}
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="school" class="col-sm-2 col-form-label">Ecole du coach :</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="school" id="school" value="{{ user.profile.coachaccount.school }}">
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="IBAN" class="col-sm-2 col-form-label">Compte en banque :</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="IBAN" id="IBAN" value="{{ user.profile.coachaccount.IBAN }}">
                                     </div>
                                 </div>
-
                                 <div class="form-group row col-md-12">
                                     <label for="natRegID" class="col-sm-2 col-form-label">Numéro de registre national :</label>
                                     <div class="col-sm-10">
                                         <input type="text" class="form-control" name="natRegID" id="natRegID" value="{{ user.profile.coachaccount.nationalRegisterID }}">
                                     </div>
                                 </div>
-
                                 <div class="form-group">
                                     <div class="container">
                                         <label for="gridLang">Niveaux de langues :</label>
@@ -522,7 +515,7 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-3">
-                                    <button type="submit" onclick="setHtmlForm()" class="btn btn-success" name="modify">Enregistrer les modifications</button>
+                                    <button type="submit" class="btn btn-success" name="modify">Enregistrer les modifications</button>
                                 </div>
                                 {% if user.is_active %}
                                 <div class="form-group col-md-3">
@@ -530,7 +523,9 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div style="display: none;" id="Confirm-Button-{{ user.username }}">
-                                        <button type="submit" class="btn btn-danger" name="delete">Confirmer la désactivation de l'utilisateur</button>
+                                        <button type="submit" class="btn btn-danger" name="delete">
+                                            Confirmer
+                                        </button>
                                     </div>
                                 </div>
                                 {% else %}

@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.decorators import login_required
-from django.core.urlresolvers import reverse
 from django.core.mail import send_mail
 from datetime import date
 import secrets
@@ -167,17 +168,20 @@ def confirmation(request, string=""):
     user = getUser(string)
     # token manquant ou non valide
     if string == "" or user is None:
-        return HttpResponseRedirect("/05/")
+        return HttpResponseRedirect(reverse("Error_view"))
 
     # Si la personne qui confirme le compte
     # n'est pas l'utilisateur concerné
     if user.username != request.user.username:
-        return HttpResponseRedirect("/05/")
+        return HttpResponseRedirect(reverse("Error_view"))
 
     # Si le compte est déjà confirmé,
     # l'utilisateur ne doit plus accéder à cette page
     if user.profile.verifiedAccount:
-        return HttpResponseRedirect("/14/")
+        messages.add_message(
+            request, messages.WARNING,
+            "Vous avez déjà confirmé votre compte !")
+        return HttpResponseRedirect("/")
 
     # L'utilisateur a vérifié son adresse mail
     # => Compte vérifié mais pas confirmé
@@ -189,7 +193,11 @@ def confirmation(request, string=""):
     if profile.account_type == "Etudiant":
         return HttpResponseRedirect(reverse("paymentView"))
     else:
-        return HttpResponseRedirect("/13/")
+        messages.add_message(
+            request, messages.SUCCESS,
+            "Votre compte à bien été confirmé ! Vous \
+            allez pouvoir commencer à donner cours !")
+        return HttpResponseRedirect("/")
 
 
 def paymentView(request):
@@ -202,12 +210,12 @@ def pay_later(request):
 
     # token manquant ou non valide
     if user is None:
-        return HttpResponseRedirect("/05/")
+        return HttpResponseRedirect(reverse("Error_view"))
 
     # Si le compte est déjà confirmé,
     # l'utilisateur ne doit plus accéder à cette page
     if user.profile.confirmed_account:
-        return HttpResponseRedirect("/05/")
+        return HttpResponseRedirect(reverse("Error_view"))
 
     newNotif = Notification(user=user)
     newNotif.author = "L'équipe CAD"
@@ -218,7 +226,13 @@ def pay_later(request):
     newNotif.save()
     user.profile.save()
 
-    return HttpResponseRedirect("/10/")
+    messages.add_message(
+        request, messages.WARNING,
+        "Votre paiement a été annulé, n'oubliez pas \
+        de le compléter au plus vite, afin de pouvoir commencer a suivre des \
+        cours avec nos coaches !")
+
+    return HttpResponseRedirect("/")
 
 
 def thanks(request):
@@ -226,12 +240,12 @@ def thanks(request):
 
     # token manquant ou non valide
     if user is None or user.profile.account_type != "Etudiant":
-        return HttpResponseRedirect("/05/")
+        return HttpResponseRedirect(reverse("Error_view"))
 
     # Si le compte est déjà confirmé, l'utilisateur ne doit plus accéder
     # à cette page
     if user.profile.studentaccount.confirmedAccount:
-        return HttpResponseRedirect("/05/")
+        return HttpResponseRedirect(reverse("Error_view"))
 
     # L'utilisateur a confirmé son compte
     # Compte vérifié et confirmé
@@ -244,7 +258,11 @@ def thanks(request):
 
     sendNotifToCoaches(user.profile)
 
-    return HttpResponseRedirect("/11/")
+    messages.add_message(
+        request, messages.SUCCESS,
+        "Merci d'avoir complété votre inscription ! \
+        Nous allons de ce pas chercher un coach pour vous !")
+    return HttpResponseRedirect("/")
 
 
 def getUser(token):
