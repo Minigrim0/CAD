@@ -65,6 +65,41 @@
                 }
             );
         }
+
+        function _postBalance(_user) {
+
+            _amout_add = document.getElementById("new_balance" + _user).value;
+
+            $.post(
+                UrlBalance, {
+                    amout_add: +_amout_add,
+                    approver: '{{ request.user.username }}',
+                    user: _user,
+
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                function(data, status) {
+                    if (status == "success") {
+                        document.getElementById("successBalance" + _user).style.display = "block";
+                        document.getElementById("balance" + _user).value = data["new_balance"];
+                        var IntervalID = setInterval(
+                            function() {
+                                document.getElementById("successBalance" + _user).style.display = "none";
+                                $('#UpdateBalance' + _user).modal('toggle')
+                                clearInterval(IntervalID);
+                            }, 1500);
+                    } else {
+                        document.getElementById("errorBalance" + _user).style.display = "block";
+                        var IntervalID = setInterval(
+                            function() {
+                                document.getElementById("errorBalance" + _user).style.display = "none";
+                                $('#UpdateBalance' + _user).modal('toggle')
+                                clearInterval(IntervalID);
+                            }, 1500);
+                    }
+                }
+            );
+        }
     </script>
 </head>
 
@@ -168,8 +203,46 @@
                         </div>
                     </div>
 
+                    <div class="modal fade" id="UpdateBalance{{ user.username }}" tabindex="-1" role="dialog" aria-labelledby="SendNotifLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="SendNotifLabel">Mettre à jour le solde de {{ user.first_name }} {{ user.last_name }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-row">
+                                            <div class="form-group row col-sm-12">
+                                                <div class="col-sm-3">
+                                                    <label for="new_balance">Valeur à ajouter</label>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <input type="number" class="form-control" id="new_balance{{ user.username }}" value=0></input>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <div class="alert alert-danger" role="alert" id="errorBalance{{ user.username }}" style="display:none;">
+                                        Une erreur est survenue, essayez plus tard !
+                                    </div>
+                                    <div class="alert alert-success" role="alert" id="successBalance{{ user.username }}" style="display:none;">
+                                        Votre mise à jour a bien été effectuée
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                                    <button type="button" class="btn btn-primary" onclick="_postBalance('{{ user.username }}')">Envoyer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="container">
-                        <form method="post" action="/administration/modify/">{% csrf_token %}
+                        <form method="POST" action="/administration/modify/">
+                            {% csrf_token %}
 
                             <input type="hidden" name="username" value="{{ user.username }}">
 
@@ -546,12 +619,6 @@
                             </div>
                         </form>
                     </div>
-
-                    {% if user.account_type != "Etudiant" %}
-                    <div class="col-sm-10" id="sketch-holder-{{ user.username }}" style="display: none;">
-                    </div>
-                    {% endif %}
-
                 </div>
                 {% endfor %}
 
@@ -609,6 +676,12 @@
     <!-- Custom scripts for this template -->
     <script src="{% static 'js/resume.min.js' %}"></script>
 
+    <script>
+        //Shows the confirm button to delete an account
+        function showConfirm(username){
+          document.getElementById("Confirm-Button-" + username).style.display = "block";
+        }
+    </script>
 
 </body>
 

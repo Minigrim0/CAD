@@ -424,8 +424,3 @@ function setHtmlForm(){
     divider.innerHTML = formHTML;
   }
 }
-
-//Shows the confirm button to delete an account
-function showConfirm(username){
-  document.getElementById("Confirm-Button-" + username).style.display = "block";
-}
