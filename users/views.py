@@ -1,10 +1,21 @@
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse,\
+    HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
-from administration.views import serializeDate
-from users.models import Notification, studentRequest, Profile
+from django.core.urlresolvers import reverse
+from users.models import Notification, studentRequest, Transaction
+
+
+def ErrorView(request):
+    messages.add_message(
+        request, messages.ERROR,
+        "Une erreur est survenue lors du chargement \
+    de la page")
+    return HttpResponseRedirect("/")
 
 
 @login_required(login_url='/connexion/')
@@ -30,9 +41,6 @@ def userView(request):
 
 @login_required(login_url='/connexion/')
 def followView(request):
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect("/05/")
-
     a_user = request.user
     followelement_set = a_user.followelement_set.all()
 
@@ -41,9 +49,6 @@ def followView(request):
 
 @login_required(redirect_field_name='/05/')
 def studentsView(request):
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect("/05/")
-
     return render(request, 'students.html', locals())
 
 
@@ -111,7 +116,7 @@ def requestView(request, id=0):
 
             return render(request, "requests.html", locals())
         else:
-            return HttpResponseRedirect("/05/")
+            return HttpResponseRedirect(reverse("Error_view"))
     else:
         if request.user.is_authenticated():
             if request.user.is_superuser:
@@ -122,9 +127,9 @@ def requestView(request, id=0):
 
                 return render(request, "requestsAdmin.html", locals())
             else:
-                return HttpResponseRedirect("/05/")
+                return HttpResponseRedirect(reverse("Error_view"))
         else:
-            return HttpResponseRedirect("/05/")
+            return HttpResponseRedirect(reverse("Error_view"))
 
 
 def thanksCoaches(coaches, student):
@@ -145,7 +150,6 @@ def thanksCoaches(coaches, student):
 
 @login_required(redirect_field_name='/05/')
 def chooseCoach(request):
-    print("Got the request")
     if request.method != "POST":
         return HttpResponse("/05/")
 
@@ -184,7 +188,7 @@ def chooseCoach(request):
 
 def requestManage(request):
     if request.method != "POST":
-        return HttpResponseRedirect("/05/")
+        return HttpResponseRedirect(reverse("Error_view"))
 
     if request.POST["decision"] == 'true':
         student_request = studentRequest.objects.get(id=request.POST["id"])
