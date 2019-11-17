@@ -1,6 +1,6 @@
 from django.contrib import admin
 from users.models import StudentAccount, CoachAccount, studentRequest,\
-    FollowElement
+    FollowElement, Transaction
 
 
 class CoachAdmin(admin.ModelAdmin):
@@ -49,11 +49,18 @@ class FollowElementAdmin(admin.ModelAdmin):
     list_display = (
         'id', 'student', 'coach', 'date')
     list_filter = (
-        "id", "student",
-        "coach")
+        "id", "student", "coach")
+
+
+class TransactionAdmin(admin.ModelAdmin):
+    list_display = (
+        'id', 'student', 'amount', 'admin')
+    list_filter = (
+        "id", "student", "amount", "admin")
 
 
 admin.site.register(StudentAccount, StudentAdmin)
 admin.site.register(CoachAccount, CoachAdmin)
 admin.site.register(studentRequest, StudentRequestAdmin)
 admin.site.register(FollowElement, FollowElementAdmin)
+admin.site.register(Transaction, TransactionAdmin)
