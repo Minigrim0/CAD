@@ -58,12 +58,12 @@ def send_notif(request):
     if request.method == "POST":
 
         user = User.objects.get(username=request.POST['user'])
-        _notif = Notification()
-        _notif.user = user
-        _notif.title = request.POST["title"]
-        _notif.content = request.POST["content"]
-        _notif.author = request.POST["sender"]
-        _notif.save()
+        notif = Notification()
+        notif.user = user
+        notif.title = request.POST["title"]
+        notif.content = request.POST["content"]
+        notif.author = request.POST["sender"]
+        notif.save()
 
         user.profile.save()
 
@@ -75,29 +75,55 @@ def send_notif(request):
 
 @login_required
 def remove_notif(request):
-    if request.method == "POST":
-        try:
-            user = User.objects.get(username=request.user.username)
+    if request.method != "POST":
+        return HttpResponseRedirect(reverse("Error_view"))
 
-            user.notification_set.get(id=request.POST["id"]).delete()
-            user.profile.notifications_nb -= 1
-            if user.profile.notifications_nb < 0:
-                user.profile.notifications_nb = 0
+    try:
+        user = User.objects.get(username=request.user.username)
 
-            user.profile.save()
-            user.save()
+        user.notification_set.get(id=request.POST["id"]).delete()
+        user.profile.notifications_nb -= 1
+        if user.profile.notifications_nb < 0:
+            user.profile.notifications_nb = 0
 
-            return HttpResponse("success")
-        except Exception as e:
-            print("Error :", e)
-            return HttpResponse("failed")
+        user.profile.save()
+        user.save()
 
-    return HttpResponseRedirect("/05/")
+        return HttpResponse("success")
+    except Exception as e:
+        print("Error :", e)
+        return HttpResponse("failed")
+
+
+@staff_member_required
+def modify_balance(request):
+    if request.method != "POST":
+        return HttpResponseBadRequest("Invalid method")
+
+    admin = User.objects.get(username=request.POST["approver"])
+    print(request.POST["user"])
+    student = User.objects.get(username=request.POST["user"])
+    to_add = request.POST["amout_add"]
+
+    prof = student.profile.studentaccount
+    prof.balance += int(to_add)
+    prof.save()
+
+    tran = Transaction(student=prof)
+    tran.amount = to_add
+    tran.admin = admin
+    tran.save()
+
+    return JsonResponse({"new_balance": prof.balance})
 
 
 @login_required(redirect_field_name='/05/')
 def disconnect(request):
     logout(request)
+
+    messages.add_message(
+        request, messages.WARNING,
+        "Vous avez été déconnecté")
     return HttpResponseRedirect("/06/")
 
 
