@@ -103,6 +103,10 @@ class StudentAccount(models.Model):
     ville = models.CharField(
         max_length=50, default="None", blank=True)
 
+    def __str__(self):
+        return "{} {}'s student".format(
+            self.profile.user.first_name, self.profile.user.last_name)
+
 
 class CoachAccount(models.Model):
     # Coach
@@ -197,5 +201,6 @@ class FollowElement(models.Model):
 
 class Transaction(models.Model):
     student = models.ForeignKey(StudentAccount)
-    amount = models.IntergerField(blank=False, default=0)
+    amount = models.IntegerField(blank=False, default=0)
     date = models.DateTimeField(auto_now_add=True, null=True)
+    admin = models.ForeignKey(User, null=True)
