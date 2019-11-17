@@ -82,6 +82,7 @@ ADMINS = (
 
 WSGI_APPLICATION = 'cad.wsgi.application'
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
