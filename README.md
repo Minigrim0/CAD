@@ -1,27 +1,10 @@
-# INFO CODES
+## CAD Site
 
-01 -> Register Success
+### Requirements
+ Simply run the following 
 
-02 -> Register Failed
+```
+  pip3 install -r requirements.txt
+```
 
-03 -> Connection Success
-
-04 -> Connection Failed
-
-05 -> Not a post Error
-
-06 -> successfully disconnected
-
-07 -> User successfully deleted
-
-08 -> Message sent
-
-09 -> Message failed
-
-10 -> Payment abort
-
-11 -> Payment received
-
-12 -> Suspended account
-
-13 -> Confirmed account
+in your virtualenv
