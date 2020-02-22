@@ -79,16 +79,15 @@ def coachRegister(user, form):
     coach_profile.save()
 
 
-def register(request):
+def registerStudentView(request):
     if request.method != "POST":
-        i_day = {
-            'Monday': 'Lundi',
-            'Tuesday': 'Mardi',
-            'Wednesday': 'Mercredi',
-            'Thursday': 'Jeudi',
-            'Friday': 'Vendredi',
-            'Saturday': 'Samedi',
-            'Sunday': 'Dimanche'}
+        return render(request, "inscriptionStudent.html", locals())
+    else:
+        return registerBase(request)
+
+
+def registerCoachView(request):
+    if request.method != "POST":
 
         i_langLevel = {
             '5': 'Langue maternelle',
@@ -101,7 +100,13 @@ def register(request):
             'French': 'Francais',
             'Dutch': 'Néerlandais',
             'English': 'Anglais'}
-        return render(request, "inscription.html", locals())
+
+        return render(request, "inscriptionCoach.html", locals())
+    else:
+        return registerBase(request)
+
+
+def registerBase(request):
     try:
         form = request.POST
         username = form["lastName"] + "_" + form['firstName']
@@ -161,9 +166,16 @@ def register(request):
         username = form["lastName"] + "_" + form['firstName']
         usr = User.objects.get(username=username)
         usr.delete()
-        return HttpResponseRedirect('/02/')
+        messages.add_message(
+            request, messages.WARNING,
+            "Il y a eu une erreur lors de la création de votre compte,\
+            réessayez plus tard")
+        return HttpResponseRedirect('/')
 
-    return HttpResponseRedirect('/01/')
+    messages.add_message(
+        request, messages.SUCCESS,
+        "Votre compte a bien été créé !")
+    return HttpResponseRedirect('/')
 
 
 @login_required(login_url='/connexion/')
@@ -194,6 +206,10 @@ def confirmation(request, string=""):
     profile.save()
 
     if profile.account_type == "Etudiant":
+        mail = Mail.objects.get(id=2)
+        send_mail(
+            mail.clean_header, mail.formatted_content(user), EMAIL_HOST_USER,
+            [user.email])
         return HttpResponseRedirect(reverse("paymentView"))
     else:
         messages.add_message(
