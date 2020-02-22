@@ -67,28 +67,28 @@
                     <li class="nav-item justify-content-between align-items-center">
                         <ul>
                             <li class="nav-item justify-content-between align-items-center">
-                                <a href="/administration/users/" class="nav-link">
+                                <a href="{% url "user_admin" %}" class="nav-link">
                                     <i class="fas fa-circle"></i>
                                     Tous
                                     <span class="badge badge-primary badge-pill">{{ nbr_accounts }}</span>
                                 </a>
                             </li>
                             <li class="nav-item justify-content-between align-items-center">
-                                <a href="/administration/users/students/" class="nav-link">
+                                <a href="{% url "user_admin" %}students/" class="nav-link">
                                     <i class="fas fa-circle"></i>
                                     Etudiants
                                     <span class="badge badge-primary badge-pill">{{ nbr_students }}</span>
                                 </a>
                             </li>
                             <li class="nav-item justify-content-between align-items-center">
-                                <a {% if nbr_coaches > 0 %} href="/administration/users/coaches/" {% endif %} class="nav-link">
+                                <a {% if nbr_coaches > 0 %} href="{% url "user_admin" %}coaches/" {% endif %} class="nav-link">
                                     <i class="fas fa-circle"></i>
                                     Coaches
                                     <span class="badge badge-primary badge-pill">{{ nbr_coaches }}</span>
                                 </a>
                             </li>
                             <li class="nav-item justify-content-between align-items-center">
-                                <a {% if nbr_other > 0 %}href="/administration/users/other/"{% endif %} class="nav-link">
+                                <a {% if nbr_other > 0 %}href="{% url "user_admin" %}other/"{% endif %} class="nav-link">
                                     <i class="fas fa-circle"></i>
                                     Autre
                                     <span class="badge badge-primary badge-pill">{{ nbr_other }}</span>
@@ -105,13 +105,13 @@
                 </li>
 
                 <li class="nav-item justify-content-between align-items-center">
-                    <a href="/administration/articles/" class="nav-link">
+                    <a href="{% url "articles_admin" %}" class="nav-link">
                         Articles
                     </a>
                 </li>
 
                 <li class="nav-item justify-content-between align-items-center">
-                    <a href="/administration/mails/" class="nav-link">
+                    <a href="{% url "mails_admin" %}" class="nav-link">
                         Templates de mails
                     </a>
                 </li>
