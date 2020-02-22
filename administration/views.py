@@ -10,6 +10,7 @@ import datetime
 
 from users.models import studentRequest, Profile
 from default.models import Article, Mail
+from administration.forms import MailForm
 from inscription.utils import sendNotifToCoaches
 
 
@@ -26,7 +27,7 @@ def adminPage(request):
 
 @staff_member_required
 def mailAdminView(request):
-    mails = Mail.objects.all()
+    mails = [MailForm(instance=mail) for mail in Mail.objects.all()]
     return render(request, 'mailsAdmin.html', locals())
 
 
@@ -34,10 +35,11 @@ def mailAdminView(request):
 def mailAdminModify(request):
     if request.method == "POST":
         form = request.POST
-        mail = Mail.objects.get(id=int(form['id']))
+        mail = Mail.objects.get(id=int(form['mailid']))
         mail.name = form['name'].replace("\r", " ")
         mail.subject = form['subject'].replace("\r", " ")
         mail.content = form['content'].replace("\r", " ")
+        mail.role = form['role']
         mail.save()
 
     return HttpResponseRedirect("/administration/mails/")
@@ -51,11 +53,13 @@ def mailAdminCreate(request):
         mail.name = form['name'].replace("\r", " ")
         mail.subject = form['subject'].replace("\r", " ")
         mail.content = form['content'].replace("\r", " ")
+        mail.role = form['role']
         mail.save()
 
         return HttpResponseRedirect("/administration/mails/")
     else:
-        return render(request, 'mailsAdminCreate.html',)
+        form = MailForm()
+        return render(request, 'mailsAdminCreate.html', locals())
 
 
 @staff_member_required
@@ -265,7 +269,6 @@ def modifyUser(request):
         profile.phone_number = form["phone_number"]
         profile.address = form["address"]
         profile.birthDate = serializeDate(form["birthDate"])
-        print("Modified for every account type")
 
         if "verifiedAccount" in form.keys():
             profile.verifiedAccount = True

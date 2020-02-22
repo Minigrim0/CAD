@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'inscription',
     'users',
     'administration',
+    'crispy_forms',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -53,6 +54,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 ROOT_URLCONF = 'cad.urls'
 
 TEMPLATES = [
