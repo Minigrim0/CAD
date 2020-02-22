@@ -92,7 +92,7 @@ class StudentAccount(models.Model):
     # Amount left for the student to pay courses
     balance = models.IntegerField(
         null=True, blank=True, verbose_name="Solde", default=0)
-    # User as payed the two first hours of course
+    # User has payed the two first hours of course
     coach = models.ForeignKey(
         User, null=True, related_name="Coach", on_delete=models.CASCADE)
     confirmedAccount = models.BooleanField(
