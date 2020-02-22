@@ -49,10 +49,11 @@
                     <a class="nav-link js-scroll-trigger" href="#video">Video explicative</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#becomeCoach">Devenir Coach</a>
+                    <a class="nav-link js-scroll-trigger" href="#about">Pourquoi nous ?</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#about">Pourquoi nous ?</a>
+                    <a class="nav-link js-scroll-trigger" href="#espaceCoach">Espace Coach</a>
+                </li>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
@@ -92,7 +93,7 @@
 
                 <br />
                 <br />
-                <a href="connexion/"><i class="fas fa-pencil-alt"> Prendre des cours</i></a>
+                <a href={% url "registerStudent" %}><i class="fas fa-pencil-alt"> Prendre des cours</i></a>
             </div>
         </section>
 
@@ -125,21 +126,6 @@
 
         <hr class="m-0">
 
-        <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="becomeCoach">
-            <div class="w-100">
-                <h2 class="mb-4">
-                    {{ a_coaches.title|safe }}
-                </h2>
-                {{ a_coaches.content|safe }}
-
-                <button type="button" class="btn btn-primary" href="/connexion/">
-                    Postuler en ligne
-                </button>
-            </div>
-        </section>
-
-        <hr class="m-0">
-
         <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="about">
             <div class="w-100">
                 <h2 class="mb-5">
@@ -150,6 +136,24 @@
                 </h3>
                 {{ a_about.content|safe }}
 
+            </div>
+        </section>
+
+        <hr class="m-0">
+
+        <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="espaceCoach">
+            <div class="w-100">
+                <h2 class="mb-4">
+                    {{ a_coaches.title|safe }}
+                </h2>
+                <h3 class="mb-5">
+                    {{ a_coaches.subTitle|safe }}
+                </h3>
+                {{ a_coaches.content|safe }}
+
+                <a type="button" class="btn btn-primary" href="{% url "registerCoach" %}">
+                    Postuler en ligne
+                </a>
             </div>
         </section>
 
@@ -219,7 +223,7 @@
                 <a href="{% url "connect_home" %}"><span style="color: white;">Connexion</span></a>
             </button>
             <button class="btn btn-primary" type="button">
-                <a href="{% url "register" %}"><span style="color: white;">inscription</span></a>
+                <a href="{% url "registerStudent" %}"><span style="color: white;">inscription</span></a>
             </button>
         </footer>
         {% endif %}
