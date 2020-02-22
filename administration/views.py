@@ -10,6 +10,7 @@ import datetime
 
 from users.models import studentRequest, Profile
 from default.models import Article, Mail
+from inscription.utils import sendNotifToCoaches
 
 
 @staff_member_required
@@ -78,7 +79,6 @@ def articleAdminModify(request):
 
 @staff_member_required
 def userAdminView(request, string=""):
-    print(string)
     if string == "":
         users = User.objects.all()
     elif string == "students":
@@ -189,7 +189,15 @@ def modifyStudent(profile, form):
     sa.tutor_name = form["tutorLastName"]
 
     if "confirmedAccount" in form.keys():
-        sa.confirmedAccount = True
+        if sa.confirmedAccount is False:
+            sa.confirmedAccount = True
+            # Continuer la procédure
+            newRequest = studentRequest(student=profile.user)
+            newRequest.save()
+
+            sendNotifToCoaches(profile)
+        else:
+            sa.confirmedAccount = True
     else:
         sa.confirmedAccount = False
     sa.save()
@@ -248,7 +256,7 @@ def modifyUser(request):
         try:  # Checks if the user as a profile extension
             type = profile.account_type  # Get account type to try
         except Exception as e:
-            print("Error :", e)
+            print("Errorfesuhsefis :", e)
             profile = Profile(user=usr)
             profile.save()
             type = usr.profile.account_type
@@ -257,6 +265,7 @@ def modifyUser(request):
         profile.phone_number = form["phone_number"]
         profile.address = form["address"]
         profile.birthDate = serializeDate(form["birthDate"])
+        print("Modified for every account type")
 
         if "verifiedAccount" in form.keys():
             profile.verifiedAccount = True
