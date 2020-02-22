@@ -128,7 +128,7 @@ def disconnect(request):
     messages.add_message(
         request, messages.WARNING,
         "Vous avez été déconnecté")
-    return HttpResponseRedirect("/06/")
+    return HttpResponseRedirect("/")
 
 
 @login_required(redirect_field_name='/05/')
