@@ -105,8 +105,7 @@ APPEND_SLASH = True
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.\
-        UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME':
@@ -126,7 +125,7 @@ EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = ***REMOVED***
 EMAIL_HOST_USER = 'cadcoursadomicile@gmail.com'
-EMAIL_HOST_PASSWORD = 'azereza12!'
+EMAIL_HOST_PASSWORD = 'azereza23.'
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
