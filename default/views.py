@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 
 from django.contrib import messages
 
-from default.models import Article
+from default.models import Article, Message
 from default.forms import contactForm
 
 
@@ -43,9 +43,17 @@ def contactView(request):
             message = form.cleaned_data['message']
             envoyeur = form.cleaned_data['envoyeur']
 
+            msg = Message()
+            msg.subject = sujet
+            msg.content = message
+            msg.contact_mail = envoyeur
+            msg.save()
+            msg.send_as_mail()
+
             messages.add_message(
                 request, messages.SUCCESS,
                 "Votre message a bien été envoyé !")
+
             return HttpResponseRedirect("/")
 
     else:
