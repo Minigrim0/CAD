@@ -10,6 +10,10 @@ urlpatterns = [
         inscription.views.pay_later, name="pay_later"),
     url(r'^thanks/$',
         inscription.views.thanks, name="thanks_view"),
+    url(r'^student/$',
+        inscription.views.registerStudentView, name="registerStudent"),
+    url(r'^coach/$',
+        inscription.views.registerCoachView, name="registerCoach"),
     url(r'^$',
-        inscription.views.register, name="register"),
+        inscription.views.registerStudentView, name="registerStudentDefault"),
 ]
