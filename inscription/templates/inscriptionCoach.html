@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+{% load static %}
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>CAD - inscription</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom fonts for this template -->
+    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
+</head>
+
+<body id="page-top">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+        <a class="navbar-brand js-scroll-trigger" href="/">
+            <span class="d-block d-lg-none">Cours à domicile</span>
+            <span class="d-none d-lg-block">
+                <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
+            </span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="/" class="nav-link js-scroll-trigger">Accueil</a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url "connect_home" %}" class="nav-link js-scroll-trigger">Connexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page content -->
+    <section class="p-3 p-lg-5 d-flex align-items-center">
+        <div class="container">
+            <h2 class="mb-2 text-center">
+                Inscription
+            </h2>
+            <div class="subheading mb-1 text-center">
+                Devenez Coach
+            </div>
+
+            <!-- General registration form -->
+            <div id="InscriptionForm">
+                <div class="container text-center">
+
+                    <div class="subheading mb-2 text-center">
+                        <h6 class="mb-1">
+                            <span style="color:red;">
+                                (* = obligatoire)
+                            </span>
+                        </h6>
+                    </div>
+
+                    <!-- Coach registration -->
+                    <div id="coachRegister">
+                        <form onsubmit="return C_validate();" method="post" action="">
+                            {% csrf_token %}
+                            <!-- Account type -->
+                            <input type="hidden" name="accountType" value="Coach">
+                            <!-- Coach name and first name -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="C_firstName">
+                                        Prénom du Coach
+                                        <span style="color:red;">
+                                            *
+                                        </span>
+                                    </label>
+                                    <input type="text" class="form-control" id="C_firstName" name="firstName">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodFirstName">
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="C_lastName">
+                                        Nom du Coach
+                                        <span style="color:red;">
+                                            *
+                                        </span>
+                                    </label>
+                                    <input type="text" class="form-control" id="C_lastName" name="lastName">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodLastName">
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Coach password and confirmation -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="C_password">
+                                        Choisissez un mot de passe (min. 8 caract.)
+                                        <span style="color:red;">
+                                            *
+                                        </span>
+                                    </label>
+                                    <input type="password" class="form-control" name="passwd" id="C_password">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodPass">
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="C_passConf">
+                                        Confirmez le mot de passe
+                                        <span style="color:red;">
+                                            *
+                                        </span>
+                                    </label>
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">
+                                                <div id="C_passNoMatch">
+                                                    <span style="color:red;">X</span>
+                                                </div>
+                                                <div id="C_passMatch" style="display: none;">
+                                                    <span style="color:green;">V</span>
+                                                </div>
+                                            </span>
+                                        </div>
+                                        <input type="password" class="form-control" id="C_passConf" name="passwordConf" onchange="checkC_Pass()">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Birth date and national register number -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="bday">Date de naissance du Coach<span style="color:red;">*</span></label>
+                                    <input type="date" class="form-control" value="2000-01-01" name="birthday" id="C_birthDate">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodBirth">
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="class">Numéro de registre national<span style="color:red;">*</span></label>
+                                    <input class="form-control" type="text" name="NationalRegisterNumber" id="C_nationalRegister">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodNRN">
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Coach Address -->
+                            <div class="form-group">
+                                <label for="C_Address">Adresse du Coach<span style="color:red;">*</span></label>
+                                <input type="text" class="form-control" id="C_Address" name="Address" placeholder="Ex : Bvd Anspach 350">
+                                <span style="color:red;">
+                                    <label id="C_notGoodAddress">
+                                    </label>
+                                </span>
+                            </div>
+                            <!-- Coach mail and phone -->
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="C_mail">Adresse mail<span style="color:red;">*</span></label>
+                                    <input type="mail" class="form-control" id="C_mail" name="mailAddress">
+                                    <span style="color:red;">
+                                        <label id="C_mailError">
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="C_phoneNumber">téléphone<span style="color:red;">*</span></label>
+                                    <input type="text" id="C_phoneNumber" class="form-control" name="PhoneNumber" placeholder="04XX/XX.XX.XX">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodPhone">
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- courses -->
+                            <div class="form-row text-center">
+                                <div class="form-group col-md-6" id="C_courses">
+                                    <label for="C_courses">Choisissez le ou les cours que vous désirez enseigner<span style="color:red;">*</span> : </label>
+                                </div>
+
+                                <div class="form-group col-md-6" id="C_courses">
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" class="custom-control-input" name="Course_Maths" value="GivesMaths" id="C_math">
+                                        <label class="custom-control-label" for="C_math">Mathématiques</label>
+                                    </div>
+
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" class="custom-control-input" name="Course_Chimie" value="GivesChimie" id="C_chemistry">
+                                        <label class="custom-control-label" for="C_chemistry">Chimie</label>
+                                    </div>
+
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" class="custom-control-input" name="Course_Physique" value="GivesPhysique" id="C_physics">
+                                        <label class="custom-control-label" for="C_physics">Physique</label>
+                                    </div>
+
+                                    <div class="custom-control custom-checkbox custom-control-inline">
+                                        <input type="checkbox" class="custom-control-input" name="Course_Francais" value="GivesFrancais" id="C_french">
+                                        <label class="custom-control-label" for="C_french">Français</label>
+                                    </div>
+                                    <span style="color:red;">
+                                        <label id="C_notGoodCourse">
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <!-- Coach University -->
+                            <div class="form-row text-center">
+                                <div class="form-group col-md-6">
+                                    <label for="coachSchool">Formation suivie et nom de l'université/institution</label>
+                                    <input type="text" id="C_School" placeholder="Ecole" class="form-control" name="coachSchool">
+                                    <span style="color:red;">
+                                        <label id="C_notGoodSchool">
+                                        </label>
+                                    </span>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="class">Vous voulez donner cours en<span style="color:red;">*</span></label>
+                                    <select class="form-control" name="schoolLevel">
+                                        <option value="elem">Primaire</option>
+                                        <option value="high">humanité</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Coach LangLevel -->
+                            <div class="form-group">
+                                <div class="container">
+                                    <label for="gridLang">Langues<span style="color:red;">*</span></label>
+                                    <div class="row" id="gridLang">
+                                        <label class="col custom-control-inline">/</label>
+                                        {% for idlev, level in i_langLevel.items %}
+                                        <div class="col">
+                                            <label>{{ level }}</label>
+                                        </div>
+                                        {% endfor %}
+                                        <div class="w-100"></div>
+                                        {% for idl, lang in i_lang.items %}
+                                        <div class="col">
+                                            <label for="{{ idl }}">{{ lang }}</label>
+                                        </div>
+                                        {% for idlev, level in i_langLevel.items %}
+                                        <div class="col">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
+                                            </label>
+                                        </div>
+                                        {% endfor %}
+                                        <div class="w-100"></div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- IBAN -->
+                            <div class="form-group">
+                                <label for="Address">Numéro de compte en banque<span style="color:red;">*</span></label>
+                                <input type="text" class="form-control" name="IBAN" id="C_IBAN" placeholder="BEXXXXXXXXXXXXXXXXXXXXXXXXX">
+                                <span style="color:red;">
+                                    <label id="C_notGoodIBAN">
+                                    </label>
+                                </span>
+                            </div>
+
+                            <span style="color:red;"><label id="C_registerErrors"></label></span><br>
+                            <button type="submit" class="btn btn-primary">
+                                Créer un compte
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for this template -->
+    <script src="{% static 'js/resume.min.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+
+</body>
+
+</html>
