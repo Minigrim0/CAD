@@ -89,6 +89,8 @@ class StudentAccount(models.Model):
     wanted_schedule = models.TextField(
         null=True, blank=True, default="",
         verbose_name="Horaire")
+    unsub_proposal = models.BooleanField(
+        default=False, verbose_name="Proposition de désinscription envoyée")
     # Amount left for the student to pay courses
     balance = models.IntegerField(
         null=True, blank=True, verbose_name="Solde", default=0)
@@ -183,7 +185,7 @@ class FollowElement(models.Model):
     """
 
     # students whom this followElement is for
-    student = models.ForeignKey(User, blank=True, default=DEFAULT_ID)
+    student = models.ForeignKey(User, blank=True, on_delete=models.CASCADE, default=DEFAULT_ID)
     # Name of the coach who wrote this followElement
     coach = models.CharField(
         null=True, blank=True, max_length=110,
@@ -205,7 +207,7 @@ class Transaction(models.Model):
             d'un étudiant ou la dépense d'un étudiant pour payment d'un cours
     """
 
-    student = models.ForeignKey(StudentAccount)
+    student = models.ForeignKey(StudentAccount, on_delete=models.CASCADE)
     amount = models.IntegerField(blank=False, default=0)
     date = models.DateTimeField(auto_now_add=True, null=True)
-    admin = models.ForeignKey(User, null=True)
+    admin = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
