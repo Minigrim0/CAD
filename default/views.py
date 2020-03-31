@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import django
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
@@ -26,10 +26,8 @@ def home(request, param=""):
         'a_contact': contact[0],
          }
 
-    try:
+    if type(request) is not django.core.handlers.wsgi.WSGIRequest and request.user.is_authenticated:
         dico["nb_notif"] = request.user.notification_set.count()
-    except Exception as e:
-        print("Unauthenticated user :", e)
 
     return render(request, 'index.html', dico)
 

@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+
 from users.models import Profile, Notification, FollowElement, \
     StudentAccount, CoachAccount
 
@@ -93,3 +95,10 @@ def coachRegister(user, form):
     coach_profile.nationalRegisterID = form["NationalRegisterNumber"]
 
     coach_profile.save()
+
+
+def getUser(token):
+    for user in User.objects.all():
+        if user.profile.secret_key == token:
+            return user
+    return None

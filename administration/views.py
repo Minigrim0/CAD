@@ -1,17 +1,19 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-
-from django.core.urlresolvers import reverse
+from django.core.mail import send_mail
+from django.urls import reverse
+from django.http import HttpResponseRedirect,\
+    HttpResponseBadRequest, HttpResponse
 
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
 
-import datetime
-
+from cad.settings import EMAIL_HOST_USER
 from users.models import studentRequest, Profile
 from default.models import Article, Mail
 from administration.forms import MailForm
-from inscription.utils import sendNotifToCoaches
+from administration.utils import modifyCoach, modifyStudent, serializeDate
+from inscription.utils import getUser
+from users.models import FollowElement
 
 
 @staff_member_required
@@ -60,6 +62,12 @@ def mailAdminCreate(request):
     else:
         form = MailForm()
         return render(request, 'mailsAdminCreate.html', locals())
+
+
+@staff_member_required
+def courses(request):
+    courses = FollowElement.objects.all().order_by("date")
+    return render(request, "courses.html", locals())
 
 
 @staff_member_required
@@ -123,103 +131,6 @@ def reactivate(request, string=""):
     usr.is_active = True
     usr.save()
     return HttpResponseRedirect("/administration")
-
-
-def serializeDate(date_):
-    """
-        returns the date from "day month year" to "ddmmyyyy"
-    """
-    months = [
-        "janvier",
-        "février",
-        "mars",
-        "avril",
-        "mai",
-        "juin",
-        "juillet",
-        "aout",
-        "septembre",
-        "octobre",
-        "novembre",
-        "décembre"]
-    date_ = date_.split()
-    date_str = date_[0]
-    if len(str(date_[0])) == 1:
-        date_str = "0" + date_str
-
-    if len(str(months.index(date_[1])+1)) == 1:
-        date_str += "0" + str(months.index(date_[1])+1)
-    else:
-        date_str += str(months.index(date_[1])+1)
-
-    date_str += str(date_[2])
-
-    return datetime.datetime.strptime(date_str, "%d%m%Y")
-
-
-def modifyDays(profile, form):
-    profile.wanted_schedule = ""
-    days_array = [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday']
-
-    for day in days_array:
-        id = "course " + day
-        try:
-            if form[id] == 'on':
-                profile.wanted_schedule += "1/"
-                profile.wanted_schedule += form[day+"Start"] + "/"
-                profile.wanted_schedule += form[day+"End"] + "."
-        except KeyError:
-            profile.wanted_schedule += "0/0/0."
-    profile.save()
-
-
-def modifyStudent(profile, form):
-
-    sa = profile.studentaccount
-    sa.NeedsVisit = False
-    if form["Visit"] != "NoVisit":
-        sa.NeedsVisit = True
-
-    sa.comments = form["comments"]
-
-    sa.tutor_firstName = form["tutorFirstName"]
-    sa.tutor_name = form["tutorLastName"]
-
-    if "confirmedAccount" in form.keys():
-        if sa.confirmedAccount is False:
-            sa.confirmedAccount = True
-            # Continuer la procédure
-            newRequest = studentRequest(student=profile.user)
-            newRequest.save()
-
-            sendNotifToCoaches(profile)
-        else:
-            sa.confirmedAccount = True
-    else:
-        sa.confirmedAccount = False
-    sa.save()
-
-
-def modifyCoach(profile, form):
-    ca = profile.coachaccount
-
-    ca.school = form["school"]
-    ca.IBAN = form["IBAN"]
-    ca.nationalRegisterID = form["natRegID"]
-
-    ca.French_level = form["Frenchlevel"]
-    ca.English_level = form["Englishlevel"]
-    ca.Dutch_level = form["Dutchlevel"]
-
-    ca.confirmedAccount = form["status"]
-    ca.save()
 
 
 @staff_member_required
@@ -295,3 +206,21 @@ def modifyUser(request):
     except Exception as e:  # In case an error occurs
         print("Error :", e)  # Print it
         return HttpResponseRedirect('/administration/users')
+
+
+@staff_member_required
+def sendUnsubscriptionMail(request):
+    if request.method != "POST":
+        return HttpResponseBadRequest(
+            "Invalid method : Requets must be type POST")
+
+    user = getUser(request.POST.get("user_key"))
+    mail = Mail.objects.get(role='c')
+    send_mail(
+        mail.clean_header, mail.formatted_content(user), EMAIL_HOST_USER,
+        [user.email])
+
+    student_account = user.profile.studentaccount
+    student_account.unsub_proposal = True
+    student_account.save()
+    return HttpResponse("Success")

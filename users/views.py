@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from django.http import HttpResponse,\
     HttpResponseRedirect, HttpResponseBadRequest, JsonResponse
@@ -148,7 +148,7 @@ def requestView(request, id=0):
         else:
             return HttpResponseRedirect(reverse("Error_view"))
     else:
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             if request.user.is_superuser:
                 student_requests = studentRequest.objects.all().exclude(
                     is_closed=True)

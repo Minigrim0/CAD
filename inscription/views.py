@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.core.mail import send_mail
 
 from django.contrib import messages
@@ -119,7 +119,7 @@ def registerBase(request):
 
 @login_required(login_url='/connexion/')
 def confirmation(request, string=""):
-    user = getUser(string)
+    user = utils.getUser(string)
     # token manquant ou non valide
     if string == "" or user is None:
         return HttpResponseRedirect(reverse("Error_view"))
@@ -145,7 +145,7 @@ def confirmation(request, string=""):
     profile.save()
 
     if profile.account_type == "Etudiant":
-        mail = Mail.objects.get(id=2)
+        mail = Mail.objects.get(role='b')
         send_mail(
             mail.clean_header, mail.formatted_content(user), EMAIL_HOST_USER,
             [user.email])
@@ -221,10 +221,3 @@ def thanks(request):
         "Merci d'avoir complété votre inscription ! \
         Nous allons de ce pas chercher un coach pour vous !")
     return HttpResponseRedirect("/")
-
-
-def getUser(token):
-    for user in User.objects.all():
-        if user.profile.secret_key == token:
-            return user
-    return None
