@@ -57,7 +57,7 @@
                     Remplissez le formulaire ci dessous pour nous contacter, nous vous répondrons dans les plus brefs délais
                 </div>
                 <div class="container" id="ConnexionForm">
-                    <form action="{% url "default.views.contactView" %}" method="post">
+                    <form action="{% url "contact_view" %}" method="post">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="id_sujet">Sujet:</label>

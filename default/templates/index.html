@@ -84,12 +84,12 @@
                 {% endif %}
 
                 <h1 class="mb-0">
-                    {{ a_home.title   |safe }}
+                    {{ a_home.title|safe }}
                 </h1>
                 <div class="subheading mb-5">
                     {{ a_home.subTitle|safe }}
                 </div>
-                {{ a_home.content |safe }}
+                {{ a_home.content|safe }}
 
                 <br />
                 <br />
@@ -102,7 +102,7 @@
         <section class="resume-section p-3 p-lg-5 d-flex justify-content-center" id="informations">
             <div class="w-100">
                 <h2 class="mb-5">
-                    {{ a_info.title  |safe }}
+                    {{ a_info.title|safe }}
                 </h2>
                 {{ a_info.content|safe }}
             </div>
@@ -162,12 +162,12 @@
         <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="contact">
             <div class="w-100">
                 <h2 class="mb-5">
-                    {{ a_contact.title   |safe }}
+                    {{ a_contact.title|safe }}
                 </h2>
                 <h3 class="mb-4">
                     {{ a_contact.subTitle|safe }}
                 </h3>
-                {{ a_contact.content |safe }}
+                {{ a_contact.content|safe }}
 
                 <div class="social-icons">
                     <a href="https://www.facebook.com/bernard.vincent.52206">
@@ -209,12 +209,26 @@
                     </div>
                 </div>
             </div>
-            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#footerCollapse" aria-expanded="false" aria-controls="collapseExample">
+            <button class="btn btn-primary" onclick="toggleFAS();" type="button" data-toggle="collapse" data-target="#footerCollapse" aria-expanded="false" aria-controls="collapseExample">
                 <span class="carret">Connecté en tant que {{ user.username}}
                     {% if nb_notif > 0 %}
                     <span class="badge badge-light">{{ nb_notif }}</span>
                     {% endif %}
-                    ^</span>
+                    <i id="fas" class="fas fa-angle-up"></i>
+
+                    <script>
+                        function toggleFAS() {
+                            var div = document.getElementById("fas")
+                            if (div.classList.contains("fa-angle-up")) {
+                                div.classList.remove("fa-angle-up");
+                                div.classList.add("fa-angle-down");
+                            } else {
+                                div.classList.remove("fa-angle-down");
+                                div.classList.add("fa-angle-up");
+                            }
+                        }
+                    </script>
+                </span>
             </button>
         </footer>
         {% else %}
