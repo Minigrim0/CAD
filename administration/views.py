@@ -44,7 +44,7 @@ def mailAdminModify(request):
         mail.role = form['role']
         mail.save()
 
-    return HttpResponseRedirect("/administration/mails/")
+    return HttpResponseRedirect(reverse("mails_admin"))
 
 
 @staff_member_required
@@ -58,7 +58,7 @@ def mailAdminCreate(request):
         mail.role = form['role']
         mail.save()
 
-        return HttpResponseRedirect("/administration/mails/")
+        return HttpResponseRedirect(reverse("mails_admin"))
     else:
         form = MailForm()
         return render(request, 'mailsAdminCreate.html', locals())
@@ -86,7 +86,7 @@ def articleAdminModify(request):
         article.content = form['Content'].replace("\r", " ")
         article.save()
 
-    return HttpResponseRedirect("/administration/articles/")
+    return HttpResponseRedirect(reverse("articles_admin"))
 
 
 @staff_member_required
@@ -130,14 +130,14 @@ def reactivate(request, string=""):
     usr = User.objects.get(username=string)
     usr.is_active = True
     usr.save()
-    return HttpResponseRedirect("/administration")
+    return HttpResponseRedirect(reverse("home_admin"))
 
 
 @staff_member_required
 def modifyUser(request):
     # Check if the way the user accessed this url is correct
     if request.method != "POST":
-        return HttpResponseRedirect('/administration/users/')
+        return HttpResponseRedirect(reverse("user_admin"))
 
     try:
         form = request.POST
@@ -201,11 +201,11 @@ def modifyUser(request):
             modifyCoach(profile, form)
 
         # Redirect to administration
-        return HttpResponseRedirect("/administration/users/")
+        return HttpResponseRedirect(reverse("user_admin"))
 
     except Exception as e:  # In case an error occurs
         print("Error :", e)  # Print it
-        return HttpResponseRedirect('/administration/users')
+        return HttpResponseRedirect(reverse("user_admin"))
 
 
 @staff_member_required

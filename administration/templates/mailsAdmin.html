@@ -74,6 +74,8 @@
                     <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#Mail{{mail.instance.id}}" aria-expanded="false" aria-controls="collapseExample">
                         <h4>{{ mail.instance.name }}</h4>
                     </button>
+                    {% endfor %}
+                    {% for mail in mails %}
                     <div class="collapse" data-parent="#accordionMail" id="Mail{{mail.instance.id}}">
                         <form method="post" action="/administration/mails/modify/">
                             {% csrf_token %}
