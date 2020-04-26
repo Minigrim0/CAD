@@ -11,7 +11,7 @@ class ArticleAdmin(admin.ModelAdmin):
     ordering = ('date', )
     search_fields = ('title', 'subTitle', 'content')
 
-    fields = ('title', 'subTitle', 'content')
+    fields = ('name', 'title', 'subTitle', 'content')
 
     def content_preview(self, article):
         text = article.title[0:ARTICLE_DISPLAY_SIZE]

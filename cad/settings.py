@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'default',
     'inscription',
+    'connexion',
     'users',
     'administration',
     'crispy_forms',
@@ -59,12 +60,7 @@ ROOT_URLCONF = 'cad.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-                    "cad/templates/",
-                    "inscription/templates/",
-                    "connexion/templates/",
-                    "users/templates/",
-                ],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

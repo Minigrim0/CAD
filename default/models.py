@@ -6,7 +6,8 @@ from cad.settings import EMAIL_HOST_USER
 
 
 class Article(models.Model):
-    name = models.TextField(null=False, default="Article", verbose_name="nom")
+    name = models.TextField(
+        null=False, default="Article", verbose_name="Nom de l'article")
     title = models.TextField(null=True)
     subTitle = models.TextField(null=True)
     content = models.TextField(null=True)
