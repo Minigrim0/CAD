@@ -27,7 +27,6 @@ def registerStudentView(request):
 
 def registerCoachView(request):
     if request.method != "POST":
-
         i_langLevel = {
             '5': 'Langue maternelle',
             '4': 'Très bon',
