@@ -32,6 +32,7 @@ class MailAdmin(admin.ModelAdmin):
     fields = (
         ('name', 'subject'),
         ('content'),
+        'role'
     )
 
 
