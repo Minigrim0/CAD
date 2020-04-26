@@ -2,18 +2,18 @@ from django.conf.urls import url
 import inscription.views
 
 urlpatterns = [
-    url(r'^confirm/(?P<string>[\w\-]+)/$',
+    url('confirm/<slug:string>/',
         inscription.views.confirmation, name="confirmation"),
-    url(r'^payment/$',
+    url('payment/',
         inscription.views.paymentView, name="paymentView"),
-    url(r'^paylater/$',
+    url('paylater/',
         inscription.views.pay_later, name="pay_later"),
-    url(r'^thanks/$',
+    url('thanks/',
         inscription.views.thanks, name="thanks_view"),
-    url(r'^student/$',
+    url('student/',
         inscription.views.registerStudentView, name="registerStudent"),
-    url(r'^coach/$',
+    url('coach/',
         inscription.views.registerCoachView, name="registerCoach"),
-    url(r'^$',
+    url('',
         inscription.views.registerStudentView, name="registerStudentDefault"),
 ]
