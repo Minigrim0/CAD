@@ -6,13 +6,13 @@ from django.core.mail import send_mail
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from datetime import date
 import secrets
 
-from cad.settings import EMAIL_HOST_USER
+from cad.settings import EMAIL_HOST_USER, DEBUG
 from default.models import Mail
 from users.models import Profile, Notification, studentRequest
 from inscription import utils
@@ -52,7 +52,6 @@ def registerBase(request):
         password = form["passwd"]
         user = User.objects.create(username=username, email=email)
         user.set_password(password)
-        user.groups.add(Group.objects.get(name=form["accountType"]))
         user.first_name = form["firstName"]
         user.last_name = form["lastName"]
         user.save()
@@ -89,10 +88,11 @@ def registerBase(request):
 
         utils.create_notif(user, title, content, author)
 
-        mail = Mail.objects.get(id=1)
-        send_mail(
-            mail.clean_header, mail.formatted_content(user), EMAIL_HOST_USER,
-            [email])
+        if not DEBUG:
+            mail = Mail.objects.get(id=1)
+            send_mail(
+                mail.clean_header, mail.formatted_content(user),
+                EMAIL_HOST_USER, [email])
 
         user = authenticate(
             username=user.username, password=form["passwd"])
