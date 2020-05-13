@@ -17,7 +17,7 @@ def sendNotifToCoaches(student):
             same_study_lev = ("eme" in student.school_level)
             same_study_lev = same_study_lev or ("ere" in student.school_level)
             compatible = compatible and same_study_lev
-        else:
+        elif coach.school_level == "elem":
             compatible = compatible and (student.school_level == "primaire")
 
         if compatible:

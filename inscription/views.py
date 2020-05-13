@@ -9,7 +9,6 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from datetime import date
 import secrets
 
 from cad.settings import EMAIL_HOST_USER, DEBUG
@@ -60,9 +59,7 @@ def registerBase(request):
         profile.phone_number = form["PhoneNumber"]
         profile.account_type = form['accountType']
         profile.address = form["Address"]
-        YMDdate = form["birthday"].split("-")
-        birthDate = date(int(YMDdate[0]), int(YMDdate[1]), int(YMDdate[2]))
-        profile.birthDate = birthDate
+        profile.birthDate = form["birthday"]
 
         for course in ["Maths", "Chimie", "Physique", "Francais"]:
             if "Course_"+course in form.keys():
