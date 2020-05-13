@@ -190,7 +190,7 @@ function C_validate() {
         return true;
     }
     document.getElementById("C_registerErrors").innerHTML = "Certains champs \
-        obligatoires n'ont pas été remplis ou les mots de passe ne \
+        obligatoires n'ont pas été remplis correctement ou les mots de passe ne \
         correspondent pas !";
     return false;
 }
