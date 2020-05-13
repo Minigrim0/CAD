@@ -20,9 +20,8 @@ class Profile(models.Model):
     address = models.CharField(
         null=True, blank=True, default="unknown", max_length=150,
         verbose_name="Adresse de l'étudiant")
-    birthDate = models.DateField(
-        auto_now=False, auto_now_add=False, default="2019-01-01",
-        verbose_name="Date de naissance")
+    birthDate = models.CharField(
+        max_length=8, default="01/01/00", verbose_name="Date de naissance")
     Maths_course = models.BooleanField(
         default=False, verbose_name="Maths")
     Chimie_course = models.BooleanField(

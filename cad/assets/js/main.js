@@ -98,7 +98,7 @@ function validate() {
     checked = checkCoordinates() && checked;
     document.getElementById("registerErrors").innerHTML = "";
     if (!checked) document.getElementById("registerErrors").innerHTML = "\
-        Certains champs obligatoires n'ont pas été remplis ou \
+        Certains champs obligatoires n'ont pas été correctement remplis ou \
         les mots de passe ne correspondent pas !";
     return checked;
 }

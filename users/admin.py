@@ -1,6 +1,17 @@
 from django.contrib import admin
 from users.models import StudentAccount, CoachAccount, studentRequest,\
-    FollowElement, Transaction
+    FollowElement, Transaction, Profile
+
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = (
+        "user", "verifiedAccount", "courses", )
+    list_filter = ("user", "verifiedAccount")
+    ordering = ("user", )
+    search_fields = ("user",)
+
+    def courses(self, profile):
+        return profile.courses
 
 
 class CoachAdmin(admin.ModelAdmin):
@@ -59,6 +70,7 @@ class TransactionAdmin(admin.ModelAdmin):
         "id", "student", "amount", "admin")
 
 
+admin.site.register(Profile, ProfileAdmin)
 admin.site.register(StudentAccount, StudentAdmin)
 admin.site.register(CoachAccount, CoachAdmin)
 admin.site.register(studentRequest, StudentRequestAdmin)

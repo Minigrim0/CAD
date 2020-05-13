@@ -4,3 +4,4 @@ db.sqlite3
 */__pycache__/*
 cad/assets/test.html
 *.dump
+core
