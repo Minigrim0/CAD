@@ -105,7 +105,6 @@ def modify_balance(request):
         return HttpResponseBadRequest("Invalid method")
 
     admin = User.objects.get(username=request.POST["approver"])
-    print(request.POST["user"])
     student = User.objects.get(username=request.POST["user"])
     to_add = request.POST["amout_add"]
 

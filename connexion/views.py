@@ -23,6 +23,11 @@ def connexion(request):
                     request, messages.SUCCESS,
                     "Rebonjour {}".format(request.user.first_name))
                 return HttpResponseRedirect("/")
+            else:
+                messages.add_message(
+                    request, messages.ERROR,
+                    "Vos identifiants ne correspondent à \
+                    aucun compte !")
         except Exception as e:
             print("Error : ", e)
 

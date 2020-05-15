@@ -2,7 +2,7 @@ from django.conf.urls import url
 import users.views
 
 urlpatterns = [
-    url(r'disconnect', users.views.disconnect),
+    url(r'disconnect', users.views.disconnect, name="disconnect_view"),
     url(r'remove_notif', users.views.remove_notif, name="rm_notif"),
     url(r'modify_balance', users.views.modify_balance, name="modify_balance"),
     url(r'send_notif', users.views.send_notif, name="send_notif"),
