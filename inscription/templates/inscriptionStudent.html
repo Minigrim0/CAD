@@ -226,23 +226,23 @@
 
                                 <div class="form-group col-md-6" id="courses">
                                     <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input id="checkMath" type="checkbox" class="custom-control-input" name="Course_Maths" id="math">
-                                        <label class="custom-control-label" for="checkMath">Mathématiques</label>
+                                        <input id="math" type="checkbox" class="custom-control-input" name="Course_Maths">
+                                        <label class="custom-control-label" for="math">Mathématiques</label>
                                     </div>
 
                                     <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input id="checkChemistry" type="checkbox" class="custom-control-input" name="Course_Chimie" id="chemistry">
-                                        <label class="custom-control-label" for="checkChemistry">Chimie</label>
+                                        <input id="chemistry" type="checkbox" class="custom-control-input" name="Course_Chimie">
+                                        <label class="custom-control-label" for="chemistry">Chimie</label>
                                     </div>
 
                                     <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input id="checkPhysics" type="checkbox" class="custom-control-input" name="Course_Physique" id="physics">
-                                        <label class="custom-control-label" for="checkPhysics">Physique</label>
+                                        <input id="physics" type="checkbox" class="custom-control-input" name="Course_Physique">
+                                        <label class="custom-control-label" for="physics">Physique</label>
                                     </div>
 
                                     <div class="custom-control custom-checkbox custom-control-inline">
-                                        <input id="checkFrench" type="checkbox" class="custom-control-input" name="Course_Francais" id="french">
-                                        <label class="custom-control-label" for="checkFrench">Français</label>
+                                        <input id="french" type="checkbox" class="custom-control-input" name="Course_Francais">
+                                        <label class="custom-control-label" for="french">Français</label>
                                     </div>
                                     <span style="color:red;">
                                         <label id="notGoodCourse">
@@ -299,15 +299,9 @@
         </div>
     </section>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    {% include "scripts.html" %}
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js" integrity="sha256-H3cjtrm/ztDeuhCN9I4yh4iN2Ybx/y1RM7rMmAesA0k=" crossorigin="anonymous"></script>
-
-    <!-- Custom scripts for this template -->
-    <script src="{% static 'js/resume.min.js' %}"></script>
     <script src="{% static 'js/main.js' %}"></script>
 
 </body>
