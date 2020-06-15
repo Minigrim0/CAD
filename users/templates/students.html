@@ -77,22 +77,22 @@
                     <div class="row">
                         <div class="col-lg-2">
                             <ul class="list-group">
-                                {% for elem in followelement_set %}
-                                <li class="list-group-item">{{ elem.date|date:"SHORT_DATE_FORMAT" }} - {{ elem.date|time:"H\hi" }}</li>
+                                {% for elem in student_set %}
+                                <li class="list-group-item">{{ elem.profile.user.first_name }}  {{ elem.profile.user.last_name }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
                         <div class="col-lg-8">
                             <ul class="list-group">
-                                {% for elem in followelement_set %}
-                                <li class="list-group-item">{{ elem.comments|safe }}</li>
+                                {% for elem in student_set %}
+                                <li class="list-group-item">{{ elem.profile.school_level }}</li>
                                 {% endfor %}
                             </ul>
                         </div>
                         <div class="col-lg-2">
                             <ul class="list-group">
-                                {% for elem in followelement_set %}
-                                <li class="list-group-item">{{ elem.coach }}</li>
+                                {% for elem in student_set %}
+                                <li class="list-group-item">{{ elem.profile.courses }}</li>
                                 {% endfor %}
                             </ul>
                         </div>

@@ -11,7 +11,7 @@ from cad.settings import EMAIL_HOST_USER
 from users.models import studentRequest, Profile
 from default.models import Article, Mail
 from administration.forms import MailForm
-from administration.utils import modifyCoach, modifyStudent, serializeDate
+from administration.utils import modifyCoach, modifyStudent
 from inscription.utils import getUser
 from users.models import FollowElement
 
@@ -179,7 +179,7 @@ def modifyUser(request):
         # Modifications that apply for all type of account
         profile.phone_number = form["phone_number"]
         profile.address = form["address"]
-        profile.birthDate = serializeDate(form["birthDate"])
+        profile.birthDate = form["birthDate"]
 
         if "verifiedAccount" in form.keys():
             profile.verifiedAccount = True

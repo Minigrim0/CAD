@@ -13,6 +13,8 @@ from django.contrib.auth.decorators import login_required
 
 from users.models import Notification, studentRequest, Transaction
 
+from .utils import thanksCoaches
+
 
 def ErrorView(request):
     messages.add_message(
@@ -53,6 +55,9 @@ def followView(request):
 
 @login_required(redirect_field_name='/05/')
 def studentsView(request):
+    a_user = request.user
+    student_set = User.objects.filter(profile__studentaccount__coach=a_user)
+
     return render(request, 'students.html', locals())
 
 
@@ -135,7 +140,7 @@ def requestView(request, id=0):
     if id != 0:
         allowed = request.user.profile.account_type == "Coach"
         allowed = allowed or request.user.is_superuser
-        if request.user.is_authenticated() and allowed:
+        if request.user.is_authenticated and allowed:
             student_request = studentRequest.objects.get(id=id)
             student_request_closed = studentRequest.objects.get(id=id)
             user = student_request.student
@@ -161,22 +166,6 @@ def requestView(request, id=0):
             return HttpResponseRedirect(reverse("Error_view"))
 
 
-def thanksCoaches(coaches, student):
-    author = "L'équipe CAD"
-    title = "Merci d'avoir répondu présent"
-    content = "Merci d'avoir répondu présent à la requête de {} {}. \
-    Malheureusement, vous n'avez pas été choisit pour donner cours à \
-    cet étudiant. Mais ne vous en faites pas, voitre tour viendra !".format(
-        student.first_name, student.last_name)
-    for coach in coaches:
-        new_notif = Notification(
-            user=coach.user,
-            author=author,
-            title=title,
-            content=content)
-        new_notif.save()
-
-
 @login_required(redirect_field_name='/05/')
 def chooseCoach(request):
     if request.method != "POST":
@@ -191,7 +180,7 @@ def chooseCoach(request):
 
     s_request.is_closed = True
     s_request.choosenCoach = coach.user.username
-    student = s_request.student
+    student = s_request.student.profile.studentAccount
     student.coach = coach
     ca = coach.coachaccount
     ca.nbStudents += 1
