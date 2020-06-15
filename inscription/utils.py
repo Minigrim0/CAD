@@ -8,6 +8,8 @@ def sendNotifToCoaches(student):
     # Receive Profile type object
     coaches = Profile.objects.filter(account_type="Coach")
     for coach in coaches:
+        if coach.coachaccount.confirmedAccount != "Engage":
+            continue
         bMaths = coach.Maths_course == student.Maths_course
         bChimie = coach.Chimie_course == student.Chimie_course
         bPhysique = coach.Physique_course == student.Physique_course
