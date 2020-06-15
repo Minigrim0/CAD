@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+  cad:
+    build: .
+    env_file:
+      - env.prod.sh
+    volumes:
+      - .:/opt/services/cad/src
+      - static_volume:/opt/services/cad/src/static
+    networks:
+      - nginx_network
+      - ***REMOVED***_network
+    depends_on:
+      - ***REMOVED***
+
+  nginx:
+    image: nginx:1.13
+    ports:
+      - 8000:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - static_volume:/opt/services/cad/src/static
+    depends_on:
+      - cad
+    networks:
+      - nginx_network
+
+  ***REMOVED***:
+    image: postgres:10
+    env_file:
+      - config/db/cad_env
+    networks:
+      - ***REMOVED***_network
+    volumes:
+      - ***REMOVED***_volume:/var/lib/postgresql/data
+
+networks:
+  nginx_network:
+    driver: bridge
+  ***REMOVED***_network:
+    driver: bridge
+
+volumes:
+  ***REMOVED***_volume:
+  static_volume:
