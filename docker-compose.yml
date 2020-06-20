@@ -27,7 +27,7 @@ services:
       - nginx_network
 
   cad_db:
-    image: postgres:10
+    build: config/db/
     env_file:
       - config/db/cad_env
     networks:
