@@ -27,7 +27,7 @@ services:
       - nginx_network
 
   ***REMOVED***:
-    image: postgres:10
+    build: config/db/
     env_file:
       - config/db/cad_env
     networks:
