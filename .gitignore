@@ -3,5 +3,7 @@ Articles.backup/*
 db.sqlite3
 */__pycache__/*
 cad/assets/test.html
-*.dump
+*.sql
 core
+.vscode
+static/
