@@ -9,7 +9,15 @@ from default.models import Article, Message
 from default.forms import contactForm
 
 
-def home(request, param=""):
+def home(request):
+    """Home view
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        render: A render of the home page
+    """
     home = Article.objects.filter(name="Accueil")
     info = Article.objects.filter(name="Info")
     video = Article.objects.filter(name="Video")
@@ -33,6 +41,15 @@ def home(request, param=""):
 
 
 def contactView(request):
+    """Contact view
+
+    Args:
+        request (request): The request object needed by all views
+
+    Returns:
+        HttpResponseRedirect: A redirection to the home page if the user clicked on "send" in the form
+        render: A render of the contact form
+    """
     sent = False
     if request.method == 'POST':
         form = contactForm(request.POST)
