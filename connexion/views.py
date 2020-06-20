@@ -7,6 +7,15 @@ from django.contrib.auth.models import User
 
 
 def connexion(request):
+    """ Connexion view
+
+    Args:
+        request (request): The request object needed by all views
+
+    Returns:
+        HttpResponseRedirect: a redirection to the home page in case of unsuccessfull login
+        render : A render of the page in case the login was successfull
+    """
     if request.method != "POST":
         return render(request, 'connexion.html', locals())
     else:
