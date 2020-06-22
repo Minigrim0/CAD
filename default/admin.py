@@ -9,9 +9,9 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = ('name', 'date')
     date_hierachy = 'date'
     ordering = ('date', )
-    search_fields = ('title', 'subTitle', 'content')
+    search_fields = ('title', 'subtitle', 'content')
 
-    fields = ('name', 'title', 'subTitle', 'content')
+    fields = ('name', 'title', 'subtitle', 'content')
 
     def content_preview(self, article):
         text = article.title[0:ARTICLE_DISPLAY_SIZE]

@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.TextField(default='Article', verbose_name="Nom de l'article")),
                 ('title', models.TextField(null=True)),
-                ('subTitle', models.TextField(null=True)),
+                ('subtitle', models.TextField(null=True)),
                 ('content', models.TextField(null=True)),
                 ('date', models.DateTimeField(auto_now_add=True, verbose_name='Date de modification')),
             ],
