@@ -1,3 +1,3 @@
-FROM postgres:10
+FROM postgres:latest
 
-ADD cad.sql /docker-entrypoint-initdb.d
+COPY cad.sql /docker-entrypoint-initdb.d

@@ -82,7 +82,7 @@ def articleAdminModify(request):
         form = request.POST
         article = Article.objects.get(id=int(form['id']))
         article.title = form['title'].replace("\r", " ")
-        article.subTitle = form['subTitle'].replace("\r", " ")
+        article.subtitle = form['subtitle'].replace("\r", " ")
         article.content = form['Content'].replace("\r", " ")
         article.save()
 
