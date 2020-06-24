@@ -42,7 +42,7 @@ class Mail(models.Model):
         max_length=1, choices=choices, verbose_name="Role du mail")
 
     def formatted_content(self, user):
-        content = self.content
+        content = str(self.content)
         content = content.replace("<LASTNAME>", str(user.last_name))
         content = content.replace("<FIRSTNAME>", str(user.first_name))
         content = content.replace("<BIRTHDATE>", str(user.profile.birthDate))
@@ -56,7 +56,7 @@ class Mail(models.Model):
 
     @property
     def clean_header(self):
-        return self.subject.replace("\n", "")
+        return str(self.subject).replace("\n", "")
 
     def __str__(self):
         return self.name
