@@ -13,4 +13,5 @@ pip3 install -r requirements.txt
 ./manage.py runserver
 ```
 
-in your virtualenv
+## ToDo:
+once uploaded : create a cron job to store the log files once a days, and remove those who are older than 3(?) months
