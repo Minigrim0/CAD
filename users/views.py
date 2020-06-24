@@ -11,6 +11,8 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+import logging
+
 from users.models import Notification, studentRequest, Transaction
 
 from .utils import thanksCoaches
@@ -76,7 +78,7 @@ def send_notif(request):
 
         user.profile.save()
 
-        print("Added notification to", request.POST['user'])
+        logging.debug("Added notification (id {}) to {}".format(notif.pk, request.POST['user']))
         return HttpResponse("Success")
 
     return HttpResponse("failed")
@@ -100,7 +102,7 @@ def remove_notif(request):
 
         return HttpResponse("success")
     except Exception as e:
-        print("Error :", e)
+        logging.critical("Error while deleting notification : {}".format(e))
         return HttpResponse("failed")
 
 

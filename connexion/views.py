@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 
+import logging
 
 def connexion(request):
     """ Connexion view
@@ -38,7 +39,7 @@ def connexion(request):
                     "Vos identifiants ne correspondent à \
                     aucun compte !")
         except Exception as e:
-            print("Error : ", e)
+            logging.warning("Error while connecting user : {}".format(e))
 
             messages.add_message(
                 request, messages.ERROR,

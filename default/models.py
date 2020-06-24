@@ -4,6 +4,7 @@ from django.db import models
 from django.core.mail import send_mail
 from cad.settings import EMAIL_HOST_USER
 
+import logging
 
 class Article(models.Model):
     name = models.TextField(
@@ -67,7 +68,7 @@ class Message(models.Model):
     contact_mail = models.CharField(max_length=250)
 
     def send_as_mail(self):
-        print("Sending: {}\n{}\n\n{}".format(self.subject, self.content, self.contact_mail))
+        logging.debug("Sending mail : {}\n{}\n\n{}".format(self.subject, self.content, self.contact_mail))
         send_mail(
             self.subject, "{}\n\n{}".format(self.content, self.contact_mail),
             EMAIL_HOST_USER, ['cadcoursadomicile@gmail.com'])
