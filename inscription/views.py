@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 import secrets
+import logging
 
 from cad.settings import EMAIL_HOST_USER, DEBUG
 from default.models import Mail
@@ -18,13 +19,33 @@ from inscription import utils
 
 
 def registerStudentView(request):
+    """registerStudentView
+        allows the student to register
+
+    Args:
+        request (request): The request object needed by all views
+
+    Returns:
+        render: the rendered student registration page
+        HttpResponseRedirect: A redirection to the registration view, with all the informations needed
+    """
     if request.method != "POST":
         return render(request, "inscriptionStudent.html", locals())
     else:
-        return registerBase(request)
+        return HttpResponseRedirect(reverse(registerBase))
 
 
 def registerCoachView(request):
+    """registerCoachView
+        allows the coach to register
+
+    Args:
+        request (request): The request object needed by all views
+
+    Returns:
+        render: the rendered coach registration page
+        HttpResponseRedirect: A redirection to the registration view, with all the informations needed
+    """
     if request.method != "POST":
         i_langLevel = {
             '5': 'Langue maternelle',
@@ -40,10 +61,21 @@ def registerCoachView(request):
 
         return render(request, "inscriptionCoach.html", locals())
     else:
-        return registerBase(request)
+        return HttpResponseRedirect(reverse(registerBase))
 
 
 def registerBase(request):
+    """registerBase
+        Reigsters a profile corresponding to the given informations
+        (those informations are shared between the coach and the student accounts)
+
+    Args:
+        request (request): The request object needed by all views
+
+    Returns:
+        HttpResponseRedirect: A redirection to the home page, wether the user could be registered or not,
+        with a message telling him if everything went well
+    """
     try:
         form = request.POST
         username = form["lastName"] + "_" + form['firstName']
@@ -97,7 +129,7 @@ def registerBase(request):
             login(request, user)
 
     except Exception as e:
-        print("Error creating an account :", e)
+        logging.critical("Error creating an account : {}".format(e))
         username = form["lastName"] + "_" + form['firstName']
         usr = User.objects.get(username=username)
         usr.delete()
