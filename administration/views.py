@@ -7,10 +7,12 @@ from django.http import HttpResponseRedirect,\
 from django.contrib.auth.models import User
 from django.contrib.admin.views.decorators import staff_member_required
 
+import logging
+
 from cad.settings import EMAIL_HOST_USER
 from users.models import studentRequest, Profile
 from default.models import Article, Mail
-from administration.forms import MailForm
+from administration.forms import MailForm, ArticleForm
 from administration.utils import modifyCoach, modifyStudent
 from inscription.utils import getUser
 from users.models import FollowElement
@@ -48,6 +50,25 @@ def mailAdminModify(request):
 
 
 @staff_member_required
+def articleAdminView(request):
+    articles = [ArticleForm(instance=article) for article in Article.objects.all()]
+    return render(request, "articlesAdmin.html", locals())
+
+
+@staff_member_required
+def articleAdminModify(request):
+    if request.method == "POST":
+        form = request.POST
+        article = Article.objects.get(id=int(form['articleid']))
+        article.title = form['title'].replace("\r", " ")
+        article.subtitle = form['subtitle'].replace("\r", " ")
+        article.content = form['content'].replace("\r", " ")
+        article.save()
+
+    return HttpResponseRedirect(reverse("articles_admin"))
+
+
+@staff_member_required
 def mailAdminCreate(request):
     if request.method == "POST":
         form = request.POST
@@ -68,25 +89,6 @@ def mailAdminCreate(request):
 def courses(request):
     courses = FollowElement.objects.all().order_by("date")
     return render(request, "courses.html", locals())
-
-
-@staff_member_required
-def articleAdminView(request):
-    articles = Article.objects.all()
-    return render(request, "articlesAdmin.html", locals())
-
-
-@staff_member_required
-def articleAdminModify(request):
-    if request.method == "POST":
-        form = request.POST
-        article = Article.objects.get(id=int(form['id']))
-        article.title = form['title'].replace("\r", " ")
-        article.subtitle = form['subtitle'].replace("\r", " ")
-        article.content = form['Content'].replace("\r", " ")
-        article.save()
-
-    return HttpResponseRedirect(reverse("articles_admin"))
 
 
 @staff_member_required
@@ -150,7 +152,7 @@ def modifyUser(request):
                 usr.save()
             # If already deactivated : delete
             else:
-                print("user deleted")
+                logging.warning("user {} deleted".format(usr))
                 usr.delete()
 
             return HttpResponseRedirect("/administration/users/")
@@ -171,7 +173,7 @@ def modifyUser(request):
         try:  # Checks if the user as a profile extension
             type = profile.account_type  # Get account type to try
         except Exception as e:
-            print("Errorfesuhsefis :", e)
+            logging.warning("Error when getting the user's profile : {}".format(e))
             profile = Profile(user=usr)
             profile.save()
             type = usr.profile.account_type
@@ -204,7 +206,7 @@ def modifyUser(request):
         return HttpResponseRedirect(reverse("user_admin"))
 
     except Exception as e:  # In case an error occurs
-        print("Error :", e)  # Print it
+        logging.critical("Error while modifying user : {}".format(e))
         return HttpResponseRedirect(reverse("user_admin"))
 
 
