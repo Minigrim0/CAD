@@ -2,6 +2,7 @@
 <html lang="fr">
 
 {% load static %}
+{% load crispy_forms_tags %}
 
 <head>
 
@@ -60,48 +61,19 @@
                     Articles :
                 </h2>
 
-                <div class="accordion" id="accordionExample">
+                <div class="accordion" id="accordionArticles">
                     {% for article in articles %}
-                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#Article{{article.id}}" aria-expanded="false" aria-controls="collapseExample">
-                        <h4>{{ article.name }}</h4>
+                    <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#Article{{article.instance.id}}" aria-expanded="false" aria-controls="collapseExample">
+                        <h4>{{ article.instance.name }}</h4>
                     </button>
-                    <div class="collapse" data-parent="#accordionExample" id="Article{{article.id}}">
-                        <form method="post" action="/administration/articles/modify/">
+                    {% endfor %}
+                    {% for article in articles %}
+                    <div class="collapse" data-parent="#accordionArticles" id="Article{{article.instance.id}}">
+                        <form method="post" action="{% url 'modifyArticle' %}">
                             {% csrf_token %}
-                            <input type="hidden" name="id" value="{{ article.id }}">
-                            <br>
-                            <div class="form-row">
-                                <div class="form-group row col-md-12">
-                                    <label for="title" class="col-sm-2 col-form-label">Titre :</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" class="form-control" size="100%" name="title" id="title" value="{{ article.title }}">
-                                    </div>
-                                </div>
-
-                                <div class="form-group row col-md-12">
-                                    <label for="subtitle" class="col-sm-2 col-form-label">Sous-titre :</label>
-                                    <div class="col-sm-10">
-                                        <textarea class="form-control" size="100%" name="subtitle" id="subtitle" rows="5">
-                                        {{ article.subtitle }}
-                                        </textarea>
-                                    </div>
-                                </div>
-
-                                <div class="form-group row col-md-12">
-                                    <label for="content" class="col-sm-2 col-form-label">Contenu :</label>
-                                    <div class="col-sm-10">
-                                        <textarea class="form-control" size="100%" name="Content" id="content" rows="13">
-                                        {{ article.content }}
-                                        </textarea>
-                                    </div>
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group col-md-12">
-                                        <button type="submit" onclick="setHtmlForm()" class="btn btn-success btn-md btn-block" name="modify">Enregistrer les modifications</button>
-                                    </div>
-                                </div>
-                            </div>
+                            {{ article|crispy }}
+                            <input type="hidden" name="articleID" value="{{article.instance.id}}">
+                            <button type="submit" class="btn btn-success">Save Article</button>
                         </form>
                     </div>
                     {% endfor %}
