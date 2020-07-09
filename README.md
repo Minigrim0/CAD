@@ -12,5 +12,3 @@ pip3 install -r requirements.txt
 ./manage.py migrate
 ./manage.py runserver
 ```
-
-in your virtualenv
