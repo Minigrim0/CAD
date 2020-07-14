@@ -1,5 +1,6 @@
 from django.forms import ModelForm
-from default.models import Mail, Article
+
+from default.models import Article, Mail
 
 
 class MailForm(ModelForm):

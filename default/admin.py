@@ -1,4 +1,5 @@
 from django.contrib import admin
+
 from default.models import Article, Mail, Message
 
 ARTICLE_DISPLAY_SIZE = 75

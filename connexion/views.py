@@ -1,11 +1,11 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
+import logging
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 
-import logging
 
 def connexion(request):
     """ Connexion view

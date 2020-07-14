@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from django.db import models
+import logging
+
 from django.core.mail import send_mail
+from django.db import models
+
 from cad.settings import EMAIL_HOST_USER
 
-import logging
 
 class Article(models.Model):
     name = models.TextField(
