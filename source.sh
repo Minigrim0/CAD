@@ -1,6 +1,6 @@
 #!/bin/bash
 
-input="env.dev.sh"
+input=$1
 while IFS= read -r line
 do
   eval "export $line"
