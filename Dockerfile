@@ -12,8 +12,10 @@ COPY inscription/ /opt/services/cad/src
 COPY users/ /opt/services/cad/src
 COPY Dockerfile /opt/services/cad/src
 COPY requirements.txt /opt/services/cad/src
+COPY compress_logs.sh /opt/services/cad/src
 
 RUN pip install -r requirements.txt
+RUN mkdir logs
 
 EXPOSE 8000
 
