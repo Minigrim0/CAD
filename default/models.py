@@ -22,7 +22,7 @@ class Article(models.Model):
 class Mail(models.Model):
     name = models.CharField(
         max_length=150, default="Mail template",
-        verbose_name="Nom de la template")
+        verbose_name="Nom du template")
     subject = models.CharField(
         max_length=150, default="CAD - Cours à domicile", verbose_name="Sujet")
     content = models.TextField(default="None", verbose_name="Contenu")

@@ -26,9 +26,12 @@ def connexion(request):
 
         try:
             user = User.objects.get(email=email)  # Get user obj via its email
-            user = authenticate(username=user.username, password=password)
-            if user:
-                login(request, user)
+            if user is None:
+                raise Exception
+
+            authuser = authenticate(username=user.username, password=password)
+            if authuser:
+                login(request, authuser)
                 messages.add_message(
                     request, messages.SUCCESS,
                     "Rebonjour {}".format(request.user.first_name))
@@ -45,4 +48,4 @@ def connexion(request):
                 request, messages.ERROR,
                 "Vos identifiants ne correspondent à \
                 aucun compte !")
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

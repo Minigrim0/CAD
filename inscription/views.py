@@ -29,10 +29,7 @@ def registerStudentView(request):
         render: the rendered student registration page
         HttpResponseRedirect: A redirection to the registration view, with all the informations needed
     """
-    if request.method != "POST":
-        return render(request, "inscriptionStudent.html", locals())
-    else:
-        return HttpResponseRedirect(reverse(registerBase))
+    return render(request, "inscriptionStudent.html")
 
 
 def registerCoachView(request):
@@ -46,22 +43,19 @@ def registerCoachView(request):
         render: the rendered coach registration page
         HttpResponseRedirect: A redirection to the registration view, with all the informations needed
     """
-    if request.method != "POST":
-        i_langLevel = {
-            '5': 'Langue maternelle',
-            '4': 'Très bon',
-            '3': 'Bon',
-            '2': 'Notions de base',
-            '1': 'Aucun'}
+    i_langLevel = {
+        '5': 'Langue maternelle',
+        '4': 'Très bon',
+        '3': 'Bon',
+        '2': 'Notions de base',
+        '1': 'Aucun'}
 
-        i_lang = {
-            'French': 'Francais',
-            'Dutch': 'Néerlandais',
-            'English': 'Anglais'}
+    i_lang = {
+        'French': 'Francais',
+        'Dutch': 'Néerlandais',
+        'English': 'Anglais'}
 
-        return render(request, "inscriptionCoach.html", locals())
-    else:
-        return HttpResponseRedirect(reverse(registerBase))
+    return render(request, "inscriptionCoach.html", locals())
 
 
 def registerBase(request):
@@ -76,72 +70,73 @@ def registerBase(request):
         HttpResponseRedirect: A redirection to the home page, wether the user could be registered or not,
         with a message telling him if everything went well
     """
-    try:
-        form = request.POST
-        username = form["lastName"] + "_" + form['firstName']
-        email = form["mailAddress"]
-        password = form["passwd"]
-        user = User.objects.create(username=username, email=email)
-        user.set_password(password)
-        user.first_name = form["firstName"]
-        user.last_name = form["lastName"]
-        user.save()
+#    try:
+    form = request.POST
+    print(form)
+    username = form["lastName"] + "_" + form['firstName']
+    email = form["mailAddress"]
+    password = form["passwd"]
+    user = User.objects.create(username=username, email=email)
+    user.set_password(password)
+    user.first_name = form["firstName"]
+    user.last_name = form["lastName"]
+    user.save()
 
-        profile = Profile(user=user)
-        profile.phone_number = form["PhoneNumber"]
-        profile.account_type = form['accountType']
-        profile.address = form["Address"]
-        profile.birthDate = form["birthday"]
+    profile = Profile(user=user)
+    profile.phone_number = form["PhoneNumber"]
+    profile.account_type = form['accountType']
+    profile.address = form["Address"]
+    profile.birthDate = form["birthday"]
 
-        for course in ["Maths", "Chimie", "Physique", "Francais"]:
-            if "Course_"+course in form.keys():
-                exec("profile." + course + "_course = True")
+    for course in ["Maths", "Chimie", "Physique", "Francais"]:
+        if "Course_"+course in form.keys():
+            exec("profile." + course + "_course = True")
 
-        profile.secret_key = secrets.token_hex(20)
-        profile.verifiedAccount = False
-        profile.school_level = form["schoolLevel"]
+    profile.secret_key = secrets.token_hex(5)
+    profile.verifiedAccount = False
+    profile.school_level = form["schoolLevel"]
 
-        profile.save()
-        if profile.account_type == "Etudiant":
-            utils.studentRegister(user, form)
-        elif profile.account_type == "Coach":
-            utils.coachRegister(user, form)
+    profile.save()
+    if profile.account_type == "Etudiant":
+        utils.studentRegister(user, form)
+    elif profile.account_type == "Coach":
+        utils.coachRegister(user, form)
 
-        author = "L'équipe CAD"
-        title = "Bienvenue parmis nous !"
-        content = "Au nom de toute l'équipe de CAD, \
-            nous vous souhaitons la bienvenue ! \
-            N'oubliez pas que vous pouvez nous contacter \
-            si vous avez le moindre soucis via ce \
-            <a href='/contact/'>formulaire</a> !"
+    author = "L'équipe CAD"
+    title = "Bienvenue parmis nous !"
+    content = "Au nom de toute l'équipe de CAD, \
+        nous vous souhaitons la bienvenue ! \
+        N'oubliez pas que vous pouvez nous contacter \
+        si vous avez le moindre soucis via ce \
+        <a href='/contact/'>formulaire</a> !"
 
-        utils.create_notif(user, title, content, author)
+    utils.create_notif(user, title, content, author)
 
-        if not DEBUG:
-            mail = Mail.objects.get(id=1)
-            send_mail(
-                mail.clean_header, mail.formatted_content(user),
-                EMAIL_HOST_USER, [email])
+    if not DEBUG:
+        mail = Mail.objects.get(id=1)
+        send_mail(
+            mail.clean_header, mail.formatted_content(user),
+            EMAIL_HOST_USER, [email])
 
-        user = authenticate(
-            username=user.username, password=form["passwd"])
-        if user:
-            login(request, user)
+    user = authenticate(
+        username=user.username, password=form["passwd"])
+    if user:
+        login(request, user)
 
-    except Exception as e:
-        logging.critical("Error creating an account : {}".format(e))
-        username = form["lastName"] + "_" + form['firstName']
-        usr = User.objects.get(username=username)
-        usr.delete()
-        messages.add_message(
-            request, messages.WARNING,
-            "Il y a eu une erreur lors de la création de votre compte,\
-            réessayez plus tard")
-        return HttpResponseRedirect('/')
-
-    messages.add_message(
-        request, messages.SUCCESS,
-        "Votre compte a bien été créé !")
+#    except Exception as e:
+#        logging.critical("Error creating an account : {}".format(e))
+#        username = form["lastName"] + "_" + form['firstName']
+#        usr = User.objects.get(username=username)
+#        usr.delete()
+#        messages.add_message(
+#            request, messages.WARNING,
+#            "Il y a eu une erreur lors de la création de votre compte,\
+#            réessayez plus tard")
+#        return HttpResponseRedirect('/')
+#
+#    messages.add_message(
+#        request, messages.SUCCESS,
+#        "Votre compte a bien été créé !")
     return HttpResponseRedirect('/')
 
 
