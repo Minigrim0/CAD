@@ -72,7 +72,7 @@
 
                     <!-- Student registration -->
                     <div id="studentRegister">
-                        <form onsubmit="return validate();" method="post" action="">
+                        <form onsubmit="return validate();" method="post" action="{% url 'registerBase' %}">
                             {% csrf_token %}
 
                             <!-- Account type -->
@@ -181,7 +181,7 @@
                                     </span>
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="tutorLastName">Code postal<span style="color:red;">*</span></label>
+                                    <label for="zip">Code postal<span style="color:red;">*</span></label>
                                     <input type="text" class="form-control" id="zip" name="zip" placeholder="Ex: 1000">
                                     <span style="color:red;">
                                         <label id="ZIPbad">

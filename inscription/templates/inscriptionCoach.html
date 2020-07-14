@@ -72,7 +72,7 @@
 
                     <!-- Coach registration -->
                     <div id="coachRegister">
-                        <form onsubmit="return C_validate();" method="post" action="">
+                        <form onsubmit="return C_validate();" method="post" action="{% url 'registerBase' %}">
                             {% csrf_token %}
                             <!-- Account type -->
                             <input type="hidden" name="accountType" value="Coach">
