@@ -1,6 +1,5 @@
 import datetime
 
-
 from inscription.utils import sendNotifToCoaches
 from users.models import studentRequest
 

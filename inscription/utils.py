@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 
-from users.models import Profile, Notification, FollowElement, \
-    StudentAccount, CoachAccount
+from users.models import (CoachAccount, FollowElement, Notification, Profile,
+                          StudentAccount)
 
 
 def sendNotifToCoaches(student):

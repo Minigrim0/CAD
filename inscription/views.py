@@ -1,21 +1,19 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-
-from django.urls import reverse
-from django.core.mail import send_mail
+import logging
+import secrets
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
+from django.urls import reverse
 
-import secrets
-import logging
-
-from cad.settings import EMAIL_HOST_USER, DEBUG
+from cad.settings import DEBUG, EMAIL_HOST_USER
 from default.models import Mail
-from users.models import Profile, Notification, studentRequest
 from inscription import utils
+from users.models import Notification, Profile, studentRequest
 
 
 def registerStudentView(request):

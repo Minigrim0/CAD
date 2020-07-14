@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import django
-from django.shortcuts import render
-from django.http import HttpResponseRedirect
-
 from django.contrib import messages
+from django.http import HttpResponseRedirect
+from django.shortcuts import render
 
-from default.models import Article, Message
 from default.forms import contactForm
+from default.models import Article, Message
 
 
 def home(request):

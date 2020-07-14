@@ -1,21 +1,19 @@
-from django.shortcuts import render
-from django.core.mail import send_mail
-from django.urls import reverse
-from django.http import HttpResponseRedirect,\
-    HttpResponseBadRequest, HttpResponse
-
-from django.contrib.auth.models import User
-from django.contrib.admin.views.decorators import staff_member_required
-
 import logging
 
-from cad.settings import EMAIL_HOST_USER
-from users.models import studentRequest, Profile
-from default.models import Article, Mail
-from administration.forms import MailForm, ArticleForm
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from django.http import (HttpResponse, HttpResponseBadRequest,
+                         HttpResponseRedirect)
+from django.shortcuts import render
+from django.urls import reverse
+
+from administration.forms import ArticleForm, MailForm
 from administration.utils import modifyCoach, modifyStudent
+from cad.settings import EMAIL_HOST_USER
+from default.models import Article, Mail
 from inscription.utils import getUser
-from users.models import FollowElement
+from users.models import FollowElement, Profile, studentRequest
 
 
 @staff_member_required
