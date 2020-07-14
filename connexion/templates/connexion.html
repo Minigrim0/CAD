@@ -53,6 +53,21 @@
 
     <section class="p-3 p-lg-5 d-flex align-items-center">
         <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div
+                        {% if message.tags %}
+                            {% if message.tags == "error" %}
+                            class="alert alert-danger"
+                            {% else %}
+                            class="alert alert-{{ message.tags }}"
+                            {% endif %}
+                        {% endif %}
+                    >
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             <h2 class="mb-2 text-center">
                 Connexion
             </h2>

@@ -131,9 +131,10 @@ function checkC_Pass() {
 }
 
 function checkC_Coordinates() {
-    phoneno = /^\(?([0-9]{3,4})\)?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})$/;
-    phone = document.getElementById("C_phoneNumber").value.match(phoneno);
-    phone = phone == null ? false : true;
+    //phoneno = /^\(?([0-9]{3,4})\)?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})$/;
+    //phone = document.getElementById("C_phoneNumber").value.match(phoneno);
+    //phone = phone == null ? false : true;
+    phone = true;
     address = document.getElementById("C_Address").value != "";
     mail = validateEmail(document.getElementById("C_mail").value);
     iban = document.getElementById("C_IBAN").value != "";
@@ -144,14 +145,14 @@ function checkC_Coordinates() {
         || document.getElementById("C_french").checked;
     school = document.getElementById("C_School").value != "";
 
-    document.getElementById("C_notGoodPhone").innerHTML = "";
+    //document.getElementById("C_notGoodPhone").innerHTML = "";
     document.getElementById("C_notGoodAddress").innerHTML = "";
     document.getElementById("C_mailError").innerHTML = "";
     document.getElementById("C_notGoodIBAN").innerHTML = "";
     document.getElementById("C_notGoodNRN").innerHTML = "";
     document.getElementById("C_notGoodCourse").innerHTML = "";
     document.getElementById("C_notGoodSchool").innerHTML = "";
-    if (!phone) document.getElementById("C_notGoodPhone").innerHTML = "Ce numero de telephone n'est pas correct";
+    //if (!phone) document.getElementById("C_notGoodPhone").innerHTML = "Ce numero de telephone n'est pas correct";
     if (!address) document.getElementById("C_notGoodAddress").innerHTML = "Ce champ est obligatoire !";
     if (!mail) document.getElementById("C_mailError").innerHTML = "Cette addresse mail n'est pas correcte !";
     if (!iban) document.getElementById("C_notGoodIBAN").innerHTML = "Ce champ est obligatoire !";
