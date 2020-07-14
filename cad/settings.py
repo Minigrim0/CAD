@@ -22,8 +22,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = os.environ.get(
-    "DJANGO_ALLOWED_HOSTS", default="127.0.0.1").split(" ")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="127.0.0.1").split(" ")
 
 # Application definition
 
@@ -137,4 +136,4 @@ STATICFILES_DIRS = (
     "cad/assets/",
 )
 
-logging.basicConfig(filename='logs/cad.log',level=logging.DEBUG)
+logging.basicConfig(filename='{}/logs/cad.log'.format(BASE_DIR), level=logging.DEBUG)
