@@ -244,28 +244,30 @@
                             <div class="form-group">
                                 <div class="container">
                                     <label for="gridLang">Langues<span style="color:red;">*</span></label>
-                                    <div class="row" id="gridLang">
-                                        <label class="col custom-control-inline">/</label>
-                                        {% for idlev, level in i_langLevel.items %}
-                                        <div class="col">
-                                            <label>{{ level }}</label>
-                                        </div>
-                                        {% endfor %}
-                                        <div class="w-100"></div>
-                                        {% for idl, lang in i_lang.items %}
-                                        <div class="col">
-                                            <label for="{{ idl }}">{{ lang }}</label>
-                                        </div>
-                                        {% for idlev, level in i_langLevel.items %}
-                                        <div class="col">
-                                            <label class="radio-inline">
-                                                <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
-                                            </label>
-                                        </div>
-                                        {% endfor %}
-                                        <div class="w-100"></div>
-                                        {% endfor %}
-                                    </div>
+                                    <table class="table" id="gridLang">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">/</th>
+                                                {% for idlev, level in i_langLevel.items %}
+                                                    <th scope="col">{{ level }}</th>
+                                                {% endfor %}
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for idl, lang in i_lang.items %}
+                                                <tr>
+                                                    <th for="{{ idl }}">{{ lang }}</label>
+                                                    {% for idlev, level in i_langLevel.items %}
+                                                        <th scope="row">
+                                                            <label class="radio-inline">
+                                                                <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
+                                                            </label>
+                                                        </th>
+                                                    {% endfor %}
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                             <!-- IBAN -->
