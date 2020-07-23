@@ -68,9 +68,18 @@ def registerBase(request):
         HttpResponseRedirect: A redirection to the home page, wether the user could be registered or not,
         with a message telling him if everything went well
     """
-#    try:
+
     form = request.POST
+
+    if User.objects.filter(email=form["mailAddress"]).count() > 0:
+        messages.error(request, "Un compte avec la même adresse mail existe déjà !")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
     username = form["lastName"] + "_" + form['firstName']
+    if User.objects.filter(username=username).count() > 0:
+        messages.error(request, "Un compte à ce nom existe déjà !")
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
     email = form["mailAddress"]
     password = form["passwd"]
     user = User.objects.create(username=username, email=email)
@@ -120,20 +129,9 @@ def registerBase(request):
     if user:
         login(request, user)
 
-#    except Exception as e:
-#        logging.critical("Error creating an account : {}".format(e))
-#        username = form["lastName"] + "_" + form['firstName']
-#        usr = User.objects.get(username=username)
-#        usr.delete()
-#        messages.add_message(
-#            request, messages.WARNING,
-#            "Il y a eu une erreur lors de la création de votre compte,\
-#            réessayez plus tard")
-#        return HttpResponseRedirect('/')
-#
-#    messages.add_message(
-#        request, messages.SUCCESS,
-#        "Votre compte a bien été créé !")
+    messages.add_message(
+       request, messages.SUCCESS,
+       "Votre compte a bien été créé !")
     return HttpResponseRedirect('/')
 
 
