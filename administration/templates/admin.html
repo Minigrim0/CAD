@@ -1,347 +1,325 @@
-<!DOCTYPE html>
-<html lang="fr">
+{% extends 'base.html' %}
 
 {% load static %}
 
-<head>
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+    <a class="navbar-brand js-scroll-trigger" href="/">
+        <span class="d-block d-lg-none">Cours à domicile</span>
+        <span class="d-none d-lg-block">
+            <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
+        </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse text-left" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="/" class="nav-link">
+                    accueil
+                </a>
+            </li>
+            <li class="nav-item justify-content-between align-items-center">
+                <a class="nav-link" data-toggle="collapse" onclick="toggleFAS()" href="#accounts" aria-expanded="false" aria-controls="accounts">
+                    <i id="fas" class="fas fa-angle-right"></i>
+                    Comptes
+                    <span class="badge badge-primary badge-pill">{{ nbr_accounts }}</span>
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Administration page">
-    <meta name="author" content="Minigrimo">
-
-    <title>CAD - administration</title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- Custom fonts for this template -->
-    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
-
-    <!-- Custom styles for this template -->
-    <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
-</head>
-
-<body id="page-top">
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-        <a class="navbar-brand js-scroll-trigger" href="/">
-            <span class="d-block d-lg-none">Cours à domicile</span>
-            <span class="d-none d-lg-block">
-                <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
-            </span>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse text-left" id="navbarSupportedContent">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="/" class="nav-link">
-                        accueil
-                    </a>
-                </li>
-                <li class="nav-item justify-content-between align-items-center">
-                    <a class="nav-link" data-toggle="collapse" onclick="toggleFAS()" href="#accounts" aria-expanded="false" aria-controls="accounts">
-                        <i id="fas" class="fas fa-angle-right"></i>
-                        Comptes
-                        <span class="badge badge-primary badge-pill">{{ nbr_accounts }}</span>
-
-                        <script>
-                            function toggleFAS() {
-                                var div = document.getElementById("fas")
-                                if (div.classList.contains("fa-angle-right")) {
-                                    div.classList.remove("fa-angle-right");
-                                    div.classList.add("fa-angle-down");
-                                } else {
-                                    div.classList.remove("fa-angle-down");
-                                    div.classList.add("fa-angle-right");
-                                }
+                    <script>
+                        function toggleFAS() {
+                            var div = document.getElementById("fas")
+                            if (div.classList.contains("fa-angle-right")) {
+                                div.classList.remove("fa-angle-right");
+                                div.classList.add("fa-angle-down");
+                            } else {
+                                div.classList.remove("fa-angle-down");
+                                div.classList.add("fa-angle-right");
                             }
-                        </script>
-                    </a>
-                </li>
-                <div id="accounts" class="collapse">
-                    <li class="nav-item justify-content-between align-items-center">
-                        <ul>
-                            <li class="nav-item justify-content-between align-items-center">
-                                <a href="{% url "user_admin" %}" class="nav-link">
-                                    <i class="fas fa-circle"></i>
-                                    Tous
-                                    <span class="badge badge-primary badge-pill">{{ nbr_accounts }}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item justify-content-between align-items-center">
-                                <a href="{% url "user_admin" %}students/" class="nav-link">
-                                    <i class="fas fa-circle"></i>
-                                    Etudiants
-                                    <span class="badge badge-primary badge-pill">{{ nbr_students }}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item justify-content-between align-items-center">
-                                <a {% if nbr_coaches > 0 %} href="{% url "user_admin" %}coaches/" {% endif %} class="nav-link">
-                                    <i class="fas fa-circle"></i>
-                                    Coaches
-                                    <span class="badge badge-primary badge-pill">{{ nbr_coaches }}</span>
-                                </a>
-                            </li>
-                            <li class="nav-item justify-content-between align-items-center">
-                                <a {% if nbr_other > 0 %}href="{% url "user_admin" %}other/"{% endif %} class="nav-link">
-                                    <i class="fas fa-circle"></i>
-                                    Autre
-                                    <span class="badge badge-primary badge-pill">{{ nbr_other }}</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </div>
+                        }
+                    </script>
+                </a>
+            </li>
+            <div id="accounts" class="collapse">
                 <li class="nav-item justify-content-between align-items-center">
-                    <a href="/users/requests/" class="nav-link">
-                        Requêtes
-                        <span class="badge badge-primary badge-pill">{{ nbr_requests }}</span>
-                    </a>
+                    <ul>
+                        <li class="nav-item justify-content-between align-items-center">
+                            <a href="{% url "user_admin" %}" class="nav-link">
+                                <i class="fas fa-circle"></i>
+                                Tous
+                                <span class="badge badge-primary badge-pill">{{ nbr_accounts }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item justify-content-between align-items-center">
+                            <a href="{% url "user_admin" %}students/" class="nav-link">
+                                <i class="fas fa-circle"></i>
+                                Etudiants
+                                <span class="badge badge-primary badge-pill">{{ nbr_students }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item justify-content-between align-items-center">
+                            <a {% if nbr_coaches > 0 %} href="{% url "user_admin" %}coaches/" {% endif %} class="nav-link">
+                                <i class="fas fa-circle"></i>
+                                Coaches
+                                <span class="badge badge-primary badge-pill">{{ nbr_coaches }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item justify-content-between align-items-center">
+                            <a {% if nbr_other > 0 %}href="{% url "user_admin" %}other/"{% endif %} class="nav-link">
+                                <i class="fas fa-circle"></i>
+                                Autre
+                                <span class="badge badge-primary badge-pill">{{ nbr_other }}</span>
+                            </a>
+                        </li>
+                    </ul>
                 </li>
+            </div>
+            <li class="nav-item justify-content-between align-items-center">
+                <a href="/users/requests/" class="nav-link">
+                    Requêtes
+                    <span class="badge badge-primary badge-pill">{{ nbr_requests }}</span>
+                </a>
+            </li>
 
-                <li class="nav-item justify-content-between align-items-center">
-                    <a href="{% url "articles_admin" %}" class="nav-link">
-                        Articles
-                    </a>
-                </li>
+            <li class="nav-item justify-content-between align-items-center">
+                <a href="{% url "articles_admin" %}" class="nav-link">
+                    Articles
+                </a>
+            </li>
 
-                <li class="nav-item justify-content-between align-items-center">
-                    <a href="{% url "mails_admin" %}" class="nav-link">
-                        Templates de mails
-                    </a>
-                </li>
+            <li class="nav-item justify-content-between align-items-center">
+                <a href="{% url "mails_admin" %}" class="nav-link">
+                    Templates de mails
+                </a>
+            </li>
 
-                <li class="nav-item justify-content-between align-items-center">
-                    <a href="{% url "given_courses" %}" class="nav-link">
-                        Cours donnés
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </nav>
+            <li class="nav-item justify-content-between align-items-center">
+                <a href="{% url "given_courses" %}" class="nav-link">
+                    Cours donnés
+                </a>
+            </li>
 
-    <div class="container-fluid p-0">
+            <li class="nav-item justify-content-between align-items-center">
+                <a href="{% url "given_courses" %}" class="nav-link">
+                    Transactions
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-        <section class="p-3 p-lg-5 d-flex align-items-center">
-            <div id="container">
-                <h2 class="mb-2">
-                    Administration :
-                </h2>
+<div class="container-fluid p-0">
 
-                <hr class="m-2">
+    <section class="p-3 p-lg-5 d-flex align-items-center">
+        <div id="container">
+            <h2 class="mb-2">
+                Administration :
+            </h2>
 
-                <h3 class="mb-2">
-                    Utilisateurs :
-                </h3>
-                <div class="col-lg-10 text-justify">
-                    <p>
-                        Les comptes des utilisateurs possèdent plusieurs champs spéciaux.
-                        <br>
-                        <br>
-                        - La <span class="text-primary">balance</span> de l'utilisateur représente, dans le cas d'un élève, le montant
-                        qu'il lui reste (à dépenser en cours). Dans le cas d'un coach, elle sera nulle et le restera.
-                        <br>
-                        - Le type de compte de l'utilisateur ne peut être changé. Pour le modifier, soit demander à l'utilisateur de
-                        se refaire un compte, soit aller <a href="/admin/auth/user/">ici</a> (non recommandé).
-                        <br>
-                        - Un utilisateur ne peut jamais réellement supprimer son compte.
-                        <br>
-                        Il peut le désactiver et c'est à l'administrateur de confirmer la suppression. Pour ce faire, simplement aller sur la page de l'utilisateur,
-                        et cliquer sur <span style="color: red;">'supprimer l'utilisateur'</span>. Pour le réactiver, simplement cliquer sur
-                        <span style="color: green;">'Réactiver l'utilisateur'</span>.
-                        Les comptes activés ou désactivés sont visible dans la barre de navigation avec les icones à côté des noms d'utilisateur :
-                        <ul>
-                            <li>
-                                <i class="fas fa-user-check"></i> Représente un utilisateur actif
-                            </li>
-                            <li>
-                                <i class="fas fa-user-slash"></i> Représente un utilisateur inactif
-                            </li>
-                        </ul>
-                    </p>
+            <hr class="m-2">
+
+            <h3 class="mb-2">
+                Utilisateurs :
+            </h3>
+            <div class="col-lg-10 text-justify">
+                <p>
+                    Les comptes des utilisateurs possèdent plusieurs champs spéciaux.
                     <br>
-                    <h4>
-                        Création, confirmation et vérification de compte
-                    </h4>
-                    <p style="text-decoration: underline;font-weight: bold;">
-                        Pour un <span style="color: green;">Étudiant</span> :
-                    </p>
+                    <br>
+                    - La <span class="text-primary">balance</span> de l'utilisateur représente, dans le cas d'un élève, le montant
+                    qu'il lui reste (à dépenser en cours). Dans le cas d'un coach, elle sera nulle et le restera.
+                    <br>
+                    - Le type de compte de l'utilisateur ne peut être changé. Pour le modifier, soit demander à l'utilisateur de
+                    se refaire un compte, soit aller <a href="/admin/auth/user/">ici</a> (non recommandé).
+                    <br>
+                    - Un utilisateur ne peut jamais réellement supprimer son compte.
+                    <br>
+                    Il peut le désactiver et c'est à l'administrateur de confirmer la suppression. Pour ce faire, simplement aller sur la page de l'utilisateur,
+                    et cliquer sur <span style="color: red;">'supprimer l'utilisateur'</span>. Pour le réactiver, simplement cliquer sur
+                    <span style="color: green;">'Réactiver l'utilisateur'</span>.
+                    Les comptes activés ou désactivés sont visible dans la barre de navigation avec les icones à côté des noms d'utilisateur :
+                    <ul>
+                        <li>
+                            <i class="fas fa-user-check"></i> Représente un utilisateur actif
+                        </li>
+                        <li>
+                            <i class="fas fa-user-slash"></i> Représente un utilisateur inactif
+                        </li>
+                    </ul>
+                </p>
+                <br>
+                <h4>
+                    Création, confirmation et vérification de compte
+                </h4>
+                <p style="text-decoration: underline;font-weight: bold;">
+                    Pour un <span style="color: green;">Étudiant</span> :
+                </p>
+                <p>
+                    Un compte est <span style="color: red;">créé</span> une fois que l'étudiant à remplit le formulaire d'inscription.
+                    Il reçoit à ce moment-là un mail, avec un lien unique, lui permettant de <span style="color: red;">vérifier</span> son compte.
+                    Ce lien l'emmènera vers une page qui lui demandera de payer soit 100 soit 50€ (en fonction de s'il a choisi d'avoir une visite pédagogique).
+                    Une fois le montant payé, son compte est <span style="color: red;">vérifié</span> et une requête est créée afin de lui trouver un coach.
+                </p>
+                <p style="text-decoration: underline;font-weight: bold;">
+                    Pour un <span style="color: green;">Coach</span> :
                     <p>
-                        Un compte est <span style="color: red;">créé</span> une fois que l'étudiant à remplit le formulaire d'inscription.
+                        Un compte est <span style="color: red;">créé</span> une fois que le coach à remplit le formulaire d'inscription.
                         Il reçoit à ce moment-là un mail, avec un lien unique, lui permettant de <span style="color: red;">vérifier</span> son compte.
-                        Ce lien l'emmènera vers une page qui lui demandera de payer soit 100 soit 50€ (en fonction de s'il a choisi d'avoir une visite pédagogique).
-                        Une fois le montant payé, son compte est <span style="color: red;">vérifié</span> et une requête est créée afin de lui trouver un coach.
+                        Une fois qu'il a cliqué sur ce lien, son compte est prêt à recevoir des requêtes d'étudiants.
                     </p>
-                    <p style="text-decoration: underline;font-weight: bold;">
-                        Pour un <span style="color: green;">Coach</span> :
-                        <p>
-                            Un compte est <span style="color: red;">créé</span> une fois que le coach à remplit le formulaire d'inscription.
-                            Il reçoit à ce moment-là un mail, avec un lien unique, lui permettant de <span style="color: red;">vérifier</span> son compte.
-                            Une fois qu'il a cliqué sur ce lien, son compte est prêt à recevoir des requêtes d'étudiants.
-                        </p>
-                    </p>
-                </div>
-
-                <hr class="mb-1">
-                <h3 class="mb-2">
-                    Requêtes :
-                </h3>
-                <div class="col-lg-10 text-justify">
-                    <p>
-                        Les requêtes représentent les recherches de coach par les étudiants.
-                        Elles sont créées automatiquement une fois qu'un étudiant à <span style="color: red;">créé</span>,
-                        <span style="color: red;">confirmé</span> et <span style="color: red;">vérifié</span> son compte.
-                        <br>
-                        Les requêtes ne sont envoyées qu'au coaches correspondant aux critères de recherche. Un coach proposant des cours de Maths ne recevra pas
-                        de requête concernant un élève qui désire des cours de francais par exemple.
-                        <br>
-                        L'administrateur peut, lorsqu'il le souhaite, cloturer la requête, en choisissant quel coach donnera cours à l'élève. Ce coach recevra une
-                        notification l'avertissant qu'il a été choisit, et les autres une notification les remerciant de s'être proposé.
-                    </p>
-                </div>
-
-                <hr class="mb-1">
-                <h3 class="mb-2">
-                    Articles :
-                </h3>
-                <div class="col-lg-10 text-justify">
-                    <p>
-                        Les articles représentent les sept 'onglets' de la page d'accueil. Il sont modifiables, mais il faut faire attention aux balises
-                        <span class="text-primary">HTML</span>. Ces balises représentent des classes de bootstrap, et il est conseillé de ne toucher qu'au texte,
-                        et de modifier les balises seuleument si l'on est sûr de ce que l'on fait.
-                    </p>
-                </div>
-
-                <hr class="mb-1">
-                <h3 class="mb-2">
-                    Mails :
-                </h3>
-                <div class="col-lg-10 text-justify">
-                    <p>
-                        <span style="color: red;">/!\ Les templates suivent des règles particulières /!\</span>. Du au fait que les mails sont des templates,
-                        destinés à être envoyés à plusieurs personnes, il faut pouvoir rendre ces mails personalisés. C'est pourquoi, il existe X balises spécifiques
-                        aux mails. Par exemple, pour insérer le nom et prénom de l'utilisateur concerné par le mail, il faut utiliser les balises
-                        <span style="color: green">&lt;LASTNAME&gt;</span> et
-                        <span style="color: green">&lt;FIRSTNAME&gt;</span>.
-                        <br>
-                        <br>
-                        Liste de balises :
-                        <div class="container-fluid">
-                            <table class="table table-striped">
-
-                                <head>
-                                    <th class="col-md-6">
-                                        <span style="color: purple;">
-                                            Balise
-                                        </span>
-                                    </th>
-                                    <th class="col-md-6">
-                                        <span style="color: purple;">
-                                            Valeur
-                                        </span>
-                                    </th>
-                                </head>
-                                <tr>
-                                    <td class="col-md-6">
-                                        <span style="color: green">
-                                            &lt;FIRSTNAME&gt;
-                                        </span>
-                                    </td>
-                                    <td class="col-md-6">
-                                        <span style="color: black">
-                                            Prénom de l'élève
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="col-md-6">
-                                        <span style="color: green">
-                                            &lt;LASTNAME&gt;
-                                        </span>
-                                    </td>
-                                    <td class="col-md-6">
-                                        Nom de famille de l'élève
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="col-md-6">
-                                        <span style="color: green">
-                                            &lt;BIRTHDATE&gt;
-                                        </span>
-                                    </td>
-                                    <td class="col-md-6">
-                                        Date de naissance (jj/mm/yyyy)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="col-md-6">
-                                        <span style="color: green">
-                                            &lt;COURSES&gt;
-                                        </span>
-                                    </td>
-                                    <td class="col-md-6">
-                                        Cours demandés (cours1, cours2, ...)
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="col-md-6">
-                                        <span style="color: green">
-                                            &lt;SCHOOLLEVEL&gt;
-                                        </span>
-                                    </td>
-                                    <td class="col-md-6">
-                                        Niveau scolaire (1ere humanité, ...)
-                                    </td>
-                                </tr>
-                                <td class="col-md-6">
-                                    <span style="color: green">
-                                        &lt;SECRETKEY&gt;
-                                    </span>
-                                </td>
-                                <td class="col-md-6">
-                                    Clé secrete du compte, pour les confirmations, etc...
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-6">
-                                    <span style="color: green">
-                                        &lt;BALANCE&gt;
-                                    </span>
-                                </td>
-                                <td class="col-md-6">
-                                    Solde restant de la famille (en €€)
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="col-md-6">
-                                    <span style="color: green">
-                                        &lt;REQUESTLINK&gt;
-                                    </span>
-                                </td>
-                                <td class="col-md-6">
-                                    Lien vers la page de demande de coach
-                                </td>
-                            </tr>
-
-                        </table>
-                    </div>
                 </p>
             </div>
 
-        </div>
-    </section>
+            <hr class="mb-1">
+            <h3 class="mb-2">
+                Requêtes :
+            </h3>
+            <div class="col-lg-10 text-justify">
+                <p>
+                    Les requêtes représentent les recherches de coach par les étudiants.
+                    Elles sont créées automatiquement une fois qu'un étudiant à <span style="color: red;">créé</span>,
+                    <span style="color: red;">confirmé</span> et <span style="color: red;">vérifié</span> son compte.
+                    <br>
+                    Les requêtes ne sont envoyées qu'au coaches correspondant aux critères de recherche. Un coach proposant des cours de Maths ne recevra pas
+                    de requête concernant un élève qui désire des cours de francais par exemple.
+                    <br>
+                    L'administrateur peut, lorsqu'il le souhaite, cloturer la requête, en choisissant quel coach donnera cours à l'élève. Ce coach recevra une
+                    notification l'avertissant qu'il a été choisit, et les autres une notification les remerciant de s'être proposé.
+                </p>
+            </div>
 
-    <hr class="m-0">
+            <hr class="mb-1">
+            <h3 class="mb-2">
+                Articles :
+            </h3>
+            <div class="col-lg-10 text-justify">
+                <p>
+                    Les articles représentent les sept 'onglets' de la page d'accueil. Il sont modifiables, mais il faut faire attention aux balises
+                    <span class="text-primary">HTML</span>. Ces balises représentent des classes de bootstrap, et il est conseillé de ne toucher qu'au texte,
+                    et de modifier les balises seuleument si l'on est sûr de ce que l'on fait.
+                </p>
+            </div>
+
+            <hr class="mb-1">
+            <h3 class="mb-2">
+                Mails :
+            </h3>
+            <div class="col-lg-10 text-justify">
+                <p>
+                    <span style="color: red;">/!\ Les templates suivent des règles particulières /!\</span>. Du au fait que les mails sont des templates,
+                    destinés à être envoyés à plusieurs personnes, il faut pouvoir rendre ces mails personalisés. C'est pourquoi, il existe X balises spécifiques
+                    aux mails. Par exemple, pour insérer le nom et prénom de l'utilisateur concerné par le mail, il faut utiliser les balises
+                    <span style="color: green">&lt;LASTNAME&gt;</span> et
+                    <span style="color: green">&lt;FIRSTNAME&gt;</span>.
+                    <br>
+                    <br>
+                    Liste de balises :
+                    <div class="container-fluid">
+                        <table class="table table-striped">
+
+                            <head>
+                                <th class="col-md-6">
+                                    <span style="color: purple;">
+                                        Balise
+                                    </span>
+                                </th>
+                                <th class="col-md-6">
+                                    <span style="color: purple;">
+                                        Valeur
+                                    </span>
+                                </th>
+                            </head>
+                            <tr>
+                                <td class="col-md-6">
+                                    <span style="color: green">
+                                        &lt;FIRSTNAME&gt;
+                                    </span>
+                                </td>
+                                <td class="col-md-6">
+                                    <span style="color: black">
+                                        Prénom de l'élève
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-6">
+                                    <span style="color: green">
+                                        &lt;LASTNAME&gt;
+                                    </span>
+                                </td>
+                                <td class="col-md-6">
+                                    Nom de famille de l'élève
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-6">
+                                    <span style="color: green">
+                                        &lt;BIRTHDATE&gt;
+                                    </span>
+                                </td>
+                                <td class="col-md-6">
+                                    Date de naissance (jj/mm/yyyy)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-6">
+                                    <span style="color: green">
+                                        &lt;COURSES&gt;
+                                    </span>
+                                </td>
+                                <td class="col-md-6">
+                                    Cours demandés (cours1, cours2, ...)
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-6">
+                                    <span style="color: green">
+                                        &lt;SCHOOLLEVEL&gt;
+                                    </span>
+                                </td>
+                                <td class="col-md-6">
+                                    Niveau scolaire (1ere humanité, ...)
+                                </td>
+                            </tr>
+                            <td class="col-md-6">
+                                <span style="color: green">
+                                    &lt;SECRETKEY&gt;
+                                </span>
+                            </td>
+                            <td class="col-md-6">
+                                Clé secrete du compte, pour les confirmations, etc...
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">
+                                <span style="color: green">
+                                    &lt;BALANCE&gt;
+                                </span>
+                            </td>
+                            <td class="col-md-6">
+                                Solde restant de la famille (en €€)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-6">
+                                <span style="color: green">
+                                    &lt;REQUESTLINK&gt;
+                                </span>
+                            </td>
+                            <td class="col-md-6">
+                                Lien vers la page de demande de coach
+                            </td>
+                        </tr>
+
+                    </table>
+                </div>
+            </p>
+        </div>
 
     </div>
+</section>
 
-    {% include "scripts.html" %}
+<hr class="m-0">
 
-</body>
-
-</html>
+</div>
+{% endblock %}
