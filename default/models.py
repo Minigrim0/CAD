@@ -9,13 +9,15 @@ from cad.settings import EMAIL_HOST_USER
 
 
 class Article(models.Model):
-    name = models.TextField(
-        null=False, default="Article", verbose_name="Nom de l'article")
+    name = models.CharField(
+        max_length=100, default="Article",
+        verbose_name="Nom de l'article")
     title = models.TextField(null=True)
     subtitle = models.TextField(null=True)
     content = models.TextField(null=True)
     date = models.DateTimeField(
-        auto_now_add=True, auto_now=False, verbose_name="Date de modification")
+        auto_now_add=True, auto_now=False,
+        verbose_name="Date de modification")
 
     def __str__(self):
         return self.name

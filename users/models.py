@@ -2,7 +2,6 @@ from django import utils
 from django.contrib.auth.models import User
 from django.db import models
 
-
 class Profile(models.Model):
     """
         Modèle Profile:
@@ -31,7 +30,7 @@ class Profile(models.Model):
     Francais_course = models.BooleanField(
         default=False, verbose_name="Francais")
     secret_key = models.CharField(
-        null=True, blank=True, default="", max_length=20,
+        null=True, blank=True, default="", max_length=64,
         verbose_name="Clé unique pour l'utilisateur")
     # User has verified his account via mail
     verifiedAccount = models.BooleanField(

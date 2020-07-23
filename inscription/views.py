@@ -1,5 +1,5 @@
 import logging
-import secrets
+import hashlib
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -70,7 +70,6 @@ def registerBase(request):
     """
 #    try:
     form = request.POST
-    print(form)
     username = form["lastName"] + "_" + form['firstName']
     email = form["mailAddress"]
     password = form["passwd"]
@@ -90,7 +89,7 @@ def registerBase(request):
         if "Course_"+course in form.keys():
             exec("profile." + course + "_course = True")
 
-    profile.secret_key = secrets.token_hex(5)
+    profile.secret_key = hashlib.sha256(username.encode("utf-8")).hexdigest()
     profile.verifiedAccount = False
     profile.school_level = form["schoolLevel"]
 
@@ -110,11 +109,11 @@ def registerBase(request):
 
     utils.create_notif(user, title, content, author)
 
-    if not DEBUG:
-        mail = Mail.objects.get(id=1)
-        send_mail(
-            mail.clean_header, mail.formatted_content(user),
-            EMAIL_HOST_USER, [email])
+    # if not DEBUG:
+    #     mail = Mail.objects.get(id=1)
+    #     send_mail(
+    #         mail.clean_header, mail.formatted_content(user),
+    #         EMAIL_HOST_USER, [email])
 
     user = authenticate(
         username=user.username, password=form["passwd"])
