@@ -1,131 +1,103 @@
-<!DOCTYPE html>
-<html lang="fr">
+{% extends 'base.html' %}
 
 {% load static %}
 
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>CAD</title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- Custom fonts for this template -->
-    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
-
-    <!-- Custom styles for this template -->
-    <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
-</head>
-
-<body id="page-top">
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">
-            <span class="d-block d-lg-none">Cours à domicile</span>
-            <span class="d-none d-lg-block">
-                <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
-            </span>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="/" class="nav-link">Accueil</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container-fluid">
-        <section class="col-sm-12">
-            {% if student_request.is_closed %}
-            <div class="alert alert-warning" role="alert">
-                Cette requête est fermée !
-            </div>
-            {% else %}
-
-            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
-
-            <p>recherche des cours de :</p>
-            <ul>
-                {% if user.profile.Maths_course %}
-                <li>Maths</li>
-                {% endif %}
-
-                {% if user.profile.Chimie_course %}
-                <li>Chimie</li>
-                {% endif %}
-
-                {% if user.profile.Physique_course %}
-                <li>Physique</li>
-                {% endif %}
-
-                {% if user.profile.Francais_course %}
-                <li>Francais</li>
-                {% endif %}
-            </ul>
-
-            <label class="col-sm-12 col-form-label">Tranches horaires de l'étudiant :</label>
-            <textarea disabled class="col-md-12" rows="5">{{ student_request.student.profile.studentaccount.wanted_schedule }}</textarea>
-
-            <p>Location : {{student_request.student.profile.studentaccount.zip}} {{student_request.student.profile.studentaccount.ville}}</p>
-
-            <script>
-                const Url = "{% url "manage_request" %}";
-
-                //Makes a request to remove the notification with the specified ID
-                //Has to be an id related to the current user's notification
-                function _post(id, decision, coach) {
-                    $.post(
-                        Url, {
-                            id: id,
-                            decision: decision,
-                            coach: coach,
-                            csrfmiddlewaretoken: '{{ csrf_token }}'
-                        },
-                        function(data, status) {
-                            console.log(data);
-                            console.log(status);
-                        }
-                    );
-                    document.getElementById("buttons").style.display = "none";
-                    document.getElementById("dejarepondu").style.display = "block";
-                }
-            </script>
-
-            {% if not request.user.username in coaches %}
-            <div id="buttons">
-                {% else %}
-                <div id="buttons" style="display: none;">
-                    {% endif %}
-                    <button type="button" class="btn btn-success" onclick="_post({{ student_request.id }}, 'true' , {{ coach.id }})" name="accept">Accepter l'offre</button>
-                    <button type="button" class="btn btn-danger" onclick="_post({{ student_request.id }}, 'false', {{ coach.id }})" name="refuses">Refuser l'offre</button>
-                </div>
-                {% if not request.user.username in coaches %}
-                <div id="dejarepondu" style="display: none;">
-                    {% else %}
-                    <div id="dejarepondu">
-                        {% endif %}
-                        <p style="color:red;">Vous avez déjà répondu à cette requete</p>
-                    </div>
-
-                </div>
-                {% endif %}
-            </div>
-        </section>
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+    <a class="navbar-brand js-scroll-trigger" href="#page-top">
+        <span class="d-block d-lg-none">Cours à domicile</span>
+        <span class="d-none d-lg-block">
+            <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
+        </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="/" class="nav-link">Accueil</a>
+            </li>
+        </ul>
     </div>
+</nav>
 
-    {% include "scripts.html" %}
+<div class="container-fluid">
+    <section class="col-sm-12">
+        {% if student_request.is_closed %}
+        <div class="alert alert-warning" role="alert">
+            Cette requête est fermée !
+        </div>
+        {% else %}
 
-</body>
+        <h2>{{ user.first_name }} {{ user.last_name }}</h2>
 
-</html>
+        <p>recherche des cours de :</p>
+        <ul>
+            {% if user.profile.Maths_course %}
+            <li>Maths</li>
+            {% endif %}
+
+            {% if user.profile.Chimie_course %}
+            <li>Chimie</li>
+            {% endif %}
+
+            {% if user.profile.Physique_course %}
+            <li>Physique</li>
+            {% endif %}
+
+            {% if user.profile.Francais_course %}
+            <li>Francais</li>
+            {% endif %}
+        </ul>
+
+        <label class="col-sm-12 col-form-label">Tranches horaires de l'étudiant :</label>
+        <textarea disabled class="col-md-12" rows="5">{{ student_request.student.profile.studentaccount.wanted_schedule }}</textarea>
+
+        <p>Location : {{student_request.student.profile.studentaccount.zip}} {{student_request.student.profile.studentaccount.ville}}</p>
+
+        <script>
+            const Url = "{% url "manage_request" %}";
+
+            //Makes a request to remove the notification with the specified ID
+            //Has to be an id related to the current user's notification
+            function _post(id, decision, coach) {
+                $.post(
+                    Url, {
+                        id: id,
+                        decision: decision,
+                        coach: coach,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    function(data, status) {
+                        console.log(data);
+                        console.log(status);
+                    }
+                );
+                document.getElementById("buttons").style.display = "none";
+                document.getElementById("dejarepondu").style.display = "block";
+            }
+        </script>
+
+        {% if not request.user.username in coaches %}
+        <div id="buttons">
+            {% else %}
+            <div id="buttons" style="display: none;">
+                {% endif %}
+                <button type="button" class="btn btn-success" onclick="_post({{ student_request.id }}, 'true' , {{ coach.id }})" name="accept">Accepter l'offre</button>
+                <button type="button" class="btn btn-danger" onclick="_post({{ student_request.id }}, 'false', {{ coach.id }})" name="refuses">Refuser l'offre</button>
+            </div>
+            {% if not request.user.username in coaches %}
+            <div id="dejarepondu" style="display: none;">
+                {% else %}
+                <div id="dejarepondu">
+                    {% endif %}
+                    <p style="color:red;">Vous avez déjà répondu à cette requete</p>
+                </div>
+
+            </div>
+            {% endif %}
+        </div>
+    </section>
+</div>
+{% endblock %}

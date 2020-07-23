@@ -1,0 +1,281 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+    <a class="navbar-brand js-scroll-trigger" href="/">
+        <span class="d-block d-lg-none">Cours à domicile</span>
+        <span class="d-none d-lg-block">
+            <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
+        </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse text-left" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="/administration/" class="nav-link">
+                    retour
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/" class="nav-link">
+                    Accueil
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <section class="p-3 p-lg-5 align-items-center">
+        <div id="container">
+            <div class="btn-group-lg text-center" role="group">
+                <button type="button" onclick="showOpened()" class="btn btn-secondary">En cours</button>
+                <button type="button" onclick="showClosed()" class="btn btn-secondary">Finis</button>
+            </div>
+
+            <div id="Opened">
+                <h3>Etudiants en attente</h3>
+                <ul class="list-group">
+                    {% for request in student_requests %}
+                    <li class="list-group-item">
+                        <h4>{{ request.student.first_name }} {{ request.student.last_name }}</h4>
+                        <p>Cherche des cours de :</p>
+                        <ul>
+                            {% if request.student.profile.Maths_course %}
+                            <li>Maths</li>
+                            {% endif %}
+
+                            {% if request.student.profile.Chimie_course %}
+                            <li>Chimie</li>
+                            {% endif %}
+
+                            {% if request.student.profile.Physique_course %}
+                            <li>Physique</li>
+                            {% endif %}
+
+                            {% if request.student.profile.Francais_course %}
+                            <li>Francais</li>
+                            {% endif %}
+                        </ul>
+                        <hr>
+                        <p>Coaches ayant postulé :</p>
+                        <div class="spinner-border" id="spin_{{ request.id }}" role="status" style="display: none;">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div id="total_{{ request.id }}">
+                            <div class="row" id="coaches_{{ request.id }}">
+                                {% for coach in request.coaches.all %}
+                                <div class="card col-md-2" id="card_{{ request.id }}_{{ coach.user.username }}" style="width: 18rem;margin: 2px;">
+                                    <div class="card-body">
+                                        <h4 class="card-title text-center">{{ coach.user.first_name }} {{ coach.user.last_name }}</h4>
+                                        <p class="card-text">Enseigne :
+                                            {% if coach.Maths_course %}
+                                            Maths
+                                            {% endif %}
+                                            {% if coach.Chimie_course %}
+                                            Chimie
+                                            {% endif %}
+                                            {% if coach.Physique_course %}
+                                            Physique
+                                            {% endif %}
+                                            {% if coach.Francais_course %}
+                                            Francais
+                                            {% endif %}
+                                        </p>
+                                        <div class="card-footer row">
+                                            <div class="btn-group" role="group" aria-label="actions">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Detail{{ coach.user.username }}">
+                                                    Détails
+                                                </button>
+                                                <div class="choose">
+                                                    <button type="button" class="btn btn-success" onclick="chooseCoach('{{ coach.user.username }}', '{{ request.id }}')" name="accept">
+                                                        Choisir
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="Detail{{ coach.user.username }}" tabindex="-1" role="dialog" aria-labelledby="DetailLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="DetailLabel">{{ coach.user.first_name }} {{ coach.user.last_name }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-row">
+                                                            <div class="form-group row col-md-12">
+                                                                <p> - Ecole du coach : {{ coach.coachaccount.school }}</p>
+                                                            </div>
+                                                            <div class="form-group row col-md-12">
+                                                                <p> - Email : {{ coach.user.email }}</p>
+                                                            </div>
+                                                            <div class="form-group row col-md-12">
+                                                                <p> - Nombre d'étudiants actuel : {{ coach.coachaccount.nbStudents }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <h5>Aucun coach n'a encore accepté cette requête</h5>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                    {% empty %}
+                    <h4>Pas de requêtes pour le moment...</h4>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div id="Closed" style="display: none;">
+                <h3>Requêtes complétées</h3>
+                <ul class="list-group">
+                    {% for request in student_requests_closed %}
+                    <li class="list-group-item">
+                        <h4>{{ request.student.first_name }} {{ request.student.last_name }}</h4>
+                        <p>Cherchait des cours de :</p>
+                        <ul>
+                            {% if request.student.profile.Maths_course %}
+                            <li>Maths</li>
+                            {% endif %}
+
+                            {% if request.student.profile.Chimie_course %}
+                            <li>Chimie</li>
+                            {% endif %}
+
+                            {% if request.student.profile.Physique_course %}
+                            <li>Physique</li>
+                            {% endif %}
+
+                            {% if request.student.profile.Francais_course %}
+                            <li>Francais</li>
+                            {% endif %}
+                        </ul>
+                        <hr>
+                        <p>Coaches ayant accepté :</p>
+                        <div class="spinner-border" id="spin_{{ request.id }}" role="status" style="display: none;">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <div id="total_{{ request.id }}">
+                            <div class="row" id="coaches_{{ request.id }}">
+                                {% for coach in request.coaches.all %}
+                                <div class="card col-md-2" id="card_{{ request.id }}_{{ coach.user.username }}" style="width: 18rem;margin: 2px;">
+                                    {% if request.choosenCoach == coach.user.username %}
+                                    <div class="card-body">
+                                    {% else %}
+                                    <div class="card-body" style="filter: opacity(10%);">
+                                    {% endif %}
+                                        <h4 class="card-title text-center">{{ coach.user.first_name }} {{ coach.user.last_name }}</h4>
+                                        <p class="card-text">Enseigne :
+                                            {% if coach.Maths_course %}
+                                            Maths
+                                            {% endif %}
+                                            {% if coach.Chimie_course %}
+                                            Chimie
+                                            {% endif %}
+                                            {% if coach.Physique_course %}
+                                            Physique
+                                            {% endif %}
+                                            {% if coach.Francais_course %}
+                                            Francais
+                                            {% endif %}
+                                        </p>
+                                        <!-- Modal -->
+                                        <div class="modal fade" id="{{ coach.user.username }}Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">{{ coach.user.first_name }} {{ coach.user.last_name }}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="form-row">
+                                                            <div class="form-group row col-md-12">
+                                                                <p> - Ecole du coach : {{ coach.coachaccount.school }}</p>
+                                                            </div>
+                                                            <div class="form-group row col-md-12">
+                                                                <p> - Email : {{ coach.user.email }}</p>
+                                                            </div>
+                                                            <div class="form-group row col-md-12">
+                                                                <p> - Nombre d'étudiants actuel : {{ coach.coachaccount.nbStudents }}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer row">
+                                            <div class="btn-group" role="group" aria-label="actions">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ coach.user.username }}Modal">
+                                                    Détails
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function chooseCoach(coach, id) {
+            document.getElementById("coaches_" + id).style = "filter: opacity(10%);";
+            document.getElementById("spin_" + id).style.display = "block";
+            var Url = "/users/choose/";
+
+            $.post(
+                Url, {
+                    id: id,
+                    coach: coach,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                function(data, status) {
+                    if (status == "success") {
+                        document.getElementById("coaches_" + id).style = "filter: opacity(100%);";;
+                        document.getElementById("spin_" + id).style.display = "none";
+
+                        var cards = document.getElementsByClassName("card");
+                        for (var x = 0; x < cards.length; x++) {
+                            if (cards[x].id == "card_" + id + "_" + coach) {
+                                cards[x].style = "filter: opacity(100%)";
+                                cards[x].getElementsByClassName("choose")[0].style.display = "none";
+                            } else if (cards[x].id.search("card_" + id + "_") != -1) {
+                                cards[x].style = "filter: opacity(25%)";
+                                cards[x].getElementsByClassName("choose")[0].style.display = "none";
+                            }
+                        }
+                    } else {
+                        document.getElementById("coaches_" + id).style = "filter: opacity(0%);";
+                    }
+                }
+            );
+        }
+    </script>
+
+</div>
+{% endblock %}

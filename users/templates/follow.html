@@ -1,108 +1,80 @@
-<!DOCTYPE html>
-<html lang="fr">
+{% extends 'base.html' %}
 
 {% load static %}
 
-<head>
-
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
-    <title>CAD - mon suivi</title>
-
-    <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-    <!-- Custom fonts for this template -->
-    <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" integrity="sha256-h20CPZ0QyXlBuAw7A+KluUYx/3pK+c7lYEpqLTlxjYQ=" crossorigin="anonymous" />
-
-    <!-- Custom styles for this template -->
-    <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
-</head>
-
-<body id="page-top">
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">
-            <span class="d-block d-lg-none">Cours à domicile</span>
-            <span class="d-none d-lg-block">
-                <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
-            </span>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a href="/" class="nav-link">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url "my_account" %}" class="nav-link">Mon compte</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="container-fluid">
-
-        <section class="p-3 p-lg-5 align-items-center">
-            <div id="container">
-
-                <h2>Mon Suivi</h2>
-                <div class="col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <ul class="list-group">
-                                <li class="list-group-item">Date</li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-8">
-                            <ul class="list-group">
-                                <li class="list-group-item">Commentaires</li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-2">
-                            <ul class="list-group">
-                                <li class="list-group-item">Coach</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <ul class="list-group">
-                                {% for elem in followelement_set %}
-                                <li class="list-group-item">{{ elem.date|date:"d/m/Y - G:i" }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="col-sm-8">
-                            <ul class="list-group">
-                                {% for elem in followelement_set %}
-                                <li class="list-group-item">{{ elem.comments|safe }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="col-sm-2">
-                            <ul class="list-group">
-                                {% for elem in followelement_set %}
-                                <li class="list-group-item">{{ elem.coach }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </section>
+{% block content %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+    <a class="navbar-brand js-scroll-trigger" href="#page-top">
+        <span class="d-block d-lg-none">Cours à domicile</span>
+        <span class="d-none d-lg-block">
+            <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
+        </span>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a href="/" class="nav-link">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url "my_account" %}" class="nav-link">Mon compte</a>
+            </li>
+        </ul>
     </div>
-</body>
+</nav>
 
-</html>
+<div class="container-fluid">
+    <section class="p-3 p-lg-5 align-items-center">
+        <div id="container">
+            <h2>Mon Suivi</h2>
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <ul class="list-group">
+                            <li class="list-group-item">Date</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-8">
+                        <ul class="list-group">
+                            <li class="list-group-item">Commentaires</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-2">
+                        <ul class="list-group">
+                            <li class="list-group-item">Coach</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-12">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <ul class="list-group">
+                            {% for elem in followelement_set %}
+                            <li class="list-group-item">{{ elem.date|date:"d/m/Y - G:i" }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-sm-8">
+                        <ul class="list-group">
+                            {% for elem in followelement_set %}
+                            <li class="list-group-item">{{ elem.comments|safe }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="col-sm-2">
+                        <ul class="list-group">
+                            {% for elem in followelement_set %}
+                            <li class="list-group-item">{{ elem.coach }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock %}
