@@ -1,6 +1,8 @@
 FROM python:3.7
 
 RUN mkdir -p /opt/services/cad/src
+RUN mkdir -p /opt/services/cad/src/logs
+RUN touch /opt/services/cad/src/logs/cad.log
 WORKDIR /opt/services/cad/src
 
 COPY manage.py /opt/services/cad/src
@@ -15,8 +17,6 @@ COPY requirements.txt /opt/services/cad/src
 COPY compress_logs.sh /opt/services/cad/src
 
 RUN pip install -r requirements.txt
-RUN mkdir /opt/services/cad/src/logs
-RUN touch /opt/services/cad/src/logs/cad.log
 
 EXPOSE 8000
 
