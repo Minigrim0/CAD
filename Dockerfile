@@ -15,8 +15,8 @@ COPY requirements.txt /opt/services/cad/src
 COPY compress_logs.sh /opt/services/cad/src
 
 RUN pip install -r requirements.txt
-RUN mkdir logs
-RUN touch logs/cad.log
+RUN mkdir /opt/services/cad/src/logs
+RUN touch /opt/services/cad/src/logs/cad.log
 
 EXPOSE 8000
 
