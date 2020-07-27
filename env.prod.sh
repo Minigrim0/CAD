@@ -6,7 +6,7 @@ SQL_USER=cad
 SQL_PASSWORD=aa3fd666534bd13b1522c747959ddc27d987be02
 SQL_HOST=cad_db
 SQL_PORT=5432
-DJANGO_ALLOWED_HOSTS=cadcoursadomicile.com 127.0.0.1 [::1]
+DJANGO_ALLOWED_HOSTS=cadcoursadomicile.com 127.0.0.1 [::1] 51.210.159.215
 
 EMAIL_USE_TLS=true
 EMAIL_HOST=smtp.gmail.com
