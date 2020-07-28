@@ -16,12 +16,12 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY", "defaultsecretkey")
+
+DEBUG = int(os.environ.get("DEBUG", default=0))
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
-DEBUG = int(os.environ.get("DEBUG", default=0))
-
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="127.0.0.1").split(" ")
 
 # Application definition
@@ -71,7 +71,7 @@ TEMPLATES = [
 ]
 
 ADMINS = (
-    ('Minigrimo', 'florent.grimau@outlook.com'),
+    ('Minigrimo', 'grimauflorent@gmail.com'),
 )
 
 WSGI_APPLICATION = 'cad.wsgi.application'
@@ -115,11 +115,11 @@ AUTH_PASSWORD_VALIDATORS = [
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-EMAIL_USE_TLS= True if os.getenv("EMAIL_USE_TLS") == "true" else False
-EMAIL_HOST=os.getenv("EMAIL_HOST")
-EMAIL_PORT=os.getenv("EMAIL_PORT")
-EMAIL_HOST_USER=os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD=os.getenv("EMAIL_HOST_PASSWORD")
+EMAIL_USE_TLS = True if os.getenv("EMAIL_USE_TLS") == "true" else False
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
@@ -136,4 +136,4 @@ STATICFILES_DIRS = (
     "cad/assets/",
 )
 
-logging.basicConfig(filename='{}/logs/cad.log'.format(BASE_DIR), level=logging.DEBUG)
+logging.basicConfig(filename='{}/logs/cad.log'.format(BASE_DIR), level=logging.DEBUG, filemode="w+")

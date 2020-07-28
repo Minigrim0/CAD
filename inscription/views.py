@@ -95,7 +95,7 @@ def registerBase(request):
     profile.birthDate = form["birthday"]
 
     for course in ["Maths", "Chimie", "Physique", "Francais"]:
-        if "Course_"+course in form.keys():
+        if f"Course_{course}" in form.keys():
             exec("profile." + course + "_course = True")
 
     profile.secret_key = hashlib.sha256(username.encode("utf-8")).hexdigest()
@@ -130,8 +130,8 @@ def registerBase(request):
         login(request, user)
 
     messages.add_message(
-       request, messages.SUCCESS,
-       "Votre compte a bien été créé !")
+        request, messages.SUCCESS,
+        "Votre compte a bien été créé !")
     return HttpResponseRedirect('/')
 
 

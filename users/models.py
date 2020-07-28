@@ -2,6 +2,7 @@ from django import utils
 from django.contrib.auth.models import User
 from django.db import models
 
+
 class Profile(models.Model):
     """
         Modèle Profile:
@@ -112,7 +113,7 @@ class CoachAccount(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
     school = models.CharField(
-        null=True, blank=True, default="None",  max_length=50,
+        null=True, blank=True, default="None", max_length=50,
         verbose_name="Ecole")
     French_level = models.CharField(
         null=True, blank=True, default="Inconnu", max_length=50)
@@ -159,7 +160,7 @@ class Notification(models.Model):
 
     # Name of the author of the notification
     author = models.CharField(
-        blank=True, null=True,  max_length=50,
+        blank=True, null=True, max_length=50,
         verbose_name="Auteur de la notification")
     # Title of the notification
     title = models.CharField(
