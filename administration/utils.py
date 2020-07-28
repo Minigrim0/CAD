@@ -26,10 +26,10 @@ def serializeDate(date_):
     if len(str(date_[0])) == 1:
         date_str = "0" + date_str
 
-    if len(str(months.index(date_[1])+1)) == 1:
-        date_str += "0" + str(months.index(date_[1])+1)
+    if len(str(months.index(date_[1]) + 1)) == 1:
+        date_str += "0" + str(months.index(date_[1]) + 1)
     else:
-        date_str += str(months.index(date_[1])+1)
+        date_str += str(months.index(date_[1]) + 1)
 
     date_str += str(date_[2])
 
