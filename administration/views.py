@@ -158,7 +158,7 @@ def modifyUser(request):
         # If the admin wants to re-activate the user's account
         elif "reactivate" in form.keys():
             return HttpResponseRedirect(
-                "/administration/reactivate/"+form["username"])
+                "/administration/reactivate/" + form["username"])
 
         # Else, the admin wants to modify the user
         usr = User.objects.get(username=form["username"])
@@ -187,7 +187,7 @@ def modifyUser(request):
             profile.verifiedAccount = False
 
         for course in ["Maths", "Chimie", "Physique", "Francais"]:
-            if course+"_Course" in form.keys():
+            if "{}_Course".format(course) in form.keys():
                 exec("profile." + course + "_course = True")
             else:
                 exec("profile." + course + "_course = False")
