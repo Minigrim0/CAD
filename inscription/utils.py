@@ -61,8 +61,8 @@ def getSchedule(student_profile, form):
         try:
             if form[id] == 'on':
                 student_profile.wanted_schedule += "1/"
-                student_profile.wanted_schedule += form[day+"Start"] + "/"
-                student_profile.wanted_schedule += form[day+"End"] + "."
+                student_profile.wanted_schedule += form[day + "Start"] + "/"
+                student_profile.wanted_schedule += form[day + "End"] + "."
         except Exception:
             student_profile.wanted_schedule += "0/0/0."
     student_profile.save()

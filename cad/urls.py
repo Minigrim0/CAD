@@ -18,10 +18,10 @@ from django.contrib import admin
 from django.conf.urls import include
 
 urlpatterns = [
-    url(r'^admin/',          admin.site.urls),
+    url(r'^admin/', admin.site.urls),
     url(r'^administration/', include('administration.urls')),
-    url(r'^inscription/',    include('inscription.urls')),
-    url(r'^connexion/',      include('connexion.urls')),
-    url(r'^users/',          include('users.urls')),
-    url(r'^',                include('default.urls')),
+    url(r'^inscription/', include('inscription.urls')),
+    url(r'^connexion/', include('connexion.urls')),
+    url(r'^users/', include('users.urls')),
+    url(r'^', include('default.urls')),
 ]
