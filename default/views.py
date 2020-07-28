@@ -31,7 +31,7 @@ def home(request):
         'a_coaches': coaches[0],
         'a_about': about[0],
         'a_contact': contact[0],
-         }
+    }
 
     if type(request) is not django.core.handlers.wsgi.WSGIRequest and request.user.is_authenticated:
         dico["nb_notif"] = request.user.notification_set.count()
