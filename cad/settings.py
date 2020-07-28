@@ -16,6 +16,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+logging.basicConfig(filename='{}/logs/cad.log'.format(BASE_DIR), level=logging.DEBUG, filemode="w+")
+
 SECRET_KEY = os.environ.get("SECRET_KEY", "defaultsecretkey")
 
 DEBUG = int(os.environ.get("DEBUG", default=0))
@@ -23,6 +25,8 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="127.0.0.1").split(" ")
+logging.warning("Allowed hosts : {}".format("\n   ".join(ALLOWED_HOSTS)))
+
 
 # Application definition
 
@@ -135,5 +139,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 STATICFILES_DIRS = (
     "cad/assets/",
 )
-
-logging.basicConfig(filename='{}/logs/cad.log'.format(BASE_DIR), level=logging.DEBUG, filemode="w+")
