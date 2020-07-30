@@ -109,7 +109,7 @@ def registerBase(request):
         utils.coachRegister(user, form)
 
     author = "L'équipe CAD"
-    title = "Bienvenue parmis nous !"
+    title = "Bienvenue parmi nous !"
     content = "Au nom de toute l'équipe de CAD, \
         nous vous souhaitons la bienvenue ! \
         N'oubliez pas que vous pouvez nous contacter \
