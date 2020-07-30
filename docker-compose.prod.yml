@@ -33,7 +33,6 @@ services:
     labels:
       - traefik.frontend.rule=Host:newsite.cadcoursadomicile.com
       - traefik.enable=true
-      - traefik.port=80
       - traefik.tags=public
       - traefik.docker.network=public
       - traefik.redirectorservice.frontend.entryPoints=http
