@@ -28,8 +28,6 @@ services:
     build: ./nginx
     volumes:
       - static_volume:/home/app/web/static
-    ports:
-      - 1337:80
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=Host(`newsite.cadcoursadomicile.com`)"
