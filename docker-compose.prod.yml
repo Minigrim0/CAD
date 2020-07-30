@@ -45,11 +45,15 @@ services:
     networks:
       - private
       - public
+      - traefik-proxy
 
 networks:
   private:
     driver: overlay
   public:
+    external: true
+  traefik-proxy:
+    external: true
 
 volumes:
   postgres_data:
