@@ -30,16 +30,15 @@ services:
       - static_volume:/home/app/web/static
     ports:
       - 1337:80
-    deploy:
-      labels:
-        - traefik.frontend.rule=Host:newsite.cadcoursadomicile.com
-        - traefik.enable=true
-        - traefik.port=80
-        - traefik.tags=public
-        - traefik.docker.network=public
-        - traefik.redirectorservice.frontend.entryPoints=http
-        - traefik.redirectorservice.frontend.redirect.entryPoint=https
-        - traefik.webservice.frontend.entryPoints=https
+    labels:
+      - traefik.frontend.rule=Host:newsite.cadcoursadomicile.com
+      - traefik.enable=true
+      - traefik.port=80
+      - traefik.tags=public
+      - traefik.docker.network=public
+      - traefik.redirectorservice.frontend.entryPoints=http
+      - traefik.redirectorservice.frontend.redirect.entryPoint=https
+      - traefik.webservice.frontend.entryPoints=https
     depends_on:
       - web
     networks:
