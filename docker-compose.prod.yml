@@ -14,12 +14,16 @@ services:
       - ./.env.prod
     depends_on:
       - db
+    networks:
+      - private
   db:
     image: postgres:12.0-alpine
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
       - ./.env.prod.db
+    networks:
+      - private
   nginx:
     build: ./nginx
     volumes:
@@ -28,7 +32,7 @@ services:
       - 1337:80
     deploy:
       labels:
-        - traefik.frontend.rule=Host:fifa-covid19.be
+        - traefik.frontend.rule=Host:newsite.cadcoursadomicile.com
         - traefik.enable=true
         - traefik.port=80
         - traefik.tags=public
@@ -38,6 +42,15 @@ services:
         - traefik.webservice.frontend.entryPoints=https
     depends_on:
       - web
+    networks:
+      - private
+      - public
+
+networks:
+  private:
+    driver: overlay
+  public:
+    external: true
 
 volumes:
   postgres_data:
