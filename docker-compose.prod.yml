@@ -50,7 +50,6 @@ networks:
   private:
     driver: overlay
   public:
-    external: true
 
 volumes:
   postgres_data:
