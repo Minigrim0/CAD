@@ -33,7 +33,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web.rule=Host(`newsite.cadcoursadomicile.com`)"
-      - "traefik.http.routers.web.entrypoints=websecure"
+      - "traefik.http.routers.web.entrypoints=https"
     depends_on:
       - web
     networks:
