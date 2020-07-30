@@ -25,7 +25,17 @@ services:
     volumes:
       - static_volume:/home/app/web/static
     ports:
-      - 80:80
+      - 1337:80
+    deploy:
+      labels:
+        - traefik.frontend.rule=Host:fifa-covid19.be
+        - traefik.enable=true
+        - traefik.port=80
+        - traefik.tags=public
+        - traefik.docker.network=public
+        - traefik.redirectorservice.frontend.entryPoints=http
+        - traefik.redirectorservice.frontend.redirect.entryPoint=https
+        - traefik.webservice.frontend.entryPoints=https
     depends_on:
       - web
 
