@@ -41,6 +41,9 @@ services:
       - "traefik.http.routers.web-secure.tls=true"
       - "traefik.http.routers.web-secure.tls.certresolver=http"
       - "traefik.http.routers.web-secure.service=nginx-cad"
+      - "traefik.port=80"
+      - "traefik.tags=public"
+      - "traefik.docker.network=public"
     depends_on:
       - web
     networks:
