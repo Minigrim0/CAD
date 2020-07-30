@@ -47,6 +47,10 @@ function checkCoordinates() {
     //phone = document.getElementById("phoneNumber").value.match(phoneno);
     phone = true; //phone == null ? false : true;
 
+    birth_regex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{2,4})$/;
+    birth = document.getElementById("birthDate").value.match(birth_regex);
+    birth = birth == null ? false : true;
+    
     address = document.getElementById("Address").value != "";
     mail = validateEmail(document.getElementById("mail").value);
     courses = document.getElementById("math").checked
@@ -58,12 +62,15 @@ function checkCoordinates() {
     document.getElementById("notGoodAddress").innerHTML = "";
     document.getElementById("mailError").innerHTML = "";
     document.getElementById("notGoodCourse").innerHTML = "";
+    document.getElementById("notGoodBirth").innerHTML = "";
     if (!phone) document.getElementById("notGoodPhone").innerHTML = "Ce numero de telephone n'est pas correct";
     if (!address) document.getElementById("notGoodAddress").innerHTML = "Ce champ est obligatoire !";
     if (!mail) document.getElementById("mailError").innerHTML = "Cette adresse mail n'est pas correcte !";
     if (!courses) document.getElementById("notGoodCourse").innerHTML = "Vous devez choisir au moins un cours !";
+    if (!birth) document.getElementById("notGoodBirth").innerHTML = "Cette date de naissance n'a pas le bon format !";
 
     return phone
+        && birth
         && address
         && mail
         && courses;
@@ -100,7 +107,9 @@ function validate() {
     if (!checked) document.getElementById("registerErrors").innerHTML = "\
         Certains champs obligatoires n'ont pas été correctement remplis ou \
         les mots de passe ne correspondent pas !";
-    return checked;
+    else
+        return true
+    return false
 }
 
 //COACH CHECKS
@@ -133,8 +142,12 @@ function checkC_Pass() {
 function checkC_Coordinates() {
     //phoneno = /^\(?([0-9]{3,4})\)?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})$/;
     //phone = document.getElementById("C_phoneNumber").value.match(phoneno);
-    //phone = phone == null ? false : true;
-    phone = true;
+    phone = true;  // phone == null ? false : true;
+
+    birth_regex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{2,4})$/;
+    birth = document.getElementById("C_birthDate").value.match(birth_regex);
+    birth = birth == null ? false : true;
+
     address = document.getElementById("C_Address").value != "";
     mail = validateEmail(document.getElementById("C_mail").value);
     iban = document.getElementById("C_IBAN").value != "";
@@ -152,6 +165,7 @@ function checkC_Coordinates() {
     document.getElementById("C_notGoodNRN").innerHTML = "";
     document.getElementById("C_notGoodCourse").innerHTML = "";
     document.getElementById("C_notGoodSchool").innerHTML = "";
+    document.getElementById("C_notGoodBirth").innerHTML = "";
     //if (!phone) document.getElementById("C_notGoodPhone").innerHTML = "Ce numero de telephone n'est pas correct";
     if (!address) document.getElementById("C_notGoodAddress").innerHTML = "Ce champ est obligatoire !";
     if (!mail) document.getElementById("C_mailError").innerHTML = "Cette addresse mail n'est pas correcte !";
@@ -159,6 +173,7 @@ function checkC_Coordinates() {
     if (!natreg_number) document.getElementById("C_notGoodNRN").innerHTML = "Ce champ est obligatoire !";
     if (!courses) document.getElementById("C_notGoodCourse").innerHTML = "Vous devez choisir au moins un cours !";
     if (!school) document.getElementById("C_notGoodSchool").innerHTML = "Ce champ est obligatoire !";
+    if (!birth) document.getElementById("C_notGoodBirth").innerHTML = "Cette date de naissance n'a pas le bon format !";
 
     return phone
         && address
