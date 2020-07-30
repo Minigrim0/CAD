@@ -31,13 +31,9 @@ services:
     ports:
       - 1337:80
     labels:
-      - traefik.frontend.rule=Host(`newsite.cadcoursadomicile.com`)
-      - traefik.enable=true
-      - traefik.tags=public
-      - traefik.docker.network=public
-      - traefik.redirectorservice.frontend.entryPoints=http
-      - traefik.redirectorservice.frontend.redirect.entryPoint=https
-      - traefik.webservice.frontend.entryPoints=https
+      - "traefik.enable=true"
+      - "traefik.http.routers.web.rule=Host(`newsite.cadcoursadomicile.com`)"
+      - "traefik.http.routers.web.entrypoints=websecure"
     depends_on:
       - web
     networks:
