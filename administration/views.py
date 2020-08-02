@@ -119,9 +119,9 @@ def userAdminView(request, string=""):
         'a_users': users,
         'a_firstUserUsername': firstUser,
         "i_langLevel": level_,
-        "i_lang": lang_}
-
-    view_name = "utilisateurs"
+        "i_lang": lang_
+        "view_name": "utilisateurs"
+    }
 
     return render(request, 'userAdmin.html', vars_)
 
