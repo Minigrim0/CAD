@@ -189,8 +189,8 @@ def chooseCoach(request):
     ca.save()
 
     author = "L'équipe CAD"
-    title = "Félicitations !"
-    content = "Vous avez été choisit pour enseigner à {} {} ! Vous pouvez \
+    title = "Félicitations!"
+    content = "Vous avez été choisit pour enseigner à {} {}! Vous pouvez \
     vous rendre sur votre profil pour retrouver les coordonées de cet \
     étudiant".format(student.first_name, student.last_name)
     new_Notif = Notification(

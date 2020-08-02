@@ -72,12 +72,12 @@ def registerBase(request):
     form = request.POST
 
     if User.objects.filter(email=form["mailAddress"]).count() > 0:
-        messages.error(request, "Un compte avec la même adresse mail existe déjà !")
+        messages.error(request, "Un compte avec la même adresse mail existe déjà!")
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     username = form["lastName"] + "_" + form['firstName']
     if User.objects.filter(username=username).count() > 0:
-        messages.error(request, "Un compte à ce nom existe déjà !")
+        messages.error(request, "Un compte à ce nom existe déjà!")
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     email = form["mailAddress"]
@@ -109,20 +109,22 @@ def registerBase(request):
         utils.coachRegister(user, form)
 
     author = "L'équipe CAD"
-    title = "Bienvenue parmi nous !"
+    title = "Bienvenue parmi nous!"
     content = "Au nom de toute l'équipe de CAD, \
-        nous vous souhaitons la bienvenue ! \
+        nous vous souhaitons la bienvenue! \
         N'oubliez pas que vous pouvez nous contacter \
         si vous avez le moindre soucis via ce \
-        <a href='/contact/'>formulaire</a> !"
+        <a href='/contact/'>formulaire</a>!"
 
     utils.create_notif(user, title, content, author)
 
-    # if not DEBUG:
-    #     mail = Mail.objects.get(id=1)
-    #     send_mail(
-    #         mail.clean_header, mail.formatted_content(user),
-    #         EMAIL_HOST_USER, [email])
+    mail = Mail.objects.get(id=1)
+    if not DEBUG:
+        send_mail(
+            mail.clean_header, mail.formatted_content(user),
+            EMAIL_HOST_USER, [email])
+    else:
+        messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 
     user = authenticate(
         username=user.username, password=form["passwd"])
@@ -131,7 +133,7 @@ def registerBase(request):
 
     messages.add_message(
         request, messages.SUCCESS,
-        "Votre compte a bien été créé !")
+        "Votre compte a bien été créé!")
     return HttpResponseRedirect('/')
 
 
@@ -152,7 +154,7 @@ def confirmation(request, string=""):
     if user.profile.verifiedAccount:
         messages.add_message(
             request, messages.WARNING,
-            "Vous avez déjà confirmé votre compte !")
+            "Vous avez déjà confirmé votre compte!")
         return HttpResponseRedirect("/")
 
     # L'utilisateur a vérifié son adresse mail
@@ -164,15 +166,19 @@ def confirmation(request, string=""):
 
     if profile.account_type == "Etudiant":
         mail = Mail.objects.get(role='b')
-        send_mail(
-            mail.clean_header, mail.formatted_content(user), EMAIL_HOST_USER,
-            [user.email])
+        if not DEBUG:
+            send_mail(
+                mail.clean_header, mail.formatted_content(user), EMAIL_HOST_USER,
+                [user.email])
+        else:
+            mail = Mail.objects.get(id=1)
+
         return HttpResponseRedirect(reverse("paymentView"))
     else:
         messages.add_message(
             request, messages.SUCCESS,
-            "Votre compte à bien été confirmé ! Vous \
-            allez pouvoir commencer à donner cours !")
+            "Votre compte à bien été confirmé! Vous \
+            allez pouvoir commencer à donner cours!")
         return HttpResponseRedirect("/")
 
 
@@ -197,7 +203,7 @@ def pay_later(request):
     newNotif.author = "L'équipe CAD"
     newNotif.title = "Paiement en attente"
     newNotif.content = "N'oubliez pas de <a href='/connexion/payment\
-        /'>payer</a> vos cours ! Nous vous enverrons un rappel\
+        /'>payer</a> vos cours! Nous vous enverrons un rappel\
         dans 2 jours si nous n'avons rien reçu d'ici là"
     newNotif.save()
     user.profile.save()
@@ -206,7 +212,7 @@ def pay_later(request):
         request, messages.WARNING,
         "Votre paiement a été annulé, n'oubliez pas \
         de le compléter au plus vite, afin de pouvoir commencer a suivre des \
-        cours avec nos coaches !")
+        cours avec nos coaches!")
 
     return HttpResponseRedirect("/")
 
@@ -236,6 +242,6 @@ def thanks(request):
 
     messages.add_message(
         request, messages.SUCCESS,
-        "Merci d'avoir complété votre inscription ! \
-        Nous allons de ce pas chercher un coach pour vous !")
+        "Merci d'avoir complété votre inscription! \
+        Nous allons de ce pas chercher un coach pour vous!")
     return HttpResponseRedirect("/")

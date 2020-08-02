@@ -40,12 +40,12 @@ def connexion(request):
                 messages.add_message(
                     request, messages.ERROR,
                     "Vos identifiants ne correspondent à \
-                    aucun compte !")
+                    aucun compte!")
         except Exception as e:
             logging.warning("Error while connecting user : {}".format(e))
 
             messages.add_message(
                 request, messages.ERROR,
                 "Vos identifiants ne correspondent à \
-                aucun compte !")
+                aucun compte!")
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

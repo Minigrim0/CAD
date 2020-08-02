@@ -7,6 +7,8 @@ from django.shortcuts import render
 from default.forms import contactForm
 from default.models import Article, Message
 
+from cad.settings import DEBUG
+
 
 def home(request):
     """Home view
@@ -62,11 +64,14 @@ def contactView(request):
             msg.content = message
             msg.contact_mail = envoyeur
             msg.save()
-            msg.send_as_mail()
+            if not DEBUG:
+                msg.send_as_mail()
+            else:
+                messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 
             messages.add_message(
                 request, messages.SUCCESS,
-                "Votre message a bien été envoyé !")
+                "Votre message a bien été envoyé!")
 
             return HttpResponseRedirect("/")
 
