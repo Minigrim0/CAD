@@ -54,7 +54,7 @@
                 {% endfor %}
                 {% for mail in mails %}
                 <div class="collapse" data-parent="#accordionMail" id="Mail{{mail.instance.id}}">
-                    <form method="post" action="{% url 'modifyMail' %}">
+                    <form method="post">
                         {% csrf_token %}
                         {{ mail|crispy }}
                         <input type="hidden" name="mailid" value="{{mail.instance.id}}">

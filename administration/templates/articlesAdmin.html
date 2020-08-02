@@ -46,7 +46,7 @@
                 {% endfor %}
                 {% for article in articles %}
                 <div class="collapse" data-parent="#accordionArticles" id="Article{{article.instance.id}}">
-                    <form method="post" action="{% url 'modifyArticle' %}">
+                    <form method="post">
                         {% csrf_token %}
                         {{ article|crispy }}
                         <input type="hidden" name="articleID" value="{{article.instance.id}}">

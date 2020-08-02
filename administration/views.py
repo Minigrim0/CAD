@@ -25,17 +25,13 @@ def adminPage(request):
     nbr_other = nbr_accounts - nbr_students - nbr_coaches
     nbr_requests = len(studentRequest.objects.all().exclude(is_closed=True))
 
+    view_title = "adminisitration"
+
     return render(request, "admin.html", locals())
 
 
 @staff_member_required
 def mailAdminView(request):
-    mails = [MailForm(instance=mail) for mail in Mail.objects.all()]
-    return render(request, 'mailsAdmin.html', locals())
-
-
-@staff_member_required
-def mailAdminModify(request):
     if request.method == "POST":
         form = request.POST
         mail = Mail.objects.get(id=int(form['mailid']))
@@ -45,17 +41,14 @@ def mailAdminModify(request):
         mail.role = form['role']
         mail.save()
 
-    return HttpResponseRedirect(reverse("mails_admin"))
+    mails = [MailForm(instance=mail) for mail in Mail.objects.all()]
+    view_title = "mails"
+
+    return render(request, 'mailsAdmin.html', locals())
 
 
 @staff_member_required
 def articleAdminView(request):
-    articles = [ArticleForm(instance=article) for article in Article.objects.all()]
-    return render(request, "articlesAdmin.html", locals())
-
-
-@staff_member_required
-def articleAdminModify(request):
     if request.method == "POST":
         form = request.POST
         article = Article.objects.get(id=int(form['articleid']))
@@ -64,7 +57,10 @@ def articleAdminModify(request):
         article.content = form['content'].replace("\r", " ")
         article.save()
 
-    return HttpResponseRedirect(reverse("articles_admin"))
+    articles = [ArticleForm(instance=article) for article in Article.objects.all()]
+    view_title = "articles"
+
+    return render(request, "articlesAdmin.html", locals())
 
 
 @staff_member_required
@@ -81,12 +77,17 @@ def mailAdminCreate(request):
         return HttpResponseRedirect(reverse("mails_admin"))
     else:
         form = MailForm()
+
+        view_name = "créer un mail"
+
         return render(request, 'mailsAdminCreate.html', locals())
 
 
 @staff_member_required
 def courses(request):
     courses = FollowElement.objects.all().order_by("date")
+    view_name = "cours donnés"
+
     return render(request, "courses.html", locals())
 
 
@@ -119,6 +120,8 @@ def userAdminView(request, string=""):
         'a_firstUserUsername': firstUser,
         "i_langLevel": level_,
         "i_lang": lang_}
+
+    view_name = "utilisateurs"
 
     return render(request, 'userAdmin.html', vars_)
 
@@ -154,12 +157,12 @@ def modifyUser(request):
                 logging.warning("user {} deleted".format(usr))
                 usr.delete()
 
-            return HttpResponseRedirect("/administration/users/")
+            return HttpResponseRedirect(reverse("user_admin"))
 
         # If the admin wants to re-activate the user's account
         elif "reactivate" in form.keys():
             return HttpResponseRedirect(
-                "/administration/reactivate/" + form["username"])
+                reverse("reactivate_user", kwargs={'string': form["username"]}))
 
         # Else, the admin wants to modify the user
         usr = User.objects.get(username=form["username"])
