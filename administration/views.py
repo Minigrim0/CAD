@@ -1,5 +1,6 @@
 import logging
 
+from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -10,7 +11,7 @@ from django.urls import reverse
 
 from administration.forms import ArticleForm, MailForm
 from administration.utils import modifyCoach, modifyStudent
-from cad.settings import EMAIL_HOST_USER
+from cad.settings import EMAIL_HOST_USER, DEBUG
 from default.models import Article, Mail
 from inscription.utils import getUser
 from users.models import FollowElement, Profile, studentRequest
@@ -216,9 +217,12 @@ def sendUnsubscriptionMail(request):
 
     user = getUser(request.POST.get("user_key"))
     mail = Mail.objects.get(role='c')
-    send_mail(
-        mail.clean_header, mail.formatted_content(user), EMAIL_HOST_USER,
-        [user.email])
+    if not DEBUG:
+        send_mail(
+            mail.clean_header, mail.formatted_content(user), EMAIL_HOST_USER,
+            [user.email])
+    else:
+        messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 
     student_account = user.profile.studentaccount
     student_account.unsub_proposal = True

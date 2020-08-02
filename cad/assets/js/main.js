@@ -30,11 +30,11 @@ function checkPass() {
     }
 
     if (pass != passConf) {
-        document.getElementById("notGoodPass").innerHTML = "Les mots de passe ne sont pas identiques !";
+        document.getElementById("notGoodPass").innerHTML = "Les mots de passe ne sont pas identiques!";
     } else if (pass.length == 0) {
-        document.getElementById("notGoodPass").innerHTML = "ce champ est obligatoire !";
+        document.getElementById("notGoodPass").innerHTML = "Ce champ est obligatoire!";
     } else if (pass.length < 8) {
-        document.getElementById("notGoodPass").innerHTML = "Le mot de passe est trop court !";
+        document.getElementById("notGoodPass").innerHTML = "Le mot de passe est trop court!";
     } else {
         document.getElementById("notGoodPass").innerHTML = "";
         return true;
@@ -45,7 +45,7 @@ function checkPass() {
 function checkCoordinates() {
     //phoneno = /^\(?([0-9]{3,4})\)?[/. ]{,1}?([0-9]{2})?[/. ]{,1}?([0-9]{2})?[/. ]{,1}?([0-9]{2})$/;
     //phone = document.getElementById("phoneNumber").value.match(phoneno);
-    phone = true; //phone == null ? false : true;
+    phone = String(document.getElementById("phoneNumber").value).length <= 25 //phone == null ? false : true;
 
     birth_regex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{2,4})$/;
     birth = document.getElementById("birthDate").value.match(birth_regex);
@@ -64,10 +64,10 @@ function checkCoordinates() {
     document.getElementById("notGoodCourse").innerHTML = "";
     document.getElementById("notGoodBirth").innerHTML = "";
     if (!phone) document.getElementById("notGoodPhone").innerHTML = "Ce numero de telephone n'est pas correct";
-    if (!address) document.getElementById("notGoodAddress").innerHTML = "Ce champ est obligatoire !";
-    if (!mail) document.getElementById("mailError").innerHTML = "Cette adresse mail n'est pas correcte !";
-    if (!courses) document.getElementById("notGoodCourse").innerHTML = "Vous devez choisir au moins un cours !";
-    if (!birth) document.getElementById("notGoodBirth").innerHTML = "Cette date de naissance n'a pas le bon format !";
+    if (!address) document.getElementById("notGoodAddress").innerHTML = "Ce champ est obligatoire!";
+    if (!mail) document.getElementById("mailError").innerHTML = "Cette adresse mail n'est pas correcte!";
+    if (!courses) document.getElementById("notGoodCourse").innerHTML = "Vous devez choisir au moins un cours!";
+    if (!birth) document.getElementById("notGoodBirth").innerHTML = "Cette date de naissance n'a pas le bon format!";
 
     return phone
         && birth
@@ -86,10 +86,10 @@ function checkNames() {
     document.getElementById("notGoodLastName").innerHTML = "";
     document.getElementById("notGoodTutorFirstName").innerHTML = "";
     document.getElementById("notGoodTutorLastName").innerHTML = "";
-    if(!firstName) document.getElementById("notGoodFirstName").innerHTML = "Ce champ est obligatoire !";
-    if(!lastName) document.getElementById("notGoodLastName").innerHTML = "Ce champ est obligatoire !";
-    if(!lastName) document.getElementById("notGoodTutorFirstName").innerHTML = "Ce champ est obligatoire !";
-    if(!lastName) document.getElementById("notGoodTutorLastName").innerHTML = "Ce champ est obligatoire !";
+    if(!firstName) document.getElementById("notGoodFirstName").innerHTML = "Ce champ est obligatoire!";
+    if(!lastName) document.getElementById("notGoodLastName").innerHTML = "Ce champ est obligatoire!";
+    if(!lastName) document.getElementById("notGoodTutorFirstName").innerHTML = "Ce champ est obligatoire!";
+    if(!lastName) document.getElementById("notGoodTutorLastName").innerHTML = "Ce champ est obligatoire!";
 
     return lastName && firstName && tutorLastName && tutorFirstName;
 }
@@ -106,7 +106,7 @@ function validate() {
     document.getElementById("registerErrors").innerHTML = "";
     if (!checked) document.getElementById("registerErrors").innerHTML = "\
         Certains champs obligatoires n'ont pas été correctement remplis ou \
-        les mots de passe ne correspondent pas !";
+        les mots de passe ne correspondent pas!";
     else
         return true
     return false
@@ -127,11 +127,11 @@ function checkC_Pass() {
     }
 
     if (pass != passConf) {
-        document.getElementById("C_notGoodPass").innerHTML = "Les mots de passe ne sont pas identiques !";
+        document.getElementById("C_notGoodPass").innerHTML = "Les mots de passe ne sont pas identiques!";
     } else if (pass.length == 0) {
-        document.getElementById("C_notGoodPass").innerHTML = "ce champ est obligatoire !";
+        document.getElementById("C_notGoodPass").innerHTML = "Ce champ est obligatoire!";
     } else if (pass.length < 8) {
-        document.getElementById("C_notGoodPass").innerHTML = "Le mot de passe est trop court !";
+        document.getElementById("C_notGoodPass").innerHTML = "Le mot de passe est trop court!";
     } else {
         document.getElementById("C_notGoodPass").innerHTML = "";
         return true;
@@ -142,7 +142,7 @@ function checkC_Pass() {
 function checkC_Coordinates() {
     //phoneno = /^\(?([0-9]{3,4})\)?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})$/;
     //phone = document.getElementById("C_phoneNumber").value.match(phoneno);
-    phone = true;  // phone == null ? false : true;
+    phone = String(document.getElementById("C_phoneNumber").value).length <= 25 //phone == null ? false : true;
 
     birth_regex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{2,4})$/;
     birth = document.getElementById("C_birthDate").value.match(birth_regex);
@@ -158,7 +158,7 @@ function checkC_Coordinates() {
         || document.getElementById("C_french").checked;
     school = document.getElementById("C_School").value != "";
 
-    //document.getElementById("C_notGoodPhone").innerHTML = "";
+    document.getElementById("C_notGoodPhone").innerHTML = "";
     document.getElementById("C_notGoodAddress").innerHTML = "";
     document.getElementById("C_mailError").innerHTML = "";
     document.getElementById("C_notGoodIBAN").innerHTML = "";
@@ -166,14 +166,14 @@ function checkC_Coordinates() {
     document.getElementById("C_notGoodCourse").innerHTML = "";
     document.getElementById("C_notGoodSchool").innerHTML = "";
     document.getElementById("C_notGoodBirth").innerHTML = "";
-    //if (!phone) document.getElementById("C_notGoodPhone").innerHTML = "Ce numero de telephone n'est pas correct";
-    if (!address) document.getElementById("C_notGoodAddress").innerHTML = "Ce champ est obligatoire !";
-    if (!mail) document.getElementById("C_mailError").innerHTML = "Cette addresse mail n'est pas correcte !";
-    if (!iban) document.getElementById("C_notGoodIBAN").innerHTML = "Ce champ est obligatoire !";
-    if (!natreg_number) document.getElementById("C_notGoodNRN").innerHTML = "Ce champ est obligatoire !";
-    if (!courses) document.getElementById("C_notGoodCourse").innerHTML = "Vous devez choisir au moins un cours !";
-    if (!school) document.getElementById("C_notGoodSchool").innerHTML = "Ce champ est obligatoire !";
-    if (!birth) document.getElementById("C_notGoodBirth").innerHTML = "Cette date de naissance n'a pas le bon format !";
+    if (!phone) document.getElementById("C_notGoodPhone").innerHTML = "Ce numero de telephone n'est pas correct";
+    if (!address) document.getElementById("C_notGoodAddress").innerHTML = "Ce champ est obligatoire!";
+    if (!mail) document.getElementById("C_mailError").innerHTML = "Cette addresse mail n'est pas correcte!";
+    if (!iban) document.getElementById("C_notGoodIBAN").innerHTML = "Ce champ est obligatoire!";
+    if (!natreg_number) document.getElementById("C_notGoodNRN").innerHTML = "Ce champ est obligatoire!";
+    if (!courses) document.getElementById("C_notGoodCourse").innerHTML = "Vous devez choisir au moins un cours!";
+    if (!school) document.getElementById("C_notGoodSchool").innerHTML = "Ce champ est obligatoire!";
+    if (!birth) document.getElementById("C_notGoodBirth").innerHTML = "Cette date de naissance n'a pas le bon format!";
 
     return phone
         && address
@@ -189,10 +189,10 @@ function checkC_Names() {
     var firstName = document.getElementById("C_firstName").value != "";
 
     if (!lastName) {
-        document.getElementById("C_notGoodLastName").innerHTML = "Ce champ est obligatoire !";
+        document.getElementById("C_notGoodLastName").innerHTML = "Ce champ est obligatoire!";
     }
     if (!firstName) {
-        document.getElementById("C_notGoodFirstName").innerHTML = "Ce champ est obligatoire !";
+        document.getElementById("C_notGoodFirstName").innerHTML = "Ce champ est obligatoire!";
     }
 
     return lastName && firstName;
@@ -207,6 +207,6 @@ function C_validate() {
     }
     document.getElementById("C_registerErrors").innerHTML = "Certains champs \
         obligatoires n'ont pas été remplis correctement ou les mots de passe ne \
-        correspondent pas !";
+        correspondent pas!";
     return false;
 }

@@ -75,4 +75,4 @@ class Message(models.Model):
         logging.debug("Sending mail : {}\n{}\n\n{}".format(self.subject, self.content, self.contact_mail))
         send_mail(
             self.subject, "{}\n\n{}".format(self.content, self.contact_mail),
-            EMAIL_HOST_USER, ['cadcoursadomicile@gmail.com'])
+            EMAIL_HOST_USER, ['cadcours@gmail.com'])
