@@ -98,6 +98,7 @@ def transactions(request):
 
     return render(request, "transactions.html", locals())
 
+
 @staff_member_required
 def userAdminView(request):
     usertype = request.GET.get("type", "")
@@ -149,7 +150,7 @@ def reactivate(request, username=""):
 def modifyUser(request):
     # Check if the way the user accessed this url is correct
     if request.method != "POST":
-        if request.META.get('HTTP_REFERER') != None :
+        if request.META.get('HTTP_REFERER') is not None:
             return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
         else:
             return HttpResponseRedirect(reverse("user_admin"))
