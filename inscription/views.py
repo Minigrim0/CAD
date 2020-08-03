@@ -140,10 +140,11 @@ def registerBase(request):
 
 
 @login_required(login_url='/connexion/')
-def confirmation(request, string=""):
-    user = utils.getUser(string)
+def confirmation(request):
+    token = request.GET.get("key", "")
+    user = utils.getUser(token)
     # token manquant ou non valide
-    if string == "" or user is None:
+    if token == "" or user is None:
         return HttpResponseRedirect(reverse("Error_view"))
 
     # Si la personne qui confirme le compte
