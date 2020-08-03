@@ -27,7 +27,8 @@ def registerStudentView(request):
         render: the rendered student registration page
         HttpResponseRedirect: A redirection to the registration view, with all the informations needed
     """
-    return render(request, "inscriptionStudent.html")
+    view_title = "Inscritpion - Etudiant"
+    return render(request, "inscriptionStudent.html", locals())
 
 
 def registerCoachView(request):
@@ -53,6 +54,7 @@ def registerCoachView(request):
         'Dutch': 'Néerlandais',
         'English': 'Anglais'}
 
+    view_title = "Inscription - Coach"
     return render(request, "inscriptionCoach.html", locals())
 
 
@@ -134,7 +136,7 @@ def registerBase(request):
     messages.add_message(
         request, messages.SUCCESS,
         "Votre compte a bien été créé!")
-    return HttpResponseRedirect('/')
+    return HttpResponseRedirect(reverse("home"))
 
 
 @login_required(login_url='/connexion/')
@@ -155,7 +157,7 @@ def confirmation(request, string=""):
         messages.add_message(
             request, messages.WARNING,
             "Vous avez déjà confirmé votre compte!")
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect(reverse("home"))
 
     # L'utilisateur a vérifié son adresse mail
     # => Compte vérifié mais pas confirmé
@@ -179,11 +181,12 @@ def confirmation(request, string=""):
             request, messages.SUCCESS,
             "Votre compte à bien été confirmé! Vous \
             allez pouvoir commencer à donner cours!")
-        return HttpResponseRedirect("/")
+        return HttpResponseRedirect(reverse("home"))
 
 
 def paymentView(request):
     user = request.user
+    view_title = "Paiement"
     return render(request, "payment.html", locals())
 
 
@@ -214,7 +217,7 @@ def pay_later(request):
         de le compléter au plus vite, afin de pouvoir commencer a suivre des \
         cours avec nos coaches!")
 
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse("home"))
 
 
 def thanks(request):
@@ -244,4 +247,4 @@ def thanks(request):
         request, messages.SUCCESS,
         "Merci d'avoir complété votre inscription! \
         Nous allons de ce pas chercher un coach pour vous!")
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse("home"))

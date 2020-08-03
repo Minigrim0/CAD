@@ -18,6 +18,7 @@ def connexion(request):
         render : A render of the page in case the login was successfull
     """
     if request.method != "POST":
+        view_title = "Connexion"
         return render(request, 'connexion.html', locals())
     else:
         form = request.POST

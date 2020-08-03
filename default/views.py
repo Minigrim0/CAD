@@ -33,6 +33,7 @@ def home(request):
         'a_coaches': coaches[0],
         'a_about': about[0],
         'a_contact': contact[0],
+        'view_title': 'Accueil'
     }
 
     if type(request) is not django.core.handlers.wsgi.WSGIRequest and request.user.is_authenticated:
@@ -78,4 +79,5 @@ def contactView(request):
     else:
         form = contactForm()
 
+    view_title = "Contact"
     return render(request, 'contact.html', locals())
