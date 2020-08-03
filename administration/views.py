@@ -14,7 +14,7 @@ from administration.utils import modifyCoach, modifyStudent
 from cad.settings import EMAIL_HOST_USER, DEBUG
 from default.models import Article, Mail
 from inscription.utils import getUser
-from users.models import FollowElement, Profile, studentRequest
+from users.models import FollowElement, Profile, studentRequest, Transaction
 
 
 @staff_member_required
@@ -92,12 +92,20 @@ def courses(request):
 
 
 @staff_member_required
-def userAdminView(request, string=""):
-    if string == "":
+def transactions(request):
+    transactions = Transaction.objects.all().order_by("date")
+    view_name = "transactions effectuées"
+
+    return render(request, "transactions.html", locals())
+
+@staff_member_required
+def userAdminView(request):
+    usertype = request.GET.get("type", "")
+    if usertype == "":
         users = User.objects.all()
-    elif string == "students":
+    elif usertype == "students":
         users = User.objects.filter(profile__account_type="Etudiant")
-    elif string == "coaches":
+    elif usertype == "coaches":
         users = User.objects.filter(profile__account_type="Coach")
     else:
         users = User.objects.all().exclude(profile__account_type="Coach")
@@ -127,11 +135,11 @@ def userAdminView(request, string=""):
 
 
 @staff_member_required
-def reactivate(request, string=""):
-    if string == "":
+def reactivate(request, username=""):
+    if username == "":
         return HttpResponseRedirect(reverse("Error_view"))
 
-    usr = User.objects.get(username=string)
+    usr = User.objects.get(username=username)
     usr.is_active = True
     usr.save()
     return HttpResponseRedirect(reverse("home_admin"))
@@ -141,8 +149,10 @@ def reactivate(request, string=""):
 def modifyUser(request):
     # Check if the way the user accessed this url is correct
     if request.method != "POST":
-        return HttpResponseRedirect(reverse("user_admin"))
-
+        if request.META.get('HTTP_REFERER') != None :
+            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        else:
+            return HttpResponseRedirect(reverse("user_admin"))
     try:
         form = request.POST
         # If the admin wants to 'delete' the user
@@ -205,11 +215,11 @@ def modifyUser(request):
             modifyCoach(profile, form)
 
         # Redirect to administration
-        return HttpResponseRedirect(reverse("user_admin"))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     except Exception as e:  # In case an error occurs
         logging.critical("Error while modifying user : {}".format(e))
-        return HttpResponseRedirect(reverse("user_admin"))
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @staff_member_required

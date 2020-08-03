@@ -40,21 +40,21 @@
                     </a>
                 </li>
                 <li class="nav-item justify-content-between align-items-center">
-                            <a href="{% url "user_admin" %}students/" class="nav-link">
+                    <a {% if nbr_students > 0 %} href="{% url "user_admin" %}?type=student" {% endif %} class="nav-link">
                         <i class="fas fa-circle"></i>
                         Etudiants
                         <span class="badge badge-primary badge-pill">{{ nbr_students }}</span>
                     </a>
                 </li>
                 <li class="nav-item justify-content-between align-items-center">
-                            <a {% if nbr_coaches > 0 %} href="{% url "user_admin" %}coaches/" {% endif %} class="nav-link">
+                    <a {% if nbr_coaches > 0 %} href="{% url "user_admin" %}?type=coaches" {% endif %} class="nav-link">
                         <i class="fas fa-circle"></i>
                         Coaches
                         <span class="badge badge-primary badge-pill">{{ nbr_coaches }}</span>
                     </a>
                 </li>
                 <li class="nav-item justify-content-between align-items-center">
-                            <a {% if nbr_other > 0 %}href="{% url "user_admin" %}other/"{% endif %} class="nav-link">
+                    <a {% if nbr_other > 0 %} href="{% url "user_admin" %}?type=other" {% endif %} class="nav-link">
                         <i class="fas fa-circle"></i>
                         Autre
                         <span class="badge badge-primary badge-pill">{{ nbr_other }}</span>
