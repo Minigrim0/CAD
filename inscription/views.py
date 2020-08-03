@@ -145,11 +145,8 @@ def confirmation(request):
     user = utils.getUser(token)
     # token manquant ou non valide
     if token == "" or user is None:
-        return HttpResponseRedirect(reverse("Error_view"))
-
-    # Si la personne qui confirme le compte
-    # n'est pas l'utilisateur concerné
-    if user.username != request.user.username:
+        print("First")
+        print("user ", user)
         return HttpResponseRedirect(reverse("Error_view"))
 
     # Si le compte est déjà confirmé,
