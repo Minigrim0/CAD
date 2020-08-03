@@ -57,7 +57,7 @@ class Mail(models.Model):
         content = content.replace(
             "<CONFIRMLINK>",
             "{}/{}?key={}".format(
-                domain, reverse("confirm"), user.profile.secret_key)
+                domain, reverse("confirmation"), user.profile.secret_key)
         )
         return content
 
