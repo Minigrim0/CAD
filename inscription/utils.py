@@ -100,7 +100,7 @@ def coachRegister(user, form):
 
 
 def getUser(token):
-    for user in User.objects.all():
-        if user.profile.secret_key == token:
-            return user
+    profile = Profile.objects.filter(secret_key=token)
+    if profile.count() == 1:
+        return profile.first().user
     return None
