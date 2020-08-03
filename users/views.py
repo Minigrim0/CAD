@@ -161,7 +161,7 @@ def requestView(request, id=0):
                 student_requests_closed = studentRequest.objects.all().exclude(
                     is_closed=False)
 
-            view_title = "Requêtes"
+                view_title = "Requêtes"
                 return render(request, "requestsAdmin.html", locals())
             else:
                 return HttpResponseRedirect(reverse("Error_view"))
