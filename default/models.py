@@ -55,9 +55,10 @@ class Mail(models.Model):
         content = content.replace("<SCHOOLLEVEL>", str(user.profile.birthDate))
         content = content.replace("<SECRETKEY>", str(user.profile.secret_key))
         content = content.replace(
-            "<CONFIRMLINK>", "{}/{}?key={}".format(
+            "<CONFIRMLINK>",
+            "{}/{}?key={}".format(
                 domain, reverse("confirm"), user.profile.secret_key)
-            )
+        )
         return content
 
     @property
