@@ -19,7 +19,7 @@ def ErrorView(request):
         request, messages.ERROR,
         "Une erreur est survenue lors du chargement \
     de la page")
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse("home"))
 
 
 @login_required(login_url='/connexion/')
@@ -40,6 +40,7 @@ def userView(request):
         'Dutch': 'Néerlandais',
         'English': 'Anglais'}
 
+    view_title = "Mon compte"
     return render(request, 'user.html', locals())
 
 
@@ -48,6 +49,7 @@ def followView(request):
     a_user = request.user
     followelement_set = a_user.followelement_set.all()
 
+    view_title = "Mon suivi"
     return render(request, 'follow.html', locals())
 
 
@@ -56,6 +58,7 @@ def studentsView(request):
     a_user = request.user
     student_set = User.objects.filter(profile__studentaccount__coach=a_user)
 
+    view_title = "Mes étudiants"
     return render(request, 'students.html', locals())
 
 
@@ -123,17 +126,17 @@ def modify_balance(request):
     return JsonResponse({"new_balance": prof.balance})
 
 
-@login_required(redirect_field_name='/05/')
+@login_required(login_url='/connexion/')
 def disconnect(request):
     logout(request)
 
     messages.add_message(
         request, messages.WARNING,
         "Vous avez été déconnecté")
-    return HttpResponseRedirect("/")
+    return HttpResponseRedirect(reverse("home"))
 
 
-@login_required(redirect_field_name='/05/')
+@login_required(login_url='/connexion/')
 def requestView(request, id=0):
     if id != 0:
         allowed = request.user.profile.account_type == "Coach"
@@ -146,6 +149,7 @@ def requestView(request, id=0):
             coaches = [
                 coach.user.username for coach in student_request.coaches.all()]
 
+            view_title = "Requête"
             return render(request, "requests.html", locals())
         else:
             return HttpResponseRedirect(reverse("Error_view"))
@@ -157,6 +161,7 @@ def requestView(request, id=0):
                 student_requests_closed = studentRequest.objects.all().exclude(
                     is_closed=False)
 
+            view_title = "Requêtes"
                 return render(request, "requestsAdmin.html", locals())
             else:
                 return HttpResponseRedirect(reverse("Error_view"))
