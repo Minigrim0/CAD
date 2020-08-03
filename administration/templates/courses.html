@@ -16,64 +16,26 @@
             <div id="container">
 
                 <h2>Cours donnés</h2>
-                <div class="col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <ul class="list-group">
-                                <li class="list-group-item">Date</li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-2">
-                            <ul class="list-group">
-                                <li class="list-group-item">Étudiant</li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-6">
-                            <ul class="list-group">
-                                <li class="list-group-item">Commentaires</li>
-                            </ul>
-                        </div>
-                        <div class="col-sm-2">
-                            <ul class="list-group">
-                                <li class="list-group-item">Coach</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-sm-12">
-                    <div class="row">
-                        <div class="col-sm-2">
-                            <ul class="list-group">
-                                {% for elem in courses %}
-                                <li class="list-group-item">{{ elem.date|date:"d/m/Y - G:i" }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="col-sm-2">
-                            <ul class="list-group">
-                                {% for elem in courses %}
-                                <li class="list-group-item">{{ elem.student.first_name }} {{ elem.student.last_name }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="col-sm-6">
-                            <ul class="list-group">
-                                {% for elem in courses %}
-                                <li class="list-group-item">{{ elem.comments|safe }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="col-sm-2">
-                            <ul class="list-group">
-                                {% for elem in courses %}
-                                <li class="list-group-item">{{ elem.coach }}</li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Étudiant</th>
+                        <th scope="col">Commentaires</th>
+                        <th scope="col">Coach</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for course in courses %}
+                            <tr>
+                                <td>{{ course.date|date:"d/m/Y - G:i" }}</td>
+                                <td>{{ course.student.first_name }} {{ course.student.last_name }}</td>
+                                <td>{{ course.comments|safe }}</td>
+                                <td>{{ course.coach }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </section>
     </div>

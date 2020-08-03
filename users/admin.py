@@ -65,9 +65,9 @@ class FollowElementAdmin(admin.ModelAdmin):
 
 class TransactionAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'student', 'amount', 'admin')
+        'id', 'student', 'amount', 'admin', 'date')
     list_filter = (
-        "id", "student", "amount", "admin")
+        "id", "student", "amount", "admin", 'date')
 
 
 admin.site.register(Profile, ProfileAdmin)
