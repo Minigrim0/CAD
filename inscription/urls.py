@@ -3,7 +3,7 @@ from django.conf.urls import url
 import inscription.views
 
 urlpatterns = [
-    url('confirm/<slug:string>/',
+    url('confirm/',
         inscription.views.confirmation, name="confirmation"),
     url('payment/',
         inscription.views.paymentView, name="paymentView"),
