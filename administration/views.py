@@ -233,7 +233,7 @@ def sendUnsubscriptionMail(request):
     mail = Mail.objects.get(role='c')
     if not DEBUG:
         send_mail(
-            mail.clean_header, mail.formatted_content(user), EMAIL_HOST_USER,
+            mail.clean_header, mail.formatted_content(user, domain=request.META['HTTP_HOST']), EMAIL_HOST_USER,
             [user.email])
     else:
         messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")

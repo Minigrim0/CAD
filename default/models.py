@@ -4,6 +4,7 @@ import logging
 
 from django.core.mail import send_mail
 from django.db import models
+from django.shortcuts import reverse
 
 from cad.settings import EMAIL_HOST_USER
 
@@ -45,7 +46,7 @@ class Mail(models.Model):
     role = models.CharField(
         max_length=1, choices=choices, verbose_name="Role du mail")
 
-    def formatted_content(self, user):
+    def formatted_content(self, user, domain="127.0.0.1:8000"):
         content = str(self.content)
         content = content.replace("<LASTNAME>", str(user.last_name))
         content = content.replace("<FIRSTNAME>", str(user.first_name))
@@ -54,8 +55,9 @@ class Mail(models.Model):
         content = content.replace("<SCHOOLLEVEL>", str(user.profile.birthDate))
         content = content.replace("<SECRETKEY>", str(user.profile.secret_key))
         content = content.replace(
-            "<CONFIRMLINK>",
-            "127.0.0.1:8000/inscription/confirm/" + user.profile.secret_key)
+            "<CONFIRMLINK>", "{}/{}?key={}".format(
+                domain, reverse("confirm"), user.profile.secret_key)
+            )
         return content
 
     @property
