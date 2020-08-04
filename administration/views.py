@@ -78,7 +78,7 @@ def mailAdminCreate(request):
     else:
         form = MailForm()
 
-        view_name = "créer un mail"
+        view_title = "créer un mail"
 
         return render(request, 'mailsAdminCreate.html', locals())
 
@@ -86,7 +86,7 @@ def mailAdminCreate(request):
 @staff_member_required
 def courses(request):
     courses = FollowElement.objects.all().order_by("date")
-    view_name = "cours donnés"
+    view_title = "cours donnés"
 
     return render(request, "courses.html", locals())
 
@@ -94,7 +94,7 @@ def courses(request):
 @staff_member_required
 def transactions(request):
     transactions = Transaction.objects.all().order_by("date")
-    view_name = "transactions effectuées"
+    view_title = "transactions effectuées"
 
     return render(request, "transactions.html", locals())
 
@@ -131,7 +131,7 @@ def userAdminView(request):
         'a_firstUserUsername': firstUser,
         "i_langLevel": level,
         "i_lang": lang,
-        "view_name": "utilisateurs"
+        "view_title": "utilisateurs"
     }
 
     return render(request, 'userAdmin.html', vars_)
