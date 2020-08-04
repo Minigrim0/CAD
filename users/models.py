@@ -90,9 +90,6 @@ class StudentAccount(models.Model):
         verbose_name="Horaire")
     unsub_proposal = models.BooleanField(
         default=False, verbose_name="Proposition de désinscription envoyée")
-    # Amount left for the student to pay courses
-    balance = models.IntegerField(
-        null=True, blank=True, verbose_name="Solde", default=0)
     # User has payed the two first hours of course
     coach = models.ForeignKey(
         User, null=True, related_name="Coach", on_delete=models.CASCADE)
@@ -102,6 +99,12 @@ class StudentAccount(models.Model):
         default='0000', max_length=4, blank=True)
     ville = models.CharField(
         max_length=50, default="None", blank=True)
+
+    @property
+    def balance(self):
+        transactions = Transaction.objects.filter(student=self)
+        balance = sum(transaction.amount for transaction in transactions)
+        return balance
 
     def __str__(self):
         return "{} {}'s student".format(
@@ -210,3 +213,4 @@ class Transaction(models.Model):
     amount = models.IntegerField(blank=False, default=0)
     date = models.DateTimeField(auto_now_add=True, null=True)
     admin = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    comment = models.CharField(max_length=300, blank=True)
