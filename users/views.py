@@ -53,7 +53,7 @@ def followView(request):
     return render(request, 'follow.html', locals())
 
 
-@login_required(redirect_field_name='/05/')
+@login_required(login_url='/connexion/')
 def studentsView(request):
     a_user = request.user
     student_set = User.objects.filter(profile__studentaccount__coach=a_user)
@@ -113,16 +113,12 @@ def modify_balance(request):
     student = User.objects.get(username=request.POST["user"])
     to_add = request.POST["amout_add"]
 
-    prof = student.profile.studentaccount
-    prof.balance += int(to_add)
-    prof.save()
-
-    tran = Transaction(student=prof)
+    tran = Transaction(student=student.profile.studentaccount)
     tran.amount = to_add
     tran.admin = admin
     tran.save()
 
-    return JsonResponse({"new_balance": prof.balance})
+    return JsonResponse({"new_balance": student.profile.studentaccount.balance})
 
 
 @login_required(login_url='/connexion/')
