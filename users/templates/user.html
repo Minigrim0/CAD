@@ -42,7 +42,7 @@
             {% endif %}
 
             <h2 class="mb-2">
-                Mon profil :
+                Mon profil:
             </h2>
             <div class="subheading mb-1">
                 {{ user.first_name }} {{ user.last_name }}, <span style="color: red;">{{ user.profile.account_type }}</span>
@@ -56,35 +56,35 @@
                             <div class="form-row">
                                 <!-- First Name -->
                                 <div class="form-group row col-md-12">
-                                    <label for="firstName" class="col-sm-3 col-form-label">Prénom :</label>
+                                    <label for="firstName" class="col-sm-3 col-form-label">Prénom:</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" name="firstName" id="firstName" value="{{ user.first_name}}" disabled>
                                     </div>
                                 </div>
                                 <!-- Last Name -->
                                 <div class="form-group row col-md-12">
-                                    <label for="lastName" class="col-sm-3 col-form-label">Nom :</label>
+                                    <label for="lastName" class="col-sm-3 col-form-label">Nom:</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" name="lastName" id="lastName" Value="{{ user.last_name }}" disabled>
                                     </div>
                                 </div>
                                 <!-- Email -->
                                 <div class="form-group row col-md-12">
-                                    <label for="mail" class="col-sm-3 col-form-label">Email :</label>
+                                    <label for="mail" class="col-sm-3 col-form-label">Email:</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" name="mail" id="mail" Value="{{ user.email }}" disabled>
                                     </div>
                                 </div>
                                 <!-- Phone -->
                                 <div class="form-group row col-md-12">
-                                    <label for="phone" class="col-sm-3 col-form-label">Téléphone :</label>
+                                    <label for="phone" class="col-sm-3 col-form-label">Téléphone:</label>
                                     <div class="col-sm-9">
                                         <input type="tel" class="form-control" name="phone_number" id="phone" Value="{{ user.profile.phone_number }}" disabled>
                                     </div>
                                 </div>
                                 <!-- Address -->
                                 <div class="form-group row col-md-12">
-                                    <label for="Address" class="col-sm-3 col-form-label">Adresse :</label>
+                                    <label for="Address" class="col-sm-3 col-form-label">Adresse:</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" name="address" id="Address" Value="{{ user.profile.address }}" disabled>
                                     </div>
@@ -98,14 +98,14 @@
                                 </div>
                                 <!-- Account Type -->
                                 <div class="form-group row col-md-12">
-                                    <label for="account_type" class="col-sm-3 col-form-label">Type de compte :</label>
+                                    <label for="account_type" class="col-sm-3 col-form-label">Type de compte:</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control type_account" name="account_type" id="account_type" value="{{ user.profile.account_type }}" disabled>
                                     </div>
                                 </div>
                                 <!-- Verified account -->
                                 <div class="form-group row col-md-12">
-                                    <label class="col-sm-3 col-form-label">Email vérifié :</label>
+                                    <label class="col-sm-3 col-form-label">Email vérifié:</label>
                                     <div class="col-sm-9">
                                         {% if user.profile.verifiedAccount %}
                                             <input disabled class="form-check-input" type="checkbox" checked>
@@ -118,7 +118,7 @@
                                 {% if user.profile.account_type == "Etudiant" %}
                                 <!-- Confirmed account -->
                                 <div class="form-group row col-md-12">
-                                    <label class="col-sm-3 col-form-label">A payé les 2 premières heures de cours :</label>
+                                    <label class="col-sm-3 col-form-label">A payé les 2 premières heures de cours:</label>
                                     <div class="col-sm-9">
                                         {% if user.profile.studentaccount.confirmedAccount %}
                                             <input disabled class="form-check-input" type="checkbox" checked>
@@ -129,21 +129,21 @@
                                 </div>
                                 <!-- Tutor Last Name -->
                                 <div class="form-group row col-md-12">
-                                    <label for="tutorName" class="col-sm-3 col-form-label">Nom du tuteur :</label>
+                                    <label for="tutorName" class="col-sm-3 col-form-label">Nom du tuteur:</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" name="tutorName" id="tutorName" value="{{ user.profile.studentaccount.tutor_name }}" disabled>
                                     </div>
                                 </div>
                                 <!-- Tutor First Name -->
                                 <div class="form-group row col-md-12">
-                                    <label for="tutorFirstName" class="col-sm-3 col-form-label">Prénom du tuteur :</label>
+                                    <label for="tutorFirstName" class="col-sm-3 col-form-label">Prénom du tuteur:</label>
                                     <div class="col-sm-9">
                                         <input type="text" class="form-control" name="tutorFirstName" id="tutorFirstName" value="{{ user.profile.studentaccount.tutor_firstName }}" disabled>
                                     </div>
                                 </div>
                                 <!-- Asked courses -->
                                 <div class="form-group row col-md-12">
-                                    <label class="col-sm-3 col-form-label">Cours demandés :</label>
+                                    <label class="col-sm-3 col-form-label">Cours demandés:</label>
                                     <div class="col-sm-9">
                                         <div class="form-check">
                                             {% if user.profile.Maths_course %}
@@ -204,7 +204,7 @@
                                 </div>
                                 <!-- Needs visit -->
                                 <div class="from-group col-md-12">
-                                    <label for="radioVisit">Désire une visite pédagogique : </label>
+                                    <label for="radioVisit">Désire une visite pédagogique: </label>
                                     <label class="radio-inline">
                                         <input disabled type="radio" name="Visit" value="NeedsVisit" {% if user.profile.studentaccount.NeedsVisit %} checked {% endif %}>Oui
                                     </label>
@@ -214,7 +214,7 @@
                                 </div>
                                 <!-- Comments -->
                                 <div class="form-group row col-md-12">
-                                    <label for="comments" class="col-sm-3 col-form-label">Commentaires :</label>
+                                    <label for="comments" class="col-sm-3 col-form-label">Commentaires:</label>
                                     <div class="col-sm-9">
                                         <input disabled type="textarea" class="form-control" name="comments" id="comments" placeholder="Pas de Commentaires" value="{{ user.profile.studentaccount.comments }}">
                                     </div>
@@ -228,7 +228,7 @@
                                 {% elif user.profile.account_type == "Coach" %}
                                 <!-- Gifted courses -->
                                 <div class="form-group row col-md-12">
-                                    <label class="col-sm-3 col-form-label">Souhaite donner cours de :</label>
+                                    <label class="col-sm-3 col-form-label">Souhaite donner cours de:</label>
                                     <div class="col-sm-9">
                                         <div class="form-check">
                                             {% if user.profile.Maths_course %}
@@ -289,7 +289,7 @@
                                 </div>
                                 <!-- Gives courses in -->
                                 <div class="form-group row col-md-12">
-                                    <label for="school_level" class="col-sm-3 col-form-label">Souhaite donner cours en :</label>
+                                    <label for="school_level" class="col-sm-3 col-form-label">Souhaite donner cours en:</label>
                                     <div class="col-sm-9">
                                         {% if user.profile.coachaccount.school_level == "high" %}
                                         <input disabled type="text" class="form-control" name="school_level" id="school_level" value="Humanité">
@@ -300,21 +300,21 @@
                                 </div>
                                 <!-- Coach school -->
                                 <div class="form-group row col-md-12">
-                                    <label for="school" class="col-sm-3 col-form-label">Ecole du coach :</label>
+                                    <label for="school" class="col-sm-3 col-form-label">Ecole du coach:</label>
                                     <div class="col-sm-9">
                                         <input disabled type="text" class="form-control" name="school" id="school" value="{{ user.profile.coachaccount.school }}">
                                     </div>
                                 </div>
                                 <!-- Bank Account -->
                                 <div class="form-group row col-md-12">
-                                    <label for="IBAN" class="col-sm-3 col-form-label">Compte en banque :</label>
+                                    <label for="IBAN" class="col-sm-3 col-form-label">Compte en banque:</label>
                                     <div class="col-sm-9">
                                         <input disabled type="text" class="form-control" name="IBAN" id="IBAN" value="{{ user.profile.coachaccount.IBAN }}">
                                     </div>
                                 </div>
                                 <!-- National register number -->
                                 <div class="form-group row col-md-12">
-                                    <label for="natRegID" class="col-sm-3 col-form-label">Numéro de registre national :</label>
+                                    <label for="natRegID" class="col-sm-3 col-form-label">Numéro de registre national:</label>
                                     <div class="col-sm-9">
                                         <input disabled type="text" class="form-control" name="natRegID" id="natRegID" value="{{ user.profile.coachaccount.nationalRegisterID }}">
                                     </div>
@@ -322,7 +322,7 @@
                                 <!-- Lang levels -->
                                 <div class="form-group">
                                     <div class="container text-center">
-                                        <label for="gridLang">Niveaux de langues :</label>
+                                        <label for="gridLang">Niveaux de langues:</label>
                                         <div class="row" id="gridLang">
                                             <label class="col">/</label>
                                             {% for idlev, level in i_langLevel.items %}

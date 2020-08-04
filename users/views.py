@@ -64,7 +64,6 @@ def studentsView(request):
 
 @login_required
 def send_notif(request):
-    # Sends a notification to a user
     if request.method == "POST":
 
         user = User.objects.get(username=request.POST['user'])
