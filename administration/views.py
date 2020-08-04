@@ -104,7 +104,7 @@ def userAdminView(request):
     usertype = request.GET.get("type", "")
     if usertype == "":
         users = User.objects.all()
-    elif usertype == "students":
+    elif usertype == "student":
         users = User.objects.filter(profile__account_type="Etudiant")
     elif usertype == "coaches":
         users = User.objects.filter(profile__account_type="Coach")
@@ -114,21 +114,23 @@ def userAdminView(request):
 
     firstUser = users[0].username
 
-    level_ = {'5': 'Langue maternelle',
-              '4': 'Très bon',
-              '3': 'Bon',
-              '2': 'Notions de base',
-              '1': 'Aucun'}
+    level = {
+        '5': 'Langue maternelle',
+        '4': 'Très bon',
+        '3': 'Bon',
+        '2': 'Notions de base',
+        '1': 'Aucun'}
 
-    lang_ = {'French': 'Francais',
-             'Dutch': 'Néerlandais',
-             'English': 'Anglais'}
+    lang = {
+        'French': 'Francais',
+        'Dutch': 'Néerlandais',
+        'English': 'Anglais'}
 
     vars_ = {
         'a_users': users,
         'a_firstUserUsername': firstUser,
-        "i_langLevel": level_,
-        "i_lang": lang_,
+        "i_langLevel": level,
+        "i_lang": lang,
         "view_name": "utilisateurs"
     }
 
