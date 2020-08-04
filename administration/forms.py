@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from default.models import Article, Mail
 from users.models import Transaction
 
+
 class MailForm(ModelForm):
 
     class Meta:
