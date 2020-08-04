@@ -323,51 +323,38 @@
                                 <div class="form-group">
                                     <div class="container text-center">
                                         <label for="gridLang">Niveaux de langues:</label>
-                                        <div class="row" id="gridLang">
-                                            <label class="col">/</label>
-                                            {% for idlev, level in i_langLevel.items %}
-                                            <div class="col col-md-2">
-                                                <label>{{ level }}</label>
-                                            </div>
-                                            {% endfor %}
-                                            <div class="w-100"></div>
-                                            {% for idl, lang in i_lang.items %}
-                                            <div class="col col-md-2">
-                                                <label for="{{ idl }}">{{ lang }}</label>
-                                            </div>
-                                            {% for idlev, level in i_langLevel.items %}
-                                            <div class="col col-md-2">
-                                                <label class="radio-inline">
-                                                    {% if idl == "French" %}
-                                                        {% if idlev == user.profile.coachaccount.French_level  %}
-                                                        <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
-                                                        {% else %}
-                                                        <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
-                                                        {% endif %}
-                                                    {% endif %}
-
-                                                    {% if idl == "Dutch" %}
-                                                        {% if idlev == user.profile.coachaccount.Dutch_level %}
-                                                        <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
-                                                        {% else %}
-                                                        <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
-                                                        {% endif %}
-                                                    {% endif %}
-
-                                                    {% if idl == "English" %}
-                                                        {% if idlev == user.profile.coachaccount.English_level %}
-                                                        <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
-                                                        {% else %}
-                                                        <input disabled type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
-                                                        {% endif %}
-                                                    {% endif %}
-                                                </label>
-                                            </div>
-                                            {% endfor %}
-                                            <div class="w-100">
-                                            </div>
-                                            {% endfor %}
-                                        </div>
+                                        <table class="table" id="gridLang">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">/</th>
+                                                    {% for idlev, level in i_langLevel.items %}
+                                                        <th scope="col">{{ level }}</th>
+                                                    {% endfor %}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for idl, lang in i_lang.items %}
+                                                    <tr>
+                                                        <th for="{{ idl }}">{{ lang }}</label>
+                                                        {% for idlev, level in i_langLevel.items %}
+                                                            <th scope="row">
+                                                                <label class="radio-inline">
+                                                                    {% if idl == "French" and idlev == user.profile.coachaccount.French_level %}
+                                                                        <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
+                                                                    {% elif idl == "Dutch" and idlev == user.profile.coachaccount.Dutch_level %}
+                                                                        <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
+                                                                    {% elif idl == "English" and idlev == user.profile.coachaccount.English_level %}
+                                                                        <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
+                                                                    {% else %}
+                                                                        <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
+                                                                    {% endif %}
+                                                                </label>
+                                                            </th>
+                                                        {% endfor %}
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
                                 {% endif %}
