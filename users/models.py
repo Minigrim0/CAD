@@ -56,9 +56,9 @@ class Profile(models.Model):
         return msg
 
     def __repr__(self):
-        string = "Nom : {} ".format(self.user.first_name)
+        string = "Nom: {} ".format(self.user.first_name)
         string += "{}\n".format(self.user.last_name)
-        string += "Role : {}\n".format(self.account_type)
+        string += "Role: {}\n".format(self.account_type)
         if self.account_type == "Coach":
             string += "Donne cours en " + self.school_level + "\n"
         else:

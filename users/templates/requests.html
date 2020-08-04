@@ -32,7 +32,7 @@
 
         <h2>{{ user.first_name }} {{ user.last_name }}</h2>
 
-        <p>recherche des cours de :</p>
+        <p>recherche des cours de:</p>
         <ul>
             {% if user.profile.Maths_course %}
             <li>Maths</li>
@@ -51,10 +51,10 @@
             {% endif %}
         </ul>
 
-        <label class="col-sm-12 col-form-label">Tranches horaires de l'étudiant :</label>
+        <label class="col-sm-12 col-form-label">Tranches horaires de l'étudiant:</label>
         <textarea disabled class="col-md-12" rows="5">{{ student_request.student.profile.studentaccount.wanted_schedule }}</textarea>
 
-        <p>Location : {{student_request.student.profile.studentaccount.zip}} {{student_request.student.profile.studentaccount.ville}}</p>
+        <p>Location: {{student_request.student.profile.studentaccount.zip}} {{student_request.student.profile.studentaccount.ville}}</p>
 
         <script>
             const Url = "{% url "manage_request" %}";
