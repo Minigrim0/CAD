@@ -1,21 +1,3 @@
-function toggleRegisterStudent() {
-    document.getElementById("studentRegister").style.display = "block";;
-    document.getElementById("AsStudent").classList.add("active");
-    document.getElementById("coachRegister").style.display = "none";
-    document.getElementById("AsCoach").classList.remove("active");
-}
-
-function toggleRegisterCoach() {
-    document.getElementById("studentRegister").style.display = "none";
-    document.getElementById("AsStudent").classList.remove("active");
-    document.getElementById("coachRegister").style.display = "block";
-    document.getElementById("AsCoach").classList.add("active");
-
-    document.getElementById("French_3").checked = true;
-    document.getElementById("Dutch_3").checked = true;
-    document.getElementById("English_3").checked = true;
-}
-
 //Student checks
 
 function checkPass() {
@@ -43,16 +25,10 @@ function checkPass() {
 }
 
 function checkCoordinates() {
-    //phoneno = /^\(?([0-9]{3,4})\)?[/. ]{,1}?([0-9]{2})?[/. ]{,1}?([0-9]{2})?[/. ]{,1}?([0-9]{2})$/;
-    //phone = document.getElementById("phoneNumber").value.match(phoneno);
-    phone = String(document.getElementById("phoneNumber").value).length <= 25 //phone == null ? false : true;
+    phone = String(document.getElementById("phoneNumber").value).length <= 25;
+    birth = String(document.getElementById("birthDate").value).length <= 25;
 
-    birth_regex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{2,4})$/;
-    birth = document.getElementById("birthDate").value.match(birth_regex);
-    birth = birth == null ? false : true;
-    
     address = document.getElementById("Address").value != "";
-    mail = validateEmail(document.getElementById("mail").value);
     courses = document.getElementById("math").checked
         || document.getElementById("chemistry").checked
         || document.getElementById("physics").checked
@@ -72,7 +48,6 @@ function checkCoordinates() {
     return phone
         && birth
         && address
-        && mail
         && courses;
 }
 
@@ -92,11 +67,6 @@ function checkNames() {
     if(!lastName) document.getElementById("notGoodTutorLastName").innerHTML = "Ce champ est obligatoire!";
 
     return lastName && firstName && tutorLastName && tutorFirstName;
-}
-
-function validateEmail(email) {
-    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
 }
 
 function validate() {
@@ -140,16 +110,10 @@ function checkC_Pass() {
 }
 
 function checkC_Coordinates() {
-    //phoneno = /^\(?([0-9]{3,4})\)?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})?[/. ]?([0-9]{2})$/;
-    //phone = document.getElementById("C_phoneNumber").value.match(phoneno);
-    phone = String(document.getElementById("C_phoneNumber").value).length <= 25 //phone == null ? false : true;
-
-    birth_regex = /^([0-9]{2})\/([0-9]{2})\/([0-9]{2,4})$/;
-    birth = document.getElementById("C_birthDate").value.match(birth_regex);
-    birth = birth == null ? false : true;
+    phone = String(document.getElementById("C_phoneNumber").value).length <= 25;
+    birth = String(document.getElementById("C_birthDate").value).length <= 25;
 
     address = document.getElementById("C_Address").value != "";
-    mail = validateEmail(document.getElementById("C_mail").value);
     iban = document.getElementById("C_IBAN").value != "";
     natreg_number = document.getElementById("C_IBAN").value != "";
     courses = document.getElementById("C_math").checked
@@ -177,7 +141,6 @@ function checkC_Coordinates() {
 
     return phone
         && address
-        && mail
         && iban
         && natreg_number
         && courses
