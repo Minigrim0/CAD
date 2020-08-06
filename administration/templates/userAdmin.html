@@ -460,17 +460,17 @@
                                     <label for="gridLang">Niveaux de langues:</label>
                                     <div class="row" id="gridLang">
                                         <label class="col custom-control-inline">/</label>
-                                        {% for idlev, level in i_langLevel.items %}
+                                        {% for idlev, level in langLevel.items %}
                                         <div class="col">
                                             <label>{{ level }}</label>
                                         </div>
                                         {% endfor %}
                                         <div class="w-100"></div>
-                                        {% for idl, lang in i_lang.items %}
+                                        {% for idl, lang in lang.items %}
                                         <div class="col">
                                             <label for="{{ idl }}">{{ lang }}</label>
                                         </div>
-                                        {% for idlev, level in i_langLevel.items %}
+                                        {% for idlev, level in langLevel.items %}
                                             <div class="col">
                                                 <label class="radio-inline">
                                                     {% if idl == "French" %}

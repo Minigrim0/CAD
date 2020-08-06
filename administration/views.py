@@ -129,8 +129,8 @@ def userAdminView(request):
     vars_ = {
         'a_users': users,
         'a_firstUserUsername': firstUser,
-        "i_langLevel": level,
-        "i_lang": lang,
+        "langLevel": level,
+        "lang": lang,
         "view_title": "utilisateurs"
     }
 

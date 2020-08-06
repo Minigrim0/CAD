@@ -42,14 +42,14 @@ def registerCoachView(request):
         render: the rendered coach registration page
         HttpResponseRedirect: A redirection to the registration view, with all the informations needed
     """
-    i_langLevel = {
+    langLevel = {
         '5': 'Langue maternelle',
         '4': 'Très bon',
         '3': 'Bon',
         '2': 'Notions de base',
         '1': 'Aucun'}
 
-    i_lang = {
+    lang = {
         'French': 'Francais',
         'Dutch': 'Néerlandais',
         'English': 'Anglais'}
