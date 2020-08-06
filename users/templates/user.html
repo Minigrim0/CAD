@@ -327,16 +327,16 @@
                                             <thead>
                                                 <tr>
                                                     <th scope="col">/</th>
-                                                    {% for idlev, level in i_langLevel.items %}
+                                                    {% for idlev, level in langLevel.items %}
                                                         <th scope="col">{{ level }}</th>
                                                     {% endfor %}
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for idl, lang in i_lang.items %}
+                                                {% for idl, lang in lang.items %}
                                                     <tr>
                                                         <th for="{{ idl }}">{{ lang }}</label>
-                                                        {% for idlev, level in i_langLevel.items %}
+                                                        {% for idlev, level in langLevel.items %}
                                                             <th scope="row">
                                                                 <label class="radio-inline">
                                                                     {% if idl == "French" and idlev == user.profile.coachaccount.French_level %}

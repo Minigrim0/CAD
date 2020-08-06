@@ -28,14 +28,14 @@ def userView(request):
     notifications = user.notification_set.all()
     nb_notifs = user.notification_set.count()
 
-    i_langLevel = {
+    langLevel = {
         '5': 'Langue maternelle',
         '4': 'Très bon',
         '3': 'Bon',
         '2': 'Notions de base',
         '1': 'Aucun'}
 
-    i_lang = {
+    lang = {
         'French': 'Francais',
         'Dutch': 'Néerlandais',
         'English': 'Anglais'}
