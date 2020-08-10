@@ -9,6 +9,18 @@ class Profile(models.Model):
             => Extension du modèle User, est utilisé pour sauvegarder les infos
             autant des profils étudiants que des profils coach
     """
+    levels = [
+        ("a", "Primaire"),
+        ("b", "1ère humanité"),
+        ("c", "2ème humanité"),
+        ("d", "3ème humanité"),
+        ("e", "4ème humanité"),
+        ("f", "5ème humanité"),
+        ("g", "6ème humanité"),
+        ("h", "Primaire"),
+        ("i", "Humanité"),
+        ("j", "Les deux"),
+    ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(
@@ -39,7 +51,7 @@ class Profile(models.Model):
     # Represents school level for student
     # Represents either if coach give course to humanité or primaire
     school_level = models.CharField(
-        null=True, blank=True, default="None", max_length=50,
+        null=True, blank=True, choices=levels, max_length=1,
         verbose_name="Niveau scolaire")
 
     @property
@@ -112,6 +124,12 @@ class StudentAccount(models.Model):
 
 
 class CoachAccount(models.Model):
+    coach_states = [
+        ('a', '----'),
+        ('b', 'Engagé'),
+        ('c', 'Refusé'),
+    ]
+
     # Coach
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
@@ -125,16 +143,16 @@ class CoachAccount(models.Model):
     Dutch_level = models.CharField(
         null=True, blank=True, default="Inconnu", max_length=50)
     IBAN = models.CharField(
-        null=True, blank=True, verbose_name="numéro de compte IBAN",
+        null=False, verbose_name="numéro de compte IBAN",
         default="inconnu", max_length=50)
     nationalRegisterID = models.CharField(
-        null=True, blank=True, verbose_name="numéro de registre national",
+        null=False, verbose_name="numéro de registre national",
         default="Inconnu", max_length=50)
     nbStudents = models.IntegerField(
-        null=True, blank=True, verbose_name="nombre d'étudiants qu'à ce coach",
+        null=True, blank=True, verbose_name="nombre d'étudiants du coach",
         default=0)
     confirmedAccount = models.CharField(
-        default="-----", blank=True, verbose_name="Engagé", max_length=20)
+        default="a", blank=True, verbose_name="Etat", max_length=1)
 
 
 class studentRequest(models.Model):

@@ -1,5 +1,4 @@
 import logging
-import hashlib
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
@@ -14,6 +13,7 @@ from cad.settings import DEBUG, EMAIL_HOST_USER
 from default.models import Mail
 from inscription import utils
 from users.models import Notification, Profile, studentRequest
+from users.forms import StudentRegisterForm, CoachRegisterForm
 
 
 def registerStudentView(request):
@@ -27,8 +27,31 @@ def registerStudentView(request):
         render: the rendered student registration page
         HttpResponseRedirect: A redirection to the registration view, with all the informations needed
     """
+
+    if request.method == "POST":
+        form = StudentRegisterForm(request.POST)
+        if form.is_valid():  # Register the coach
+            user = utils.registerUser(form)
+            utils.registerProfile(user, form, "Etudiant")
+            utils.studentRegister(user, form)
+
+            user = authenticate(
+                username=user.username,
+                password=form.cleaned_data["password"])
+            if user:
+                login(request, user)
+
+            messages.add_message(
+                request, messages.SUCCESS,
+                "Votre compte a bien été créé!")
+            welcomeUser(request, user, host=request.META['HTTP_HOST'])
+            return HttpResponseRedirect(reverse("home"))
+    else:
+        form = StudentRegisterForm()
+
+
     view_title = "Inscritpion - Etudiant"
-    return render(request, "inscriptionStudent.html", locals())
+    return render(request, "inscription.html", locals())
 
 
 def registerCoachView(request):
@@ -42,73 +65,37 @@ def registerCoachView(request):
         render: the rendered coach registration page
         HttpResponseRedirect: A redirection to the registration view, with all the informations needed
     """
-    langLevel = {
-        '5': 'Langue maternelle',
-        '4': 'Très bon',
-        '3': 'Bon',
-        '2': 'Notions de base',
-        '1': 'Aucun'}
+    if request.method == "POST":
+        form = CoachRegisterForm(request.POST)
+        if form.is_valid():  # Register the coach
+            user = utils.registerUser(form)
+            utils.registerProfile(user, form, "Coach")
+            utils.coachRegister(user, form)
 
-    lang = {
-        'French': 'Francais',
-        'Dutch': 'Néerlandais',
-        'English': 'Anglais'}
+            user = authenticate(
+                username=user.username,
+                password=form.cleaned_data["password"])
+            if user:
+                login(request, user)
+
+            messages.add_message(
+                request, messages.SUCCESS,
+                "Votre compte a bien été créé!")
+            welcomeUser(request, user, host=request.META['HTTP_HOST'])
+            return HttpResponseRedirect(reverse("home"))
+    else:
+        form = CoachRegisterForm()
 
     view_title = "Inscription - Coach"
-    return render(request, "inscriptionCoach.html", locals())
+    return render(request, "inscription.html", locals())
 
 
-def registerBase(request):
-    """registerBase
-        Reigsters a profile corresponding to the given informations
-        (those informations are shared between the coach and the student accounts)
+def welcomeUser(request, user, host):
+    """Welcomes the new user, by sending him an email and a notification
 
     Args:
-        request (request): The request object needed by all views
-
-    Returns:
-        HttpResponseRedirect: A redirection to the home page, wether the user could be registered or not,
-        with a message telling him if everything went well
+        user (django.contrib.auth.models.User): The new user
     """
-
-    form = request.POST
-
-    if User.objects.filter(email=form["mailAddress"]).count() > 0:
-        messages.error(request, "Un compte avec la même adresse mail existe déjà!")
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-    username = form["lastName"] + "_" + form['firstName']
-    if User.objects.filter(username=username).count() > 0:
-        messages.error(request, "Un compte à ce nom existe déjà!")
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-    email = form["mailAddress"]
-    password = form["passwd"]
-    user = User.objects.create(username=username, email=email)
-    user.set_password(password)
-    user.first_name = form["firstName"]
-    user.last_name = form["lastName"]
-    user.save()
-
-    profile = Profile(user=user)
-    profile.phone_number = form["PhoneNumber"]
-    profile.account_type = form['accountType']
-    profile.address = form["Address"]
-    profile.birthDate = form["birthday"]
-
-    for course in ["Maths", "Chimie", "Physique", "Francais"]:
-        if f"Course_{course}" in form.keys():
-            exec("profile." + course + "_course = True")
-
-    profile.secret_key = hashlib.sha256(username.encode("utf-8")).hexdigest()
-    profile.verifiedAccount = False
-    profile.school_level = form["schoolLevel"]
-
-    profile.save()
-    if profile.account_type == "Etudiant":
-        utils.studentRegister(user, form)
-    elif profile.account_type == "Coach":
-        utils.coachRegister(user, form)
 
     author = "L'équipe CAD"
     title = "Bienvenue parmi nous!"
@@ -123,20 +110,10 @@ def registerBase(request):
     mail = Mail.objects.get(id=1)
     if not DEBUG:
         send_mail(
-            mail.clean_header, mail.formatted_content(user, domain=request.META['HTTP_HOST']),
-            EMAIL_HOST_USER, [email])
+            mail.clean_header, mail.formatted_content(user, domain=host),
+            EMAIL_HOST_USER, [user.email])
     else:
         messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
-
-    user = authenticate(
-        username=user.username, password=form["passwd"])
-    if user:
-        login(request, user)
-
-    messages.add_message(
-        request, messages.SUCCESS,
-        "Votre compte a bien été créé!")
-    return HttpResponseRedirect(reverse("home"))
 
 
 @login_required(login_url='/connexion/')

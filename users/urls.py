@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'requests/(?P<id>\d+)/', users.views.requestView),
     url(r'requests/', users.views.requestView),
     url(r'error/', users.views.ErrorView, name="Error_view"),
+    url(r'test/', users.views.testView),
 ]
