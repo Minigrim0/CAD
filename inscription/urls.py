@@ -15,8 +15,6 @@ urlpatterns = [
         inscription.views.registerStudentView, name="registerStudent"),
     url('coach/',
         inscription.views.registerCoachView, name="registerCoach"),
-    url('register/',
-        inscription.views.registerBase, name="registerBase"),
     url('',
         inscription.views.registerStudentView, name="registerStudentDefault"),
 ]

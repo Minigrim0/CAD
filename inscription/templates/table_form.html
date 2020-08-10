@@ -1,0 +1,19 @@
+<tr>
+    <th scope="row">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+    </th>
+    {% for idl, level in field.field.choices %}
+        <th scope="row">
+            <label class="radio-inline">
+                <input type="radio" name="{{ field.name }}" id="{{ field.id_for_label }}" value="{{ idl }}">
+            </label>
+        </th>
+    {% endfor %}
+    {% if form.errors %}
+        {% for key, value in form.errors.items %}
+            {% if key == field.name %}
+                <th style="color: red;">{{ value|safe }}</th>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</tr>

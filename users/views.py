@@ -13,6 +13,8 @@ from django.urls import reverse
 from users.models import Notification, Transaction, studentRequest
 from users.utils import thanksCoaches
 
+from .forms import StudentRegisterForm, CoachRegisterForm
+
 
 def ErrorView(request):
     messages.add_message(
@@ -20,6 +22,11 @@ def ErrorView(request):
         "Une erreur est survenue lors du chargement \
     de la page")
     return HttpResponseRedirect(reverse("home"))
+
+
+def testView(request):
+    form = StudentRegisterForm()
+    return render(request, 'test.html',locals())
 
 
 @login_required(login_url='/connexion/')
