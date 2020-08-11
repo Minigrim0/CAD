@@ -154,12 +154,10 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
                 Submit('save', 'Modifier l\'utilisateur'),
                 HTML('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SendNotif">\
                         Envoyer une notification\
-                    </button>'),
-                HTML(
-                    '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#UpdateBalance">\
-                        <i class="fas fa-plus">\
-                            Augmenter la balance\
-                        </i>\
+                    </button>\
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#UpdateBalance">\
+                        <i class="fas fa-plus"></i>\
+                        Augmenter la balance\
                     </button>')
             )
         )
