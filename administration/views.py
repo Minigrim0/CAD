@@ -166,6 +166,7 @@ def user_list(request):
 
     return render(request, "user_list.html", locals())
 
+
 @staff_member_required
 def test(request):
     username = request.GET.get("user", "")
