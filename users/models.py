@@ -20,6 +20,7 @@ class Profile(models.Model):
         ("h", "Primaire"),
         ("i", "Humanité"),
         ("j", "Les deux"),
+        ("k", "autre")
     ]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
