@@ -60,7 +60,6 @@ def modifyCoach(coach_account, cleaned_data):
     coach_account.French_level = cleaned_data["french_level"]
     coach_account.English_level = cleaned_data["english_level"]
     coach_account.Dutch_level = cleaned_data["dutch_level"]
-    print("confirmed", cleaned_data["confirmedAccount"])
     coach_account.confirmedAccount = cleaned_data["confirmedAccount"]
 
     coach_account.save()
@@ -105,6 +104,7 @@ def populate_data(usertype, user):
             'dutch_level': user.profile.coachaccount.Dutch_level,
             'english_level': user.profile.coachaccount.English_level,
             'nationalRegisterID': user.profile.coachaccount.nationalRegisterID,
+            'confirmedAccount': user.profile.coachaccount.confirmedAccount,
             'courses': list(filter((None).__ne__, [
                 'a' if user.profile.Maths_course else None,
                 'b' if user.profile.Physique_course else None,

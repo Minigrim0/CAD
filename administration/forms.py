@@ -176,7 +176,8 @@ class CoachAdminForm(CoachRegisterForm, OtherAdminForm):
         required=False,
         label="nombre d'étudiants du coach")
     confirmedAccount = forms.ChoiceField(
-        choices=coach_states, required=False)
+        choices=coach_states, required=False,
+        label="Etat du coach")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
