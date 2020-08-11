@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block navlinks %}
+    <ul class="navbar-nav text-left">
+        <li class="nav-item">
+            <a href="{% url 'home_admin' %}" class="nav-link">
+                retour
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url "home" %}" class="nav-link">
+                accueil
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="modal fade" id="SendNotif" tabindex="-1" role="dialog" aria-labelledby="SendNotifLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="SendNotifLabel">Envoyer une notification à {{ form_user.first_name }} {{ form_user.last_name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-sm-12">
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="notifTitle" placeholder="Titre"></input>
+                        </div>
+                        <div class="form-group row">
+                            <textarea class="form-control" placeholder="contenu de la notification" id="notifContent" rows="3"></textarea>
+                        </div>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="notifSender" placeholder="Signer en tant que" value="L'équipe CAD"></input>
+                        </div>
+                        <div class="alert alert-danger" role="alert" id="errorSend" style="display:none;">
+                            Une erreur est survenue, essayez plus tard!
+                        </div>
+                        <div class="alert alert-success" role="alert" id="successSend" style="display:none;">
+                            Votre notification a bien été envoyée
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="sendNotif('{{ form_user.username }}')">Envoyer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="UpdateBalance" tabindex="-1" role="dialog" aria-labelledby="SendNotifLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="SendNotifLabel">Mettre à jour le solde de {{ form_user.first_name }} {{ form_user.last_name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-row">
+                            <div class="form-group row col-sm-12">
+                                <div class="col-sm-3">
+                                    <label for="new_balance">Valeur à ajouter</label>
+                                </div>
+                                <div class="col-sm-9">
+                                    <input type="number" class="form-control" id="new_balance" value=0></input>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="alert alert-danger" role="alert" id="errorBalance" style="display:none;">
+                        Une erreur est survenue, essayez plus tard!
+                    </div>
+                    <div class="alert alert-success" role="alert" id="successBalance" style="display:none;">
+                        Votre mise à jour a bien été effectuée
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="updBalance('{{ form_user.username }}')">Envoyer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid p-0">
+        <section class="p-3 p-lg-5 d-flex align-items-center">
+            <div id="container">
+                <h2 class="mb-2">
+                    Modifier un utilisateur:
+                </h2>
+                {% csrf_token %}
+                {% crispy form %}
+            </div>
+        </section>
+
+        <hr class="m-0">
+    </div>
+{% endblock %}
+
+{% block extra_imports %}
+{{ form.media }}
+
+<script>
+    function copyKey() {
+        /* Get the text field */
+        var copyText = document.getElementById("id_secret_key");
+
+        /* Select the text field */
+        copyText.select();
+        copyText.setSelectionRange(0, 99999); /*For mobile devices*/
+
+        /* Copy the text inside the text field */
+        document.execCommand("copy");
+
+        /* Alert the copied text */
+
+        var copyText = document.getElementById("buttoncopy");
+        copyText.innerHTML = "copié!";
+    }
+
+    const Url = "{% url "send_notif" %}";
+    const UrlBalance = "{% url "modify_balance" %}";
+
+    //Makes a request to create a notification for a specified user
+    function sendNotif(_user) {
+        _title = document.getElementById("notifTitle").value;
+        _content = document.getElementById("notifContent").value;
+        _sender = document.getElementById("notifSender").value;
+
+        $.post(
+            Url, {
+                title: _title,
+                content: _content,
+                sender: _sender,
+                user: _user,
+
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            function(data, status) {
+                if (status == "success") {
+                    document.getElementById("successSend").style.display = "block";
+                    var IntervalID = setInterval(
+                        function() {
+                            document.getElementById("successSend").style.display = "none";
+                            $('#SendNotif').modal('toggle')
+                            clearInterval(IntervalID);
+                        }, 1500);
+                } else {
+                    document.getElementById("errorSend").style.display = "block";
+                    var IntervalID = setInterval(
+                        function() {
+                            document.getElementById("errorSend").style.display = "none";
+                            $('#SendNotif').modal('toggle')
+                            clearInterval(IntervalID);
+                        }, 1500);
+                }
+            }
+        );
+    }
+
+    function updBalance(_user) {
+
+        _amout_add = document.getElementById("new_balance").value;
+
+        $.post(
+            UrlBalance, {
+                amout_add: +_amout_add,
+                approver: '{{ request.user.username }}',
+                user: _user,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            function(data, status) {
+                if (status == "success") {
+                    document.getElementById("successBalance").style.display = "block";
+                    document.getElementById("id_balance").value = data["new_balance"];
+                    var IntervalID = setInterval(
+                        function() {
+                            document.getElementById("successBalance").style.display = "none";
+                            $('#UpdateBalance').modal('toggle')
+                            clearInterval(IntervalID);
+                        }, 1500);
+                } else {
+                    document.getElementById("errorBalance").style.display = "block";
+                    var IntervalID = setInterval(
+                        function() {
+                            document.getElementById("errorBalance").style.display = "none";
+                            $('#UpdateBalance').modal('toggle')
+                            clearInterval(IntervalID);
+                        }, 1500);
+                }
+            }
+        );
+    }
+</script>
+
+{% if user.profile.account_type == "Etudiant" %}
+    {% if not user.profile.studentaccount.confirmedAccount and not user.profile.studentaccount.unsub_proposal %}
+        <div class="form-group row col-md-12">
+            <label for="account_type" class="col-sm-2 col-form-label">Proposition de désinscription:</label>
+            <div class="col-sm-10">
+                <button type="button" onclick="unsub('{{user.profile.secret_key}}')" class="btn btn-success" name="modify">Envoyer</button>
+                <script>
+                    function unsub(user_key){
+                        var Url = "{% url 'unsubscribe' %}";
+
+                        $.post(
+                            Url, {
+                                user_key: user_key,
+                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            function(data, status) {
+                                console.log(status);
+                                if (status == "success") {
+                                    console.log("request successfully sent");
+                                } else {
+                                    console.log("request failed...");
+                                }
+                            }
+                        );
+                    }
+                </script>
+            </div>
+        </div>
+    {% elif user.profile.studentaccount.unsub_proposal and not user.profile.studentaccount.confirmedAccount %}
+        <div class="form-group row col-md-12">
+            <label for="account_type" class="col-sm-2 col-form-label">Proposition de désinscription:</label>
+            <div class="col-sm-10">
+                <p style="color:red;">Proposition de désinscription envoyée</p>
+            </div>
+        </div>
+    {% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block navlinks %}
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a href="/administration" class="nav-link">retour</a>
+        </li>
+    </ul>
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+
+        <section class="p-3 p-lg-5 align-items-center">
+            <div id="container">
+
+                <h2>Utilisateurs</h2>
+                <div>
+                    <img src="/static/admin/img/search.svg" alt="True">
+                    <input id="searchbar" type="text" size="40" name="q">
+                    <a class="btn btn-primary" id="searchbutton" style="color: white" href="" onclick="doSearch()">rechercher</a>
+                    </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Type de compte</th>
+                        <th scope="col">état</th>
+                        <th scope="col">mail vérifié</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td><a href="{% url 'user_admin_view' %}?type={{ user.profile.account_type }}&user={{ user.username }}">{{ user.id }}</a></td>
+                                <td>{{ user.first_name }}</td>
+                                <td>{{ user.last_name }}</td>
+                                <td>{{ user.profile.account_type }}</td>
+                                <td>{% if user.is_active %}<i class="fas fa-user-check"></i>{% else %}<i class="fas fa-user-slash"></i>{% endif %}</td>
+                                <td>{% if user.profile.verifiedAccount %}<img src="/static/admin/img/icon-yes.svg" alt="True"/>{% else %}<img src="/static/admin/img/icon-no.svg" alt="True"/>{% endif %}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block extra_imports %}
+<script>
+
+    $(document).ready(
+        function(){
+            var url = new URL(document.location);
+            value = document.getElementById('searchbar').value = url.searchParams.get('q');
+
+            var input = document.getElementById("searchbar");
+            input.addEventListener("keyup", function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    document.getElementById("searchbutton").click();
+                }
+            })
+        }
+    )
+
+    function doSearch(){
+        var url = new URL(document.location);
+        value = document.getElementById('searchbar').value;
+        url.searchParams.set('q', value);
+        value = document.getElementById('searchbutton').href = url;
+    }
+</script>
+{% endblock %}

@@ -8,9 +8,10 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseRedirect)
 from django.shortcuts import render
 from django.urls import reverse
+from django.shortcuts import get_object_or_404
 
-from administration.forms import ArticleForm, MailForm
-from administration.utils import modifyCoach, modifyStudent
+from administration.forms import ArticleForm, MailForm, StudentAdminForm, CoachAdminForm, OtherAdminForm
+from administration.utils import modifyCoach, modifyStudent, populate_data
 from cad.settings import EMAIL_HOST_USER, DEBUG
 from default.models import Article, Mail
 from inscription.utils import getUser
@@ -20,8 +21,8 @@ from users.models import FollowElement, Profile, studentRequest, Transaction
 @staff_member_required
 def adminPage(request):
     nbr_accounts = len(User.objects.all())
-    nbr_students = len(User.objects.filter(profile__account_type="Etudiant"))
-    nbr_coaches = len(User.objects.filter(profile__account_type="Coach"))
+    nbr_students = len(User.objects.filter(profile__account_type="student"))
+    nbr_coaches = len(User.objects.filter(profile__account_type="coach"))
     nbr_other = nbr_accounts - nbr_students - nbr_coaches
     nbr_requests = len(studentRequest.objects.all().exclude(is_closed=True))
 
@@ -106,7 +107,7 @@ def userAdminView(request):
         users = User.objects.all()
     elif usertype == "student":
         users = User.objects.filter(profile__account_type="Etudiant")
-    elif usertype == "coaches":
+    elif usertype == "coach":
         users = User.objects.filter(profile__account_type="Coach")
     else:
         users = User.objects.all().exclude(profile__account_type="Coach")
@@ -146,6 +147,44 @@ def reactivate(request, username=""):
     usr.is_active = True
     usr.save()
     return HttpResponseRedirect(reverse("home_admin"))
+
+
+@staff_member_required
+def user_list(request):
+    usertype = request.GET.get("type", "")
+    query = request.GET.get("q", "")
+
+    if usertype in ['student', 'coach']:
+        users = User.objects.filter(profile__account_type=usertype).order_by('id')
+    elif usertype == "other":
+        users = User.objects.all().exclude(profile__account_type="student").exclude(profile__account_type="coach").order_by('id')
+    else:
+        users = User.objects.all().order_by('id')
+
+    if query != "":
+        users = users.filter(username__icontains=query)
+
+    return render(request, "user_list.html", locals())
+
+@staff_member_required
+def test(request):
+    username = request.GET.get("user", "")
+    usertype = request.GET.get("type", "")
+    if username == "":
+        return HttpResponseRedirect("{}?type={}".format(reverse("userlist"), usertype))
+    else:
+        user = get_object_or_404(User, username=username)
+
+    data = populate_data(usertype.lower(), user)
+
+    if usertype.lower() == "student":
+        form = StudentAdminForm(data)
+    elif usertype.lower() == "coach":
+        form = CoachAdminForm(data)
+    else:
+        form = OtherAdminForm(data)
+
+    return render(request, "userAdmintest.html", {"form": form, "form_user": user})
 
 
 @staff_member_required
