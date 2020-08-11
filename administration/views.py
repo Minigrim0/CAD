@@ -26,7 +26,7 @@ def adminPage(request):
     nbr_other = nbr_accounts - nbr_students - nbr_coaches
     nbr_requests = len(studentRequest.objects.all().exclude(is_closed=True))
 
-    view_title = "adminisitration"
+    view_title = "Administration"
 
     return render(request, "admin.html", locals())
 
@@ -43,7 +43,7 @@ def mailAdminView(request):
         mail.save()
 
     mails = [MailForm(instance=mail) for mail in Mail.objects.all()]
-    view_title = "mails"
+    view_title = "Mails"
 
     return render(request, 'mailsAdmin.html', locals())
 
@@ -59,7 +59,7 @@ def articleAdminView(request):
         article.save()
 
     articles = [ArticleForm(instance=article) for article in Article.objects.all()]
-    view_title = "articles"
+    view_title = "Articles"
 
     return render(request, "articlesAdmin.html", locals())
 
@@ -79,7 +79,7 @@ def mailAdminCreate(request):
     else:
         form = MailForm()
 
-        view_title = "créer un mail"
+        view_title = "Créer un mail"
 
         return render(request, 'mailsAdminCreate.html', locals())
 
@@ -87,7 +87,7 @@ def mailAdminCreate(request):
 @staff_member_required
 def courses(request):
     courses = FollowElement.objects.all().order_by("date")
-    view_title = "cours donnés"
+    view_title = "Cours donnés"
 
     return render(request, "courses.html", locals())
 
@@ -95,7 +95,7 @@ def courses(request):
 @staff_member_required
 def transactions(request):
     transactions = Transaction.objects.all().order_by("date")
-    view_title = "transactions effectuées"
+    view_title = "Transactions effectuées"
 
     return render(request, "transactions.html", locals())
 
