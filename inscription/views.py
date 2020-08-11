@@ -21,9 +21,7 @@ def registerStudentView(request):
     if request.method == "POST":
         form = StudentRegisterForm(request.POST)
         if form.is_valid():
-            user = utils.registerUser(form)
-            utils.registerProfile(user, form, "student")
-            utils.studentRegister(user, form)
+            user = utils.registerUser(form, "student")
 
             user = authenticate(
                 username=user.username,
@@ -48,9 +46,7 @@ def registerCoachView(request):
     if request.method == "POST":
         form = CoachRegisterForm(request.POST)
         if form.is_valid():
-            user = utils.registerUser(form)
-            utils.registerProfile(user, form, "coach")
-            utils.coachRegister(user, form)
+            user = utils.registerUser(form, "coach")
 
             user = authenticate(
                 username=user.username,
@@ -103,8 +99,6 @@ def confirmation(request):
     user = utils.getUser(token)
     # token manquant ou non valide
     if token == "" or user is None:
-        print("First")
-        print("user ", user)
         return HttpResponseRedirect(reverse("Error_view"))
 
     # Si le compte est déjà confirmé,
@@ -122,7 +116,7 @@ def confirmation(request):
     profile.verifiedAccount = True
     profile.save()
 
-    if profile.account_type == "Etudiant":
+    if profile.account_type == "student":
         mail = Mail.objects.get(role='b')
         if not DEBUG:
             send_mail(
@@ -135,8 +129,8 @@ def confirmation(request):
     else:
         messages.add_message(
             request, messages.SUCCESS,
-            "Votre compte à bien été confirmé! Vous \
-            allez pouvoir commencer à donner cours!")
+            "Votre compte à bien été confirmé! Nous allons\
+            bientôt entrer en contact avec vous!")
         return HttpResponseRedirect(reverse("home"))
 
 
@@ -180,7 +174,7 @@ def thanks(request):
     user = request.user
 
     # token manquant ou non valide
-    if user is None or user.profile.account_type != "Etudiant":
+    if user is None or user.profile.account_type != "student":
         return HttpResponseRedirect(reverse("Error_view"))
 
     # Si le compte est déjà confirmé, l'utilisateur ne doit plus accéder
