@@ -37,7 +37,7 @@ def registerStudentView(request):
     else:
         form = StudentRegisterForm()
 
-    view_title = "Inscritpion - Etudiant"
+    view_title = "Inscription - Etudiant"
     return render(request, "inscription.html", locals())
 
 
