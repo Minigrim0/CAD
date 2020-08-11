@@ -10,9 +10,10 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
 from django.shortcuts import render
 from django.urls import reverse
 
-from users.models import Notification, Transaction, studentRequest
-from users.utils import thanksCoaches
-
+from administration.utils import populate_data
+from .models import Notification, Transaction, studentRequest
+from .utils import thanksCoaches
+from .forms import StudentReadOnlyForm, BaseReadOnly, CoachReadOnlyForm
 
 def ErrorView(request):
     messages.add_message(
@@ -26,19 +27,16 @@ def ErrorView(request):
 def userView(request):
     user = request.user
     notifications = user.notification_set.all()
-    nb_notifs = user.notification_set.count()
 
-    langLevel = {
-        '5': 'Langue maternelle',
-        '4': 'Très bon',
-        '3': 'Bon',
-        '2': 'Notions de base',
-        '1': 'Aucun'}
-
-    lang = {
-        'French': 'Francais',
-        'Dutch': 'Néerlandais',
-        'English': 'Anglais'}
+    if user.profile.account_type == "student":
+        data = populate_data("student", user)
+        form = StudentReadOnlyForm(data)
+    elif user.profile.account_type == "coach":
+        data = populate_data("coach", user)
+        form = CoachReadOnlyForm(data)
+    else:
+        data = populate_data("other", user)
+        form = BaseReadOnly(data)
 
     view_title = "Mon compte"
     return render(request, 'user.html', locals())

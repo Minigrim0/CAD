@@ -131,8 +131,8 @@ class StudentRegisterForm(BaseRegistration):
             Fieldset(
                 'Devenez élève!',
                 Row(
-                    Column('first_name', css_class='form-group col-md-6 mb-0', placeholder="Prénom"),
-                    Column('last_name', css_class='form-group col-md-6 mb-0', placeholder="Nom de famille"),
+                    Column('first_name', css_class='form-group col-md-6 mb-0'),
+                    Column('last_name', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
                 ),
                 Row(
@@ -222,8 +222,8 @@ class CoachRegisterForm(BaseRegistration):
             Fieldset(
                 'Devenez coach!',
                 Row(
-                    Column('first_name', css_class='form-group col-md-6 mb-0', placeholder="Prénom"),
-                    Column('last_name', css_class='form-group col-md-6 mb-0', placeholder="Nom de famille"),
+                    Column('first_name', css_class='form-group col-md-6 mb-0'),
+                    Column('last_name', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
                 ),
                 Row(
@@ -257,3 +257,141 @@ class CoachRegisterForm(BaseRegistration):
             ),
             Submit('submit', 'S\'inscrire')
         )
+
+
+class StudentReadOnlyForm(StudentRegisterForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-form-student-readonly'
+        for key, _ in self.fields.items():
+            self.fields[key].widget.attrs.update({'readonly': 'readonly'})
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'Mon compte',
+                Row(
+                    Column('first_name', css_class='form-group col-md-6 mb-0'),
+                    Column('last_name', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('birthdate', css_class='form-group col-md-6 mb-0'),
+                    Column('school_level', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                'address',
+                Row(
+                    Column('tutor_firstName', css_class='form-group col-md-6 mb-0'),
+                    Column('tutor_name', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('ville', css_class='form-group col-md-4 mb-0'),
+                    Column('zip', css_class='form-group col-md-4 mb-0'),
+                    Column('address', css_class='form-group col-md-4 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('email', css_class='form-group col-md-6 mb-0'),
+                    Column('phone_number', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                bforms.InlineCheckboxes('courses'),
+                Row(
+                    Column('comments', css_class='form-group col-md-12 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('wanted_schedule', css_class='form-group col-md-12 mb-0'),
+                    css_class='form-row'
+                ),
+                'NeedsVisit',
+            ),
+        )
+
+    def clean(self):
+        super().clean(admin=True)
+
+
+class CoachReadOnlyForm(CoachRegisterForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-form-coach-readonly'
+        self.helper.form_method = 'post'
+        for key, _ in self.fields.items():
+            self.fields[key].widget.attrs.update({'readonly': 'readonly'})
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'Mon compte',
+                Row(
+                    Column('first_name', css_class='form-group col-md-6 mb-0 read-only'),
+                    Column('last_name', css_class='form-group col-md-6 mb-0 read-only'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('birthdate', css_class='form-group col-md-6 mb-0'),
+                    Column('nationalRegisterID', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                'address',
+                Row(
+                    Column('email', css_class='form-group col-md-6 mb-0'),
+                    Column('phone_number', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                bforms.InlineCheckboxes('courses'),
+                Row(
+                    Column('school', css_class='form-group col-md-6 mb-0'),
+                    Column('school_level', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                TableForm(
+                    'french_level',
+                    'dutch_level',
+                    'english_level',
+                ),
+                'IBAN'
+            )
+        )
+
+    def clean(self):
+        super().clean(admin=True)
+
+
+class BaseReadOnly(BaseRegistration):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-form-coach-readonly'
+        self.helper.form_method = 'post'
+        for key, _ in self.fields.items():
+            self.fields[key].widget.attrs.update({'readonly': 'readonly'})
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'Mon compte',
+                Row(
+                    Column('first_name', css_class='form-group col-md-6 mb-0 read-only'),
+                    Column('last_name', css_class='form-group col-md-6 mb-0 read-only'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('birthdate', css_class='form-group col-md-6 mb-0'),
+                    Column('email', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('address', css_class='form-group col-md-6 mb-0'),
+                    Column('phone_number', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+            ),
+        )
+
+    def clean(self, admin=False):
+        super().clean(admin=True)

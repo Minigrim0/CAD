@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block navlinks %}
     <ul class="navbar-nav">
@@ -23,7 +24,7 @@
 <div class="container-fluid p-0">
 
     <section class="p-3 p-lg-5 d-flex align-items-center">
-        <div id="container">
+        <div class="container-fluid">
             {% if not user.profile.verifiedAccount %}
             <div class="alert alert-warning text-center" role="alert">
                 N'oubliez pas de vérifier vos mails pour confirmer votre compte!
@@ -38,317 +39,10 @@
             </div>
 
             <div class="container-fluid">
-                <div class="row">
+                <div class="row col-lg-12">
                     <!-- User's informations -->
                     <div class="col-md-8">
-                        <form>
-                            <div class="form-row">
-                                <!-- First Name -->
-                                <div class="form-group row col-md-12">
-                                    <label for="firstName" class="col-sm-3 col-form-label">Prénom:</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="firstName" id="firstName" value="{{ user.first_name}}" disabled>
-                                    </div>
-                                </div>
-                                <!-- Last Name -->
-                                <div class="form-group row col-md-12">
-                                    <label for="lastName" class="col-sm-3 col-form-label">Nom:</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="lastName" id="lastName" Value="{{ user.last_name }}" disabled>
-                                    </div>
-                                </div>
-                                <!-- Email -->
-                                <div class="form-group row col-md-12">
-                                    <label for="mail" class="col-sm-3 col-form-label">Email:</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="mail" id="mail" Value="{{ user.email }}" disabled>
-                                    </div>
-                                </div>
-                                <!-- Phone -->
-                                <div class="form-group row col-md-12">
-                                    <label for="phone" class="col-sm-3 col-form-label">Téléphone:</label>
-                                    <div class="col-sm-9">
-                                        <input type="tel" class="form-control" name="phone_number" id="phone" Value="{{ user.profile.phone_number }}" disabled>
-                                    </div>
-                                </div>
-                                <!-- Address -->
-                                <div class="form-group row col-md-12">
-                                    <label for="Address" class="col-sm-3 col-form-label">Adresse:</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="address" id="Address" Value="{{ user.profile.address }}" disabled>
-                                    </div>
-                                </div>
-                                <!-- Birthday -->
-                                <div class="form-group row col-md-12">
-                                    <label for="birthDate" class="col-sm-3 col-form-label">Date de naissance:</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="birthDate" id="birthDate" value="{{ user.profile.birthDate }}" disabled>
-                                    </div>
-                                </div>
-                                <!-- Account Type -->
-                                <div class="form-group row col-md-12">
-                                    <label for="account_type" class="col-sm-3 col-form-label">Type de compte:</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control type_account" name="account_type" id="account_type" value="{{ user.profile.account_type }}" disabled>
-                                    </div>
-                                </div>
-                                <!-- Verified account -->
-                                <div class="form-group row col-md-12">
-                                    <label class="col-sm-3 col-form-label">Email vérifié:</label>
-                                    <div class="col-sm-9">
-                                        {% if user.profile.verifiedAccount %}
-                                            <input disabled class="form-check-input" type="checkbox" checked>
-                                        {% else %}
-                                            <input disabled class="form-check-input" type="checkbox">
-                                        {% endif %}
-                                    </div>
-                                </div>
-
-                                {% if user.profile.account_type == "Etudiant" %}
-                                <!-- Confirmed account -->
-                                <div class="form-group row col-md-12">
-                                    <label class="col-sm-3 col-form-label">A payé les 2 premières heures de cours:</label>
-                                    <div class="col-sm-9">
-                                        {% if user.profile.studentaccount.confirmedAccount %}
-                                            <input disabled class="form-check-input" type="checkbox" checked>
-                                        {% else %}
-                                            <input disabled class="form-check-input" type="checkbox">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <!-- Tutor Last Name -->
-                                <div class="form-group row col-md-12">
-                                    <label for="tutorName" class="col-sm-3 col-form-label">Nom du tuteur:</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="tutorName" id="tutorName" value="{{ user.profile.studentaccount.tutor_name }}" disabled>
-                                    </div>
-                                </div>
-                                <!-- Tutor First Name -->
-                                <div class="form-group row col-md-12">
-                                    <label for="tutorFirstName" class="col-sm-3 col-form-label">Prénom du tuteur:</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control" name="tutorFirstName" id="tutorFirstName" value="{{ user.profile.studentaccount.tutor_firstName }}" disabled>
-                                    </div>
-                                </div>
-                                <!-- Asked courses -->
-                                <div class="form-group row col-md-12">
-                                    <label class="col-sm-3 col-form-label">Cours demandés:</label>
-                                    <div class="col-sm-9">
-                                        <div class="form-check">
-                                            {% if user.profile.Maths_course %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course" checked>
-                                            <label class="form-check-label" for="Maths_Course">
-                                                Maths
-                                            </label>
-                                            {% else %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course">
-                                            <label class="form-check-label" for="Maths_Course">
-                                                Maths
-                                            </label>
-                                            {% endif %}
-                                        </div>
-
-                                        <div class="form-check">
-                                            {% if user.profile.Chimie_course %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course" checked>
-                                            <label class="form-check-label" for="Chimie_Course">
-                                                Chimie
-                                            </label>
-                                            {% else %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course">
-                                            <label class="form-check-label" for="Chimie_Course">
-                                                Chimie
-                                            </label>
-                                            {% endif %}
-                                        </div>
-
-                                        <div class="form-check">
-                                            {% if user.profile.Physique_course %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course" checked>
-                                            <label class="form-check-label" for="Physique_Course">
-                                                Physique
-                                            </label>
-                                            {% else %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course">
-                                            <label class="form-check-label" for="Physique_Course">
-                                                Physique
-                                            </label>
-                                            {% endif %}
-                                        </div>
-
-                                        <div class="form-check">
-                                            {% if user.profile.Francais_course %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course" checked>
-                                            <label class="form-check-label" for="Francais_Course">
-                                                Français
-                                            </label>
-                                            {% else %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course">
-                                            <label class="form-check-label" for="Francais_Course">
-                                                Français
-                                            </label>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Needs visit -->
-                                <div class="from-group col-md-12">
-                                    <label for="radioVisit">Désire une visite pédagogique: </label>
-                                    <label class="radio-inline">
-                                        <input disabled type="radio" name="Visit" value="NeedsVisit" {% if user.profile.studentaccount.NeedsVisit %} checked {% endif %}>Oui
-                                    </label>
-                                    <label class="radio-inline">
-                                        <input disabled type="radio" name="Visit" value="NoVisit" {% if user.profile.studentaccount.NeedsVisit %} # {% else %} checked {% endif %}>Non
-                                    </label>
-                                </div>
-                                <!-- Comments -->
-                                <div class="form-group row col-md-12">
-                                    <label for="comments" class="col-sm-3 col-form-label">Commentaires:</label>
-                                    <div class="col-sm-9">
-                                        <input disabled type="textarea" class="form-control" name="comments" id="comments" placeholder="Pas de Commentaires" value="{{ user.profile.studentaccount.comments }}">
-                                    </div>
-                                </div>
-                                <!-- disponibilities -->
-                                <div class="form-group row col-md-12">
-                                    <label class="col-md-3" for="schedule">Moments de disponibilités</label>
-                                    <textarea id="schedule" name="schedule" class="col-md-9" rows="5" disabled>{{ user.profile.studentaccount.wanted_schedule }}</textarea>
-                                </div>
-
-                                {% elif user.profile.account_type == "Coach" %}
-                                <!-- Gifted courses -->
-                                <div class="form-group row col-md-12">
-                                    <label class="col-sm-3 col-form-label">Souhaite donner cours de:</label>
-                                    <div class="col-sm-9">
-                                        <div class="form-check">
-                                            {% if user.profile.Maths_course %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course" checked>
-                                            <label class="form-check-label" for="Maths_Course">
-                                                Maths
-                                            </label>
-                                            {% else %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Maths_Course" name="Maths_Course" id="Maths_Course">
-                                            <label class="form-check-label" for="Maths_Course">
-                                                Maths
-                                            </label>
-                                            {% endif %}
-                                        </div>
-
-                                        <div class="form-check">
-                                            {% if user.profile.Chimie_course %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course" checked>
-                                            <label class="form-check-label" for="Chimie_Course">
-                                                Chimie
-                                            </label>
-                                            {% else %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Chimie_Course" name="Chimie_Course" id="Chimie_Course">
-                                            <label class="form-check-label" for="Chimie_Course">
-                                                Chimie
-                                            </label>
-                                            {% endif %}
-                                        </div>
-
-                                        <div class="form-check">
-                                            {% if user.profile.Physique_course %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course" checked>
-                                            <label class="form-check-label" for="Physique_Course">
-                                                Physique
-                                            </label>
-                                            {% else %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Physique_Course" name="Physique_Course" id="Physique_Course">
-                                            <label class="form-check-label" for="Physique_Course">
-                                                Physique
-                                            </label>
-                                            {% endif %}
-                                        </div>
-
-                                        <div class="form-check">
-                                            {% if user.profile.Francais_course %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course" checked>
-                                            <label class="form-check-label" for="Francais_Course">
-                                                Français
-                                            </label>
-                                            {% else %}
-                                            <input disabled class="form-check-input" type="checkbox" value="Francais_Course" name="Francais_Course" id="Francais0_Course">
-                                            <label class="form-check-label" for="Francais_Course">
-                                                Français
-                                            </label>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Gives courses in -->
-                                <div class="form-group row col-md-12">
-                                    <label for="school_level" class="col-sm-3 col-form-label">Souhaite donner cours en:</label>
-                                    <div class="col-sm-9">
-                                        {% if user.profile.coachaccount.school_level == "high" %}
-                                        <input disabled type="text" class="form-control" name="school_level" id="school_level" value="Humanité">
-                                        {% else %}
-                                        <input disabled type="text" class="form-control" name="school_level" id="school_level" value="Primaire">
-                                        {% endif %}
-                                    </div>
-                                </div>
-                                <!-- Coach school -->
-                                <div class="form-group row col-md-12">
-                                    <label for="school" class="col-sm-3 col-form-label">Ecole du coach:</label>
-                                    <div class="col-sm-9">
-                                        <input disabled type="text" class="form-control" name="school" id="school" value="{{ user.profile.coachaccount.school }}">
-                                    </div>
-                                </div>
-                                <!-- Bank Account -->
-                                <div class="form-group row col-md-12">
-                                    <label for="IBAN" class="col-sm-3 col-form-label">Compte en banque:</label>
-                                    <div class="col-sm-9">
-                                        <input disabled type="text" class="form-control" name="IBAN" id="IBAN" value="{{ user.profile.coachaccount.IBAN }}">
-                                    </div>
-                                </div>
-                                <!-- National register number -->
-                                <div class="form-group row col-md-12">
-                                    <label for="natRegID" class="col-sm-3 col-form-label">Numéro de registre national:</label>
-                                    <div class="col-sm-9">
-                                        <input disabled type="text" class="form-control" name="natRegID" id="natRegID" value="{{ user.profile.coachaccount.nationalRegisterID }}">
-                                    </div>
-                                </div>
-                                <!-- Lang levels -->
-                                <div class="form-group">
-                                    <div class="container text-center">
-                                        <label for="gridLang">Niveaux de langues:</label>
-                                        <table class="table" id="gridLang">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col">/</th>
-                                                    {% for idlev, level in langLevel.items %}
-                                                        <th scope="col">{{ level }}</th>
-                                                    {% endfor %}
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for idl, lang in lang.items %}
-                                                    <tr>
-                                                        <th for="{{ idl }}">{{ lang }}</label>
-                                                        {% for idlev, level in langLevel.items %}
-                                                            <th scope="row">
-                                                                <label class="radio-inline">
-                                                                    {% if idl == "French" and idlev == user.profile.coachaccount.French_level %}
-                                                                        <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
-                                                                    {% elif idl == "Dutch" and idlev == user.profile.coachaccount.Dutch_level %}
-                                                                        <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
-                                                                    {% elif idl == "English" and idlev == user.profile.coachaccount.English_level %}
-                                                                        <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}" checked>
-                                                                    {% else %}
-                                                                        <input type="radio" name="{{ idl }}level" id="{{ idl }}_{{ idlev }}" value="{{ idlev }}">
-                                                                    {% endif %}
-                                                                </label>
-                                                            </th>
-                                                        {% endfor %}
-                                                    </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </form>
+                        {% crispy form form.helper %}
                     </div>
                     <!-- Notifications -->
                     <div class="col-md-4">
@@ -358,29 +52,6 @@
                             </h3>
                             <hr class="my-4">
                             <ul class="list-group">
-                                <script>
-                                    const Url = "{% url "rm_notif" %}";
-
-                                    //Makes a request to remove the notification with the specified ID
-                                    //Has to be an id related to the current user's notification
-                                    function _post(_id){
-                                        $.post(
-                                            Url, {
-                                                id: _id,
-                                                csrfmiddlewaretoken: '{{ csrf_token }}'
-                                            },
-                                            function(data, status) {
-                                                if (status == "success") {
-                                                    console.log("request successfully sent");
-                                                } else {
-                                                    console.log("request failed...");
-                                                }
-                                            }
-                                        );
-                                        document.getElementById("msg" + _id).style.display = "none";
-                                    }
-                                </script>
-
                                 {% for notification in notifications %}
                                     <li class="list-group-item" id="msg{{ notification.id }}">
                                         <div class="text-right">
@@ -405,4 +76,29 @@
     <hr class="m-0">
 
 </div>
+{% endblock %}
+
+{% block extra_imports %}
+<script>
+    const Url = "{% url "rm_notif" %}";
+
+    //Makes a request to remove the notification with the specified ID
+    //Has to be an id related to the current user's notification
+    function _post(_id){
+        $.post(
+            Url, {
+                id: _id,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            function(data, status) {
+                if (status == "success") {
+                    console.log("request successfully sent");
+                } else {
+                    console.log("request failed...");
+                }
+            }
+        );
+        document.getElementById("msg" + _id).style.display = "none";
+    }
+</script>
 {% endblock %}
