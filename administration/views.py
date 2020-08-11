@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 
 from administration.forms import ArticleForm, MailForm, StudentAdminForm, CoachAdminForm, OtherAdminForm
-from administration.utils import modifyCoach, modifyStudent, populate_data
+from administration.utils import modifyUser, modifyCoach, modifyStudent, populate_data
 from cad.settings import EMAIL_HOST_USER, DEBUG
 from default.models import Article, Mail
 from inscription.utils import getUser
@@ -131,14 +131,19 @@ def user_list(request):
 
 @staff_member_required
 def user_admin_view(request):
+
     username = request.GET.get("user", "")
     usertype = request.GET.get("type", "")
+
     if username == "":
         return HttpResponseRedirect("{}?type={}".format(reverse("userlist"), usertype))
     else:
         user = get_object_or_404(User, username=username)
 
-    data = populate_data(usertype.lower(), user)
+    if request.method == "POST":
+        data = request.POST
+    else:
+        data = populate_data(usertype.lower(), user)
 
     if usertype.lower() == "student":
         form = StudentAdminForm(data)
@@ -147,84 +152,12 @@ def user_admin_view(request):
     else:
         form = OtherAdminForm(data)
 
+    if request.method == "POST":
+        if form.is_valid():
+            modifyUser(username, form)
+        else:
+            print("form errors", form.errors)
     return render(request, "user_admin_view.html", {"form": form, "form_user": user})
-
-
-@staff_member_required
-def modifyUser(request):
-    # Check if the way the user accessed this url is correct
-    if request.method != "POST":
-        if request.META.get('HTTP_REFERER') is not None:
-            return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-        else:
-            return HttpResponseRedirect(reverse("user_admin"))
-    try:
-        form = request.POST
-        # If the admin wants to 'delete' the user
-        if "delete" in form.keys():
-            usr = User.objects.get(username=form["username"])
-            # First step, deactivate the user's account
-            if usr.is_active:
-                usr.is_active = False
-                usr.save()
-            # If already deactivated : delete
-            else:
-                logging.warning("user {} deleted".format(usr))
-                usr.delete()
-
-            return HttpResponseRedirect(reverse("user_admin"))
-
-        # If the admin wants to re-activate the user's account
-        elif "reactivate" in form.keys():
-            return HttpResponseRedirect(
-                reverse("reactivate_user", kwargs={'string': form["username"]}))
-
-        # Else, the admin wants to modify the user
-        usr = User.objects.get(username=form["username"])
-        usr.first_name = form["firstName"]
-        usr.last_name = form["lastName"]
-        usr.email = form["mail"]
-        usr.save()  # Saves basic user model
-        profile = usr.profile
-
-        try:  # Checks if the user as a profile extension
-            type = profile.account_type  # Get account type to try
-        except Exception as e:
-            logging.warning("Error when getting the user's profile : {}".format(e))
-            profile = Profile(user=usr)
-            profile.save()
-            type = usr.profile.account_type
-
-        # Modifications that apply for all type of account
-        profile.phone_number = form["phone_number"]
-        profile.address = form["address"]
-        profile.birthDate = form["birthDate"]
-
-        if "verifiedAccount" in form.keys():
-            profile.verifiedAccount = True
-        else:
-            profile.verifiedAccount = False
-
-        for course in ["Maths", "Chimie", "Physique", "Francais"]:
-            if "{}_Course".format(course) in form.keys():
-                exec("profile." + course + "_course = True")
-            else:
-                exec("profile." + course + "_course = False")
-        profile.save()
-
-        # Modifications that only apply to student type account
-        if type == "Etudiant":
-            modifyStudent(profile, form)
-        # Modifications that only apply to coach type account
-        elif type == "Coach":
-            modifyCoach(profile, form)
-
-        # Redirect to administration
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-    except Exception as e:  # In case an error occurs
-        logging.critical("Error while modifying user : {}".format(e))
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @staff_member_required

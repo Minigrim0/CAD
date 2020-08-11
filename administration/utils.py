@@ -1,86 +1,69 @@
-import datetime
+from django.shortcuts import get_object_or_404
+from django.contrib.auth.models import User
 
 from inscription.utils import sendNotifToCoaches
 from users.models import studentRequest
 
 
-def serializeDate(date_):
-    """
-        returns the date from "day month year" to "ddmmyyyy"
-    """
-    months = [
-        "janvier",
-        "février",
-        "mars",
-        "avril",
-        "mai",
-        "juin",
-        "juillet",
-        "aout",
-        "septembre",
-        "octobre",
-        "novembre",
-        "décembre"]
-    date_ = date_.split()
-    date_str = date_[0]
-    if len(str(date_[0])) == 1:
-        date_str = "0" + date_str
+def modifyUser(username, form):
+    user = get_object_or_404(User, username=username)
+    cleaned_data = form.cleaned_data
+    user.first_name = cleaned_data['first_name']
+    user.last_name = cleaned_data['last_name']
+    user.email = cleaned_data['email']
+    user.save()
 
-    if len(str(months.index(date_[1]) + 1)) == 1:
-        date_str += "0" + str(months.index(date_[1]) + 1)
-    else:
-        date_str += str(months.index(date_[1]) + 1)
+    profile = user.profile
+    profile.phone_number = cleaned_data['phone_number']
+    profile.address = cleaned_data['address']
+    profile.birthDate = cleaned_data['birthdate']
+    profile.verifiedAccount = cleaned_data['verifiedAccount']
 
-    date_str += str(date_[2])
-
-    return datetime.datetime.strptime(date_str, "%d%m%Y")
-
-
-def modifyStudent(profile, form):
-    """
-        Modifies a student profile according to the form given
-    """
-    sa = profile.studentaccount
-    sa.NeedsVisit = False
-    if form["Visit"] != "NoVisit":
-        sa.NeedsVisit = True
-
-    sa.comments = form["comments"]
-
-    sa.tutor_firstName = form["tutorFirstName"]
-    sa.tutor_name = form["tutorLastName"]
-
-    if "confirmedAccount" in form.keys():
-        if sa.confirmedAccount is False:
-            sa.confirmedAccount = True
-            # Continuer la procédure
-            newRequest = studentRequest(student=profile.user)
-            newRequest.save()
-
-            sendNotifToCoaches(profile)
+    if profile.account_type in ['student', 'coach']:
+        profile.school_level = cleaned_data['school_level']
+        profile.Maths_course = "a" in cleaned_data['courses']
+        profile.Physique_course = "b" in cleaned_data['courses']
+        profile.Francais_course = "c" in cleaned_data['courses']
+        profile.Chimie_course = "d" in cleaned_data['courses']
+        if profile.account_type == "student":
+            modifyStudent(profile.studentaccount, cleaned_data)
         else:
-            sa.confirmedAccount = True
-    else:
-        sa.confirmedAccount = False
-    sa.save()
+            modifyCoach(profile.coachaccount, cleaned_data)
+    profile.save()
 
 
-def modifyCoach(profile, form):
+def modifyStudent(student_account, cleaned_data):
     """
-        Modifies a coach profile according to the form given
+        Modifies a student profile according to the given form
     """
-    ca = profile.coachaccount
+    student_account.NeedsVisit = cleaned_data['NeedsVisit']
+    student_account.comments = cleaned_data["comments"]
+    student_account.tutor_firstName = cleaned_data["tutor_firstName"]
+    student_account.tutor_name = cleaned_data["tutor_name"]
+    student_account.wanted_schedule = cleaned_data['wanted_schedule']
+    student_account.zip = cleaned_data['zip']
+    student_account.ville = cleaned_data['ville']
+    student_account.zip = cleaned_data['zip']
+    student_account.coach = cleaned_data['coach']
 
-    ca.school = form["school"]
-    ca.IBAN = form["IBAN"]
-    ca.nationalRegisterID = form["natRegID"]
+    student_account.save()
 
-    ca.French_level = form["Frenchlevel"]
-    ca.English_level = form["Englishlevel"]
-    ca.Dutch_level = form["Dutchlevel"]
 
-    ca.confirmedAccount = form["status"]
-    ca.save()
+def modifyCoach(coach_account, cleaned_data):
+    """
+        Modifies a coach profile according to the given form
+    """
+
+    coach_account.school = cleaned_data["school"]
+    coach_account.IBAN = cleaned_data["IBAN"]
+    coach_account.nationalRegisterID = cleaned_data["nationalRegisterID"]
+    coach_account.French_level = cleaned_data["french_level"]
+    coach_account.English_level = cleaned_data["english_level"]
+    coach_account.Dutch_level = cleaned_data["dutch_level"]
+    print("confirmed", cleaned_data["confirmedAccount"])
+    coach_account.confirmedAccount = cleaned_data["confirmedAccount"]
+
+    coach_account.save()
 
 
 def populate_data(usertype, user):
