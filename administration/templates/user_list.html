@@ -35,8 +35,8 @@
                     <tbody>
                         {% for user in users %}
                             <tr>
-                                <td><a href="{% url 'user_admin_view' %}?type={{ user.profile.account_type }}&user={{ user.username }}">{{ user.id }}</a></td>
-                                <td>{{ user.first_name }}</td>
+                                <td>{{ user.id }}</td>
+                                <td><a href="{% url 'user_admin_view' %}?type={{ user.profile.account_type }}&user={{ user.username }}">{{ user.first_name }}</a></td>
                                 <td>{{ user.last_name }}</td>
                                 <td>{{ user.profile.account_type }}</td>
                                 <td>{% if user.is_active %}<i class="fas fa-user-check"></i>{% else %}<i class="fas fa-user-slash"></i>{% endif %}</td>

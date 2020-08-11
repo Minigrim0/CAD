@@ -4,8 +4,7 @@ import administration.views as views
 
 urlpatterns = [
     url('^$', views.adminPage, name="home_admin"),
-    url('^test/$', views.test),
-    url('^users/$', views.test, name="user_admin_view"),
+    url('^users/$', views.user_admin_view, name="user_admin_view"),
     url('^users/all/$', views.user_list, name="userlist"),
     url('^users/modify/$', views.modifyUser, name="modify_user"),
     url('^users/activate/<slug:username>/$', views.reactivate, name="reactivate_user"),
