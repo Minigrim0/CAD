@@ -15,6 +15,7 @@ from .models import Notification, Transaction, studentRequest
 from .utils import thanksCoaches
 from .forms import StudentReadOnlyForm, BaseReadOnly, CoachReadOnlyForm
 
+
 def ErrorView(request):
     messages.add_message(
         request, messages.ERROR,

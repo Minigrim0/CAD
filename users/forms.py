@@ -26,8 +26,7 @@ class TableForm(Field):
                 </tbody>
             </table>
             """.format(
-                ''.join(
-                    "<th scope=\"col\" class=\"col-md-2\">{}</th>".format(
+                ''.join("<th scope=\"col\" class=\"col-md-2\">{}</th>".format(
                         choice
                     ) for _, choice in form[self.fields[0]].field.choices),
                 ''.join(
@@ -39,8 +38,8 @@ class TableForm(Field):
                         template="table_form.html",
                         template_pack=template_pack,
                         **kwargs) for x in range(len(self.fields))
-                    )
                 )
+            )
 
 
 class BaseRegistration(forms.Form):
