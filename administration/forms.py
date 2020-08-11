@@ -45,6 +45,8 @@ class OtherAdminForm(BaseRegistration):
         self.helper = FormHelper()
         self.helper.form_id = 'id-form-student-register'
         self.helper.form_method = 'post'
+        self.fields['password'].required = False
+        self.fields['confirm_password'].required = False
 
         self.helper.layout = Layout(
             Fieldset(
@@ -173,8 +175,8 @@ class CoachAdminForm(CoachRegisterForm, OtherAdminForm):
     nbStudents = forms.IntegerField(
         required=False,
         label="nombre d'étudiants du coach")
-    confirmedAccount = forms.CharField(
-        label="Etat", max_length=1)
+    confirmedAccount = forms.ChoiceField(
+        choices=coach_states, required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -212,7 +214,16 @@ class CoachAdminForm(CoachRegisterForm, OtherAdminForm):
                     'dutch_level',
                     'english_level',
                 ),
-                'IBAN'
+                'IBAN',
+                'confirmedAccount',
+                bforms.FieldWithButtons(
+                    'secret_key',
+                    HTML(
+                        '<button type="button" id="buttoncopy" class="btn btn-primary" name="Save" onclick="copyKey()"> \
+                            copier\
+                        </button>')
+                ),
+                'verifiedAccount'
             ),
             bforms.FormActions(
                 Submit('save', 'Modifier l\'utilisateur'),

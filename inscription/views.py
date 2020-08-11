@@ -16,20 +16,11 @@ from users.forms import StudentRegisterForm, CoachRegisterForm
 
 
 def registerStudentView(request):
-    """registerStudentView
-        allows the student to register
-
-    Args:
-        request (request): The request object needed by all views
-
-    Returns:
-        render: the rendered student registration page
-        HttpResponseRedirect: A redirection to the registration view, with all the informations needed
-    """
+    """ allows a student to register an account """
 
     if request.method == "POST":
         form = StudentRegisterForm(request.POST)
-        if form.is_valid():  # Register the coach
+        if form.is_valid():
             user = utils.registerUser(form)
             utils.registerProfile(user, form, "student")
             utils.studentRegister(user, form)
@@ -53,19 +44,10 @@ def registerStudentView(request):
 
 
 def registerCoachView(request):
-    """registerCoachView
-        allows the coach to register
-
-    Args:
-        request (request): The request object needed by all views
-
-    Returns:
-        render: the rendered coach registration page
-        HttpResponseRedirect: A redirection to the registration view, with all the informations needed
-    """
+    """ allows a coach to register an account """
     if request.method == "POST":
         form = CoachRegisterForm(request.POST)
-        if form.is_valid():  # Register the coach
+        if form.is_valid():
             user = utils.registerUser(form)
             utils.registerProfile(user, form, "coach")
             utils.coachRegister(user, form)
