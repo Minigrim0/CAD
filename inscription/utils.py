@@ -101,7 +101,7 @@ def coachRegister(user, form):
     coach_profile.save()
 
 
-def registerUser(form):
+def registerUser(form, usertype):
     """Generates a user from a form values
 
     Args:
@@ -122,6 +122,13 @@ def registerUser(form):
         email=form.cleaned_data['email'])
     user.set_password(form.cleaned_data['password'])
     user.save()
+
+    registerProfile(user, form, usertype)
+    if usertype == "student":
+        studentRegister(user, form)
+    elif usertype == "coach":
+        coachRegister(user, form)
+
     return user
 
 
