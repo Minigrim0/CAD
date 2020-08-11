@@ -13,22 +13,22 @@ class TableForm(Field):
     """
 
     def render(self, form, form_style, context, template_pack=CRISPY_TEMPLATE_PACK, extra_context=None, **kwargs):
-        return """
-            <table class="table" id="gridLang">
-                <thead>
-                    <tr>
-                        <th scope="col" class="col-md-2">/</th>
-                        {}
-                    </tr>
-                </thead>
-                <tbody>
-                    {}
-                </tbody>
-            </table>
-            """.format(
-                ''.join("<th scope=\"col\" class=\"col-md-2\">{}</th>".format(
-                        choice
-                    ) for _, choice in form[self.fields[0]].field.choices),
+        return \
+            "<table class=\"table\" id=\"gridLang\">\
+                <thead>\
+                    <tr>\
+                        <th scope=\"col\" class=\"col-md-2\">/</th>\
+                        {}\
+                    </tr>\
+                </thead>\
+                <tbody>\
+                    {}\
+                </tbody>\
+            </table>\
+            ".format(
+                ''.join(
+                    "<th scope=\"col\" class=\"col-md-2\">{}</th>".format(
+                        choice) for _, choice in form[self.fields[0]].field.choices),
                 ''.join(
                     render_field(
                         self.fields[x],
