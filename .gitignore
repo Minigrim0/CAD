@@ -10,3 +10,4 @@ static/
 logs/
 *.pyc
 env.alwaysdata.sh
+setup.cfg

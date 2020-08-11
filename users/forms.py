@@ -3,11 +3,8 @@ from django.contrib.auth.models import User
 import crispy_forms.bootstrap as bforms
 from crispy_forms.utils import render_field
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, Row, Column, Field
+from crispy_forms.layout import Layout, Fieldset, Submit, Row, Column, Field
 from cad.settings import CRISPY_TEMPLATE_PACK
-from django.template.loader import get_template
-
-from .models import CoachAccount, StudentAccount, Profile
 
 
 class TableForm(Field):
@@ -29,8 +26,21 @@ class TableForm(Field):
                 </tbody>
             </table>
             """.format(
-                ''.join("<th scope=\"col\" class=\"col-md-2\">{}</th>".format(choice) for _, choice in form[self.fields[0]].field.choices),
-                ''.join(render_field(self.fields[x], form, form_style, context, template="table_form.html", template_pack=template_pack, **kwargs) for x in range(len(self.fields))))
+                ''.join(
+                    "<th scope=\"col\" class=\"col-md-2\">{}</th>".format(
+                        choice
+                    ) for _, choice in form[self.fields[0]].field.choices),
+                ''.join(
+                    render_field(
+                        self.fields[x],
+                        form,
+                        form_style,
+                        context,
+                        template="table_form.html",
+                        template_pack=template_pack,
+                        **kwargs) for x in range(len(self.fields))
+                    )
+                )
 
 
 class BaseRegistration(forms.Form):
@@ -49,8 +59,10 @@ class BaseRegistration(forms.Form):
     address = forms.CharField(required=True, label="Rue et numéro")
     phone_number = forms.CharField(required=True, max_length=25, label="numéro de téléphone")
 
-    def clean(self):
+    def clean(self, admin=False):
         cleaned_data = super().clean()
+        if admin:
+            return
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
         email = cleaned_data.get("email")
@@ -112,7 +124,7 @@ class StudentRegisterForm(BaseRegistration):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_id = 'id-form-coach-register'
+        self.helper.form_id = 'id-form-student-register'
         self.helper.form_method = 'post'
 
         self.helper.layout = Layout(

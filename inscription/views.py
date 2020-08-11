@@ -3,7 +3,6 @@ import logging
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
@@ -12,7 +11,7 @@ from django.urls import reverse
 from cad.settings import DEBUG, EMAIL_HOST_USER
 from default.models import Mail
 from inscription import utils
-from users.models import Notification, Profile, studentRequest
+from users.models import Notification, studentRequest
 from users.forms import StudentRegisterForm, CoachRegisterForm
 
 
@@ -32,7 +31,7 @@ def registerStudentView(request):
         form = StudentRegisterForm(request.POST)
         if form.is_valid():  # Register the coach
             user = utils.registerUser(form)
-            utils.registerProfile(user, form, "Etudiant")
+            utils.registerProfile(user, form, "student")
             utils.studentRegister(user, form)
 
             user = authenticate(
@@ -48,7 +47,6 @@ def registerStudentView(request):
             return HttpResponseRedirect(reverse("home"))
     else:
         form = StudentRegisterForm()
-
 
     view_title = "Inscritpion - Etudiant"
     return render(request, "inscription.html", locals())
@@ -69,7 +67,7 @@ def registerCoachView(request):
         form = CoachRegisterForm(request.POST)
         if form.is_valid():  # Register the coach
             user = utils.registerUser(form)
-            utils.registerProfile(user, form, "Coach")
+            utils.registerProfile(user, form, "coach")
             utils.coachRegister(user, form)
 
             user = authenticate(
@@ -109,6 +107,7 @@ def welcomeUser(request, user, host):
 
     mail = Mail.objects.get(id=1)
     if not DEBUG:
+        logging.warning("Sending mail to {}".format(user.email))
         send_mail(
             mail.clean_header, mail.formatted_content(user, domain=host),
             EMAIL_HOST_USER, [user.email])

@@ -5,7 +5,7 @@
     {% for idl, level in field.field.choices %}
         <th scope="row">
             <label class="radio-inline">
-                <input type="radio" name="{{ field.name }}" id="{{ field.id_for_label }}" value="{{ idl }}">
+                <input type="radio" name="{{ field.name }}" id="{{ field.id_for_label }}" value="{{ idl }}" {% if field.value == idl %}checked{% endif %}>
             </label>
         </th>
     {% endfor %}

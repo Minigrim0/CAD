@@ -81,3 +81,53 @@ def modifyCoach(profile, form):
 
     ca.confirmedAccount = form["status"]
     ca.save()
+
+
+def populate_data(usertype, user):
+    data = {
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'birthdate': user.profile.birthDate,
+        'email': user.email,
+        'address': user.profile.address,
+        'phone_number': user.profile.phone_number,
+        'secret_key': user.profile.secret_key,
+        'verifiedAccount': user.profile.verifiedAccount,
+    }
+
+    if usertype == "student":
+        data.update({
+            'school_level': user.profile.school_level,
+            'tutor_name': user.profile.studentaccount.tutor_name,
+            'tutor_firstName': user.profile.studentaccount.tutor_firstName,
+            'comments': user.profile.studentaccount.comments,
+            'wanted_schedule': user.profile.studentaccount.wanted_schedule,
+            'zip': user.profile.studentaccount.zip,
+            'ville': user.profile.studentaccount.ville,
+            'NeedsVisit': user.profile.studentaccount.NeedsVisit,
+            'balance': user.profile.studentaccount.balance,
+            'courses': list(filter((None).__ne__, [
+                'a' if user.profile.Maths_course else None,
+                'b' if user.profile.Physique_course else None,
+                'c' if user.profile.Francais_course else None,
+                'd' if user.profile.Chimie_course else None,
+            ]))
+        })
+    elif usertype == "coach":
+        data.update({
+            'school_level': user.profile.school_level,
+            'school': user.profile.coachaccount.school,
+            'IBAN': user.profile.coachaccount.IBAN,
+            'french_level': user.profile.coachaccount.French_level,
+            'dutch_level': user.profile.coachaccount.Dutch_level,
+            'english_level': user.profile.coachaccount.English_level,
+            'nationalRegisterID': user.profile.coachaccount.nationalRegisterID,
+            'courses': list(filter((None).__ne__, [
+                'a' if user.profile.Maths_course else None,
+                'b' if user.profile.Physique_course else None,
+                'c' if user.profile.Francais_course else None,
+                'd' if user.profile.Chimie_course else None,
+            ]))
+        })
+
+    return data

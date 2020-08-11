@@ -116,10 +116,10 @@ class StudentAccount(models.Model):
     def balance(self):
         transactions = Transaction.objects.filter(student=self)
         balance = sum(transaction.amount for transaction in transactions)
-        return balance
+        return int(balance)
 
     def __str__(self):
-        return "{} {}'s student".format(
+        return "{} {}'s student profile".format(
             self.profile.user.first_name, self.profile.user.last_name)
 
 
@@ -152,7 +152,7 @@ class CoachAccount(models.Model):
         null=True, blank=True, verbose_name="nombre d'étudiants du coach",
         default=0)
     confirmedAccount = models.CharField(
-        default="a", blank=True, verbose_name="Etat", max_length=1)
+        default="a", blank=True, choices=coach_states, verbose_name="Etat", max_length=1)
 
 
 class studentRequest(models.Model):

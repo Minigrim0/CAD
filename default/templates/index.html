@@ -110,9 +110,7 @@
             </h3>
             {{ a_coaches.content|safe }}
 
-            <button class="btn btn-primary" type="button">
-                <a href="{% url "registerCoach" %}"><span style="color: white;">Postuler en ligne</span></a>
-            </button>
+            <a class="btn btn-primary" href="{% url "registerCoach" %}"><span style="color: white;">Postuler en ligne</span></a>
         </div>
     </section>
 
@@ -192,12 +190,8 @@
     </footer>
     {% else %}
     <footer style="bottom: 0; position: fixed" class="container-fluid footer-collapse px-1 py-3">
-        <button class="btn btn-primary" type="button">
-            <a href="{% url "connect_home" %}"><span style="color: white;">Connexion</span></a>
-        </button>
-        <button class="btn btn-primary" type="button">
-            <a href="{% url "registerStudent" %}"><span style="color: white;">Inscription</span></a>
-        </button>
+        <a class="btn btn-primary" href="{% url "connect_home" %}"><span style="color: white;">Connexion</span></a>
+        <a class="btn btn-primary" href="{% url "registerStudent" %}"><span style="color: white;">Inscription</span></a>
     </footer>
     {% endif %}
 </div>
