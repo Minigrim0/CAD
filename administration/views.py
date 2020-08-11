@@ -101,44 +101,6 @@ def transactions(request):
 
 
 @staff_member_required
-def userAdminView(request):
-    usertype = request.GET.get("type", "")
-    if usertype == "":
-        users = User.objects.all()
-    elif usertype == "student":
-        users = User.objects.filter(profile__account_type="Etudiant")
-    elif usertype == "coach":
-        users = User.objects.filter(profile__account_type="Coach")
-    else:
-        users = User.objects.all().exclude(profile__account_type="Coach")
-        users = users.exclude(profile__account_type="Etudiant")
-
-    firstUser = users[0].username
-
-    level = {
-        '5': 'Langue maternelle',
-        '4': 'Très bon',
-        '3': 'Bon',
-        '2': 'Notions de base',
-        '1': 'Aucun'}
-
-    lang = {
-        'French': 'Francais',
-        'Dutch': 'Néerlandais',
-        'English': 'Anglais'}
-
-    vars_ = {
-        'a_users': users,
-        'a_firstUserUsername': firstUser,
-        "langLevel": level,
-        "lang": lang,
-        "view_title": "utilisateurs"
-    }
-
-    return render(request, 'userAdmin.html', vars_)
-
-
-@staff_member_required
 def reactivate(request, username=""):
     if username == "":
         return HttpResponseRedirect(reverse("Error_view"))
@@ -168,7 +130,7 @@ def user_list(request):
 
 
 @staff_member_required
-def test(request):
+def user_admin_view(request):
     username = request.GET.get("user", "")
     usertype = request.GET.get("type", "")
     if username == "":
@@ -185,7 +147,7 @@ def test(request):
     else:
         form = OtherAdminForm(data)
 
-    return render(request, "userAdmintest.html", {"form": form, "form_user": user})
+    return render(request, "user_admin_view.html", {"form": form, "form_user": user})
 
 
 @staff_member_required
