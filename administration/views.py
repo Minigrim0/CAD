@@ -126,12 +126,12 @@ def user_list(request):
     if query != "":
         users = users.filter(username__icontains=query)
 
+    view_title = "Utilisateurs"
     return render(request, "user_list.html", locals())
 
 
 @staff_member_required
 def user_admin_view(request):
-
     username = request.GET.get("user", "")
     usertype = request.GET.get("type", "")
 
@@ -155,9 +155,9 @@ def user_admin_view(request):
     if request.method == "POST":
         if form.is_valid():
             modifyUser(username, form)
-        else:
-            print("form errors", form.errors)
-    return render(request, "user_admin_view.html", {"form": form, "form_user": user})
+
+    view_title = "{} {}".format(user.last_name, user.first_name)
+    return render(request, "user_admin_view.html", {"form": form, "form_user": user, "view_title": view_title})
 
 
 @staff_member_required
