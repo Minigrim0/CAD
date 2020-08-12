@@ -5,7 +5,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.http import (HttpResponse, HttpResponseBadRequest,
-                         HttpResponseRedirect)
+                         HttpResponseRedirect, Http404)
 from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
@@ -13,18 +13,19 @@ from django.shortcuts import get_object_or_404
 from administration.forms import ArticleForm, MailForm, StudentAdminForm, CoachAdminForm, OtherAdminForm
 from administration.utils import modifyUser, modifyCoach, modifyStudent, populate_data
 from cad.settings import EMAIL_HOST_USER, DEBUG
-from default.models import Article, Mail
+from default.models import Article, Mail, Message
 from inscription.utils import getUser
 from users.models import FollowElement, Profile, studentRequest, Transaction
 
 
 @staff_member_required
 def adminPage(request):
-    nbr_accounts = len(User.objects.all())
-    nbr_students = len(User.objects.filter(profile__account_type="student"))
-    nbr_coaches = len(User.objects.filter(profile__account_type="coach"))
+    nbr_accounts = User.objects.all().count()
+    nbr_students = User.objects.filter(profile__account_type="student").count()
+    nbr_coaches = User.objects.filter(profile__account_type="coach").count()
     nbr_other = nbr_accounts - nbr_students - nbr_coaches
-    nbr_requests = len(studentRequest.objects.all().exclude(is_closed=True))
+    nbr_requests = studentRequest.objects.all().exclude(is_closed=True).count()
+    nbr_messages = Message.objects.filter(seen=False).count()
 
     view_title = "Administration"
 
@@ -179,3 +180,30 @@ def sendUnsubscriptionMail(request):
     student_account.unsub_proposal = True
     student_account.save()
     return HttpResponse("Success")
+
+
+@staff_member_required
+def message_list(request):
+    status = request.GET.get("status", "")
+    if status == "unread":
+        messages = Message.objects.filter(seen=False)
+    elif status == "read":
+        messages = Message.objects.filter(seen=True)
+    else:
+        messages = Message.objects.all()
+
+    view_title = "Messages"
+    return render(request, 'message_list.html', locals())
+
+
+@staff_member_required
+def message_admin_view(request):
+    id = request.GET.get("id", "")
+    if id == "":
+        raise Http404()
+    message = get_object_or_404(Message, id=id)
+    message.seen = True
+    message.save()
+
+    view_title = "Messages"
+    return render(request, 'message_admin_view.html', locals())
