@@ -29,11 +29,10 @@ def userView(request):
     user = request.user
     notifications = user.notification_set.all()
 
-    if user.profile.account_type == "student":
-        data = populate_data("student", user)
+    data = populate_data(user.profile.account_type, user)
+    if user.profile.account_type == "a":
         form = StudentReadOnlyForm(data)
-    elif user.profile.account_type == "coach":
-        data = populate_data("coach", user)
+    elif user.profile.account_type == "b":
         form = CoachReadOnlyForm(data)
     else:
         data = populate_data("other", user)

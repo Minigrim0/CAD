@@ -124,9 +124,9 @@ def registerUser(form, usertype):
     user.save()
 
     registerProfile(user, form, usertype)
-    if usertype == "student":
+    if usertype == "a":
         studentRegister(user, form)
-    elif usertype == "coach":
+    elif usertype == "b":
         coachRegister(user, form)
 
     return user

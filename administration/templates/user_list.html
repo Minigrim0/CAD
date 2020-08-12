@@ -39,7 +39,7 @@
                                 <td>{{ user.id }}</td>
                                 <td><a href="{% url 'user_admin_view' %}?type={{ user.profile.account_type }}&user={{ user.username }}">{{ user.first_name }}</a></td>
                                 <td>{{ user.last_name }}</td>
-                                <td>{{ user.profile.account_type }}</td>
+                                <td>{{ user.profile.get_account_type_display }}</td>
                                 <td>{% if user.is_active %}<i class="fas fa-user-check"></i>{% else %}<i class="fas fa-user-slash"></i>{% endif %}</td>
                                 <td>{% if user.profile.verifiedAccount %}<img src="/static/admin/img/icon-yes.svg" alt="True"/>{% else %}<img src="/static/admin/img/icon-no.svg" alt="True"/>{% endif %}</td>
                             </tr>
