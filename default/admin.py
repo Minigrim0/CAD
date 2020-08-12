@@ -38,14 +38,14 @@ class MailAdmin(admin.ModelAdmin):
 
 
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ('id', 'subject', 'contact_mail')
-    list_filter = ('id', 'subject', 'contact_mail')
+    list_display = ('id', 'subject', 'contact_mail', 'seen')
+    list_filter = ('id', 'subject', 'contact_mail', 'seen')
     ordering = ('-id', )
     search_fields = ('subject', 'subject', 'id')
 
     fields = (
-        ('subject', 'contact_mail'),
-        ('content'),
+        ('subject', 'content'),
+        ('contact_mail', 'seen'),
     )
 
 
