@@ -119,6 +119,15 @@ class StudentRegisterForm(BaseRegistration):
     ville = forms.CharField(max_length=50, required=True, label="Ville")
     NeedsVisit = forms.BooleanField(required=False, label="Désire une visite pédagogique ?")
     courses = forms.MultipleChoiceField(choices=courses_choices, required=True, label="Cours désirés")
+    resp_phone_number1 = forms.CharField(
+        required=True, label="numéro de téléphone d'un responsable 1",
+        max_length=25)
+    resp_phone_number2 = forms.CharField(
+        required=False, label="numéro de téléphone d'un responsable 2",
+        max_length=25)
+    resp_phone_number3 = forms.CharField(
+        required=False, label="numéro de téléphone d'un responsable 3",
+        max_length=25)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -128,7 +137,7 @@ class StudentRegisterForm(BaseRegistration):
 
         self.helper.layout = Layout(
             Fieldset(
-                'Devenez élève!',
+                'Devenez élève! <br/><small>Les champs suivis d\'une astérisque (<span style="color:red">*</span>) sont obligatoires</small>',
                 Row(
                     Column('first_name', css_class='form-group col-md-6 mb-0'),
                     Column('last_name', css_class='form-group col-md-6 mb-0'),
@@ -159,6 +168,12 @@ class StudentRegisterForm(BaseRegistration):
                 Row(
                     Column('email', css_class='form-group col-md-6 mb-0'),
                     Column('phone_number', css_class='form-group col-md-6 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('resp_phone_number1', css_class='form-group col-md-4 mb-0'),
+                    Column('resp_phone_number2', css_class='form-group col-md-4 mb-0'),
+                    Column('resp_phone_number3', css_class='form-group col-md-4 mb-0'),
                     css_class='form-row'
                 ),
                 bforms.InlineCheckboxes('courses'),
