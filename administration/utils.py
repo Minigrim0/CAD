@@ -6,6 +6,9 @@ from users.models import studentRequest
 
 
 def modifyUser(username, form):
+    """
+        Modifies a user and his profile according to the given form
+    """
     user = get_object_or_404(User, username=username)
     cleaned_data = form.cleaned_data
     user.first_name = cleaned_data['first_name']
@@ -66,6 +69,9 @@ def modifyCoach(coach_account, cleaned_data):
 
 
 def populate_data(usertype, user):
+    """
+        Populates a form according to the user's data
+    """
     data = {
         'first_name': user.first_name,
         'last_name': user.last_name,

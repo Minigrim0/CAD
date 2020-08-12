@@ -128,7 +128,7 @@ class StudentRegisterForm(BaseRegistration):
 
         self.helper.layout = Layout(
             Fieldset(
-                'Devenez élève!',
+                'Devenez élève! <br/><small>Les champs suivis d\'une astérisque (<span style="color:red">*</span>) sont obligatoires</small>',
                 Row(
                     Column('first_name', css_class='form-group col-md-6 mb-0'),
                     Column('last_name', css_class='form-group col-md-6 mb-0'),
