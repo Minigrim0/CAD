@@ -21,7 +21,7 @@ def registerStudentView(request):
     if request.method == "POST":
         form = StudentRegisterForm(request.POST)
         if form.is_valid():
-            user = utils.registerUser(form, "student")
+            user = utils.registerUser(form, "a")
 
             user = authenticate(
                 username=user.username,
@@ -46,7 +46,7 @@ def registerCoachView(request):
     if request.method == "POST":
         form = CoachRegisterForm(request.POST)
         if form.is_valid():
-            user = utils.registerUser(form, "coach")
+            user = utils.registerUser(form, "b")
 
             user = authenticate(
                 username=user.username,
@@ -116,7 +116,7 @@ def confirmation(request):
     profile.verifiedAccount = True
     profile.save()
 
-    if profile.account_type == "student":
+    if profile.account_type == "a":
         mail = Mail.objects.get(role='b')
         if not DEBUG:
             send_mail(
@@ -174,7 +174,7 @@ def thanks(request):
     user = request.user
 
     # token manquant ou non valide
-    if user is None or user.profile.account_type != "student":
+    if user is None or user.profile.account_type != "a":
         return HttpResponseRedirect(reverse("Error_view"))
 
     # Si le compte est déjà confirmé, l'utilisateur ne doit plus accéder

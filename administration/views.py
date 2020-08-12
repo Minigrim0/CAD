@@ -21,8 +21,8 @@ from users.models import FollowElement, Profile, studentRequest, Transaction
 @staff_member_required
 def adminPage(request):
     nbr_accounts = len(User.objects.all())
-    nbr_students = len(User.objects.filter(profile__account_type="student"))
-    nbr_coaches = len(User.objects.filter(profile__account_type="coach"))
+    nbr_students = len(User.objects.filter(profile__account_type="a"))
+    nbr_coaches = len(User.objects.filter(profile__account_type="b"))
     nbr_other = nbr_accounts - nbr_students - nbr_coaches
     nbr_requests = len(studentRequest.objects.all().exclude(is_closed=True))
 
@@ -116,10 +116,12 @@ def user_list(request):
     usertype = request.GET.get("type", "")
     query = request.GET.get("q", "")
 
-    if usertype in ['student', 'coach']:
-        users = User.objects.filter(profile__account_type=usertype).order_by('id')
-    elif usertype == "other":
-        users = User.objects.all().exclude(profile__account_type="student").exclude(profile__account_type="coach").order_by('id')
+    if usertype == "a":
+        users = User.objects.filter(profile__account_type="a").order_by('id')
+    elif usertype == "b":
+        users = User.objects.filter(profile__account_type="b").order_by('id')
+    elif usertype == "c":
+        users = User.objects.all().exclude(profile__account_type="a").exclude(profile__account_type="b").order_by('id')
     else:
         users = User.objects.all().order_by('id')
 
@@ -145,9 +147,9 @@ def user_admin_view(request):
     else:
         data = populate_data(usertype.lower(), user)
 
-    if usertype.lower() == "student":
+    if usertype.lower() == "a":
         form = StudentAdminForm(data)
-    elif usertype.lower() == "coach":
+    elif usertype.lower() == "b":
         form = CoachAdminForm(data)
     else:
         form = OtherAdminForm(data)
