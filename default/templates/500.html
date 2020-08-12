@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block navlinks %}
+<ul class="navbar-nav text-left">
+    <li class="nav-item">
+        <a href="{% url 'home' %}" class="nav-link">
+            accueil
+        </a>
+    </li>
+</ul>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid p-0">
+    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="home">
+        <div class="w-100">
+            {% include 'messages.html' %}
+            <h1 class="mb-0">
+                500 Erreur <span class="text-primary">interne</span>!
+            </h1>
+            <p class="lead mb-5">
+                Une erreur serveur est survenue, réessayez plus tard.<br/>
+                Si cette erreur persiste, n'hésitez pas à nous <a href="{% url 'contact_view' %}">contacter</a>!
+            </p>
+        </div>
+    </section>
+</div>
+{% endblock %}
