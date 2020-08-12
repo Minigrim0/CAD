@@ -19,13 +19,13 @@ def modifyUser(username, form):
     profile.birthDate = cleaned_data['birthdate']
     profile.verifiedAccount = cleaned_data['verifiedAccount']
 
-    if profile.account_type in ['student', 'coach']:
+    if profile.account_type in "ab":
         profile.school_level = cleaned_data['school_level']
         profile.Maths_course = "a" in cleaned_data['courses']
         profile.Physique_course = "b" in cleaned_data['courses']
         profile.Francais_course = "c" in cleaned_data['courses']
         profile.Chimie_course = "d" in cleaned_data['courses']
-        if profile.account_type == "student":
+        if profile.account_type == "a":
             modifyStudent(profile.studentaccount, cleaned_data)
         else:
             modifyCoach(profile.coachaccount, cleaned_data)
@@ -77,7 +77,7 @@ def populate_data(usertype, user):
         'verifiedAccount': user.profile.verifiedAccount,
     }
 
-    if usertype == "student":
+    if usertype == "a":
         data.update({
             'school_level': user.profile.school_level,
             'tutor_name': user.profile.studentaccount.tutor_name,
@@ -95,7 +95,7 @@ def populate_data(usertype, user):
                 'd' if user.profile.Chimie_course else None,
             ]))
         })
-    elif usertype == "coach":
+    elif usertype == "b":
         data.update({
             'school_level': user.profile.school_level,
             'school': user.profile.coachaccount.school,
