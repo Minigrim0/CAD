@@ -40,34 +40,23 @@ def sendNotifToCoaches(student):
             coach.save()
 
 
-def create_notif(user, title, content, author):
-    newNotif = Notification(user=user)
-    newNotif.title = title
-    newNotif.content = content
-    newNotif.author = author
-    newNotif.save()
+def registerProfile(user, form, account_type="Etudiant"):
+    profile = Profile(user=user)
+    profile.phone_number = form.cleaned_data["phone_number"]
+    profile.account_type = account_type
+    profile.address = form.cleaned_data["address"]
+    profile.birthDate = form.cleaned_data["birthdate"]
 
+    profile.Maths_course = "a" in form.cleaned_data['courses']
+    profile.Physique_course = "b" in form.cleaned_data['courses']
+    profile.Francais_course = "c" in form.cleaned_data['courses']
+    profile.Chimie_course = "d" in form.cleaned_data['courses']
 
-def getSchedule(student_profile, form):
-    days_array = [
-        'Monday',
-        'Tuesday',
-        'Wednesday',
-        'Thursday',
-        'Friday',
-        'Saturday',
-        'Sunday']
+    profile.secret_key = hashlib.sha256(user.username.encode("utf-8")).hexdigest()
+    profile.verifiedAccount = False
+    profile.school_level = form.cleaned_data["school_level"]
 
-    for day in days_array:
-        id = "course " + day
-        try:
-            if form[id] == 'on':
-                student_profile.wanted_schedule += "1/"
-                student_profile.wanted_schedule += form[day + "Start"] + "/"
-                student_profile.wanted_schedule += form[day + "End"] + "."
-        except Exception:
-            student_profile.wanted_schedule += "0/0/0."
-    student_profile.save()
+    profile.save()
 
 
 def studentRegister(user, form):
@@ -80,6 +69,9 @@ def studentRegister(user, form):
     student_profile.zip = form.cleaned_data["zip"]
     student_profile.ville = form.cleaned_data["ville"]
     student_profile.wanted_schedule = form.cleaned_data["wanted_schedule"]
+    student_profile.resp_phone_number1 = form.cleaned_data["resp_phone_number1"]
+    student_profile.resp_phone_number2 = form.cleaned_data["resp_phone_number2"]
+    student_profile.resp_phone_number3 = form.cleaned_data["resp_phone_number3"]
     student_profile.save()
 
     # Follow Element creation
@@ -130,25 +122,6 @@ def registerUser(form, usertype):
         coachRegister(user, form)
 
     return user
-
-
-def registerProfile(user, form, account_type="Etudiant"):
-    profile = Profile(user=user)
-    profile.phone_number = form.cleaned_data["phone_number"]
-    profile.account_type = account_type
-    profile.address = form.cleaned_data["address"]
-    profile.birthDate = form.cleaned_data["birthdate"]
-
-    profile.Maths_course = "a" in form.cleaned_data['courses']
-    profile.Physique_course = "b" in form.cleaned_data['courses']
-    profile.Francais_course = "c" in form.cleaned_data['courses']
-    profile.Chimie_course = "d" in form.cleaned_data['courses']
-
-    profile.secret_key = hashlib.sha256(user.username.encode("utf-8")).hexdigest()
-    profile.verifiedAccount = False
-    profile.school_level = form.cleaned_data["school_level"]
-
-    profile.save()
 
 
 def getUser(token):

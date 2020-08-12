@@ -129,6 +129,12 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
                     Column('phone_number', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
                 ),
+                Row(
+                    Column('resp_phone_number1', css_class='form-group col-md-4 mb-0'),
+                    Column('resp_phone_number2', css_class='form-group col-md-4 mb-0'),
+                    Column('resp_phone_number3', css_class='form-group col-md-4 mb-0'),
+                    css_class='form-row'
+                ),
                 bforms.InlineCheckboxes('courses'),
                 Row(
                     Column('comments', css_class='form-group col-md-12 mb-0'),

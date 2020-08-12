@@ -112,6 +112,15 @@ class StudentAccount(models.Model):
         default='0000', max_length=4, blank=True)
     ville = models.CharField(
         max_length=50, default="None", blank=True)
+    resp_phone_number1 = models.CharField(
+        null=True, blank=True, verbose_name="numéro de téléphone d'un responsable",
+        default="", max_length=25)
+    resp_phone_number2 = models.CharField(
+        null=True, blank=True, verbose_name="numéro de téléphone d'un responsable",
+        default="", max_length=25)
+    resp_phone_number3 = models.CharField(
+        null=True, blank=True, verbose_name="numéro de téléphone d'un responsable",
+        default="", max_length=25)
 
     @property
     def balance(self):

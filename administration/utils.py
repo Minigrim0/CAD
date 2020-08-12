@@ -48,6 +48,9 @@ def modifyStudent(student_account, cleaned_data):
     student_account.ville = cleaned_data['ville']
     student_account.zip = cleaned_data['zip']
     student_account.coach = cleaned_data['coach']
+    student_account.resp_phone_number1 = cleaned_data['resp_phone_number1']
+    student_account.resp_phone_number2 = cleaned_data['resp_phone_number2']
+    student_account.resp_phone_number3 = cleaned_data['resp_phone_number3']
 
     student_account.save()
 
@@ -56,7 +59,6 @@ def modifyCoach(coach_account, cleaned_data):
     """
         Modifies a coach profile according to the given form
     """
-
     coach_account.school = cleaned_data["school"]
     coach_account.IBAN = cleaned_data["IBAN"]
     coach_account.nationalRegisterID = cleaned_data["nationalRegisterID"]
@@ -94,6 +96,9 @@ def populate_data(usertype, user):
             'ville': user.profile.studentaccount.ville,
             'NeedsVisit': user.profile.studentaccount.NeedsVisit,
             'balance': user.profile.studentaccount.balance,
+            'resp_phone_number1': user.profile.studentaccount.resp_phone_number1,
+            'resp_phone_number2': user.profile.studentaccount.resp_phone_number2,
+            'resp_phone_number3': user.profile.studentaccount.resp_phone_number3,
             'courses': list(filter((None).__ne__, [
                 'a' if user.profile.Maths_course else None,
                 'b' if user.profile.Physique_course else None,
