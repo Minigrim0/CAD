@@ -23,12 +23,18 @@ class Profile(models.Model):
         ("k", "autre")
     ]
 
+    account_types = [
+        ("a", "Etudiant"),
+        ("b", "Coach"),
+        ("c", "Administrateur")
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(
         null=True, blank=True, verbose_name="numéro de téléphone",
         default="", max_length=25)
     account_type = models.CharField(
-        null=True, blank=True, default="unknown", max_length=50,
+        null=True, blank=True, choices=account_types, default="a", max_length=1,
         verbose_name="Role")
     address = models.CharField(
         null=True, blank=True, default="unknown", max_length=150,
@@ -72,7 +78,7 @@ class Profile(models.Model):
         string = "Nom: {} ".format(self.user.first_name)
         string += "{}\n".format(self.user.last_name)
         string += "Role: {}\n".format(self.account_type)
-        if self.account_type == "Coach":
+        if self.account_type == "b":  # If coach
             string += "Donne cours en " + self.school_level + "\n"
         else:
             string += "Est en " + self.school_level + "\n"
@@ -112,6 +118,15 @@ class StudentAccount(models.Model):
         default='0000', max_length=4, blank=True)
     ville = models.CharField(
         max_length=50, default="None", blank=True)
+    resp_phone_number1 = models.CharField(
+        null=True, blank=True, verbose_name="numéro de téléphone d'un responsable",
+        default="", max_length=25)
+    resp_phone_number2 = models.CharField(
+        null=True, blank=True, verbose_name="numéro de téléphone d'un responsable",
+        default="", max_length=25)
+    resp_phone_number3 = models.CharField(
+        null=True, blank=True, verbose_name="numéro de téléphone d'un responsable",
+        default="", max_length=25)
 
     @property
     def balance(self):

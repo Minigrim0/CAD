@@ -6,6 +6,9 @@ from users.models import studentRequest
 
 
 def modifyUser(username, form):
+    """
+        Modifies a user and his profile according to the given form
+    """
     user = get_object_or_404(User, username=username)
     cleaned_data = form.cleaned_data
     user.first_name = cleaned_data['first_name']
@@ -19,13 +22,13 @@ def modifyUser(username, form):
     profile.birthDate = cleaned_data['birthdate']
     profile.verifiedAccount = cleaned_data['verifiedAccount']
 
-    if profile.account_type in ['student', 'coach']:
+    if profile.account_type in "ab":
         profile.school_level = cleaned_data['school_level']
         profile.Maths_course = "a" in cleaned_data['courses']
         profile.Physique_course = "b" in cleaned_data['courses']
         profile.Francais_course = "c" in cleaned_data['courses']
         profile.Chimie_course = "d" in cleaned_data['courses']
-        if profile.account_type == "student":
+        if profile.account_type == "a":
             modifyStudent(profile.studentaccount, cleaned_data)
         else:
             modifyCoach(profile.coachaccount, cleaned_data)
@@ -45,6 +48,9 @@ def modifyStudent(student_account, cleaned_data):
     student_account.ville = cleaned_data['ville']
     student_account.zip = cleaned_data['zip']
     student_account.coach = cleaned_data['coach']
+    student_account.resp_phone_number1 = cleaned_data['resp_phone_number1']
+    student_account.resp_phone_number2 = cleaned_data['resp_phone_number2']
+    student_account.resp_phone_number3 = cleaned_data['resp_phone_number3']
 
     student_account.save()
 
@@ -53,7 +59,6 @@ def modifyCoach(coach_account, cleaned_data):
     """
         Modifies a coach profile according to the given form
     """
-
     coach_account.school = cleaned_data["school"]
     coach_account.IBAN = cleaned_data["IBAN"]
     coach_account.nationalRegisterID = cleaned_data["nationalRegisterID"]
@@ -66,6 +71,9 @@ def modifyCoach(coach_account, cleaned_data):
 
 
 def populate_data(usertype, user):
+    """
+        Populates a form according to the user's data
+    """
     data = {
         'first_name': user.first_name,
         'last_name': user.last_name,
@@ -77,7 +85,7 @@ def populate_data(usertype, user):
         'verifiedAccount': user.profile.verifiedAccount,
     }
 
-    if usertype == "student":
+    if usertype == "a":
         data.update({
             'school_level': user.profile.school_level,
             'tutor_name': user.profile.studentaccount.tutor_name,
@@ -88,6 +96,9 @@ def populate_data(usertype, user):
             'ville': user.profile.studentaccount.ville,
             'NeedsVisit': user.profile.studentaccount.NeedsVisit,
             'balance': user.profile.studentaccount.balance,
+            'resp_phone_number1': user.profile.studentaccount.resp_phone_number1,
+            'resp_phone_number2': user.profile.studentaccount.resp_phone_number2,
+            'resp_phone_number3': user.profile.studentaccount.resp_phone_number3,
             'courses': list(filter((None).__ne__, [
                 'a' if user.profile.Maths_course else None,
                 'b' if user.profile.Physique_course else None,
@@ -95,7 +106,7 @@ def populate_data(usertype, user):
                 'd' if user.profile.Chimie_course else None,
             ]))
         })
-    elif usertype == "coach":
+    elif usertype == "b":
         data.update({
             'school_level': user.profile.school_level,
             'school': user.profile.coachaccount.school,
