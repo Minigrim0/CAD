@@ -51,12 +51,13 @@ def mailAdminView(request):
 @staff_member_required
 def articleAdminView(request):
     if request.method == "POST":
-        form = request.POST
-        article = Article.objects.get(id=int(form['articleid']))
-        article.title = form['title'].replace("\r", " ")
-        article.subtitle = form['subtitle'].replace("\r", " ")
-        article.content = form['content'].replace("\r", " ")
-        article.save()
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            article = get_object_or_404(Article, name=form.cleaned_data['name'])
+            article.title = form.cleaned_data['title'].replace("\r", " ")
+            article.subtitle = form.cleaned_data['subtitle'].replace("\r", " ")
+            article.content = form.cleaned_data['content'].replace("\r", " ")
+            article.save()
 
     articles = [ArticleForm(instance=article) for article in Article.objects.all()]
     view_title = "Articles"

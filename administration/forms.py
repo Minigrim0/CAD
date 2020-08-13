@@ -23,6 +23,9 @@ class ArticleForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = ['name', 'title', 'subtitle', 'content']
+        widgets = {
+            'name': forms.TextInput(attrs={"readonly": "readonly"}),
+        }
 
 
 class TransactionForm(forms.ModelForm):
