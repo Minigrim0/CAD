@@ -8,6 +8,9 @@ from django.shortcuts import reverse
 
 from cad.settings import EMAIL_HOST_USER
 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+
 
 class Article(models.Model):
     name = models.CharField(
@@ -56,7 +59,7 @@ class Mail(models.Model):
         content = content.replace("<SECRETKEY>", str(user.profile.secret_key))
         content = content.replace(
             "<CONFIRMLINK>",
-            "https://{}/{}?key={}".format(
+            "https://{}{}?key={}".format(
                 domain, reverse("confirmation"), user.profile.secret_key)
         )
         return content
@@ -76,6 +79,20 @@ class Message(models.Model):
 
     def send_as_mail(self):
         logging.debug("Sending mail : {}\n{}\n\n{}".format(self.subject, self.content, self.contact_mail))
-        send_mail(
-            self.subject, "{}\n\n{}".format(self.content, self.contact_mail),
-            EMAIL_HOST_USER, ['cadcours@gmail.com'])
+        # send_mail(
+        #     self.subject, "{}\n\n{}".format(self.content, self.contact_mail),
+        #     EMAIL_HOST_USER, ['cadcours@gmail.com'])
+
+        html_message = render_to_string(
+            "mail.html",
+            {
+                'title': self.subject,
+                "content": self.content 
+            }
+        )
+
+        from_email = 'CAD - Cours a domicile <{}>'.format(EMAIL_HOST_USER)
+        to = 'grimauflorent@gmail.com'
+        msg = EmailMultiAlternatives(self.subject, self.content, from_email, [to])
+        msg.attach_alternative(html_message,"text/html")
+        msg.send()
