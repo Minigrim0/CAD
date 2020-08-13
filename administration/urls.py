@@ -14,4 +14,6 @@ urlpatterns = [
     url('^mails/create/$', views.mailAdminCreate, name="createMail"),
     url('^courses/$', views.courses, name="given_courses"),
     url('^transactions/$', views.transactions, name="transactions"),
+    url('^messages/$', views.message_admin_view, name="message_admin_view"),
+    url('^messages/all/$', views.message_list, name="messagelist"),
 ]

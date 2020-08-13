@@ -76,6 +76,7 @@ class Message(models.Model):
     subject = models.TextField(null=False, default="No subject")
     content = models.TextField(null=False)
     contact_mail = models.CharField(max_length=250)
+    seen = models.BooleanField(default=False)
 
     def send_as_mail(self):
         logging.debug("Sending mail : {}\n{}\n\n{}".format(self.subject, self.content, self.contact_mail))
