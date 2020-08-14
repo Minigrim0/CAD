@@ -93,15 +93,28 @@
     </div>
 
     <div class="container-fluid p-0">
+
         <section class="p-3 p-lg-5 d-flex align-items-center">
             <div class="container-fluid">
                 <h2 class="mb-2">
                     Modifier un utilisateur:
                 </h2>
+                <p>
+                {% if form_user.profile.account_type == "a" %}
+                    <div class="form-group row col-md-12">
+                        <div id="unsubbutton" class="col-sm-10">
+                            {% if not form_user.profile.studentaccount.confirmedAccount and not form_user.profile.studentaccount.unsub_proposal %}
+                                <button type="button" onclick="unsub('{{form_user.profile.secret_key}}')" class="btn btn-success" name="modify">Envoyer une demande de désincritpion</button>
+                            {% elif form_user.profile.studentaccount.unsub_proposal and not form_user.profile.studentaccount.confirmedAccount %}
+                                <p style="color:red;">Proposition de désinscription envoyée</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+                </p>
                 {% crispy form %}
             </div>
         </section>
-
         <hr class="m-0">
     </div>
 {% endblock %}
@@ -200,43 +213,27 @@
             }
         );
     }
+
+    function unsub(user_key){
+        var Url = "{% url 'unsubscribe' %}";
+
+        $.post(
+            Url, {
+                user_key: user_key,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            function(data, status) {
+                console.log(status);
+                if (status == "success") {
+                    unsubButton = document.getElementById("unsubbutton");
+                    unsubButton.innerHTML = '<p style="color:red;">Proposition de désinscription envoyée</p>';
+                } else {
+                    unsubButton = document.getElementById("unsubbutton");
+                    unsubButton.innerHTML = '<p style="color:red;">La requête n\'a pas abouti, réessayez plus tard</p>';
+                }
+            }
+        );
+    }
 </script>
 
-{% if user.profile.account_type == "Etudiant" %}
-    {% if not user.profile.studentaccount.confirmedAccount and not user.profile.studentaccount.unsub_proposal %}
-        <div class="form-group row col-md-12">
-            <label for="account_type" class="col-sm-2 col-form-label">Proposition de désinscription:</label>
-            <div class="col-sm-10">
-                <button type="button" onclick="unsub('{{user.profile.secret_key}}')" class="btn btn-success" name="modify">Envoyer</button>
-                <script>
-                    function unsub(user_key){
-                        var Url = "{% url 'unsubscribe' %}";
-
-                        $.post(
-                            Url, {
-                                user_key: user_key,
-                                csrfmiddlewaretoken: '{{ csrf_token }}'
-                            },
-                            function(data, status) {
-                                console.log(status);
-                                if (status == "success") {
-                                    console.log("request successfully sent");
-                                } else {
-                                    console.log("request failed...");
-                                }
-                            }
-                        );
-                    }
-                </script>
-            </div>
-        </div>
-    {% elif user.profile.studentaccount.unsub_proposal and not user.profile.studentaccount.confirmedAccount %}
-        <div class="form-group row col-md-12">
-            <label for="account_type" class="col-sm-2 col-form-label">Proposition de désinscription:</label>
-            <div class="col-sm-10">
-                <p style="color:red;">Proposition de désinscription envoyée</p>
-            </div>
-        </div>
-    {% endif %}
-{% endif %}
 {% endblock %}

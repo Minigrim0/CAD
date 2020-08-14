@@ -17,6 +17,9 @@ from default.models import Article, Mail, Message
 from inscription.utils import getUser
 from users.models import FollowElement, Profile, studentRequest, Transaction
 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+
 
 @staff_member_required
 def adminPage(request):
@@ -43,7 +46,7 @@ def mailAdminView(request):
         mail.role = form['role']
         mail.save()
 
-    mails = [MailForm(instance=mail) for mail in Mail.objects.all()]
+    mails = [MailForm(instance=mail) for mail in Mail.objects.all().exclude(role="i")]
     view_title = "Mails"
 
     return render(request, 'mailsAdmin.html', locals())
@@ -172,10 +175,9 @@ def sendUnsubscriptionMail(request):
 
     user = getUser(request.POST.get("user_key"))
     mail = Mail.objects.get(role='c')
-    if not DEBUG:
-        send_mail(
-            mail.clean_header, mail.formatted_content(user, domain=request.META['HTTP_HOST']), EMAIL_HOST_USER,
-            [user.email])
+    if DEBUG:
+        mail.send(user, request.META["HTTP_HOST"])
+
     else:
         messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 

@@ -14,6 +14,9 @@ from inscription import utils
 from users.models import Notification, studentRequest
 from users.forms import StudentRegisterForm, CoachRegisterForm
 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+
 
 def registerStudentView(request):
     """ allows a student to register an account """
@@ -86,9 +89,8 @@ def welcomeUser(request, user, host):
     mail = Mail.objects.get(id=1)
     if not DEBUG:
         logging.warning("Sending mail to {}".format(user.email))
-        send_mail(
-            mail.clean_header, mail.formatted_content(user, domain=host),
-            EMAIL_HOST_USER, [user.email])
+
+        mail.send(user, request.META["HTTP_HOST"])
     else:
         messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 
@@ -119,9 +121,7 @@ def confirmation(request):
     if profile.account_type == "a":
         mail = Mail.objects.get(role='b')
         if not DEBUG:
-            send_mail(
-                mail.clean_header, mail.formatted_content(user, domain=request.META['HTTP_HOST']), EMAIL_HOST_USER,
-                [user.email])
+            mail.send(user, request.META["HTTP_HOST"])
         else:
             mail = Mail.objects.get(id=1)
 
