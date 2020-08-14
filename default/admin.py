@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from default.models import Article, Mail, Message
+from default.models import Article, Mail, Message, MailingList
 
 ARTICLE_DISPLAY_SIZE = 75
 
@@ -25,8 +25,8 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 class MailAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'subject')
-    list_filter = ('id', 'name', 'subject')
+    list_display = ('id', 'name', 'subject', 'role')
+    list_filter = ('id', 'name', 'subject', 'role')
     ordering = ('-id', )
     search_fields = ('name', 'subject', 'id')
 
@@ -49,6 +49,19 @@ class MessageAdmin(admin.ModelAdmin):
     )
 
 
+class MailingListAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name',)
+    list_filter = ('id', 'name',)
+    ordering = ('-id', )
+    search_fields = ('name',)
+
+    fields = (
+        'name',
+        'users',
+    )
+
+
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Mail, MailAdmin)
 admin.site.register(Message, MessageAdmin)
+admin.site.register(MailingList, MailingListAdmin)
