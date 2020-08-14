@@ -88,12 +88,14 @@ class Message(models.Model):
             "mail.html",
             {
                 'title': self.subject,
-                "content": self.content 
+                'content': self.content,
+                'error_mail': "null",
+                'site_see_link': "null"
             }
         )
 
         from_email = 'CAD - Cours a domicile <{}>'.format(EMAIL_HOST_USER)
-        to = 'grimauflorent@gmail.com'
+        to = 'cadcours@gmail.com'
         msg = EmailMultiAlternatives(self.subject, self.content, from_email, [to])
         msg.attach_alternative(html_message,"text/html")
         msg.send()
