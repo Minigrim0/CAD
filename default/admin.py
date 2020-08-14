@@ -25,8 +25,8 @@ class ArticleAdmin(admin.ModelAdmin):
 
 
 class MailAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'subject')
-    list_filter = ('id', 'name', 'subject')
+    list_display = ('id', 'name', 'subject', 'role')
+    list_filter = ('id', 'name', 'subject', 'role')
     ordering = ('-id', )
     search_fields = ('name', 'subject', 'id')
 

@@ -46,10 +46,12 @@ class Mail(models.Model):
         ('f', 'attribution de mission'),
         ('g', 'mission attribuée à un autre coach'),
         ('h', 'Template non automatique'),
+        ('i', 'Message envoyé'),
     )
 
     role = models.CharField(
         max_length=1, choices=choices, verbose_name="Role du mail")
+    to = models.ForeignKey(User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE)
 
     def formatted_content(self, user, domain="127.0.0.1:8000"):
         content = str(self.content)
@@ -64,7 +66,32 @@ class Mail(models.Model):
             "https://{}{}?key={}".format(
                 domain, reverse("confirmation"), user.profile.secret_key)
         )
+        content = content.replace("\n", "<br/>")
         return content
+
+    def send(self, user, domain):
+        html_message = render_to_string(
+            "mail.html",
+            {
+                'title': self.clean_header,
+                'content': self.formatted_content(user, domain=domain),
+                'error_mail': "",
+                'site_see_link': "http://{}{}".format(domain, reverse("soon_view"))
+            }
+        )
+
+        to = [user.email]
+        from_email = 'CAD - Cours a domicile <{}>'.format(EMAIL_HOST_USER)
+        msg = EmailMultiAlternatives(self.clean_header, self.formatted_content(user, domain=domain), from_email, to)
+        msg.attach_alternative(html_message, "text/html")
+        msg.send()
+
+        # Duplicates the email, setting it as "sent" email
+        self.pk = None
+        self.id = Mail.objects.count() + 1
+        self.role = "i"
+        self.to = user
+        self.save()
 
     @property
     def clean_header(self):
