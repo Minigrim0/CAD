@@ -3,6 +3,7 @@ import django
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.urls import reverse
 
 from default.forms import contactForm
 from default.models import Article, Message
@@ -56,17 +57,13 @@ def contactView(request):
     if request.method == 'POST':
         form = contactForm(request.POST)
         if form.is_valid():
-            sujet = form.cleaned_data['sujet']
-            message = form.cleaned_data['message']
-            envoyeur = form.cleaned_data['envoyeur']
-
             msg = Message()
-            msg.subject = sujet
-            msg.content = message
-            msg.contact_mail = envoyeur
+            msg.subject = form.cleaned_data['sujet']
+            msg.content = form.cleaned_data['message']
+            msg.contact_mail = form.cleaned_data['envoyeur']
             msg.save()
             if not DEBUG:
-                msg.send_as_mail()
+                msg.send_as_mail(domain=request.META['HTTP_HOST'])
             else:
                 messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 
@@ -74,7 +71,7 @@ def contactView(request):
                 request, messages.SUCCESS,
                 "Votre message a bien été envoyé!")
 
-            return HttpResponseRedirect("/")
+            return HttpResponseRedirect(reverse("home"))
 
     else:
         form = contactForm()
