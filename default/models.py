@@ -110,7 +110,7 @@ class Message(models.Model):
         from_email = 'CAD - Cours a domicile <{}>'.format(EMAIL_HOST_USER)
         to = [user.email for user in to.users.all()]
         msg = EmailMultiAlternatives(self.subject, self.content, from_email, to)
-        msg.attach_alternative(html_message,"text/html")
+        msg.attach_alternative(html_message, "text/html")
         msg.send()
 
 
