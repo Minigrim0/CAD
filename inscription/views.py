@@ -78,7 +78,7 @@ def welcomeUser(request, user, host):
     content = "Au nom de toute l'équipe de CAD, \
         nous vous souhaitons la bienvenue! \
         N'oubliez pas que vous pouvez nous contacter \
-        si vous avez le moindre soucis via ce \
+        si vous avez le moindre souci via ce \
         <a href='/contact/'>formulaire</a>!"
 
     utils.create_notif(user, title, content, author)
