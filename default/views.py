@@ -78,3 +78,7 @@ def contactView(request):
 
     view_title = "Contact"
     return render(request, 'contact.html', locals())
+
+
+def soon(request):
+    return render(request, "soon.html")

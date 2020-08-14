@@ -111,7 +111,7 @@ class StudentAccount(models.Model):
         default=False, verbose_name="Proposition de désinscription envoyée")
     # User has payed the two first hours of course
     coach = models.ForeignKey(
-        User, null=True, related_name="Coach", on_delete=models.CASCADE)
+        User, null=True, blank=True, related_name="Coach", on_delete=models.SET_NULL)
     confirmedAccount = models.BooleanField(
         default=False, verbose_name="A payé ses 2 premières heures de cours")
     zip = models.CharField(
