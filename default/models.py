@@ -11,6 +11,8 @@ from cad.settings import EMAIL_HOST_USER
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
 
+from django.contrib.auth.models import User
+
 
 class Article(models.Model):
     name = models.CharField(
@@ -78,24 +80,40 @@ class Message(models.Model):
     contact_mail = models.CharField(max_length=250)
     seen = models.BooleanField(default=False)
 
-    def send_as_mail(self):
-        logging.debug("Sending mail : {}\n{}\n\n{}".format(self.subject, self.content, self.contact_mail))
-        # send_mail(
-        #     self.subject, "{}\n\n{}".format(self.content, self.contact_mail),
-        #     EMAIL_HOST_USER, ['cadcours@gmail.com'])
-
+    def rendered(self):
         html_message = render_to_string(
             "mail.html",
             {
-                'title': self.subject,
-                'content': self.content,
+                'title': 'Nouveau message d\'un utilisateur de CAD',
+                'content': "<h2>{}</h2><br/>{}".format(self.subject, self.content),
                 'error_mail': "null",
                 'site_see_link': "null"
             }
         )
 
+        return html_message
+
+    def send_as_mail(self, domain="127.0.0.1:8000"):
+        logging.debug("Sending mail : {}\n{}\n\n{}".format(self.subject, self.content, self.contact_mail))
+
+        html_message = render_to_string(
+            "mail.html",
+            {
+                'title': 'Nouveau message d\'un utilisateur de CAD',
+                'content': "<h2>{}</h2><br/>{}".format(self.subject, self.content),
+                'error_mail': "",
+                'site_see_link': "http://{}{}?id={}".format(domain, reverse("message_admin_view"), self.pk)
+            }
+        )
+
+        to = MailingList.objects.get(id=1)
         from_email = 'CAD - Cours a domicile <{}>'.format(EMAIL_HOST_USER)
-        to = 'cadcours@gmail.com'
-        msg = EmailMultiAlternatives(self.subject, self.content, from_email, [to])
+        to = [user.email for user in to.users.all()]
+        msg = EmailMultiAlternatives(self.subject, self.content, from_email, to)
         msg.attach_alternative(html_message,"text/html")
         msg.send()
+
+
+class MailingList(models.Model):
+    users = models.ManyToManyField(User, verbose_name="Utilisateurs intéréssés")
+    name = models.CharField(max_length=100)
