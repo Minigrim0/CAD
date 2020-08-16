@@ -40,7 +40,21 @@
                                 <td><a href="{% url 'user_admin_view' %}?type={{ user.profile.account_type }}&user={{ user.username }}">{{ user.first_name }}</a></td>
                                 <td>{{ user.last_name }}</td>
                                 <td>{{ user.profile.get_account_type_display }}</td>
-                                <td>{% if user.is_active %}<i class="fas fa-user-check"></i>{% else %}<i class="fas fa-user-slash"></i>{% endif %}</td>
+                                <td>
+                                    {% if user.is_active %}
+                                        <button class="btn btn-link" id="activationbutton_{{ user.id }}" onclick="activate('{{ user.id }}', 'false')">
+                                            <div id="status_{{ user.id }}">
+                                                <i class="fas fa-user-check"></i>
+                                            </div>
+                                        </button>
+                                    {% else %}
+                                        <button class="btn btn-link" id="activationbutton_{{ user.id }}" onclick="activate('{{ user.id }}', 'true')">
+                                            <div id="status_{{ user.id }}">
+                                                <i class="fas fa-user-slash"></i>
+                                            </div>
+                                        </button>
+                                    {% endif %}
+                                </td>
                                 <td>{% if user.profile.verifiedAccount %}<img src="/static/admin/img/icon-yes.svg" alt="True"/>{% else %}<img src="/static/admin/img/icon-no.svg" alt="True"/>{% endif %}</td>
                             </tr>
                         {% endfor %}
@@ -69,6 +83,33 @@
             })
         }
     )
+
+    function activate(user_id, active){
+        var Url = "{% url 'activate_user' %}?userid=" + user_id + "&active=" + active;
+
+        $.post(
+            Url, {
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            function(data, status) {
+                console.log(status);
+                if (status == "success") {
+                    status = document.getElementById("status_" + user_id);
+                    button = document.getElementById("activationbutton_" + user_id);
+                    if (active == "true"){
+                        status.innerHTML = '<i class="fas fa-user-check"></i>';
+                        button.setAttribute("onClick", "activate('" + user_id + "', 'false')");
+                    } else {
+                        status.innerHTML = '<i class="fas fa-user-slash"></i>';
+                        button.setAttribute("onClick", "activate('" + user_id + "', 'true')");
+                    }
+                } else {
+                    unsubButton = document.getElementById("unsubbutton");
+                    unsubButton.innerHTML = '<p style="color:red;">La requête n\'a pas abouti, réessayez plus tard</p>';
+                }
+            }
+        );
+    }
 
     function doSearch(){
         var url = new URL(document.location);

@@ -106,14 +106,18 @@ def transactions(request):
 
 
 @staff_member_required
-def reactivate(request, username=""):
-    if username == "":
-        return HttpResponseRedirect(reverse("Error_view"))
+def activate(request):
+    userid = request.GET.get("userid", "")
+    active = True if request.GET.get("active", "false") == "true" else False
+    usr = User.objects.filter(id=userid)
 
-    usr = User.objects.get(username=username)
-    usr.is_active = True
+    if usr.count() == 0:
+        return HttpResponse("Error")
+
+    usr = usr.first()
+    usr.is_active = active
     usr.save()
-    return HttpResponseRedirect(reverse("home_admin"))
+    return HttpResponse("Success")
 
 
 @staff_member_required
