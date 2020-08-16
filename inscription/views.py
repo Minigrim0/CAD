@@ -84,7 +84,11 @@ def welcomeUser(request, user, host):
         si vous avez le moindre souci via ce \
         <a href='/contact/'>formulaire</a>!"
 
-    utils.create_notif(user, title, content, author)
+    newNotif = Notification(user=user)
+    newNotif.title = title
+    newNotif.content = content
+    newNotif.author = author
+    newNotif.save()
 
     mail = Mail.objects.get(id=1)
     if not DEBUG:
