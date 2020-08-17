@@ -16,6 +16,14 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include
+from django.contrib.sitemaps.views import sitemap
+
+from default.sitemap import HomeSitemap
+
+
+sitemaps = {
+    'static': HomeSitemap,
+}
 
 urlpatterns = [
     url('^admin/', admin.site.urls),
@@ -23,4 +31,5 @@ urlpatterns = [
     url('^inscription/', include('inscription.urls')),
     url('^users/', include('users.urls')),
     url('^', include('default.urls')),
+    url('^sitemap.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
 ]
