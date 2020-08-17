@@ -25,7 +25,7 @@ def ErrorView(request):
     return HttpResponseRedirect(reverse("home"))
 
 
-@login_required(login_url='/connexion/')
+@login_required(login_url='/users/login')
 def userView(request):
     user = request.user
     notifications = user.notification_set.all()
@@ -43,7 +43,7 @@ def userView(request):
     return render(request, 'user.html', locals())
 
 
-@login_required(login_url='/connexion/')
+@login_required(login_url='/users/login')
 def followView(request):
     a_user = request.user
     followelement_set = a_user.followelement_set.all()
@@ -52,7 +52,7 @@ def followView(request):
     return render(request, 'follow.html', locals())
 
 
-@login_required(login_url='/connexion/')
+@login_required(login_url='/users/login')
 def studentsView(request):
     a_user = request.user
     student_set = User.objects.filter(profile__studentaccount__coach=a_user)
@@ -61,7 +61,7 @@ def studentsView(request):
     return render(request, 'students.html', locals())
 
 
-@login_required
+@login_required(login_url='/users/login')
 def send_notif(request):
     if request.method == "POST":
 
@@ -81,7 +81,7 @@ def send_notif(request):
     return HttpResponse("failed")
 
 
-@login_required
+@login_required(login_url='/users/login')
 def remove_notif(request):
     if request.method != "POST":
         return HttpResponseRedirect(reverse("Error_view"))
@@ -120,7 +120,7 @@ def modify_balance(request):
     return JsonResponse({"new_balance": student.profile.studentaccount.balance})
 
 
-@login_required(login_url='/connexion/')
+@login_required(login_url='/users/login')
 def disconnect(request):
     logout(request)
 
@@ -130,7 +130,7 @@ def disconnect(request):
     return HttpResponseRedirect(reverse("home"))
 
 
-@login_required(login_url='/connexion/')
+@login_required(login_url='/users/login')
 def requestView(request, id=0):
     if id != 0:
         allowed = request.user.profile.account_type == "Coach"
@@ -163,7 +163,7 @@ def requestView(request, id=0):
             return HttpResponseRedirect(reverse("Error_view"))
 
 
-@login_required(redirect_field_name='/05/')
+@login_required(login_url='/users/login')
 def chooseCoach(request):
     if request.method != "POST":
         return HttpResponse("/05/")
@@ -227,11 +227,13 @@ def login_view(request):
     email = form["coMail"]
     password = form["coPass"]
 
-    try:
-        user = User.objects.get(email=email)  # Get user obj via its email
-        if user is None:
-            raise Exception
-
+    user = User.objects.filter(email=email)
+    if user.count() == 0:
+        messages.add_message(
+            request, messages.ERROR,
+            "Vos identifiants ne correspondent à aucun compte!")
+    else:
+        user = user.first()
         authuser = authenticate(username=user.username, password=password)
         if authuser:
             login(request, authuser)
@@ -241,15 +243,11 @@ def login_view(request):
         else:
             messages.add_message(
                 request, messages.ERROR,
-                "Vos identifiants ne correspondent à \
-                aucun compte!")
-    except Exception as e:
-        logging.warning("Error while connecting user : {}".format(e))
+                "Vos identifiants ne correspondent à aucun compte!")
 
-        messages.add_message(
-            request, messages.ERROR,
-            "Vos identifiants ne correspondent à \
-            aucun compte!")
+    # If the user could not connect, redirect him to the login page again
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login_view"))
 
     next = request.GET.get("next", "")
     if next != "":

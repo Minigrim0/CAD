@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'default',
     'inscription',
-    'connexion',
     'users',
     'administration',
     'crispy_forms',
