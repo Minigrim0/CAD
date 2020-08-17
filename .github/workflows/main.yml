@@ -12,6 +12,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: upgrading pip
+      run: pip install --upgrade pip
+
     - name: Installing pip packages
       run: pip install -r requirements.txt
 
