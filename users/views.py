@@ -9,6 +9,7 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseRedirect, JsonResponse)
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth import authenticate, login
 
 from administration.utils import populate_data
 from .models import Notification, Transaction, studentRequest
@@ -24,7 +25,7 @@ def ErrorView(request):
     return HttpResponseRedirect(reverse("home"))
 
 
-@login_required(login_url='/connexion/')
+@login_required
 def userView(request):
     user = request.user
     notifications = user.notification_set.all()
@@ -42,7 +43,7 @@ def userView(request):
     return render(request, 'user.html', locals())
 
 
-@login_required(login_url='/connexion/')
+@login_required
 def followView(request):
     a_user = request.user
     followelement_set = a_user.followelement_set.all()
@@ -51,7 +52,7 @@ def followView(request):
     return render(request, 'follow.html', locals())
 
 
-@login_required(login_url='/connexion/')
+@login_required
 def studentsView(request):
     a_user = request.user
     student_set = User.objects.filter(profile__studentaccount__coach=a_user)
@@ -119,7 +120,7 @@ def modify_balance(request):
     return JsonResponse({"new_balance": student.profile.studentaccount.balance})
 
 
-@login_required(login_url='/connexion/')
+@login_required
 def disconnect(request):
     logout(request)
 
@@ -129,7 +130,7 @@ def disconnect(request):
     return HttpResponseRedirect(reverse("home"))
 
 
-@login_required(login_url='/connexion/')
+@login_required
 def requestView(request, id=0):
     if id != 0:
         allowed = request.user.profile.account_type == "Coach"
@@ -162,7 +163,7 @@ def requestView(request, id=0):
             return HttpResponseRedirect(reverse("Error_view"))
 
 
-@login_required(redirect_field_name='/05/')
+@login_required
 def chooseCoach(request):
     if request.method != "POST":
         return HttpResponse("/05/")
@@ -212,3 +213,43 @@ def requestManage(request):
         return HttpResponse("A été ajouté")
 
     return HttpResponse("N'a pas été ajouté")
+
+
+def login_view(request):
+    """
+        Allows a user to connect to his account
+    """
+    if request.method != "POST":
+        view_title = "Connectez vous"
+        return render(request, 'connexion.html', locals())
+
+    form = request.POST
+    email = form["coMail"]
+    password = form["coPass"]
+
+    user = User.objects.filter(email=email)
+    if user.count() == 0:
+        messages.add_message(
+            request, messages.ERROR,
+            "Vos identifiants ne correspondent à aucun compte!")
+    else:
+        user = user.first()
+        authuser = authenticate(username=user.username, password=password)
+        if authuser:
+            login(request, authuser)
+            messages.add_message(
+                request, messages.SUCCESS,
+                "Rebonjour {}".format(request.user.first_name))
+        else:
+            messages.add_message(
+                request, messages.ERROR,
+                "Vos identifiants ne correspondent à aucun compte!")
+
+    # If the user could not connect, redirect him to the login page again
+    if not request.user.is_authenticated:
+        return HttpResponseRedirect(reverse("login_view"))
+
+    next = request.GET.get("next", "")
+    if next != "":
+        return HttpResponseRedirect(next)
+    return HttpResponseRedirect(reverse("home"))
