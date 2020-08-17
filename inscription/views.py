@@ -95,7 +95,7 @@ def welcomeUser(request, user, host):
         messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 
 
-@login_required(login_url='/users/login')
+@login_required
 def confirmation(request):
     token = request.GET.get("key", "")
     user = utils.getUser(token)

@@ -59,6 +59,7 @@ MIDDLEWARE = [
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 ROOT_URLCONF = 'cad.urls'
+LOGIN_URL = "login_view"
 
 TEMPLATES = [
     {
