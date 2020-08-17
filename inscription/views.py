@@ -3,19 +3,15 @@ import logging
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from cad.settings import DEBUG, EMAIL_HOST_USER
+from cad.settings import DEBUG
 from default.models import Mail
 from inscription import utils
 from users.models import Notification, studentRequest
 from users.forms import StudentRegisterForm, CoachRegisterForm
-
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
 
 
 def registerStudentView(request):
