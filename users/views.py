@@ -9,6 +9,7 @@ from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseRedirect, JsonResponse)
 from django.shortcuts import render
 from django.urls import reverse
+from django.contrib.auth import authenticate, login
 
 from administration.utils import populate_data
 from .models import Notification, Transaction, studentRequest
@@ -212,3 +213,45 @@ def requestManage(request):
         return HttpResponse("A été ajouté")
 
     return HttpResponse("N'a pas été ajouté")
+
+
+def login_view(request):
+    """
+        Allows a user to connect to his account
+    """
+    if request.method != "POST":
+        view_title = "Connectez vous"
+        return render(request, 'connexion.html', locals())
+
+    form = request.POST
+    email = form["coMail"]
+    password = form["coPass"]
+
+    try:
+        user = User.objects.get(email=email)  # Get user obj via its email
+        if user is None:
+            raise Exception
+
+        authuser = authenticate(username=user.username, password=password)
+        if authuser:
+            login(request, authuser)
+            messages.add_message(
+                request, messages.SUCCESS,
+                "Rebonjour {}".format(request.user.first_name))
+        else:
+            messages.add_message(
+                request, messages.ERROR,
+                "Vos identifiants ne correspondent à \
+                aucun compte!")
+    except Exception as e:
+        logging.warning("Error while connecting user : {}".format(e))
+
+        messages.add_message(
+            request, messages.ERROR,
+            "Vos identifiants ne correspondent à \
+            aucun compte!")
+
+    next = request.GET.get("next", "")
+    if next != "":
+        return HttpResponseRedirect(next)
+    return HttpResponseRedirect(reverse("home"))
