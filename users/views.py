@@ -73,8 +73,6 @@ def send_notif(request):
         notif.author = request.POST["sender"]
         notif.save()
 
-        user.profile.save()
-
         logging.debug("Added notification (id {}) to {}".format(notif.pk, request.POST['user']))
         return HttpResponse("Success")
 

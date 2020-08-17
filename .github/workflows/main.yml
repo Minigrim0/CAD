@@ -20,3 +20,6 @@ jobs:
 
     - name: building docker image
       run: COMPOSE_INTERACTIVE_NO_CLI=1 docker-compose up -d --build
+
+    - name: executing tests
+      run: COMPOSE_INTERACTIVE_NO_CLI=1 docker-compose exec web python manage.py test
