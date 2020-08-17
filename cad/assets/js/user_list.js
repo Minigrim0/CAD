@@ -15,7 +15,18 @@ $(document).ready(
 
 function activate(user_id, active){
     var Url = ActivateUserUrl + "?userid=" + user_id + "&active=" + active;
+    var message = "Voulez vous réellement ";
+    if(active == "true"){
+        message += "réactiver cet utilisateur ?"
+    }
+    else{
+        message += "désactiver cet utilisateur ?"
+    }
 
+    if(!confirm(message)) {
+        return
+    }
+    
     $.post(
         Url, {
             csrfmiddlewaretoken: csrf_token
