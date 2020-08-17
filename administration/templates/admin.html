@@ -122,18 +122,17 @@
                     Les comptes des utilisateurs possèdent plusieurs champs spéciaux.
                     <br>
                     <br>
-                    - La <span class="text-primary">balance</span> de l'utilisateur représente, dans le cas d'un élève, le montant
-                    qu'il lui reste (à dépenser en cours). Dans le cas d'un coach, elle sera nulle et le restera.
+                    - La <span class="text-primary">balance</span> de l'utilisateur représente, le montant
+                    qu'il lui reste (à dépenser en cours).
                     <br>
-                    - Le type de compte de l'utilisateur ne peut être changé. Pour le modifier, soit demander à l'utilisateur de
+                    - Le type de compte de l'utilisateur ne peut pas être changé. Pour le modifier, soit demander à l'utilisateur de
                     se refaire un compte, soit aller <a href="/admin/auth/user/">ici</a> (non recommandé).
                     <br>
-                    - Un utilisateur ne peut jamais réellement supprimer son compte.
+                    - Un utilisateur ne peut jamais réellement supprimer son compte, et ceci afin d'éviter des soucis comme la disparition
+                    des transactions liées à son compte, ou des cours donnés/reçus.
                     <br>
-                    Il peut le désactiver et c'est à l'administrateur de confirmer la suppression. Pour ce faire, simplement aller sur la page de l'utilisateur,
-                    et cliquer sur <span style="color: red;">'supprimer l'utilisateur'</span>. Pour le réactiver, simplement cliquer sur
-                    <span style="color: green;">'Réactiver l'utilisateur'</span>.
-                    Les comptes activés ou désactivés sont visible dans la barre de navigation avec les icones à côté des noms d'utilisateur:
+                    Un administrateur peut désactiver le compte d'un étudiant, en cliquant sur l'icone représentant son état dans la liste des utilisateurs
+                    de l'administration :
                     <ul>
                         <li>
                             <i class="fas fa-user-check"></i> Représente un utilisateur actif
@@ -151,7 +150,7 @@
                     Pour un <span style="color: green;">Étudiant</span>:
                 </p>
                 <p>
-                    Un compte est <span style="color: red;">créé</span> une fois que l'étudiant à  le formulaire d'inscription.
+                    Un compte est <span style="color: red;">créé</span> une fois que l'étudiant à rempli le formulaire d'inscription.
                     Il reçoit à ce moment-là un mail, avec un lien unique, lui permettant de <span style="color: red;">vérifier</span> son compte.
                     Ce lien l'emmènera vers une page qui lui demandera de payer soit 100 soit 50€ (en fonction de s'il a choisi d'avoir une visite pédagogique).
                     Une fois le montant payé, son compte est <span style="color: red;">vérifié</span> et une requête est créée afin de lui trouver un coach.
@@ -161,7 +160,9 @@
                     <p>
                         Un compte est <span style="color: red;">créé</span> une fois que le coach à rempli le formulaire d'inscription.
                         Il reçoit à ce moment-là un mail, avec un lien unique, lui permettant de <span style="color: red;">vérifier</span> son compte.
-                        Une fois qu'il a cliqué sur ce lien, son compte est prêt à recevoir des requêtes d'étudiants.
+                        Une fois qu'il a cliqué sur ce lien, son compte est vérifié. Les administrateurs entreront ensuite en contact avec lui pour décider
+                        d'un entretien. Ils pourront alors ensuite <span style="color: green;">engager</span> ou non ce coach, ce qui lui permettra par la suite de 
+                        recevoir des requêtes d'étudiants.
                     </p>
                 </p>
             </div>
