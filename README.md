@@ -23,4 +23,4 @@ source source.sh env.dev.sh
 * [ ] Write tests
 * [ ] setup CI/CD
 * [ ] verify admin
-* [ ] Use html/css in mails
+* [X] Use html/css in mails
