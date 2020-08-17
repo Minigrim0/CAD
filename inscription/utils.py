@@ -8,21 +8,20 @@ from users.models import (CoachAccount, FollowElement, Notification, Profile,
 
 def sendNotifToCoaches(student):
     # Receive Profile type object
-    coaches = Profile.objects.filter(account_type="Coach")
+    coaches = Profile.objects.filter(account_type="b")
     for coach in coaches:
-        if coach.coachaccount.confirmedAccount != "Engage":
+        if coach.coachaccount.confirmedAccount != "b":
             continue
         bMaths = coach.Maths_course == student.Maths_course
         bChimie = coach.Chimie_course == student.Chimie_course
         bPhysique = coach.Physique_course == student.Physique_course
         bFrancais = coach.Francais_course == student.Francais_course
         compatible = bMaths or bChimie or bPhysique or bFrancais
-        if coach.school_level == "high":
-            same_study_lev = ("eme" in student.school_level)
-            same_study_lev = same_study_lev or ("ere" in student.school_level)
+        if coach.school_level == "i":
+            same_study_lev = student.school_level in 'abcdefg'
             compatible = compatible and same_study_lev
-        elif coach.school_level == "elem":
-            compatible = compatible and (student.school_level == "primaire")
+        elif coach.school_level == "h":
+            compatible = compatible and (student.school_level == "a")
 
         if compatible:
             newNotif = Notification(user=coach.user)

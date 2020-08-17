@@ -1,36 +1,70 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from users.models import Profile, StudentAccount, CoachAccount, Notification, Transaction
-
+import users.models as models
+import inscription.utils as utils
 
 class UserTestCase(TestCase):
     def setUp(self):
         User.objects.create(username="a", first_name="user", last_name="etudiant")
         User.objects.create(username="b", first_name="user", last_name="coach")
+        User.objects.create(username="c", first_name="user", last_name="coach2")
+        User.objects.create(username="d", first_name="user", last_name="coach3")
+        User.objects.create(username="e", first_name="user", last_name="coach4")
 
-        student = Profile.objects.create(user=User.objects.get(username="a"), account_type="a")
+        student = models.Profile.objects.create(user=User.objects.get(username="a"), account_type="a")
         student.Maths_course = True
         student.Francais_course = True
+        student.school_level = "d"  # 3 ieme humanité
         student.save()
-        StudentAccount.objects.create(profile=student)
+        models.StudentAccount.objects.create(profile=student)
 
-        coach = Profile.objects.create(user=User.objects.get(username="b"), account_type="b")
+        coach = models.Profile.objects.create(user=User.objects.get(username="b"), account_type="b")
         coach.Maths_course = True
         coach.Chimie_course = True
+        coach.school_level = "i"  # humanité
         coach.save()
-        CoachAccount.objects.create(profile=coach)
+        coach_account1 = models.CoachAccount.objects.create(profile=coach)
+        coach_account1.confirmedAccount = "b"
+        coach_account1.save()
+
+        coach2 = models.Profile.objects.create(user=User.objects.get(username="c"), account_type="b")
+        coach2.Physique_course = True
+        coach2.Chimie_course = True
+        coach2.school_level = "j"  # humanité et primaire
+        coach2.save()
+        coach_account2 = models.CoachAccount.objects.create(profile=coach2)
+        coach_account2.confirmedAccount = "b"
+        coach_account2.save()
+
+        coach3 = models.Profile.objects.create(user=User.objects.get(username="d"), account_type="b")
+        coach3.Francais_course = True
+        coach3.Chimie_course = True
+        coach3.school_level = "h"  # primaire seulement
+        coach3.save()
+        coach_account3 = models.CoachAccount.objects.create(profile=coach3)
+        coach_account3.confirmedAccount = "b"
+        coach_account3.save()
+
+        coach4 = models.Profile.objects.create(user=User.objects.get(username="e"), account_type="b")
+        coach4.Francais_course = True
+        coach4.Chimie_course = True
+        coach4.school_level = "j"  # primaire seulement
+        coach4.save()
+        coach_account4 = models.CoachAccount.objects.create(profile=coach4)
+        coach_account4.confirmedAccount = "b"
+        coach_account4.save()
 
     def test_user_courses(self):
-        """Animals that can speak are correctly identified"""
+        """User courses render correctly"""
         student = User.objects.get(username="a")
         coach = User.objects.get(username="b")
         self.assertEqual(student.profile.courses, 'Maths, Francais')
         self.assertEqual(coach.profile.courses, 'Maths, Chimie, ')
 
     def test_user_notification(self):
-        """Animals that can speak are correctly identified"""
+        """User correctly receives notification"""
         student = User.objects.get(username="a")
-        notif = Notification.objects.create(user=student)
+        notif = models.Notification.objects.create(user=student)
         notif.title = "Title"
         notif.content = "content"
         notif.author = "sender"
@@ -39,17 +73,33 @@ class UserTestCase(TestCase):
         self.assertEqual(student.notification_set.count(), 1)
 
     def test_student_balance(self):
-        """Animals that can speak are correctly identified"""
+        """The student's balance is correctly calculated"""
         student = User.objects.get(username="a")
         
-        transaction = Transaction.objects.create(student=student.profile.studentaccount)
+        transaction = models.Transaction.objects.create(student=student.profile.studentaccount)
         transaction.amount = 20
         transaction.save()
 
         self.assertEqual(student.profile.studentaccount.balance, 20)
 
-        transaction = Transaction.objects.create(student=student.profile.studentaccount)
+        transaction = models.Transaction.objects.create(student=student.profile.studentaccount)
         transaction.amount = -10
         transaction.save()
 
         self.assertEqual(student.profile.studentaccount.balance, 10)
+
+    def test_student_request(self):
+        """The requests notify the expected coaches"""
+        student = User.objects.get(username="a")
+        models.studentRequest.objects.create(student=student)
+        utils.sendNotifToCoaches(student.profile)
+
+        coach1 = User.objects.get(username="b")
+        coach2 = User.objects.get(username="c")
+        coach3 = User.objects.get(username="d")
+        coach4 = User.objects.get(username="e")
+
+        self.assertEqual(coach1.notification_set.count(), 1)
+        self.assertEqual(coach2.notification_set.count(), 0)
+        self.assertEqual(coach3.notification_set.count(), 0)
+        self.assertEqual(coach4.notification_set.count(), 1)
