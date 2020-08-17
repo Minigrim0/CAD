@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.sitemaps',
     'default',
     'inscription',
     'users',
@@ -60,6 +62,7 @@ MIDDLEWARE = [
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 ROOT_URLCONF = 'cad.urls'
 LOGIN_URL = "login_view"
+SITE_ID = 1
 
 TEMPLATES = [
     {
