@@ -4,7 +4,7 @@ from dal import autocomplete
 
 import crispy_forms.bootstrap as bforms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Fieldset, Submit, Row, Column, HTML, Button
+from crispy_forms.layout import Layout, Fieldset, Submit, Row, Column, HTML
 
 from default.models import Article, Mail
 from users.models import Transaction

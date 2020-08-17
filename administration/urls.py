@@ -6,7 +6,6 @@ urlpatterns = [
     url('^$', views.adminPage, name="home_admin"),
     url('^users/$', views.user_admin_view, name="user_admin_view"),
     url('^users/all/$', views.user_list, name="userlist"),
-    url('^users/modify/$', views.modifyUser, name="modify_user"),
     url('^users/activate/$', views.activate, name="activate_user"),
     url('^users/unsubscribe/$', views.sendUnsubscriptionMail, name="unsubscribe"),
     url('^articles/$', views.articleAdminView, name="articles_admin"),

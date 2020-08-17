@@ -3,7 +3,6 @@ import logging
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
 from django.http import (HttpResponse, HttpResponseBadRequest,
                          HttpResponseRedirect, Http404)
 from django.shortcuts import render
@@ -11,14 +10,11 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404
 
 from administration.forms import ArticleForm, MailForm, StudentAdminForm, CoachAdminForm, OtherAdminForm
-from administration.utils import modifyUser, modifyCoach, modifyStudent, populate_data
-from cad.settings import EMAIL_HOST_USER, DEBUG
+from administration.utils import modifyUser, populate_data
+from cad.settings import DEBUG
 from default.models import Article, Mail, Message
 from inscription.utils import getUser
-from users.models import FollowElement, Profile, studentRequest, Transaction
-
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
+from users.models import FollowElement, studentRequest, Transaction
 
 
 @staff_member_required
