@@ -35,7 +35,7 @@
                 Mon profil:
             </h2>
             <div class="subheading mb-1">
-                {{ user.first_name }} {{ user.last_name }}, <span style="color: red;">{{ user.profile.account_type }}</span>
+                {{ user.first_name }} {{ user.last_name }}, <span style="color: red;">{{ user.profile.get_account_type_display }}</span>
             </div>
 
             <div class="container-fluid">
