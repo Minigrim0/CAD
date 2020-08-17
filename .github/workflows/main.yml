@@ -22,4 +22,6 @@ jobs:
       run: sudo apt install flake8 -y && flake8 --ignore=E501,F401 .
 
     - name: executing tests
-      run: python3 manage.py test
+      run: |
+        mkdir logs && touch logs/cad.log
+        python3 manage.py test
