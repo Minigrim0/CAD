@@ -71,7 +71,7 @@ class Profile(models.Model):
         if self.Physique_course:
             msg += "Physique, "
         if self.Francais_course:
-            msg += "Francais "
+            msg += "Francais"
         return msg
 
     def __repr__(self):
@@ -211,9 +211,6 @@ class Notification(models.Model):
         auto_now_add=True, null=True)
 
 
-DEFAULT_ID = 1
-
-
 class FollowElement(models.Model):
     """
         Modèle FollowElement:
@@ -221,7 +218,7 @@ class FollowElement(models.Model):
     """
 
     # students whom this followElement is for
-    student = models.ForeignKey(User, blank=True, on_delete=models.CASCADE, default=DEFAULT_ID)
+    student = models.ForeignKey(User, blank=True, on_delete=models.CASCADE)
     # Name of the coach who wrote this followElement
     coach = models.CharField(
         null=True, blank=True, max_length=110,
