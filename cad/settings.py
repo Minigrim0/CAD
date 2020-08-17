@@ -41,13 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'default',
     'inscription',
-    'connexion',
     'users',
     'administration',
     'crispy_forms',
 ]
 
 MIDDLEWARE = [
+    'django.middleware.gzip.GZipMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +59,7 @@ MIDDLEWARE = [
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 ROOT_URLCONF = 'cad.urls'
+LOGIN_URL = "login_view"
 
 TEMPLATES = [
     {
