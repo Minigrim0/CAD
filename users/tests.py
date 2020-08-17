@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 import users.models as models
 import inscription.utils as utils
 
+
 class UserTestCase(TestCase):
     def setUp(self):
         User.objects.create(username="a", first_name="user", last_name="etudiant")
@@ -75,7 +76,7 @@ class UserTestCase(TestCase):
     def test_student_balance(self):
         """The student's balance is correctly calculated"""
         student = User.objects.get(username="a")
-        
+
         transaction = models.Transaction.objects.create(student=student.profile.studentaccount)
         transaction.amount = 20
         transaction.save()
