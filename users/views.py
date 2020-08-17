@@ -25,7 +25,7 @@ def ErrorView(request):
     return HttpResponseRedirect(reverse("home"))
 
 
-@login_required(login_url='/users/login')
+@login_required
 def userView(request):
     user = request.user
     notifications = user.notification_set.all()
@@ -43,7 +43,7 @@ def userView(request):
     return render(request, 'user.html', locals())
 
 
-@login_required(login_url='/users/login')
+@login_required
 def followView(request):
     a_user = request.user
     followelement_set = a_user.followelement_set.all()
@@ -52,7 +52,7 @@ def followView(request):
     return render(request, 'follow.html', locals())
 
 
-@login_required(login_url='/users/login')
+@login_required
 def studentsView(request):
     a_user = request.user
     student_set = User.objects.filter(profile__studentaccount__coach=a_user)
@@ -61,7 +61,7 @@ def studentsView(request):
     return render(request, 'students.html', locals())
 
 
-@login_required(login_url='/users/login')
+@login_required
 def send_notif(request):
     if request.method == "POST":
 
@@ -81,7 +81,7 @@ def send_notif(request):
     return HttpResponse("failed")
 
 
-@login_required(login_url='/users/login')
+@login_required
 def remove_notif(request):
     if request.method != "POST":
         return HttpResponseRedirect(reverse("Error_view"))
@@ -120,7 +120,7 @@ def modify_balance(request):
     return JsonResponse({"new_balance": student.profile.studentaccount.balance})
 
 
-@login_required(login_url='/users/login')
+@login_required
 def disconnect(request):
     logout(request)
 
@@ -130,7 +130,7 @@ def disconnect(request):
     return HttpResponseRedirect(reverse("home"))
 
 
-@login_required(login_url='/users/login')
+@login_required
 def requestView(request, id=0):
     if id != 0:
         allowed = request.user.profile.account_type == "Coach"
@@ -163,7 +163,7 @@ def requestView(request, id=0):
             return HttpResponseRedirect(reverse("Error_view"))
 
 
-@login_required(login_url='/users/login')
+@login_required
 def chooseCoach(request):
     if request.method != "POST":
         return HttpResponse("/05/")
