@@ -2,12 +2,10 @@ ve37/
 Articles.backup/*
 db.sqlite3
 */__pycache__/*
-cad/assets/test.html
 *.sql
 core
 .vscode
 static/
 logs/
 *.pyc
-env.alwaysdata.sh
 setup.cfg
