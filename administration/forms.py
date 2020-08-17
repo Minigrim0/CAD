@@ -101,6 +101,7 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
         self.helper = FormHelper()
         self.helper.form_id = 'id-form-student-register'
         self.helper.form_method = 'post'
+        self.helper.include_media = False
 
         self.helper.layout = Layout(
             Fieldset(

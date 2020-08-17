@@ -35,7 +35,7 @@
                 Mon profil:
             </h2>
             <div class="subheading mb-1">
-                {{ user.first_name }} {{ user.last_name }}, <span style="color: red;">{{ user.profile.account_type }}</span>
+                {{ user.first_name }} {{ user.last_name }}, <span style="color: red;">{{ user.profile.get_account_type_display }}</span>
             </div>
 
             <div class="container-fluid">
@@ -55,7 +55,7 @@
                                 {% for notification in notifications %}
                                     <li class="list-group-item" id="msg{{ notification.id }}">
                                         <div class="text-right">
-                                            <button type="button" onclick="_post('{{ notification.id }}')" class="btn btn-danger">X</button>
+                                            <button type="button" onclick="del_notif('{{ notification.id }}')" class="btn btn-danger">X</button>
                                         </div>
                                         <h3>{{ notification.author }}</h3>
                                         <h5>{{ notification.title }}</h5>
@@ -80,15 +80,16 @@
 
 {% block extra_imports %}
 <script>
-    const Url = "{% url "rm_notif" %}";
+    const UrlNotif = "{% url "rm_notif" %}";
+    const csrf_token = '{{ csrf_token }}';
 
     //Makes a request to remove the notification with the specified ID
     //Has to be an id related to the current user's notification
-    function _post(_id){
+    function del_notif(notif_id){
         $.post(
-            Url, {
-                id: _id,
-                csrfmiddlewaretoken: '{{ csrf_token }}'
+            UrlNotif, {
+                id: notif_id,
+                csrfmiddlewaretoken: csrf_token
             },
             function(data, status) {
                 if (status == "success") {
@@ -98,7 +99,7 @@
                 }
             }
         );
-        document.getElementById("msg" + _id).style.display = "none";
+        document.getElementById("msg" + notif_id).style.display = "none";
     }
 </script>
 {% endblock %}
