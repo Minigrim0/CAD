@@ -7,7 +7,8 @@ urlpatterns = [
     url('^$', default.views.home, name="home"),
     url('^contact/$', default.views.contactView, name="contact_view"),
     url('^soon/$', default.views.soon, name="soon_view"),
-    url("^robots.txt$",
+    url(
+        "^robots.txt$",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
     ),
 ]
