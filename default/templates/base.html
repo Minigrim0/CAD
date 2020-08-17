@@ -6,8 +6,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="CAD - le premier réseau belge spécialisé en math, chimie, physique et français dès 7,80€/h"/>
+    <meta property="og:image" content="{% static 'img/profile.png' %}">
+    <meta name="author" content="CAD cours a domicile">
 
     <title>CAD - {{ view_title }}</title>
 
@@ -20,12 +21,9 @@
     <link href="{% static 'css/resume.min.css' %}" rel="stylesheet">
 </head>
 
-
 <body id="page-top">
-
-        <!-- METTRE UN CHAMPS DATE ET DEUX CHAMPS HEURE POUR LE SUIVI DES ETUDIANTS -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">
+        <a class="navbar-brand js-scroll-trigger" href="{% url 'home' %}#page-top">
             <span class="d-block d-lg-none">Cours à domicile</span>
             <span class="d-none d-lg-block">
                 <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'img/profile.jpg' %}" alt="" />
@@ -40,7 +38,6 @@
         </div>
     </nav>
 
-
     {% block content %}
     {% endblock %}
 
@@ -53,5 +50,4 @@
     {% block extra_imports %}
     {% endblock %}
 </body>
-
 </html>
