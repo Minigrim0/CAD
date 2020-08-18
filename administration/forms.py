@@ -116,7 +116,6 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
                     Column('school_level', css_class='form-group col-md-6 mb-0'),
                     css_class='form-row'
                 ),
-                'address',
                 Row(
                     Column('tutor_firstName', css_class='form-group col-md-6 mb-0'),
                     Column('tutor_name', css_class='form-group col-md-6 mb-0'),
