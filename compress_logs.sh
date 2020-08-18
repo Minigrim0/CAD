@@ -1,9 +1,9 @@
 #!/bin/bash
 
 LOGNAME="$(date +'%Y-%m-%d').log"
-DIRNAME="../logs/$(date +'%Y-%m')/"
+DIRNAME="$HOME/docker/apps/logs/$(date +'%Y-%m')/"
 mkdir -p $DIRNAME
-mv logs/cad.log ../logs/$DIRNAME/$LOGNAME
+docker cp cad_web:/home/app/web/logs/cad.log $DIRNAME/$LOGNAME
 cd $DIRNAME
-tar cf "$LOGNAME.tar" $LOGNAME
-rm -f $LOGNAME
+tar cf "$DIRNAME/$LOGNAME.tar" $DIRNAME/$LOGNAME
+rm -f $DIRNAME/$LOGNAME
