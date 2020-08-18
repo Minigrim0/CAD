@@ -89,14 +89,14 @@ def welcomeUser(request, user, host):
     mail = Mail.objects.get(id=1)
     if not DEBUG:
         logging.warning("Sending mail to {}".format(user.email))
-
         mail.send(user, request.META["HTTP_HOST"])
     else:
+        logging.error("Couldn't send mail to {}, debug is true".format(user.email))
         messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 
 
 @login_required
-def confirmation(request):
+def confirmation_view(request):
     token = request.GET.get("key", "")
     user = utils.getUser(token)
     # token manquant ou non valide
