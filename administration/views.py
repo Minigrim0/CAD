@@ -175,7 +175,7 @@ def sendUnsubscriptionMail(request):
 
     user = getUser(request.POST.get("user_key"))
     mail = Mail.objects.get(role='c')
-    if DEBUG:
+    if not DEBUG:
         mail.send(user, request.META["HTTP_HOST"])
 
     else:
