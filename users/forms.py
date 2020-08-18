@@ -53,7 +53,7 @@ class BaseRegistration(forms.Form):
     confirm_password = forms.CharField(
         min_length=8, max_length=150, required=True,
         widget=forms.PasswordInput, label="Confirmez le mot de passe")
-    birthdate = forms.DateField(required=True, label="Date de naissance")
+    birthdate = forms.CharField(max_length=25, required=True, label="Date de naissance")
     email = forms.EmailField(required=True, label="Adresse mail")
     address = forms.CharField(required=True, label="Rue et numéro")
     phone_number = forms.CharField(required=True, max_length=25, label="numéro de téléphone")
