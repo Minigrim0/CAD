@@ -26,14 +26,19 @@
         <br>
         <div id="ConnexionForm">
             <div class="container text-center" id="ConnexionForm">
-                <form method="post" action="">
-                    {% csrf_token %}
+                <div id="askmail">
                     <div class="form-group">
-                        <label for="connexionEmail">Addresse mail</label>
+                        <label for="connexionEmail">Entrez votre adresse mail</label>
                         <div class="col-xs-4">
-                            <input type="email" name="coMail" class="form-control" id="connexionEmail" aria-describedby="emailHelp" placeholder="Addresse Mail">
+                            <input type="email" class="form-control" id="email_input" aria-describedby="emailHelp" placeholder="Addresse Mail">
                         </div>
                     </div>
+                    <button class="btn btn-primary" onclick="getUsers()">Suivant</button>
+                </div>
+
+                <form method="post" action="" style="display: none;">
+                    {% csrf_token %}
+                    <input type="hidden" name="coMail" class="form-control" id="connexionEmail" aria-describedby="emailHelp">
                     <div class="form-group">
                         <label for="connexionPassword">Mot de Passe</label>
                         <div class="col-xs-4">
@@ -41,10 +46,18 @@
                         </div>
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                    <button type="submit" class="btn btn-primary">Suivant</button>
                 </form>
             </div>
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extra_imports %}
+<script>
+    const MailCheckUrl = "{% url "get_users_mail" %}";
+    const csrf_token = "{{ csrf_token }}";
+</script>
+<script src="{% static "js/login.js" %}"></script>
 {% endblock %}

@@ -18,4 +18,5 @@ urlpatterns = [
     url('^error/$', views.ErrorView, name="Error_view"),
     url('^user-autocomplete/$', UserAutocomplete.as_view(), name='user-autocomplete'),
     url('^login$', views.login_view, name="login_view"),
+    url('^usermail$', views.get_users, name="get_users_mail"),
 ]
