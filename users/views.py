@@ -215,6 +215,19 @@ def requestManage(request):
     return HttpResponse("N'a pas été ajouté")
 
 
+def get_users(request):
+    """
+        returns the users linked to the email provided
+    """
+    if request.method != "POST":
+        return HttpResponseBadRequest("Invalid method : Requets must be type POST")
+
+    email = request.POST.get("email", "")
+    users = User.objects.filter(email=email)
+
+    return JsonResponse({"users" : list(users)})
+
+
 def login_view(request):
     """
         Allows a user to connect to his account
