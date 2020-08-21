@@ -64,7 +64,6 @@ class BaseRegistration(forms.Form):
             return
         password = cleaned_data.get("password")
         confirm_password = cleaned_data.get("confirm_password")
-        email = cleaned_data.get("email")
         first_name = cleaned_data.get("first_name")
         last_name = cleaned_data.get("last_name")
         username = '{}_{}'.format(
@@ -76,10 +75,6 @@ class BaseRegistration(forms.Form):
             # If passwords are different
             msg = "Les mots de passe ne sont pas identiques!"
             self.add_error('password', msg)
-
-        if User.objects.filter(email=email).count() > 0:
-            msg = "Un compte avec cette addresse mail existe déjà!"
-            self.add_error('email', msg)
 
         if User.objects.filter(username=username).count() > 0:
             msg = "Un compte avec les mêmes noms et prénoms existe déjà!"
