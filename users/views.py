@@ -231,7 +231,7 @@ def get_users(request):
             ("{} {}".format(user.first_name, user.last_name), user.username)
         )
 
-    return JsonResponse({"users" : userData})
+    return JsonResponse({"users": userData})
 
 
 def login_view(request):

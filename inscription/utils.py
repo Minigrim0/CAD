@@ -109,9 +109,9 @@ def registerUser(form, usertype):
     )
     user = User.objects.create(
         username=username)
-    user.first_name=form.cleaned_data['first_name'],
-    user.last_name=form.cleaned_data['last_name'],
-    user.email=form.cleaned_data['email']
+    user.first_name = form.cleaned_data['first_name']
+    user.last_name = form.cleaned_data['last_name']
+    user.email = form.cleaned_data['email']
     user.set_password(form.cleaned_data['password'])
     user.save()
 
