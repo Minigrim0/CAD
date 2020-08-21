@@ -215,6 +215,25 @@ def requestManage(request):
     return HttpResponse("N'a pas été ajouté")
 
 
+def get_users(request):
+    """
+        returns the users linked to the email provided
+    """
+    if request.method != "POST":
+        return HttpResponseBadRequest("Invalid method : Requets must be type POST")
+
+    email = request.POST.get("email", "")
+    users = User.objects.filter(email=email)
+
+    userData = []
+    for user in users:
+        userData.append(
+            ("{} {}".format(user.first_name, user.last_name), user.username)
+        )
+
+    return JsonResponse({"users": userData})
+
+
 def login_view(request):
     """
         Allows a user to connect to his account
@@ -224,26 +243,19 @@ def login_view(request):
         return render(request, 'connexion.html', locals())
 
     form = request.POST
-    email = form["coMail"]
-    password = form["coPass"]
+    username = form["username"]
+    password = form["password"]
 
-    user = User.objects.filter(email=email)
-    if user.count() == 0:
+    authuser = authenticate(username=username, password=password)
+    if authuser:
+        login(request, authuser)
+        messages.add_message(
+            request, messages.SUCCESS,
+            "Rebonjour {}".format(request.user.first_name))
+    else:
         messages.add_message(
             request, messages.ERROR,
             "Vos identifiants ne correspondent à aucun compte!")
-    else:
-        user = user.first()
-        authuser = authenticate(username=user.username, password=password)
-        if authuser:
-            login(request, authuser)
-            messages.add_message(
-                request, messages.SUCCESS,
-                "Rebonjour {}".format(request.user.first_name))
-        else:
-            messages.add_message(
-                request, messages.ERROR,
-                "Vos identifiants ne correspondent à aucun compte!")
 
     # If the user could not connect, redirect him to the login page again
     if not request.user.is_authenticated:

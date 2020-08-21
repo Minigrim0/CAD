@@ -26,25 +26,46 @@
         <br>
         <div id="ConnexionForm">
             <div class="container text-center" id="ConnexionForm">
-                <form method="post" action="">
-                    {% csrf_token %}
-                    <div class="form-group">
-                        <label for="connexionEmail">Addresse mail</label>
-                        <div class="col-xs-4">
-                            <input type="email" name="coMail" class="form-control" id="connexionEmail" aria-describedby="emailHelp" placeholder="Addresse Mail">
-                        </div>
+                <div id="askmail" class="animated">
+                    <div style="display: none;" id="mailerror" class="alert alert-danger" role="alert">
+                        Aucun compte ne correspond à cette adresse mail
                     </div>
+                    <h3>Entrez votre adresse mail</h3>
+                    <div class="form-group">
+                        <input type="email" class="form-control" name="email" id="email_input" aria-describedby="emailHelp" placeholder="Addresse Mail">
+                    </div>
+                    <button class="btn btn-primary" onclick="getUsers()">Suivant</button>
+                </div>
+
+                <div class="animated" id="chooseAccountContainer" style="display: none;">
+                    <p><span id="nbraccounts" class="text-primary"></span> comptes ont été trouvé avec cette adresse mail.</p>
+                    <div id="chooseAccount" class="text-center">
+                    </div>
+                </div>
+
+                <form method="post" action="" id="formlogin" class="animated" style="display: none;">
+                    {% csrf_token %}
+                    <h3>Connexion en tant que <span id="user_name" class="text-primary"></span></h3>
+                    <input type="hidden" name="username" class="form-control" id="username">
                     <div class="form-group">
                         <label for="connexionPassword">Mot de Passe</label>
                         <div class="col-xs-4">
-                            <input type="password" name="coPass" class="form-control" id="connexionPassword" placeholder="Mot de passe">
+                            <input type="password" name="password" class="form-control" id="connexionPassword" placeholder="Mot de passe">
                         </div>
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-primary">Se connecter</button>
+                    <button type="submit" class="btn btn-primary">Suivant</button>
                 </form>
             </div>
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block extra_imports %}
+<script>
+    const MailCheckUrl = "{% url "get_users_mail" %}";
+    const csrf_token = "{{ csrf_token }}";
+</script>
+<script src="{% static "js/login.js" %}"></script>
 {% endblock %}
