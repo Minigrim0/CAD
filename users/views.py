@@ -6,8 +6,8 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import (HttpResponse, HttpResponseBadRequest,
-                         HttpResponseRedirect, JsonResponse)
-from django.shortcuts import render
+                         HttpResponseRedirect, JsonResponse, Http404)
+from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.contrib.auth import authenticate, login
 
@@ -86,21 +86,13 @@ def remove_notif(request):
     if request.method != "POST":
         return HttpResponseRedirect(reverse("Error_view"))
 
-    try:
-        user = User.objects.get(username=request.user.username)
+    user = request.user
+    notification = get_object_or_404(Notification, id=request.POST["id"])
+    if notification.user.username != user.username:
+        raise Http404()
+    notification.delete()
 
-        user.notification_set.get(id=request.POST["id"]).delete()
-        user.profile.notifications_nb -= 1
-        if user.profile.notifications_nb < 0:
-            user.profile.notifications_nb = 0
-
-        user.profile.save()
-        user.save()
-
-        return HttpResponse("success")
-    except Exception as e:
-        logging.critical("Error while deleting notification : {}".format(e))
-        return HttpResponse("failed")
+    return HttpResponse("success")
 
 
 @staff_member_required
