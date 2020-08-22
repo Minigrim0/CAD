@@ -3,8 +3,7 @@ import logging
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.http import (HttpResponse, HttpResponseBadRequest,
-                         HttpResponseRedirect, Http404)
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, Http404
 from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
@@ -77,12 +76,11 @@ def mailAdminCreate(request):
         mail.save()
 
         return HttpResponseRedirect(reverse("mails_admin"))
-    else:
-        form = MailForm()
 
-        view_title = "Créer un mail"
+    form = MailForm()
+    view_title = "Créer un mail"
 
-        return render(request, 'mailsAdminCreate.html', locals())
+    return render(request, 'mailsAdminCreate.html', locals())
 
 
 @staff_member_required
@@ -103,14 +101,10 @@ def transactions(request):
 
 @staff_member_required
 def activate(request):
-    userid = request.GET.get("userid", "")
+    userid = request.GET.get("userid", -1)
     active = True if request.GET.get("active", "false") == "true" else False
-    usr = User.objects.filter(id=userid)
+    usr = get_object_or_404(User, id=userid)
 
-    if usr.count() == 0:
-        return HttpResponse("Error")
-
-    usr = usr.first()
     usr.is_active = active
     usr.save()
     return HttpResponse("Success")
@@ -177,7 +171,6 @@ def sendUnsubscriptionMail(request):
     mail = Mail.objects.get(role='c')
     if not DEBUG:
         mail.send(user, request.META["HTTP_HOST"])
-
     else:
         messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 
@@ -203,9 +196,7 @@ def message_list(request):
 
 @staff_member_required
 def message_admin_view(request):
-    id = request.GET.get("id", "")
-    if id == "":
-        raise Http404()
+    id = request.GET.get("id", -1)
     message = get_object_or_404(Message, id=id)
     message.seen = True
     message.save()
