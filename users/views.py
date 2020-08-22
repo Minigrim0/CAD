@@ -20,8 +20,7 @@ from .forms import StudentReadOnlyForm, BaseReadOnly, CoachReadOnlyForm
 def ErrorView(request):
     messages.add_message(
         request, messages.ERROR,
-        "Une erreur est survenue lors du chargement \
-    de la page")
+        "Une erreur est survenue lors du chargement de la page")
     return HttpResponseRedirect(reverse("home"))
 
 
