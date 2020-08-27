@@ -14,12 +14,11 @@ jobs:
 
     - name: upgrading pip & Installing pip packages
       run: |
-        apt-get install python3-setuptools
         pip3 install --upgrade pip
         pip3 install -r requirements.txt
 
     - name: flake8
-      run: apt install flake8 -y && flake8 --ignore=E501,F401 .
+      run: flake8 --ignore=E501,F401 .
 
     - name: executing tests
       run: |
