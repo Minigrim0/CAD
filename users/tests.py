@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 import users.models as models
 import inscription.utils as utils
+from users.utils import thanksCoaches
 
 
 class UserTestCase(TestCase):
@@ -99,6 +100,54 @@ class UserTestCase(TestCase):
         coach2 = User.objects.get(username="c")
         coach3 = User.objects.get(username="d")
         coach4 = User.objects.get(username="e")
+
+        self.assertEqual(coach1.notification_set.count(), 1)
+        self.assertEqual(coach2.notification_set.count(), 0)
+        self.assertEqual(coach3.notification_set.count(), 0)
+        self.assertEqual(coach4.notification_set.count(), 1)
+
+    def test_coach_accept(self):
+        """The requests workflow to choose a coach works"""
+
+        student = User.objects.get(username="a")
+        models.studentRequest.objects.create(student=student)
+
+        coach1 = User.objects.get(username="b")
+        coach2 = User.objects.get(username="c")
+        coach3 = User.objects.get(username="d")
+        coach4 = User.objects.get(username="e")
+
+        # Make all the coaches 1 and 4 accept the request (they're the invited ones)
+        student_request = models.studentRequest.objects.get(student=student)
+        student_request.coaches.add(coach1.profile)
+        student_request.coaches.add(coach4.profile)
+        student_request.save()
+
+        request = models.studentRequest.objects.get(student=student)
+        coach = request.coaches.get(user__username=coach1.username)
+        other_coaches = request.coaches.all().exclude(user__username=coach1.username)
+
+        request.is_closed = True
+        request.choosenCoach = coach.user.username
+        student = student.profile.studentaccount
+        student.coach = coach.user
+
+        request.save()
+        student.save()
+
+        author = "L'équipe CAD"
+        title = "Félicitations!"
+        content = "Vous avez été choisit pour enseigner à {} {}! Vous pouvez \
+        vous rendre sur votre profil pour retrouver les coordonées de cet \
+        étudiant".format(student.profile.user.first_name, student.profile.user.last_name)
+        models.Notification.objects.create(user=coach.user, author=author, title=title, content=content)
+
+        self.assertEqual(coach1.notification_set.count(), 1)
+        self.assertEqual(coach2.notification_set.count(), 0)
+        self.assertEqual(coach3.notification_set.count(), 0)
+        self.assertEqual(coach4.notification_set.count(), 0)
+
+        thanksCoaches(other_coaches, student.profile.user)
 
         self.assertEqual(coach1.notification_set.count(), 1)
         self.assertEqual(coach2.notification_set.count(), 0)
