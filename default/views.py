@@ -37,7 +37,7 @@ def home(request):
         'view_title': 'cours à domicile'
     }
 
-    if type(request) is not django.core.handlers.wsgi.WSGIRequest and request.user.is_authenticated:
+    if request.user.is_authenticated:
         dico["nb_notif"] = request.user.notification_set.count()
 
     return render(request, 'index.html', dico)
