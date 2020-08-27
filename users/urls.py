@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from .autocomplete import UserAutocomplete
+from users.autocomplete import UserAutocomplete
 import users.views as views
 
 
