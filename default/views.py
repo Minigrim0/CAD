@@ -37,7 +37,7 @@ def home(request):
         'view_title': 'cours à domicile'
     }
 
-    if type(request) is not django.core.handlers.wsgi.WSGIRequest and request.user.is_authenticated:
+    if request.user.is_authenticated:
         dico["nb_notif"] = request.user.notification_set.count()
 
     return render(request, 'index.html', dico)
@@ -53,7 +53,6 @@ def contactView(request):
         HttpResponseRedirect: A redirection to the home page if the user clicked on "send" in the form
         render: A render of the contact form
     """
-    sent = False
     if request.method == 'POST':
         form = contactForm(request.POST)
         if form.is_valid():
@@ -72,7 +71,6 @@ def contactView(request):
                 "Votre message a bien été envoyé!")
 
             return HttpResponseRedirect(reverse("home"))
-
     else:
         form = contactForm()
 

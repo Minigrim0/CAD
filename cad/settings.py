@@ -25,7 +25,12 @@ sentry_sdk.init(
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-logging.basicConfig(filename='{}/logs/cad.log'.format(BASE_DIR), level=logging.DEBUG, filemode="w+")
+logging.basicConfig(
+    filename='{}/logs/cad.log'.format(BASE_DIR),
+    level=logging.DEBUG,
+    filemode="w+",
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S')
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "defaultsecretkey")
 

@@ -32,7 +32,6 @@ function activate(user_id, active){
             csrfmiddlewaretoken: csrf_token
         },
         function(data, status) {
-            console.log(status);
             if (status == "success") {
                 status = document.getElementById("status_" + user_id);
                 button = document.getElementById("activationbutton_" + user_id);
