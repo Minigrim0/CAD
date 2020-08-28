@@ -111,7 +111,7 @@ class StudentAccount(models.Model):
         default=False, verbose_name="Proposition de désinscription envoyée")
     # User has payed the two first hours of course
     coach = models.ForeignKey(
-        User, null=True, blank=True, related_name="Coach", on_delete=models.SET_NULL)
+        "users.CoachAccount", null=True, blank=True, related_name="students", on_delete=models.SET_NULL)
     confirmedAccount = models.BooleanField(
         default=False, verbose_name="A payé ses 2 premières heures de cours")
     zip = models.CharField(
@@ -164,11 +164,15 @@ class CoachAccount(models.Model):
     nationalRegisterID = models.CharField(
         null=False, verbose_name="numéro de registre national",
         default="Inconnu", max_length=50)
-    nbStudents = models.IntegerField(
-        null=True, blank=True, verbose_name="nombre d'étudiants du coach",
-        default=0)
     confirmedAccount = models.CharField(
         default="a", blank=True, choices=coach_states, verbose_name="Etat", max_length=1)
+
+    @property
+    def nb_students(self):
+        return self.students.count()
+
+    def __str__(self):
+        return "{} {}".format(self.profile.user.first_name, self.profile.user.last_name)
 
 
 class studentRequest(models.Model):
@@ -180,10 +184,9 @@ class studentRequest(models.Model):
     # represents the user who made the request
     student = models.OneToOneField(User, on_delete=models.CASCADE)
     # represents the coaches who accepted this request
-    coaches = models.ManyToManyField(Profile)
+    coaches = models.ManyToManyField("users.CoachAccount", blank=True, related_name="request_participated")
     is_closed = models.BooleanField(default=False)
-    choosenCoach = models.CharField(
-        null=True, default='Pas encore de coach choisi', max_length=100)
+    choosenCoach = models.ForeignKey("users.CoachAccount", blank=True, null=True, on_delete=models.SET_NULL)
 
 
 class Notification(models.Model):
