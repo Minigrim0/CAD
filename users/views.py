@@ -72,8 +72,6 @@ def send_notif(request):
         notif.author = request.POST["sender"]
         notif.save()
 
-        user.profile.save()
-
         logging.debug("Added notification (id {}) to {}".format(notif.pk, request.POST['user']))
         return HttpResponse("Success")
 
@@ -157,7 +155,8 @@ def requestView(request, id=0):
 @login_required
 def chooseCoach(request):
     if request.method != "POST":
-        return HttpResponse("/05/")
+        messages.error(request, "Vous n'avez pas le droit d'accéder à cette page de cette façon là")
+        return HttpResponse(reverse("home"))
 
     query = request.POST
 
