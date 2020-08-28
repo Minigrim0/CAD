@@ -242,7 +242,7 @@ def chooseCoach(request):
 
     author = "L'équipe CAD"
     title = "Félicitations!"
-    content = "Vous avez été choisit pour enseigner à {} {}! Vous pouvez \
+    content = "Vous avez été choisi pour enseigner à {} {}! Vous pouvez \
     vous rendre sur votre profil pour retrouver les coordonées de cet \
     étudiant".format(student.profile.user.first_name, student.profile.user.last_name)
     new_Notif = Notification(

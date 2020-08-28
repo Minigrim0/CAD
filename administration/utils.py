@@ -135,7 +135,7 @@ def thanksCoaches(coaches, student):
     author = "L'équipe CAD"
     title = "Merci d'avoir répondu présent"
     content = "Merci d'avoir répondu présent à la requête de {} {}. \
-    Malheureusement, vous n'avez pas été choisit pour donner cours à \
+    Malheureusement, vous n'avez pas été choisi pour donner cours à \
     cet étudiant. Mais ne vous en faites pas, voitre tour viendra!".format(
         student.profile.user.first_name, student.profile.user.last_name)
     for coach in coaches:
