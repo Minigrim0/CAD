@@ -173,6 +173,7 @@ class CoachAccount(models.Model):
             return self.profile.user.studentaccount_set.objects.count()
         return 0
 
+
 class studentRequest(models.Model):
     """
         Modèle studentRequest:
