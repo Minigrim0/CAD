@@ -5,7 +5,7 @@
 {% block navlinks %}
     <ul class="navbar-nav text-left">
         <li class="nav-item">
-            <a href="/administration/" class="nav-link">
+            <a href="{% url "home_admin" %}" class="nav-link">
                 retour
             </a>
         </li>
@@ -22,11 +22,11 @@
     <section class="p-3 p-lg-5 align-items-center">
         <div id="container">
             <div class="btn-group-lg text-center" role="group">
-                <button type="button" onclick="showOpened()" class="btn btn-secondary">En cours</button>
-                <button type="button" onclick="showClosed()" class="btn btn-secondary">Finis</button>
+                <button type="button" onclick="document.getElementById('Open').style.display = 'block';document.getElementById('Closed').style.display = 'none';" class="btn btn-secondary">En cours</button>
+                <button type="button" onclick="document.getElementById('Open').style.display = 'none';document.getElementById('Closed').style.display = 'block';" class="btn btn-secondary">Finis</button>
             </div>
 
-            <div id="Opened">
+            <div id="Open">
                 <h3>Etudiants en attente</h3>
                 <ul class="list-group">
                     {% for request in student_requests %}
@@ -58,41 +58,41 @@
                         <div id="total_{{ request.id }}">
                             <div class="row" id="coaches_{{ request.id }}">
                                 {% for coach in request.coaches.all %}
-                                <div class="card col-md-2" id="card_{{ request.id }}_{{ coach.user.username }}" style="width: 18rem;margin: 2px;">
+                                <div class="card col-md-2" id="card_{{ request.id }}_{{ coach.pk }}" style="width: 18rem;margin: 2px;">
                                     <div class="card-body">
-                                        <h4 class="card-title text-center">{{ coach.user.first_name }} {{ coach.user.last_name }}</h4>
+                                        <h4 class="card-title text-center">{{ coach.profile.user.first_name }} {{ coach.profile.user.last_name }}</h4>
                                         <p class="card-text">Enseigne:
-                                            {% if coach.Maths_course %}
+                                            {% if coach.profile.Maths_course %}
                                             Maths
                                             {% endif %}
-                                            {% if coach.Chimie_course %}
+                                            {% if coach.profile.Chimie_course %}
                                             Chimie
                                             {% endif %}
-                                            {% if coach.Physique_course %}
+                                            {% if coach.profile.Physique_course %}
                                             Physique
                                             {% endif %}
-                                            {% if coach.Francais_course %}
+                                            {% if coach.profile.Francais_course %}
                                             Francais
                                             {% endif %}
                                         </p>
                                         <div class="card-footer row">
                                             <div class="btn-group" role="group" aria-label="actions">
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Detail{{ coach.user.username }}">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Detail{{ coach.pk }}">
                                                     Détails
                                                 </button>
                                                 <div class="choose">
-                                                    <button type="button" class="btn btn-success" onclick="chooseCoach('{{ coach.user.username }}', '{{ request.id }}')" name="accept">
+                                                    <button type="button" class="btn btn-success" onclick="chooseCoach('{{ coach.pk }}', '{{ request.id }}')" name="accept">
                                                         Choisir
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                         <!-- Modal -->
-                                        <div class="modal fade" id="Detail{{ coach.user.username }}" tabindex="-1" role="dialog" aria-labelledby="DetailLabel" aria-hidden="true">
+                                        <div class="modal fade" id="Detail{{ coach.pk }}" tabindex="-1" role="dialog" aria-labelledby="DetailLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="DetailLabel">{{ coach.user.first_name }} {{ coach.user.last_name }}</h5>
+                                                        <h5 class="modal-title" id="DetailLabel">{{ coach.profile.user.first_name }} {{ coach.profile.user.last_name }}</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -100,13 +100,13 @@
                                                     <div class="modal-body">
                                                         <div class="form-row">
                                                             <div class="form-group row col-md-12">
-                                                                <p> - Ecole du coach: {{ coach.coachaccount.school }}</p>
+                                                                <p> - Ecole du coach: {{ coach.school }}</p>
                                                             </div>
                                                             <div class="form-group row col-md-12">
-                                                                <p> - Email: {{ coach.user.email }}</p>
+                                                                <p> - Email: {{ coach.profile.user.email }}</p>
                                                             </div>
                                                             <div class="form-group row col-md-12">
-                                                                <p> - Nombre d'étudiants actuel: {{ coach.coachaccount.nbStudents }}</p>
+                                                                <p> - Nombre d'étudiants actuel: {{ coach.nb_students }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -162,33 +162,33 @@
                         <div id="total_{{ request.id }}">
                             <div class="row" id="coaches_{{ request.id }}">
                                 {% for coach in request.coaches.all %}
-                                <div class="card col-md-2" id="card_{{ request.id }}_{{ coach.user.username }}" style="width: 18rem;margin: 2px;">
-                                    {% if request.choosenCoach == coach.user.username %}
+                                <div class="card col-md-2" id="card_{{ request.id }}_{{ coach.pk }}" style="width: 18rem;margin: 2px;">
+                                    {% if request.choosenCoach.pk == coach.pk %}
                                     <div class="card-body">
                                     {% else %}
                                     <div class="card-body" style="filter: opacity(10%);">
                                     {% endif %}
-                                        <h4 class="card-title text-center">{{ coach.user.first_name }} {{ coach.user.last_name }}</h4>
+                                        <h4 class="card-title text-center">{{ coach.profile.user.first_name }} {{ coach.profile.user.last_name }}</h4>
                                         <p class="card-text">Enseigne:
-                                            {% if coach.Maths_course %}
+                                            {% if coach.profile.Maths_course %}
                                             Maths
                                             {% endif %}
-                                            {% if coach.Chimie_course %}
+                                            {% if coach.profile.Chimie_course %}
                                             Chimie
                                             {% endif %}
-                                            {% if coach.Physique_course %}
+                                            {% if coach.profile.Physique_course %}
                                             Physique
                                             {% endif %}
-                                            {% if coach.Francais_course %}
+                                            {% if coach.profile.Francais_course %}
                                             Francais
                                             {% endif %}
                                         </p>
                                         <!-- Modal -->
-                                        <div class="modal fade" id="{{ coach.user.username }}Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                        <div class="modal fade" id="{{ coach.pk }}Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">{{ coach.user.first_name }} {{ coach.user.last_name }}</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">{{ coach.profile.user.first_name }} {{ coach.profile.user.last_name }}</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -196,13 +196,13 @@
                                                     <div class="modal-body">
                                                         <div class="form-row">
                                                             <div class="form-group row col-md-12">
-                                                                <p> - Ecole du coach: {{ coach.coachaccount.school }}</p>
+                                                                <p> - Ecole du coach: {{ coach.school }}</p>
                                                             </div>
                                                             <div class="form-group row col-md-12">
-                                                                <p> - Email: {{ coach.user.email }}</p>
+                                                                <p> - Email: {{ coach.profile.user.email }}</p>
                                                             </div>
                                                             <div class="form-group row col-md-12">
-                                                                <p> - Nombre d'étudiants actuel: {{ coach.coachaccount.nbStudents }}</p>
+                                                                <p> - Nombre d'étudiants actuel: {{ coach.nb_students }}</p>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -214,7 +214,7 @@
                                         </div>
                                         <div class="card-footer row">
                                             <div class="btn-group" role="group" aria-label="actions">
-                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ coach.user.username }}Modal">
+                                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#{{ coach.pk }}Modal">
                                                     Détails
                                                 </button>
                                             </div>
@@ -232,15 +232,15 @@
     </section>
 
     <script>
-        function chooseCoach(coach, id) {
+        function chooseCoach(coach_pk, id) {
             document.getElementById("coaches_" + id).style = "filter: opacity(10%);";
             document.getElementById("spin_" + id).style.display = "block";
-            var Url = "/users/choose/";
+            var Url = "{% url 'request_select_coach' %}";
 
             $.post(
                 Url, {
                     id: id,
-                    coach: coach,
+                    coach: coach_pk,
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 function(data, status) {
@@ -250,7 +250,7 @@
 
                         var cards = document.getElementsByClassName("card");
                         for (var x = 0; x < cards.length; x++) {
-                            if (cards[x].id == "card_" + id + "_" + coach) {
+                            if (cards[x].id == "card_" + id + "_" + coach_pk) {
                                 cards[x].style = "filter: opacity(100%)";
                                 cards[x].getElementsByClassName("choose")[0].style.display = "none";
                             } else if (cards[x].id.search("card_" + id + "_") != -1) {

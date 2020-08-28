@@ -1,19 +1,17 @@
-import logging
-
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, Http404
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 
 from administration.forms import ArticleForm, MailForm, StudentAdminForm, CoachAdminForm, OtherAdminForm
-from administration.utils import modifyUser, populate_data
+from administration.utils import modifyUser, populate_data, thanksCoaches, sendNotifToCoaches
 from cad.settings import DEBUG
 from default.models import Article, Mail, Message
 from inscription.utils import getUser
-from users.models import FollowElement, studentRequest, Transaction
+from users.models import FollowElement, studentRequest, Transaction, Notification
 
 
 @staff_member_required
@@ -203,3 +201,77 @@ def message_admin_view(request):
 
     view_title = "Messages"
     return render(request, 'message_admin_view.html', locals())
+
+
+@staff_member_required
+def student_requests(request):
+    student_requests = studentRequest.objects.all().exclude(
+        is_closed=True)
+    student_requests_closed = studentRequest.objects.all().exclude(
+        is_closed=False)
+
+    view_title = "Requêtes"
+    return render(request, "requestsAdmin.html", locals())
+
+
+@staff_member_required
+def chooseCoach(request):
+    """
+        Selects a coach to be chosen for a certain request
+    """
+    if request.method != "POST":
+        messages.error(request, "Vous n'avez pas le droit d'accéder à cette page de cette façon là")
+        return HttpResponse(reverse("home"))
+
+    query = request.POST
+
+    studentrequest = studentRequest.objects.get(id=query['id'])
+
+    # Profile objects
+    coach = studentrequest.coaches.get(pk=query["coach"])
+    other_coaches = studentrequest.coaches.all().exclude(pk=query["coach"])
+    student = studentrequest.student.profile.studentaccount
+
+    studentrequest.is_closed = True
+    studentrequest.choosenCoach = coach
+
+    student.coach = coach
+
+    studentrequest.save()
+    student.save()
+
+    author = "L'équipe CAD"
+    title = "Félicitations!"
+    content = "Vous avez été choisit pour enseigner à {} {}! Vous pouvez \
+    vous rendre sur votre profil pour retrouver les coordonées de cet \
+    étudiant".format(student.profile.user.first_name, student.profile.user.last_name)
+    new_Notif = Notification(
+        user=coach.profile.user, author=author, title=title, content=content)
+    new_Notif.save()
+
+    thanksCoaches(other_coaches, student)
+
+    return HttpResponse("success")
+
+
+@staff_member_required
+def modify_balance(request):
+    if request.method != "POST":
+        return HttpResponseBadRequest("Invalid method")
+
+    isCoachLaunching = True if request.POST.get('isFirstPayment', False) == 'true' else False
+
+    student = User.objects.get(username=request.POST["user"])
+
+    tran = Transaction(student=student.profile.studentaccount)
+    tran.amount = request.POST["amout_add"]
+    tran.admin = User.objects.get(username=request.POST["approver"])
+    tran.save()
+
+    if isCoachLaunching:
+        newRequest = studentRequest(student=student)
+        newRequest.save()
+
+        sendNotifToCoaches(student.profile)
+
+    return JsonResponse({"new_balance": student.profile.studentaccount.balance})
