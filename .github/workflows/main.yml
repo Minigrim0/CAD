@@ -7,16 +7,20 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Installing docker-compose
-      run: sudo curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose
+    - name: upgrading pip & Installing pip packages
+      run: |
+        pip3 install --upgrade pip
+        pip3 install -r requirements.txt
 
     - name: flake8
-      run: sudo apt install flake8 -y && flake8 --ignore=E501,F401 .
+      run: flake8 --ignore=E501,F401 .
 
-    - name: building docker image
-      run: COMPOSE_INTERACTIVE_NO_CLI=1 docker-compose up -d --build
+    - name: executing tests
+      run: |
+        mkdir logs && touch logs/cad.log
+        python3 manage.py test
