@@ -111,7 +111,7 @@ class StudentAccount(models.Model):
         default=False, verbose_name="Proposition de désinscription envoyée")
     # User has payed the two first hours of course
     coach = models.ForeignKey(
-        "users.CoachAccount", null=True, blank=True, related_name="Coach", on_delete=models.SET_NULL)
+        "users.CoachAccount", null=True, blank=True, related_name="students", on_delete=models.SET_NULL)
     confirmedAccount = models.BooleanField(
         default=False, verbose_name="A payé ses 2 premières heures de cours")
     zip = models.CharField(
@@ -169,9 +169,10 @@ class CoachAccount(models.Model):
 
     @property
     def nb_students(self):
-        if 'studentaccount_set' in dir(self.profile.user):
-            return self.profile.user.studentaccount_set.objects.count()
-        return 0
+        return self.students.count()
+
+    def __str__(self):
+        return "{} {}".format(self.profile.user.first_name, self.profile.user.last_name)
 
 
 class studentRequest(models.Model):

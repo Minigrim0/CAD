@@ -75,15 +75,19 @@
                                     <input type="number" class="form-control" id="new_balance" value=0></input>
                                 </div>
                             </div>
-                             <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="isFirstPayment">
-                                <label class="form-check-label" for="isFirstPayment">
-                                    Payment pour les premières heures de cours
-                                    <span data-toggle="tooltip" data-placement="right" title="Enclencher la procédure de recherche de coach">
-                                        <i class="fas fa-info-circle"></i>
-                                    </span>
-                                </label>
-                            </div>
+                            {% if not form_user.studentrequest %}
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input" id="isFirstPayment">
+                                    <label class="form-check-label" for="isFirstPayment">
+                                        Payment pour les premières heures de cours
+                                        <span data-toggle="tooltip" data-placement="right" title="Enclencher la procédure de recherche de coach">
+                                            <i class="fas fa-info-circle"></i>
+                                        </span>
+                                    </label>
+                                </div>
+                            {% else %}
+                                <input type="checkbox" style="display: none;" class="form-check-input" id="isFirstPayment">
+                            {% endif %}
                         </div>
                     </form>
                     <div class="alert alert-danger" role="alert" id="errorBalance" style="display:none;">
