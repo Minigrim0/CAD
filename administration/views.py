@@ -272,6 +272,10 @@ def modify_balance(request):
         newRequest = studentRequest(student=student)
         newRequest.save()
 
+        studentAccount = student.profile.studentaccount
+        studentAccount.confirmedAccount = True
+        studentAccount.save()
+
         sendNotifToCoaches(student.profile)
 
     return JsonResponse({"new_balance": student.profile.studentaccount.balance})
