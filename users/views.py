@@ -1,7 +1,6 @@
 import logging
 
 from django.contrib import messages
-from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -12,9 +11,12 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login
 
 from administration.utils import populate_data
-from .models import Notification, Transaction, studentRequest
-from .utils import thanksCoaches
+from .models import Notification, studentRequest
 from .forms import StudentReadOnlyForm, BaseReadOnly, CoachReadOnlyForm
+
+
+def user_home(request):
+    return HttpResponseRedirect(reverse("my_account"))
 
 
 def ErrorView(request):
@@ -53,8 +55,8 @@ def followView(request):
 
 @login_required
 def studentsView(request):
-    a_user = request.user
-    student_set = User.objects.filter(profile__studentaccount__coach=a_user)
+    coach = request.user.profile.coachaccount
+    student_set = User.objects.filter(profile__studentaccount__coach=coach)
 
     view_title = "Mes étudiants"
     return render(request, 'students.html', locals())
@@ -81,7 +83,7 @@ def send_notif(request):
 @login_required
 def remove_notif(request):
     if request.method != "POST":
-        return HttpResponseRedirect(reverse("Error_view"))
+        return ErrorView(request)
 
     user = request.user
     notification = get_object_or_404(Notification, id=request.POST["id"])
@@ -90,23 +92,6 @@ def remove_notif(request):
     notification.delete()
 
     return HttpResponse("success")
-
-
-@staff_member_required
-def modify_balance(request):
-    if request.method != "POST":
-        return HttpResponseBadRequest("Invalid method")
-
-    admin = User.objects.get(username=request.POST["approver"])
-    student = User.objects.get(username=request.POST["user"])
-    to_add = request.POST["amout_add"]
-
-    tran = Transaction(student=student.profile.studentaccount)
-    tran.amount = to_add
-    tran.admin = admin
-    tran.save()
-
-    return JsonResponse({"new_balance": student.profile.studentaccount.balance})
 
 
 @login_required
@@ -120,85 +105,33 @@ def disconnect(request):
 
 
 @login_required
-def requestView(request, id=0):
-    if id != 0:
-        allowed = request.user.profile.account_type == "Coach"
-        allowed = allowed or request.user.is_superuser
-        if request.user.is_authenticated and allowed:
-            student_request = studentRequest.objects.get(id=id)
-            student_request_closed = studentRequest.objects.get(id=id)
-            user = student_request.student
-            coach = request.user
-            coaches = [
-                coach.user.username for coach in student_request.coaches.all()]
+def requestView(request):
+    request_id = request.GET.get('id', 0)
 
-            view_title = "Requête"
-            return render(request, "requests.html", locals())
-        else:
-            return HttpResponseRedirect(reverse("Error_view"))
+    allowed = request.user.profile.account_type == "b"
+    if request.user.is_authenticated and allowed:
+        student_request = studentRequest.objects.get(id=request_id)
+        student_request_closed = studentRequest.objects.get(id=request_id)
+        user = student_request.student
+        coach = request.user
+        coaches = [
+            coach.profile.user.username for coach in student_request.coaches.all()]
+
+        view_title = "Requête"
+        return render(request, "requests.html", locals())
     else:
-        if request.user.is_authenticated:
-            if request.user.is_superuser:
-                student_requests = studentRequest.objects.all().exclude(
-                    is_closed=True)
-                student_requests_closed = studentRequest.objects.all().exclude(
-                    is_closed=False)
-
-                view_title = "Requêtes"
-                return render(request, "requestsAdmin.html", locals())
-            else:
-                return HttpResponseRedirect(reverse("Error_view"))
-        else:
-            return HttpResponseRedirect(reverse("Error_view"))
+        return ErrorView(request)
 
 
 @login_required
-def chooseCoach(request):
+def acceptRequest(request):
     if request.method != "POST":
-        messages.error(request, "Vous n'avez pas le droit d'accéder à cette page de cette façon là")
-        return HttpResponse(reverse("home"))
-
-    query = request.POST
-
-    s_request = studentRequest.objects.get(id=query['id'])
-    coach = s_request.coaches.get(user__username=query["coach"])
-    other_coaches = s_request.coaches.all().exclude(
-        user__username=query["coach"])
-
-    s_request.is_closed = True
-    s_request.choosenCoach = coach.user.username
-    student = s_request.student.profile.studentAccount
-    student.coach = coach
-    ca = coach.coachaccount
-    ca.nbStudents += 1
-
-    s_request.save()
-    student.save()
-    coach.save()
-    ca.save()
-
-    author = "L'équipe CAD"
-    title = "Félicitations!"
-    content = "Vous avez été choisit pour enseigner à {} {}! Vous pouvez \
-    vous rendre sur votre profil pour retrouver les coordonées de cet \
-    étudiant".format(student.first_name, student.last_name)
-    new_Notif = Notification(
-        user=coach.user, author=author, title=title, content=content)
-    new_Notif.save()
-
-    thanksCoaches(other_coaches, student)
-
-    return HttpResponse("success")
-
-
-def requestManage(request):
-    if request.method != "POST":
-        return HttpResponseRedirect(reverse("Error_view"))
+        return ErrorView(request)
 
     if request.POST["decision"] == 'true':
         student_request = studentRequest.objects.get(id=request.POST["id"])
         coach = User.objects.get(id=request.POST["coach"])
-        student_request.coaches.add(coach.profile)
+        student_request.coaches.add(coach.profile.coachaccount)
         student_request.save()
         return HttpResponse("A été ajouté")
 

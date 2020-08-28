@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import django
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.shortcuts import render

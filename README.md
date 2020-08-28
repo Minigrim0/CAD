@@ -19,8 +19,8 @@ source source.sh env.dev.sh
 * [X] Fix visible email addresses
 * [X] Use html/css in mails
 * [X] create a cron job to store the log files once a days, and remove those who are older than 3(?) months
- 
-* [ ] Fix workflow when engaging coaches
-* [ ] Write tests
+* [X] Fix workflow when engaging coaches
+* [X] Write tests
+
 * [ ] setup CI/CD
 * [ ] verify admin
