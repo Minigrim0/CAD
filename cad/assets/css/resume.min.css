@@ -7,3 +7,11 @@
 .asteriskField{
     color: #bd0000;
 }
+
+.list_link{
+    color: #bd5d38;
+}
+
+.list_link:hover{
+    color: #ae4c27;
+}
