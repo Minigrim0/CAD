@@ -37,7 +37,7 @@
                         {% for user in users %}
                             <tr>
                                 <td>{{ user.id }}</td>
-                                <td><a href="{% url 'user_admin_view' %}?type={{ user.profile.account_type }}&user={{ user.username }}">{{ user.first_name }}</a></td>
+                                <td><a class="list_link" href="{% url 'user_admin_view' %}?type={{ user.profile.account_type }}&user={{ user.username }}">{{ user.first_name }}</a></td>
                                 <td>{{ user.last_name }}</td>
                                 <td>{{ user.profile.get_account_type_display }}</td>
                                 <td>

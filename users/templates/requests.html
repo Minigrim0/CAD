@@ -14,79 +14,78 @@
 <div class="container-fluid">
     <section class="col-sm-12">
         {% if student_request.is_closed %}
-        <div class="alert alert-warning" role="alert">
-            Cette requête est fermée!
-        </div>
+            <div class="alert alert-warning" role="alert">
+                Cette requête est fermée!
+            </div>
         {% else %}
+            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
 
-        <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+            <p>recherche des cours de:</p>
+            <ul>
+                {% if user.profile.Maths_course %}
+                <li>Maths</li>
+                {% endif %}
 
-        <p>recherche des cours de:</p>
-        <ul>
-            {% if user.profile.Maths_course %}
-            <li>Maths</li>
-            {% endif %}
+                {% if user.profile.Chimie_course %}
+                <li>Chimie</li>
+                {% endif %}
 
-            {% if user.profile.Chimie_course %}
-            <li>Chimie</li>
-            {% endif %}
+                {% if user.profile.Physique_course %}
+                <li>Physique</li>
+                {% endif %}
 
-            {% if user.profile.Physique_course %}
-            <li>Physique</li>
-            {% endif %}
+                {% if user.profile.Francais_course %}
+                <li>Francais</li>
+                {% endif %}
+            </ul>
 
-            {% if user.profile.Francais_course %}
-            <li>Francais</li>
-            {% endif %}
-        </ul>
+            <label class="col-sm-12 col-form-label">Tranches horaires de l'étudiant:</label>
+            <textarea disabled class="col-md-12" rows="5">{{ student_request.student.profile.studentaccount.wanted_schedule }}</textarea>
 
-        <label class="col-sm-12 col-form-label">Tranches horaires de l'étudiant:</label>
-        <textarea disabled class="col-md-12" rows="5">{{ student_request.student.profile.studentaccount.wanted_schedule }}</textarea>
+            <p>Location: {{student_request.student.profile.studentaccount.zip}} {{student_request.student.profile.studentaccount.ville}}</p>
 
-        <p>Location: {{student_request.student.profile.studentaccount.zip}} {{student_request.student.profile.studentaccount.ville}}</p>
-
-        <script>
-            const Url = "{% url "manage_request" %}";
-
-            //Makes a request to remove the notification with the specified ID
-            //Has to be an id related to the current user's notification
-            function _post(id, decision, coach) {
-                $.post(
-                    Url, {
-                        id: id,
-                        decision: decision,
-                        coach: coach,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    },
-                    function(data, status) {
-                        console.log(data);
-                        console.log(status);
-                    }
-                );
-                document.getElementById("buttons").style.display = "none";
-                document.getElementById("dejarepondu").style.display = "block";
-            }
-        </script>
-
-        {% if not request.user.username in coaches %}
-        <div id="buttons">
+            {% if not request.user.username in coaches %}
+            <div id="buttons">
             {% else %}
             <div id="buttons" style="display: none;">
-                {% endif %}
+            {% endif %}
                 <button type="button" class="btn btn-success" onclick="_post({{ student_request.id }}, 'true' , {{ coach.id }})" name="accept">Accepter l'offre</button>
                 <button type="button" class="btn btn-danger" onclick="_post({{ student_request.id }}, 'false', {{ coach.id }})" name="refuses">Refuser l'offre</button>
             </div>
+
             {% if not request.user.username in coaches %}
             <div id="dejarepondu" style="display: none;">
-                {% else %}
-                <div id="dejarepondu">
-                    {% endif %}
-                    <p style="color:red;">Vous avez déjà répondu à cette requete</p>
-                </div>
-
-            </div>
+            {% else %}
+            <div id="dejarepondu">
             {% endif %}
-        </div>
+                <p style="color:red;">Merci d'avoir répondu à cette requête</p>
+            </div>
+        {% endif %}
     </section>
 </div>
+{% endblock %}
+
+{% block extra_imports %}
+<script>
+    const Url = "{% url "manage_request" %}";
+
+    //Makes a request to remove the notification with the specified ID
+    //Has to be an id related to the current user's notification
+    function _post(id, decision, coach) {
+        $.post(
+            Url, {
+                id: id,
+                decision: decision,
+                coach: coach,
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            function(data, status) {
+                console.log(data);
+                console.log(status);
+            }
+        );
+        document.getElementById("buttons").style.display = "none";
+        document.getElementById("dejarepondu").style.display = "block";
+    }
+</script>
 {% endblock %}
