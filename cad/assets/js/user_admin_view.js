@@ -55,10 +55,12 @@ function sendNotif(_user) {
 function updBalance(user, admin) {
 
     amout_add = document.getElementById("new_balance").value;
+    isFirst = document.getElementById("isFirstPayment").checked;
 
     $.post(
         UrlBalance, {
             amout_add: +amout_add,
+            isFirstPayment: isFirst,
             approver: admin,
             user: user,
             csrfmiddlewaretoken: csrf_token
