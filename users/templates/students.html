@@ -50,7 +50,7 @@
                     <div class="col-lg-8">
                         <ul class="list-group">
                             {% for elem in student_set %}
-                            <li class="list-group-item">{{ elem.profile.school_level }}</li>
+                            <li class="list-group-item">{{ elem.profile.get_school_level_display }}</li>
                             {% endfor %}
                         </ul>
                     </div>

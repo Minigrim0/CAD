@@ -1,18 +1,22 @@
-from django.conf.urls import url
+from django.urls import path
 
 import administration.views as views
 
+
 urlpatterns = [
-    url('^$', views.adminPage, name="home_admin"),
-    url('^users/$', views.user_admin_view, name="user_admin_view"),
-    url('^users/all/$', views.user_list, name="userlist"),
-    url('^users/activate/$', views.activate, name="activate_user"),
-    url('^users/unsubscribe/$', views.sendUnsubscriptionMail, name="unsubscribe"),
-    url('^articles/$', views.articleAdminView, name="articles_admin"),
-    url('^mails/$', views.mailAdminView, name="mails_admin"),
-    url('^mails/create/$', views.mailAdminCreate, name="createMail"),
-    url('^courses/$', views.courses, name="given_courses"),
-    url('^transactions/$', views.transactions, name="transactions"),
-    url('^messages/$', views.message_admin_view, name="message_admin_view"),
-    url('^messages/all/$', views.message_list, name="messagelist"),
+    path('', views.adminPage, name="home_admin"),
+    path('users/', views.user_admin_view, name="user_admin_view"),
+    path('users/all/', views.user_list, name="userlist"),
+    path('users/activate/', views.activate, name="activate_user"),
+    path('users/unsubscribe/', views.sendUnsubscriptionMail, name="unsubscribe"),
+    path('users/transaction/add/', views.modify_balance, name="modify_balance"),
+    path('users/transaction/', views.transactions, name="transactions"),
+    path('requests/', views.student_requests, name="requests_admin"),
+    path('requests/select/', views.chooseCoach, name="request_select_coach"),
+    path('articles/', views.articleAdminView, name="articles_admin"),
+    path('mails/', views.mailAdminView, name="mails_admin"),
+    path('mails/create/', views.mailAdminCreate, name="createMail"),
+    path('courses/', views.courses, name="given_courses"),
+    path('messages/', views.message_admin_view, name="message_admin_view"),
+    path('messages/all/', views.message_list, name="messagelist"),
 ]

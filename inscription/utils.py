@@ -2,41 +2,8 @@ import hashlib
 
 from django.contrib.auth.models import User
 
-from users.models import (CoachAccount, FollowElement, Notification, Profile,
+from users.models import (CoachAccount, FollowElement, Profile,
                           StudentAccount)
-
-
-def sendNotifToCoaches(student):
-    # Receive Profile type object
-    coaches = Profile.objects.filter(account_type="b")
-    for coach in coaches:
-        if coach.coachaccount.confirmedAccount != "b":
-            continue
-        bMaths = coach.Maths_course == student.Maths_course
-        bChimie = coach.Chimie_course == student.Chimie_course
-        bPhysique = coach.Physique_course == student.Physique_course
-        bFrancais = coach.Francais_course == student.Francais_course
-        compatible = bMaths or bChimie or bPhysique or bFrancais
-        if coach.school_level == "i":
-            same_study_lev = student.school_level in 'abcdefg'
-            compatible = compatible and same_study_lev
-        elif coach.school_level == "h":
-            compatible = compatible and (student.school_level == "a")
-
-        if compatible:
-            newNotif = Notification(user=coach.user)
-            newNotif.author = "{} {}".format(
-                student.user.first_name, student.user.last_name)
-            newNotif.title = "Recherche de coach"
-            newNotif.content = "Vos matières/niveaux correspondent avec "
-            newNotif.content += "{} {} ".format(
-                student.user.first_name, student.user.last_name)
-            newNotif.content += "!\nVous pouvez cliquer "
-            newNotif.content += "<a href='/users/requests/{}/'>ici</a>".format(
-                student.user.studentrequest.id)
-            newNotif.content += " pour voir le profil de l'etudiant"
-            newNotif.save()
-            coach.save()
 
 
 def registerProfile(user, form, account_type="Etudiant"):
