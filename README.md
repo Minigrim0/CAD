@@ -24,3 +24,7 @@ source source.sh env.dev.sh
 
 * [ ] setup CI/CD
 * [ ] verify admin
+* [ ] Send notifications by mail
+* [ ] Verify requests choosing
+* [ ] Test coach swap
+* [ ] Add password retrieving
