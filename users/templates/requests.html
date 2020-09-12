@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load coach_schedule %}
 
 {% block navlinks %}
     <ul class="navbar-nav">
@@ -18,23 +19,23 @@
                 Cette requête est fermée!
             </div>
         {% else %}
-            <h2>{{ user.first_name }} {{ user.last_name }}</h2>
+            <h2>{{ student.first_name }} {{ student.last_name }}</h2>
 
             <p>recherche des cours de:</p>
             <ul>
-                {% if user.profile.Maths_course %}
+                {% if student.profile.Maths_course %}
                 <li>Maths</li>
                 {% endif %}
 
-                {% if user.profile.Chimie_course %}
+                {% if student.profile.Chimie_course %}
                 <li>Chimie</li>
                 {% endif %}
 
-                {% if user.profile.Physique_course %}
+                {% if student.profile.Physique_course %}
                 <li>Physique</li>
                 {% endif %}
 
-                {% if user.profile.Francais_course %}
+                {% if student.profile.Francais_course %}
                 <li>Francais</li>
                 {% endif %}
             </ul>
@@ -42,23 +43,29 @@
             <label class="col-sm-12 col-form-label">Tranches horaires de l'étudiant:</label>
             <textarea disabled class="col-md-12" rows="5">{{ student_request.student.profile.studentaccount.wanted_schedule }}</textarea>
 
-            <p>Location: {{student_request.student.profile.studentaccount.zip}} {{student_request.student.profile.studentaccount.ville}}</p>
+            <p>Localité: {{student_request.student.profile.studentaccount.zip}} {{student_request.student.profile.studentaccount.ville}}</p>
+
+            <label for="coach_schedule">Inscrivez ci-dessous l'horaire qui vous conviendrait (soyez précis !)</label><br/>
 
             {% if not request.user.username in coaches %}
-            <div id="buttons">
+                <textarea id="coach_schedule" class="col-md-12" rows="5" ></textarea>
             {% else %}
-            <div id="buttons" style="display: none;">
+                <textarea id="coach_schedule" class="col-md-12" rows="5" disabled>{% coach_schedule coach student_request %}</textarea>
             {% endif %}
-                <button type="button" class="btn btn-success" onclick="_post({{ student_request.id }}, 'true' , {{ coach.id }})" name="accept">Accepter l'offre</button>
-                <button type="button" class="btn btn-danger" onclick="_post({{ student_request.id }}, 'false', {{ coach.id }})" name="refuses">Refuser l'offre</button>
+            <small style="color:red;" id="error_schedule"></small>
+
+            {% if not request.user.username in coaches %}
+            <div id="buttons">                
+                <button type="button" class="btn btn-success" onclick="acceptRequest({{ student_request.id }}, 'true' , {{ coach.id }})" name="accept">Accepter l'offre</button>
+                <button type="button" class="btn btn-danger" onclick="acceptRequest({{ student_request.id }}, 'false', {{ coach.id }})" name="refuses">Refuser l'offre</button>
             </div>
-
-            {% if not request.user.username in coaches %}
-            <div id="dejarepondu" style="display: none;">
-            {% else %}
-            <div id="dejarepondu">
             {% endif %}
-                <p style="color:red;">Merci d'avoir répondu à cette requête</p>
+
+
+            <div id="dejarepondu">
+                {% if request.user.username in coaches %}
+               <p style="color:red;">Merci d'avoir répondu à cette requête</p>
+                {% endif %}
             </div>
         {% endif %}
     </section>
@@ -71,11 +78,20 @@
 
     //Makes a request to remove the notification with the specified ID
     //Has to be an id related to the current user's notification
-    function _post(id, decision, coach) {
+    function acceptRequest(id, decision, coach) {
+        schedule = document.getElementById("coach_schedule").value;
+        if (decision == "true"){
+            if (schedule == ""){
+                document.getElementById("error_schedule").innerHTML = "Vous devez renseigner ces informations pour pouvoir accepter la requête"
+                return
+            }
+        }
+
         $.post(
             Url, {
                 id: id,
                 decision: decision,
+                schedule: schedule,
                 coach: coach,
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
@@ -85,7 +101,7 @@
             }
         );
         document.getElementById("buttons").style.display = "none";
-        document.getElementById("dejarepondu").style.display = "block";
+        document.getElementById("dejarepondu").innerHTML = '<p style="color:red;">Merci d\'avoir répondu à cette requête</p>';
     }
 </script>
 {% endblock %}
