@@ -191,7 +191,7 @@ def thanks(request):
     newRequest = studentRequest(student=user)
     newRequest.save()
 
-    utils.sendNotifToCoaches(user.profile)
+    utils.sendNotifToCoaches(user.profile, request.META['HTTP_HOST'])
 
     messages.add_message(
         request, messages.SUCCESS,
