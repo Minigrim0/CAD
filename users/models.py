@@ -175,6 +175,13 @@ class CoachAccount(models.Model):
         return "{} {}".format(self.profile.user.first_name, self.profile.user.last_name)
 
 
+class coachRequestThrough(models.Model):
+    request = models.ForeignKey('users.studentRequest', on_delete=models.CASCADE)
+    coach = models.ForeignKey('users.coachAccount', on_delete=models.CASCADE)
+
+    coachschedule = models.TextField()
+
+
 class studentRequest(models.Model):
     """
         Modèle studentRequest:
@@ -184,7 +191,7 @@ class studentRequest(models.Model):
     # represents the user who made the request
     student = models.OneToOneField(User, on_delete=models.CASCADE)
     # represents the coaches who accepted this request
-    coaches = models.ManyToManyField("users.CoachAccount", blank=True, related_name="request_participated")
+    coaches = models.ManyToManyField("users.CoachAccount", blank=True, related_name="request_participated", through=coachRequestThrough)
     is_closed = models.BooleanField(default=False)
     choosenCoach = models.ForeignKey("users.CoachAccount", blank=True, null=True, on_delete=models.SET_NULL)
 
