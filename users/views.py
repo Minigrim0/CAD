@@ -114,11 +114,12 @@ def requestView(request):
     allowed = request.user.profile.account_type == "b"
     if request.user.is_authenticated and allowed:
         student_request = studentRequest.objects.get(id=request_id)
-        student_request_closed = studentRequest.objects.get(id=request_id)
-        user = student_request.student
-        coach = request.user
+        student = student_request.student
         coaches = [
             coach.profile.user.username for coach in student_request.coaches.all()]
+        coach = request.user
+
+        coach_schedule = coach.profile.coachaccount.schedule(student_request)
 
         view_title = "Requête"
         return render(request, "requests.html", locals())
@@ -129,16 +130,22 @@ def requestView(request):
 @login_required
 def acceptRequest(request):
     if request.method != "POST":
-        return ErrorView(request)
+        return HttpResponseBadRequest("Invalid method : Request must type be 'POST'")
 
-    if request.POST["decision"] == 'true':
-        student_request = studentRequest.objects.get(id=request.POST["id"])
-        coach = User.objects.get(id=request.POST["coach"])
-        student_request.coaches.add(coach.profile.coachaccount)
-        student_request.save()
-        return HttpResponse("A été ajouté")
+    accepted = request.POST.get("decision", False) == "true"
+    coachschedule = request.POST.get("schedule", "")
 
-    return HttpResponse("N'a pas été ajouté")
+    student_request = get_object_or_404(studentRequest, id=request.POST["id"])
+    coach = get_object_or_404(User, id=request.POST["coach"])
+    student_request.coaches.add(coach.profile.coachaccount)
+    student_request.save()
+
+    throughmodel = student_request.coachrequestthrough_set.get(coach=coach.profile.coachaccount)
+    throughmodel.has_accepted = accepted
+    throughmodel.coachschedule = coachschedule
+    throughmodel.save()
+
+    return HttpResponse("Success")
 
 
 def get_users(request):
@@ -146,7 +153,7 @@ def get_users(request):
         returns the users linked to the email provided
     """
     if request.method != "POST":
-        return HttpResponseBadRequest("Invalid method : Requets must be type POST")
+        return HttpResponseBadRequest("Invalid method : Request type must be 'POST'")
 
     email = request.POST.get("email", "")
     users = User.objects.filter(email=email)
