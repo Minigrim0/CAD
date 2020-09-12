@@ -174,6 +174,11 @@ class CoachAccount(models.Model):
     def nb_students(self):
         return self.students.count()
 
+    def schedule(self, studentRequest):
+        if studentRequest.coachrequestthrough_set.filter(coach=self).count() == 1:
+            return studentRequest.coachrequestthrough_set.get(
+                coach=self).coachschedule
+
     def __str__(self):
         return "{} {}".format(self.profile.user.first_name, self.profile.user.last_name)
 
@@ -183,6 +188,7 @@ class coachRequestThrough(models.Model):
     coach = models.ForeignKey('users.coachAccount', on_delete=models.CASCADE)
 
     coachschedule = models.TextField(null=False, blank=False)
+    has_accepted = models.BooleanField(default=True)  # TODO: Verify actions with only those who accepted
 
 
 class studentRequest(models.Model):
