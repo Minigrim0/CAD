@@ -147,7 +147,7 @@ def thanksCoaches(coaches, student):
         new_notif.save()
 
 
-def sendNotifToCoaches(student):
+def sendNotifToCoaches(student, domain):
     """
         Looks for coaches compatible with the student request
     """
@@ -181,6 +181,5 @@ def sendNotifToCoaches(student):
                 reverse("request_view"), student.user.studentrequest.id)
             newNotif.content += " pour voir le profil de l'etudiant"
             newNotif.save()
+            newNotif.send_as_mail(domain)
             coach.save()
-
-    # TODO: Send as mail too using template
