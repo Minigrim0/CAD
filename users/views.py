@@ -75,6 +75,7 @@ def send_notif(request):
         notif.save()
 
         logging.debug("Added notification (id {}) to {}".format(notif.pk, request.POST['user']))
+        # TODO: send with a new template
         return HttpResponse("Success")
 
     return HttpResponse("failed")
