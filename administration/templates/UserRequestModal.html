@@ -1,0 +1,34 @@
+{% load coach_schedule %}
+
+<!-- Modal -->
+<div class="modal fade" id="Detail{{ coach.pk }}_{{ student_request.pk }}" tabindex="-1" role="dialog" aria-labelledby="DetailLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DetailLabel">{{ coach.profile.user.first_name }} {{ coach.profile.user.last_name }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <div class="form-group row col-md-12">
+                        <p> - Ecole du coach: {{ coach.school }}</p>
+                    </div>
+                    <div class="form-group row col-md-12">
+                        <p> - Email: {{ coach.profile.user.email }}</p>
+                    </div>
+                    <div class="form-group row col-md-12">
+                        <p> - Nombre d'étudiants actuel: {{ coach.nb_students }}</p>
+                    </div>
+                    <div class="form-group row col-md-12">
+                        <p> - Horaire du coach: {% coach_schedule coach student_request %}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
