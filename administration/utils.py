@@ -182,3 +182,5 @@ def sendNotifToCoaches(student):
             newNotif.content += " pour voir le profil de l'etudiant"
             newNotif.save()
             coach.save()
+
+    # TODO: Send as mail too using template
