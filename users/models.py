@@ -179,7 +179,7 @@ class coachRequestThrough(models.Model):
     request = models.ForeignKey('users.studentRequest', on_delete=models.CASCADE)
     coach = models.ForeignKey('users.coachAccount', on_delete=models.CASCADE)
 
-    coachschedule = models.TextField()
+    coachschedule = models.TextField(null=False, blank=False)
 
 
 class studentRequest(models.Model):
@@ -194,6 +194,8 @@ class studentRequest(models.Model):
     coaches = models.ManyToManyField("users.CoachAccount", blank=True, related_name="request_participated", through=coachRequestThrough)
     is_closed = models.BooleanField(default=False)
     choosenCoach = models.ForeignKey("users.CoachAccount", blank=True, null=True, on_delete=models.SET_NULL)
+    finalschedule = models.TextField(null=True, blank=True)
+    # TODO: final schedule things
 
 
 class Notification(models.Model):
