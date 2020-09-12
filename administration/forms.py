@@ -75,7 +75,7 @@ class OtherAdminForm(BaseRegistration):
                 'verifiedAccount'
             ),
             bforms.FormActions(
-                Submit('save', 'Modifier l\'utilisateur'),
+                Submit('save', 'Enregistrer les modifications'),
                 HTML('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SendNotif">\
                         Envoyer une notification\
                     </button>')
@@ -93,7 +93,8 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
         required=False
     )
     balance = forms.IntegerField(
-        required=False, label="Balance"
+        required=False, label="Balance",
+        widget=forms.TextInput(attrs={'readonly': 'readonly'})
     )
 
     def __init__(self, *args, **kwargs):
@@ -160,7 +161,7 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
                 'verifiedAccount'
             ),
             bforms.FormActions(
-                Submit('save', 'Modifier l\'utilisateur'),
+                Submit('save', 'Enregistrer les modifications'),
                 HTML('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SendNotif">\
                         Envoyer une notification\
                     </button>\
@@ -234,7 +235,7 @@ class CoachAdminForm(CoachRegisterForm, OtherAdminForm):
                 'verifiedAccount'
             ),
             bforms.FormActions(
-                Submit('save', 'Modifier l\'utilisateur'),
+                Submit('save', 'Enregistrer les modifications'),
                 HTML('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SendNotif">\
                         Envoyer une notification\
                     </button>')

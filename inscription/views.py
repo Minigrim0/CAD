@@ -30,7 +30,7 @@ def registerStudentView(request):
 
             messages.add_message(
                 request, messages.SUCCESS,
-                "Votre compte a bien été créé!")
+                "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.")
             welcomeUser(request, user, host=request.META['HTTP_HOST'])
             return HttpResponseRedirect(reverse("home"))
     else:
@@ -55,7 +55,7 @@ def registerCoachView(request):
 
             messages.add_message(
                 request, messages.SUCCESS,
-                "Votre compte a bien été créé!")
+                "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.")
             welcomeUser(request, user, host=request.META['HTTP_HOST'])
             return HttpResponseRedirect(reverse("home"))
     else:
