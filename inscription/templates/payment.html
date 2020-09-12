@@ -22,16 +22,16 @@
                 Pour terminer la création de votre compte en tant qu'étudiant, nous vous demandons le payement d'avance pour au moins 2h de cours
             </div>
             <p class="lead mb-5">
-                {% if usr.profile.NeedsVisit %}
+                {% if user.profile.studentaccount.NeedsVisit %}
                 Un montant total de 100€ vous est demandé afin de terminer la création de votre compte,
                 ce montant couvre les deux premières heures de cours avec un de nos coaches, ainsi que la visite pédagogique demandée.
-
-                Vous pouvez payer cet accompte sur BE22 7310 4019 4347
+                <br/>
+                <div style="font-size: 1.2em;font-weight: bold;">Vous pouvez payer cet accompte sur BE22 7310 4019 4347</div>
                 {% else %}
                 Un montant total de 50€ vous est demandé afin de terminer la création de votre compte,
                 ce montant couvre les deux premières heures de cours avec un de nos coaches.
-                <hr>
-                <div style="font-weight: bold;">Vous pouvez payer cet accompte sur le compte BE22 7310 4019 4347</div>
+                <br/>
+                <div style="font-size: 1.2em;font-weight: bold;">Vous pouvez payer cet accompte sur le compte BE22 7310 4019 4347</div>
                 {% endif %}
             </p>
 
