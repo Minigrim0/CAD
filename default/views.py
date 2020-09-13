@@ -61,7 +61,7 @@ def contactView(request):
             msg.contact_mail = form.cleaned_data['envoyeur']
             msg.save()
             if not DEBUG:
-                msg.send_as_mail(domain=request.META['HTTP_HOST'])
+                msg.send_as_mail()
             else:
                 messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 

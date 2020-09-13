@@ -94,7 +94,7 @@ class UserTestCase(TestCase):
         """The requests notify the expected coaches"""
         student = User.objects.get(username="a")
         models.studentRequest.objects.create(student=student)
-        sendNotifToCoaches(student.profile, "127.0.0.1")
+        sendNotifToCoaches(student.profile)
 
         coach1 = User.objects.get(username="b")
         coach2 = User.objects.get(username="c")

@@ -74,7 +74,7 @@ def send_notif(request):
         notif.content = request.POST["content"]
         notif.author = request.POST["sender"]
         notif.save()
-        notif.send_as_mail(request.META["HTTP_HOST"])
+        notif.send_as_mail()
 
         logging.debug("Added notification (id {}) to {}".format(notif.pk, request.POST['user']))
 

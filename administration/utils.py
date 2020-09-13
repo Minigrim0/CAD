@@ -136,7 +136,7 @@ def thanksCoaches(coaches, student):
     title = "Merci d'avoir répondu présent"
     content = "Merci d'avoir répondu présent à la requête de {} {}. \
     Malheureusement, vous n'avez pas été choisi pour donner cours à \
-    cet étudiant. Mais ne vous en faites pas, voitre tour viendra!".format(
+    cet étudiant. Mais ne vous en faites pas, votre tour viendra!".format(
         student.profile.user.first_name, student.profile.user.last_name)
     for coach in coaches:
         new_notif = Notification(
@@ -145,9 +145,10 @@ def thanksCoaches(coaches, student):
             title=title,
             content=content)
         new_notif.save()
+        new_notif.send_as_mail()
 
 
-def sendNotifToCoaches(student, domain):
+def sendNotifToCoaches(student):
     """
         Looks for coaches compatible with the student request
     """
@@ -181,5 +182,5 @@ def sendNotifToCoaches(student, domain):
                 reverse("request_view"), student.user.studentrequest.id)
             newNotif.content += " pour voir le profil de l'etudiant"
             newNotif.save()
-            newNotif.send_as_mail(domain)
+            newNotif.send_as_mail()
             coach.save()

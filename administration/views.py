@@ -168,7 +168,7 @@ def sendUnsubscriptionMail(request):
     user = getUser(request.POST.get("user_key"))
     mail = Mail.objects.get(role='c')
     if not DEBUG:
-        mail.send(user, request.META["HTTP_HOST"])
+        mail.send(user)
     else:
         messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 
@@ -276,6 +276,6 @@ def modify_balance(request):
         studentAccount.confirmedAccount = True
         studentAccount.save()
 
-        sendNotifToCoaches(student.profile, request.META["HTTP_HOST"])
+        sendNotifToCoaches(student.profile)
 
     return JsonResponse({"new_balance": student.profile.studentaccount.balance})
