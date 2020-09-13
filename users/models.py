@@ -232,7 +232,7 @@ class Notification(models.Model):
     date_created = models.DateField(
         auto_now_add=True, null=True)
 
-    def send_as_mail(self, domain):
+    def send_as_mail(self):
         if settings.DEBUG is False:
             mail = Mail(
                 name="notification - {}".format(self.title),
@@ -241,7 +241,7 @@ class Notification(models.Model):
                 role="i",  # Sent message
                 to=self.user
             )
-            mail.send(self.user, domain)
+            mail.send(self.user)
 
 
 class FollowElement(models.Model):
