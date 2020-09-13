@@ -22,9 +22,9 @@ source source.sh env.dev.sh
 * [X] Fix workflow when engaging coaches
 * [X] Write tests
 * [X] Verify requests choosing
+* [X] Send notifications by mail
 
 * [ ] setup CI/CD
 * [ ] verify admin
-* [ ] Send notifications by mail
 * [ ] Test coach swap
 * [ ] Add password retrieving

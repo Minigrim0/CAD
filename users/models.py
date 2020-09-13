@@ -188,7 +188,7 @@ class coachRequestThrough(models.Model):
     coach = models.ForeignKey('users.coachAccount', on_delete=models.CASCADE)
 
     coachschedule = models.TextField(null=False, blank=False)
-    has_accepted = models.BooleanField(default=True)  # TODO: Verify actions with only those who accepted
+    has_accepted = models.BooleanField(default=True)
 
 
 class studentRequest(models.Model):
@@ -205,7 +205,7 @@ class studentRequest(models.Model):
     is_closed = models.BooleanField(default=False)
     choosenCoach = models.ForeignKey("users.CoachAccount", blank=True, null=True, on_delete=models.SET_NULL)
     finalschedule = models.TextField(null=True, blank=True)
-    # TODO: final schedule things
+    # TODO: final schedule choice, when choosing a coach
 
 
 class Notification(models.Model):
