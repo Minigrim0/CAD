@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load requests_tags %}
 
 {% block navlinks %}
     <ul class="navbar-nav text-left">
@@ -62,9 +63,12 @@
                         <div id="total_{{ student_request.id }}">
                             <div class="row col-md-12" id="coaches_{{ student_request.id }}">
                                 {% for coach in student_request.coaches.all %}
-                                <div class="col-xl-4 col-lg-6 col-sm-12">
-                                    {% include "request_user_card.html" %}
-                                </div>
+                                    {% accepted_by_coach student_request coach as accepted %}
+                                    {% if accepted %}
+                                    <div class="col-xl-4 col-lg-6 col-sm-12">
+                                        {% include "request_user_card.html" %}
+                                    </div>
+                                    {% endif %}
                                 {% empty %}
                                 <h5>Aucun coach n'a encore accepté cette requête</h5>
                                 {% endfor %}
