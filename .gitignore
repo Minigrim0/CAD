@@ -9,4 +9,3 @@ static/
 logs/
 *.pyc
 setup.cfg
-.env.prod
