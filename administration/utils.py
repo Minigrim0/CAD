@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-from users.models import Profile, Notification
+from users.models import Profile, Notification, coachRequestThrough
 
 
 def modifyUser(username, form):
@@ -99,6 +99,7 @@ def populate_data(usertype, user):
             'resp_phone_number1': user.profile.studentaccount.resp_phone_number1,
             'resp_phone_number2': user.profile.studentaccount.resp_phone_number2,
             'resp_phone_number3': user.profile.studentaccount.resp_phone_number3,
+            # 'coach': user.profile.studentaccount.coach.profile.user,  # TODO: Fix this
             'courses': list(filter((None).__ne__, [
                 'a' if user.profile.Maths_course else None,
                 'b' if user.profile.Physique_course else None,
@@ -134,18 +135,19 @@ def thanksCoaches(coaches, student):
 
     author = "L'équipe CAD"
     title = "Merci d'avoir répondu présent"
-    content = "Merci d'avoir répondu présent à la requête de {} {}. \
-    Malheureusement, vous n'avez pas été choisi pour donner cours à \
-    cet étudiant. Mais ne vous en faites pas, votre tour viendra!".format(
+    content = """Merci d'avoir répondu présent à la requête de {} {}.
+    Malheureusement, vous n'avez pas été choisi pour donner cours à
+    cet étudiant. Mais ne vous en faites pas, votre tour viendra!""".format(
         student.profile.user.first_name, student.profile.user.last_name)
     for coach in coaches:
-        new_notif = Notification(
-            user=coach.profile.user,
-            author=author,
-            title=title,
-            content=content)
-        new_notif.save()
-        new_notif.send_as_mail()
+        if coachRequestThrough.objects.get(coach=coach, request__student=student.profile.user).has_accepted == True:
+            new_notif = Notification(
+                user=coach.profile.user,
+                author=author,
+                title=title,
+                content=content)
+            new_notif.save()
+            new_notif.send_as_mail()
 
 
 def sendNotifToCoaches(student):

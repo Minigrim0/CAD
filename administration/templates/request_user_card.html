@@ -20,9 +20,10 @@
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Detail{{ coach.pk }}_{{ student_request.pk }}">
             Détails
         </button>
-        <button type="button" class="btn btn-success" onclick="chooseCoach('{{ coach.pk }}', '{{ student_request.id }}')" name="accept">
+        <button type="button" class="btn btn-success choose" onclick="chooseCoach('{{ coach.pk }}', '{{ student_request.id }}')" name="accept">
             Choisir
         </button>
     </div>
-    {% include "UserRequestModal.html" %}
 </div>
+
+{% include "UserRequestModal.html" %}
