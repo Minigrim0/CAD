@@ -18,51 +18,25 @@
     <section class="p-3 p-lg-5 align-items-center">
         <div id="container">
             <h2>Mes étudiants</h2>
-            <div class="col-lg-12">
-                <div class="row">
-                    <div class="col-lg-2">
-                        <ul class="list-group">
-                            <li class="list-group-item">Nom</li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-8">
-                        <ul class="list-group">
-                            <li class="list-group-item">Niveau scolaire</li>
-                        </ul>
-                    </div>
-                    <div class="col-lg-2">
-                        <ul class="list-group">
-                            <li class="list-group-item">Cours à enseigner</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Niveau scolaire</th>
+                    <th scope="col">Cours à enseigner</th>
+                    </tr>
+                </thead>
 
-            <div class="col-lg-12">
-                <div class="row">
-                    <div class="col-lg-2">
-                        <ul class="list-group">
-                            {% for elem in student_set %}
-                            <li class="list-group-item">{{ elem.profile.user.first_name }}  {{ elem.profile.user.last_name }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="col-lg-8">
-                        <ul class="list-group">
-                            {% for elem in student_set %}
-                            <li class="list-group-item">{{ elem.profile.get_school_level_display }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="col-lg-2">
-                        <ul class="list-group">
-                            {% for elem in student_set %}
-                            <li class="list-group-item">{{ elem.profile.courses }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
+                <tbody>
+                    {% for student in student_set %}
+                        <tr>
+                            <td>{{ student.profile.user.first_name }}  {{ student.profile.user.last_name }}</td>
+                            <td>{{ student.profile.get_school_level_display }}</td>
+                            <td>{{ student.profile.courses }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </section>
 </div>
