@@ -34,6 +34,12 @@
                             <td>{{ followelement.comments|safe }}</td>
                             <td>{{ followelement.coach }}</td>
                         </tr>
+                    {% empty %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Vous n'avez encore suivi aucun cours</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
