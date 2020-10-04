@@ -34,6 +34,12 @@
                             <td>{{ student.profile.get_school_level_display }}</td>
                             <td>{{ student.profile.courses }}</td>
                         </tr>
+                    {% empty %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Vous n'avez encore aucun étudiant</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
