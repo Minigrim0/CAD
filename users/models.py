@@ -2,6 +2,9 @@ from django import utils
 from django.contrib.auth.models import User
 from django.db import models
 
+import cad.settings as settings
+from default.models import Mail
+
 
 class Profile(models.Model):
     """
@@ -171,6 +174,11 @@ class CoachAccount(models.Model):
     def nb_students(self):
         return self.students.count()
 
+    def schedule(self, studentRequest):
+        if studentRequest.coachrequestthrough_set.filter(coach=self).count() == 1:
+            return studentRequest.coachrequestthrough_set.get(
+                coach=self).coachschedule
+
     def __str__(self):
         return "{} {}".format(self.profile.user.first_name, self.profile.user.last_name)
 
@@ -179,7 +187,8 @@ class coachRequestThrough(models.Model):
     request = models.ForeignKey('users.studentRequest', on_delete=models.CASCADE)
     coach = models.ForeignKey('users.coachAccount', on_delete=models.CASCADE)
 
-    coachschedule = models.TextField()
+    coachschedule = models.TextField(null=False, blank=False)
+    has_accepted = models.BooleanField(default=True)
 
 
 class studentRequest(models.Model):
@@ -191,9 +200,12 @@ class studentRequest(models.Model):
     # represents the user who made the request
     student = models.OneToOneField(User, on_delete=models.CASCADE)
     # represents the coaches who accepted this request
-    coaches = models.ManyToManyField("users.CoachAccount", blank=True, related_name="request_participated", through=coachRequestThrough)
+    coaches = models.ManyToManyField(
+        "users.CoachAccount", blank=True, related_name="request_participated", through=coachRequestThrough)
     is_closed = models.BooleanField(default=False)
     choosenCoach = models.ForeignKey("users.CoachAccount", blank=True, null=True, on_delete=models.SET_NULL)
+    finalschedule = models.TextField(null=True, blank=True)
+    # TODO: final schedule choice, when choosing a coach
 
 
 class Notification(models.Model):
@@ -219,6 +231,17 @@ class Notification(models.Model):
     # Date of the creation
     date_created = models.DateField(
         auto_now_add=True, null=True)
+
+    def send_as_mail(self):
+        if settings.DEBUG is False:
+            mail = Mail(
+                name="notification - {}".format(self.title),
+                subject="Nouvelle notification - {}".format(self.title),
+                content=self.content,
+                role="i",  # Sent message
+                to=self.user
+            )
+            mail.send(self.user)
 
 
 class FollowElement(models.Model):
