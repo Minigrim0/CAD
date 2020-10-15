@@ -15,13 +15,6 @@ import os
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 
-sentry_sdk.init(
-    dsn="https://eb467cdda8db4f0dab298073cad2fd50@o435374.ingest.sentry.io/5394576",
-    integrations=[DjangoIntegration()],
-
-    send_default_pii=True
-)
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -35,6 +28,14 @@ logging.basicConfig(
 SECRET_KEY = os.environ.get("SECRET_KEY", "defaultsecretkey")
 
 DEBUG = int(os.environ.get("DEBUG", default=0))
+
+if not DEBUG:
+    sentry_sdk.init(
+        dsn="https://eb467cdda8db4f0dab298073cad2fd50@o435374.ingest.sentry.io/5394576",
+        integrations=[DjangoIntegration()],
+
+        send_default_pii=True
+    )
 
 # 'DJANGO_ALLOWED_HOSTS' should be a single string of hosts with a space between each.
 # For example: 'DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]'
@@ -77,6 +78,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 ROOT_URLCONF = 'cad.urls'
 LOGIN_URL = "login_view"
 SITE_ID = 1
+SITE_DOMAIN = os.environ.get("DEPLOYED_DOMAIN", "127.0.0.1:8000")
 
 TEMPLATES = [
     {

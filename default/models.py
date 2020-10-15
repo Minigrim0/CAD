@@ -5,7 +5,7 @@ import logging
 from django.db import models
 from django.shortcuts import reverse
 
-from cad.settings import EMAIL_HOST_USER
+from cad.settings import EMAIL_HOST_USER, SITE_DOMAIN
 
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
@@ -52,7 +52,7 @@ class Mail(models.Model):
         max_length=1, choices=choices, verbose_name="Role du mail")
     to = models.ForeignKey(User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE)
 
-    def formatted_content(self, user, domain="127.0.0.1:8000"):
+    def formatted_content(self, user):
         content = str(self.content)
         content = content.replace("<LASTNAME>", str(user.last_name))
         content = content.replace("<FIRSTNAME>", str(user.first_name))
@@ -63,25 +63,25 @@ class Mail(models.Model):
         content = content.replace(
             "<CONFIRMLINK>",
             "https://{}{}?key={}".format(
-                domain, reverse("confirmation"), user.profile.secret_key)
+                SITE_DOMAIN, reverse("confirmation"), user.profile.secret_key)
         )
         content = content.replace("\n", "<br/>")
         return content
 
-    def send(self, user, domain):
+    def send(self, user):
         html_message = render_to_string(
             "mail.html",
             {
                 'title': self.clean_header,
-                'content': self.formatted_content(user, domain=domain),
+                'content': self.formatted_content(user),
                 'error_mail': "",
-                'site_see_link': "http://{}{}".format(domain, reverse("soon_view"))
+                'site_see_link': "http://{}{}".format(SITE_DOMAIN, reverse("soon_view"))
             }
         )
 
         to = [user.email]
         from_email = 'CAD - Cours a domicile <{}>'.format(EMAIL_HOST_USER)
-        msg = EmailMultiAlternatives(self.clean_header, self.formatted_content(user, domain=domain), from_email, to)
+        msg = EmailMultiAlternatives(self.clean_header, self.formatted_content(user), from_email, to)
         msg.attach_alternative(html_message, "text/html")
         msg.send()
 
@@ -119,7 +119,7 @@ class Message(models.Model):
 
         return html_message
 
-    def send_as_mail(self, domain="127.0.0.1:8000"):
+    def send_as_mail(self):
         logging.debug("Sending mail : {}\n{}\n\n{}".format(self.subject, self.content, self.contact_mail))
 
         html_message = render_to_string(
@@ -128,7 +128,7 @@ class Message(models.Model):
                 'title': 'Nouveau message d\'un utilisateur de CAD',
                 'content': "<h2>{}</h2><br/>{}".format(self.subject, self.content),
                 'error_mail': "",
-                'site_see_link': "http://{}{}?id={}".format(domain, reverse("message_admin_view"), self.pk)
+                'site_see_link': "http://{}{}?id={}".format(SITE_DOMAIN, reverse("message_admin_view"), self.pk)
             }
         )
 
