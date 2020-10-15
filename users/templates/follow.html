@@ -18,51 +18,31 @@
     <section class="p-3 p-lg-5 align-items-center">
         <div id="container">
             <h2>Mon Suivi</h2>
-            <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <ul class="list-group">
-                            <li class="list-group-item">Date</li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-8">
-                        <ul class="list-group">
-                            <li class="list-group-item">Commentaires</li>
-                        </ul>
-                    </div>
-                    <div class="col-sm-2">
-                        <ul class="list-group">
-                            <li class="list-group-item">Coach</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Commentaires</th>
+                    <th scope="col">Coach</th>
+                    </tr>
+                </thead>
 
-            <div class="col-sm-12">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <ul class="list-group">
-                            {% for elem in followelement_set %}
-                            <li class="list-group-item">{{ elem.date|date:"d/m/Y - G:i" }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="col-sm-8">
-                        <ul class="list-group">
-                            {% for elem in followelement_set %}
-                            <li class="list-group-item">{{ elem.comments|safe }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    <div class="col-sm-2">
-                        <ul class="list-group">
-                            {% for elem in followelement_set %}
-                            <li class="list-group-item">{{ elem.coach }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                </div>
-            </div>
+                <tbody>
+                    {% for followelement in followelement_set %}
+                        <tr>
+                            <td>{{ followelement.date|date:"d/m/Y - G:i" }}</td>
+                            <td>{{ followelement.comments|safe }}</td>
+                            <td>{{ followelement.coach }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Vous n'avez encore suivi aucun cours</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </section>
 </div>

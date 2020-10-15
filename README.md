@@ -21,10 +21,10 @@ source source.sh env.dev.sh
 * [X] create a cron job to store the log files once a days, and remove those who are older than 3(?) months
 * [X] Fix workflow when engaging coaches
 * [X] Write tests
+* [X] Verify requests choosing
+* [X] Send notifications by mail
 
 * [ ] setup CI/CD
 * [ ] verify admin
-* [ ] Send notifications by mail
-* [ ] Verify requests choosing
 * [ ] Test coach swap
 * [ ] Add password retrieving

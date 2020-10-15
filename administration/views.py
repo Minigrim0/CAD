@@ -168,7 +168,7 @@ def sendUnsubscriptionMail(request):
     user = getUser(request.POST.get("user_key"))
     mail = Mail.objects.get(role='c')
     if not DEBUG:
-        mail.send(user, request.META["HTTP_HOST"])
+        mail.send(user)
     else:
         messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
 
@@ -230,11 +230,12 @@ def chooseCoach(request):
     # Profile objects
     coach = studentrequest.coaches.get(pk=query["coach"])
     other_coaches = studentrequest.coaches.all().exclude(pk=query["coach"])
+    finalschedule = query["schedule"]
     student = studentrequest.student.profile.studentaccount
 
     studentrequest.is_closed = True
     studentrequest.choosenCoach = coach
-
+    studentrequest.finalschedule = finalschedule
     student.coach = coach
 
     studentrequest.save()
