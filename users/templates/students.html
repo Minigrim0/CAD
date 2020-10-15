@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load requests_tags %}
 
 {% block navlinks %}
     <ul class="navbar-nav">
@@ -24,6 +25,7 @@
                     <th scope="col">Nom</th>
                     <th scope="col">Niveau scolaire</th>
                     <th scope="col">Cours à enseigner</th>
+                    <th scope="col">Horaire</th>
                     </tr>
                 </thead>
 
@@ -33,6 +35,7 @@
                             <td>{{ student.profile.user.first_name }}  {{ student.profile.user.last_name }}</td>
                             <td>{{ student.profile.get_school_level_display }}</td>
                             <td>{{ student.profile.courses }}</td>
+                            <td>{% final_schedule request.user.profile.coachaccount student %}</td>
                         </tr>
                     {% empty %}
                         <tr>
