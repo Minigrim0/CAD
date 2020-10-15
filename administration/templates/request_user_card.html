@@ -17,10 +17,10 @@
         </p>
     </div>
     <div class="card-footer text-center">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Detail{{ coach.pk }}_{{ student_request.pk }}">
+        <button type="button" class="btn btn-primary" onclick="showdetailmodal('{{ coach.pk }}', '{{ student_request.id }}');">
             Détails
         </button>
-        <button type="button" class="btn btn-success choose" onclick="chooseCoach('{{ coach.pk }}', '{{ student_request.id }}')" name="accept">
+        <button type="button" class="btn btn-success choose" onclick="showconfirmationmodal('{{ coach.pk }}', '{{ student_request.id }}')" name="accept">
             Choisir
         </button>
     </div>

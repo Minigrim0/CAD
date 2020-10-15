@@ -42,15 +42,12 @@
                             {% if student_request.student.profile.Maths_course %}
                             <li>Maths</li>
                             {% endif %}
-
                             {% if student_request.student.profile.Chimie_course %}
                             <li>Chimie</li>
                             {% endif %}
-
                             {% if student_request.student.profile.Physique_course %}
                             <li>Physique</li>
                             {% endif %}
-
                             {% if student_request.student.profile.Francais_course %}
                             <li>Francais</li>
                             {% endif %}
@@ -87,28 +84,22 @@
                     {% for student_request in student_requests_closed %}
                     <li class="list-group-item">
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-lg-4 col-md-12">
                                 <h4>{{ student_request.student.first_name }} {{ student_request.student.last_name }}</h4>
                                 <p>Cherchait des cours de:</p>
-                                <ul>
-                                    {% if student_request.student.profile.Maths_course %}
-                                    <li>Maths</li>
-                                    {% endif %}
-                                    {% if student_request.student.profile.Chimie_course %}
-                                    <li>Chimie</li>
-                                    {% endif %}
-                                    {% if student_request.student.profile.Physique_course %}
-                                    <li>Physique</li>
-                                    {% endif %}
-                                    {% if student_request.student.profile.Francais_course %}
-                                    <li>Francais</li>
-                                    {% endif %}
-                                </ul>
+                                <p style="font-weight: bold;">{{ student_request.student.profile.courses }}</p>
+
+                                <h6>Horaire de l'étudiant</h6>
+                                <textarea class="col-md-12" readonly="readonly">{{ student_request.student.profile.studentaccount.wanted_schedule }}</textarea>
                             </div>
-                            <div class="row col-md-6">
+                            <div class="col-lg-4 col-md-12">
+                                <h4>Horaire final</h4>
+                                <textarea class="col-md-12" readonly="readonly" rows=5>{{ student_request.finalschedule }}</textarea>
+                            </div>
+                            <div class="col-lg-4 col-md-12">
                                 <h4>Coach sélectionné</h4>
                                 {% with coach=student_request.choosenCoach %}
-                                    <div class="col-xl-4 col-lg-6 col-sm-12">
+                                    <div class="col-md-12">
                                         {% include "request_user_card_closed.html" %}
                                     </div>
                                 {% endwith %}
@@ -124,7 +115,7 @@
                                 {% for coach in student_request.coaches.all %}
                                     {% accepted_by_coach student_request coach as accepted %}
                                     {% if accepted %}
-                                    <div class="col-xl-4 col-lg-6 col-sm-12">
+                                    <div class="col-lg-4 col-md-6 col-sm-12">
                                         {% include "request_user_card_closed.html" %}
                                     </div>
                                     {% endif %}
@@ -139,7 +130,25 @@
     </section>
 
     <script>
+        function showconfirmationmodal(coach_pk, id){
+            $('#Detail' + coach_pk + '_' + id).modal('show');
+            $('#tobechosen_' + coach_pk + id).css('display', 'block');
+        }
+
+        function showdetailmodal(coach_pk, id){
+            $('#Detail' + coach_pk + '_' + id).modal('show');
+            $('#tobechosen_' + coach_pk + id).css('display', 'none');
+        }
+
         function chooseCoach(coach_pk, id) {
+
+            var finalschedule = $('#schedulefor' + coach_pk + id).val()
+            if(finalschedule == ""){
+                $('#errorschedule' + coach_pk + id).text("Ce champ est obligatoire");
+                $('#errorschedule' + coach_pk + id).css("display", "block");
+                return;
+            }
+
             document.getElementById("coaches_" + id).style = "filter: opacity(10%);";
             document.getElementById("spin_" + id).style.display = "block";
             var Url = "{% url 'request_select_coach' %}";
@@ -148,6 +157,7 @@
                 Url, {
                     id: id,
                     coach: coach_pk,
+                    schedule: finalschedule,
                     csrfmiddlewaretoken: '{{ csrf_token }}'
                 },
                 function(data, status) {
@@ -170,6 +180,8 @@
                     }
                 }
             );
+
+            $('#Detail' + coach_pk + '_' + id).modal('hide');
         }
 
         function switchTo(to){
