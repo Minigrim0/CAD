@@ -140,7 +140,7 @@ def thanksCoaches(coaches, student):
     cet étudiant. Mais ne vous en faites pas, votre tour viendra!""".format(
         student.profile.user.first_name, student.profile.user.last_name)
     for coach in coaches:
-        if coachRequestThrough.objects.get(coach=coach, request__student=student.profile.user).has_accepted == True:
+        if coachRequestThrough.objects.get(coach=coach, request__student=student.profile.user).has_accepted is True:
             new_notif = Notification(
                 user=coach.profile.user,
                 author=author,
