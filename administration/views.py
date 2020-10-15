@@ -230,11 +230,12 @@ def chooseCoach(request):
     # Profile objects
     coach = studentrequest.coaches.get(pk=query["coach"])
     other_coaches = studentrequest.coaches.all().exclude(pk=query["coach"])
+    finalschedule = query["schedule"]
     student = studentrequest.student.profile.studentaccount
 
     studentrequest.is_closed = True
     studentrequest.choosenCoach = coach
-
+    studentrequest.finalschedule = finalschedule
     student.coach = coach
 
     studentrequest.save()

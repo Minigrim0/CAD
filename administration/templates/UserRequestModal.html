@@ -21,11 +21,20 @@
                     <div class="form-group row col-md-12">
                         <p> - Nombre d'étudiants actuel: {{ coach.nb_students }}</p>
                     </div>
-                    <div class="form-group row col-md-12">
-                        <p> - Horaire du coach: {% coach_schedule coach student_request %}</p>
-                    </div>
+                    <p class="col-md-12"> - Horaire du coach:</p>
+                    <textarea class="col-md-12 text-left" readonly="readonly" rows=5>{% coach_schedule coach student_request %}</textarea>
+                </div>
+
+                <hr>
+
+                <div id="tobechosen_{{ coach.pk }}{{ student_request.id }}" style="display:none;">
+                    <h4 class="col-md-12">Horaire final :</h4>
+                    <textarea class="col-md-12 text-left" rows=5 id="schedulefor{{ coach.pk }}{{ student_request.id }}"></textarea>
+                    <small style="display:none;color:red" id="errorschedule{{coach.pk}}{{student_request.id}}"></small>
+                    <button type="button" class="btn btn-success" onclick="chooseCoach('{{ coach.pk }}', '{{ student_request.id }}');">Choisir ce coach</button>
                 </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
