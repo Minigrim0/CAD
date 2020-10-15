@@ -91,7 +91,6 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('is_closed', models.BooleanField(default=False)),
-                ('finalschedule', models.TextField(blank=True, null=True)),
                 ('choosenCoach', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='users.CoachAccount')),
                 ('coaches', models.ManyToManyField(blank=True, related_name='request_participated', through='users.coachRequestThrough', to='users.CoachAccount')),
                 ('student', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
