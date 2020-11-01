@@ -10,6 +10,7 @@ urlpatterns = [
     path('send_notif/', views.send_notif, name="send_notif"),
     path('me/follow/', views.followView, name="follow_up"),
     path('me/students/', views.studentsView, name="my_students"),
+    path('me/students/add/', views.addFollowElement, name="add_follow"),
     path('me/', views.userView, name="my_account"),
     path('requests/', views.requestView, name="request_view"),
     path('requests/accept/', views.acceptRequest, name="manage_request"),

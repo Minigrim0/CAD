@@ -248,6 +248,7 @@ def chooseCoach(request):
     étudiant".format(student.profile.user.first_name, student.profile.user.last_name)
     new_Notif = Notification(
         user=coach.profile.user, author=author, title=title, content=content)
+    new_Notif.send_as_mail()
     new_Notif.save()
 
     thanksCoaches(other_coaches, student)

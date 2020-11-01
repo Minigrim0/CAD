@@ -11,8 +11,8 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login
 
 from administration.utils import populate_data
-from .models import Notification, studentRequest
-from .forms import StudentReadOnlyForm, BaseReadOnly, CoachReadOnlyForm
+from .models import Notification, studentRequest, StudentAccount, FollowElement
+from .forms import StudentReadOnlyForm, BaseReadOnly, CoachReadOnlyForm, addFollowElementForm
 
 
 def user_home(request):
@@ -61,6 +61,30 @@ def studentsView(request):
 
     view_title = "Mes étudiants"
     return render(request, 'students.html', locals())
+
+
+@login_required
+def addFollowElement(request):
+    student_pk = request.GET.get("pk", -1)
+    student = get_object_or_404(StudentAccount, pk=student_pk)
+
+    if request.method == "POST":
+        form = addFollowElementForm(request.POST)
+        print(form)
+        if form.is_valid():
+            course = FollowElement.objects.create(coach=request.user, student=student)
+            course.date = form.cleaned_data["date"]
+            course.startHour = form.cleaned_data["startHour"]
+            course.endHour = form.cleaned_data["endHour"]
+            course.comments = form.cleaned_data["comments"]
+            return HttpResponseRedirect(reverse("my_students"))
+        else:
+            print("Errors:", form.errors)
+    else:
+        form = addFollowElementForm()
+
+    view_title = "Ajouter un cours"
+    return render(request, 'addFollow.html', locals())
 
 
 @login_required
