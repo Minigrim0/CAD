@@ -1,10 +1,15 @@
 import django.forms as forms
 from django.contrib.auth.models import User
+
 import crispy_forms.bootstrap as bforms
 from crispy_forms.utils import render_field
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Fieldset, Submit, Row, Column, Field
+
 from cad.settings import CRISPY_TEMPLATE_PACK
+from users.models import FollowElement
+
+from django.shortcuts import reverse
 
 
 class TableForm(Field):
@@ -405,3 +410,33 @@ class BaseReadOnly(BaseRegistration):
 
     def clean(self, admin=False):
         super().clean(admin=True)
+
+
+class addFollowElementForm(forms.ModelForm):
+
+    class Meta:
+        model = FollowElement
+        exclude = ("approved", "coach", "student")
+
+    def __init__(self, pk=0, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.form_id = 'id-form-coach-readonly'
+        self.helper.form_method = 'post'
+
+        self.helper.layout = Layout(
+            Fieldset(
+                'Ajouter un cours',
+                Row(
+                    Column('date', css_class='form-group col-md-4 mb-0'),
+                    Column('startHour', placeholder="Heure de début", css_class='form-group col-md-4 mb-0'),
+                    Column('endHour', css_class='form-group col-md-4 mb-0'),
+                    css_class='form-row'
+                ),
+                Row(
+                    Column('comments', css_class='form-group col-md-12 mb-2'),
+                    css_class='form-row'
+                ),
+            ),
+            Submit('submit', 'Ajouter le cours')
+        )

@@ -251,19 +251,23 @@ class FollowElement(models.Model):
     """
 
     # students whom this followElement is for
-    student = models.ForeignKey(User, blank=True, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
     # Name of the coach who wrote this followElement
     coach = models.CharField(
-        null=True, blank=True, max_length=110,
+        max_length=110,
         default="Erreur lors de la recherche du coach")
     # date of the writing of this FollowElement
-    date = models.DateTimeField(
-        default=utils.timezone.now, blank=True,
-        verbose_name="Date et heure du cours")
+    date = models.DateField(
+        default=utils.timezone.now,
+        verbose_name="Date et heure du cours")  # TODO: transform to date + start hour + end hour
+    startHour = models.TimeField(default="10:00")
+    endHour = models.TimeField(default="12:00")
+
     # comments of the coach about the course represented by this FollowElement
     comments = models.TextField(
-        null=True, blank=True, default="Pas de commentaires",
+        default="Pas de commentaires",
         verbose_name="Commentaires du cours")
+    approved = models.BooleanField(default=False)
 
 
 class Transaction(models.Model):
