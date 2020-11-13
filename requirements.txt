@@ -8,6 +8,7 @@ cssutils==1.0.2
 Django==3.0.7
 django-autocomplete-light==3.5.1
 django-crispy==1.8.1
+django-extensions==3.0.9
 django-html-emailer==0.0.8.1
 flake8==3.8.4
 future==0.18.2
