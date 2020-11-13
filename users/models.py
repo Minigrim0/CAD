@@ -251,7 +251,7 @@ class FollowElement(models.Model):
     """
 
     # students whom this followElement is for
-    student = models.ForeignKey(User, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     # Name of the coach who wrote this followElement
     coach = models.CharField(
         max_length=110,
