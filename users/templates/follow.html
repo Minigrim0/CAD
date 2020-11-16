@@ -30,7 +30,7 @@
                 <tbody>
                     {% for followelement in followelement_set %}
                         <tr>
-                            <td>{{ followelement.date|date:"d/m/Y - G:i" }}</td>
+                            <td>{{ followelement.date|date:"d/m/Y" }} de {{ followelement.startHour }} à {{ followelement.endHour }}</td>
                             <td>{{ followelement.comments|safe }}</td>
                             <td>{{ followelement.coach }}</td>
                         </tr>

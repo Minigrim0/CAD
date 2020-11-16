@@ -29,8 +29,7 @@
                     <tbody>
                         {% for course in courses %}
                             <tr>
-                                <td>{{ course.date|date:"d/m/Y - G:i" }}</td>
-                                <td>{{ course.student.first_name }} {{ course.student.last_name }}</td>
+                                <td>{{ course.date|date:"d/m/Y" }} <br/> {{ course.startHour }} à {{ course.endHour }}</td>
                                 <td>{{ course.comments|safe }}</td>
                                 <td>{{ course.coach }}</td>
                             </tr>
