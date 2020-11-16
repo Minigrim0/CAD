@@ -205,7 +205,6 @@ class studentRequest(models.Model):
     is_closed = models.BooleanField(default=False)
     choosenCoach = models.ForeignKey("users.CoachAccount", blank=True, null=True, on_delete=models.SET_NULL)
     finalschedule = models.TextField(null=True, blank=True)
-    # TODO: final schedule choice, when choosing a coach
 
 
 class Notification(models.Model):

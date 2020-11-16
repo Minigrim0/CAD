@@ -55,7 +55,6 @@ def followView(request):
 
 @login_required
 def studentsView(request):
-    # TODO: WOrkflow add course + admin managing
     coach = request.user.profile.coachaccount
     student_set = User.objects.filter(profile__studentaccount__coach=coach)
 
