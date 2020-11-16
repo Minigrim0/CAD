@@ -418,10 +418,10 @@ class addFollowElementForm(forms.ModelForm):
         model = FollowElement
         exclude = ("approved", "coach", "student")
 
-    def __init__(self, pk=0, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.form_id = 'id-form-coach-readonly'
+        self.helper.form_id = 'id-add-follow-elem'
         self.helper.form_method = 'post'
 
         self.helper.layout = Layout(
