@@ -17,6 +17,7 @@ urlpatterns = [
     path('mails/', views.mailAdminView, name="mails_admin"),
     path('mails/create/', views.mailAdminCreate, name="createMail"),
     path('courses/', views.courses, name="given_courses"),
+    path('courses/approve/', views.approve_course, name="approve_course"),
     path('messages/', views.message_admin_view, name="message_admin_view"),
     path('messages/all/', views.message_list, name="messagelist"),
 ]

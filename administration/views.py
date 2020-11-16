@@ -90,6 +90,16 @@ def courses(request):
 
 
 @staff_member_required
+def approve_course(request):
+    pk = request.POST.get("pk", -1)
+    course = get_object_or_404(FollowElement, pk=pk)
+    course.approved = True
+    course.save()
+
+    return HttpResponse("Success")
+
+
+@staff_member_required
 def transactions(request):
     transactions = Transaction.objects.all().order_by("date")
     view_title = "Transactions effectuées"
