@@ -260,8 +260,8 @@ class FollowElement(models.Model):
     date = models.DateField(
         default=utils.timezone.now,
         verbose_name="Date et heure du cours")  # TODO: transform to date + start hour + end hour
-    startHour = models.TimeField(default="10:00")
-    endHour = models.TimeField(default="12:00")
+    startHour = models.TimeField(default="10:00", verbose_name="Heure de début")
+    endHour = models.TimeField(default="12:00", verbose_name="Heure de fin")
 
     # comments of the coach about the course represented by this FollowElement
     comments = models.TextField(
