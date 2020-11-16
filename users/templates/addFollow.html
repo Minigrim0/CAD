@@ -18,9 +18,7 @@
                 Ajouter un <span class="text-primary">cours</span>
             </h1>
             {% include 'messages.html' %}
-            <form action="{% url "add_follow" %}?pk={{ student_pk }}" method="post">
-                {% crispy form %}
-            </form>
+            {% crispy form form.helper %}
         </div>
     </section>
 </div>
