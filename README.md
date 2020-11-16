@@ -23,8 +23,10 @@ source source.sh env.dev.sh
 * [X] Write tests
 * [X] Verify requests choosing
 * [X] Send notifications by mail
+* [X] Final schedule by admin
+* [X] Start and End hours in followElements
 
+* [ ] Add admin filtering in lists
 * [ ] setup CI/CD
-* [ ] verify admin
 * [ ] Test coach swap
 * [ ] Add password retrieving
