@@ -70,16 +70,14 @@ def addFollowElement(request):
 
     if request.method == "POST":
         form = addFollowElementForm(request.POST)
-        print(form)
         if form.is_valid():
-            course = FollowElement.objects.create(coach=request.user, student=student)
+            course = FollowElement.objects.create(coach=request.user, student=student.profile.user)
             course.date = form.cleaned_data["date"]
             course.startHour = form.cleaned_data["startHour"]
             course.endHour = form.cleaned_data["endHour"]
             course.comments = form.cleaned_data["comments"]
+            course.save()
             return HttpResponseRedirect(reverse("my_students"))
-        else:
-            print("Errors:", form.errors)
     else:
         form = addFollowElementForm()
 
