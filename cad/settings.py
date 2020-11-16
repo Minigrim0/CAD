@@ -28,10 +28,11 @@ logging.basicConfig(
 SECRET_KEY = os.environ.get("SECRET_KEY", "defaultsecretkey")
 
 DEBUG = int(os.environ.get("DEBUG", default=0))
+SENTRY_DSN = os.environ.get("SENTRY_DSN", None)
 
-if not DEBUG:
+if not DEBUG and SENTRY_DSN is not None:
     sentry_sdk.init(
-        dsn="***REMOVED***",
+        dsn=SENTRY_DSN,
         integrations=[DjangoIntegration()],
 
         send_default_pii=True
