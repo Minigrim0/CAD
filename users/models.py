@@ -253,13 +253,15 @@ class FollowElement(models.Model):
     # students whom this followElement is for
     student = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     # Name of the coach who wrote this followElement
-    coach = models.CharField(
-        max_length=110,
-        default="Erreur lors de la recherche du coach")
+    coach = models.ForeignKey(
+        User,
+        related_name="coach_of",
+        null=True,
+        on_delete=models.CASCADE)
     # date of the writing of this FollowElement
     date = models.DateField(
         default=utils.timezone.now,
-        verbose_name="Date et heure du cours")  # TODO: transform to date + start hour + end hour
+        verbose_name="Date et heure du cours")
     startHour = models.TimeField(default="10:00", verbose_name="Heure de début")
     endHour = models.TimeField(default="12:00", verbose_name="Heure de fin")
 
