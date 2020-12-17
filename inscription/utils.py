@@ -42,7 +42,6 @@ def studentRegister(user, form):
 
     # Follow Element creation
     folElem = FollowElement(student=user)
-    folElem.coach = "L'Equipe CAD"
     folElem.comments = "Inscription sur le site CAD - cours à domicile"
     folElem.save()
 
