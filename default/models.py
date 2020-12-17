@@ -63,7 +63,7 @@ class Mail(models.Model):
         content = content.replace("<SECRETKEY>", str(user.profile.secret_key))
         content = content.replace(
             "<CONFIRMLINK>",
-            format_html("<a href=\"{1}\">{1}</a>".format("https://{}{}?key={}".format(
+            format_html("<a href=\"{0}\">{0}</a>".format("https://{}{}?key={}".format(
                 SITE_DOMAIN, reverse("confirmation")), user.profile.secret_key))
         )
         content = content.replace("\n", "<br/>")
