@@ -132,9 +132,9 @@
     </section>
 
     {% if user.is_authenticated %}
-    <footer style="bottom: 0; position: fixed" class="container-fluid footer-collapse px-1 py-3">
-        <div class="col-lg-12 mx-auto card card-body collapse" id="footerCollapse">
-            <div class="button-group row col-md-12">
+    <footer style="bottom: 0; position: fixed" class="container text-right">
+        <div class="col-12 mx-auto collapse" id="footerCollapse">
+            <div class="button-group row">
                 <div class="col-md-3">
                     <a class="btn btn-primary" href="{% url "contact_view" %}" role="button">Contact</a>
                 </div>
@@ -177,7 +177,7 @@
         </button>
     </footer>
     {% else %}
-    <footer style="bottom: 0; position: fixed" class="container-fluid footer-collapse px-1 py-3">
+    <footer style="bottom: 0; position: fixed" class="container text-right">
         <a class="btn btn-primary" href="{% url "login_view" %}"><span style="color: white;">Connexion</span></a>
         <a class="btn btn-primary" href="{% url "registerStudent" %}"><span style="color: white;">Inscription</span></a>
     </footer>
