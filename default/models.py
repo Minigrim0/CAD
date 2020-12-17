@@ -63,8 +63,8 @@ class Mail(models.Model):
         content = content.replace("<SECRETKEY>", str(user.profile.secret_key))
         content = content.replace(
             "<CONFIRMLINK>",
-            format_html("https://{}{}?key={}".format(
-                SITE_DOMAIN, reverse("confirmation"), user.profile.secret_key))
+            format_html("<a href=\"{1}\">{1}</a>".format("https://{}{}?key={}".format(
+                SITE_DOMAIN, reverse("confirmation")), user.profile.secret_key))
         )
         content = content.replace("\n", "<br/>")
         return content
@@ -76,7 +76,7 @@ class Mail(models.Model):
                 'title': self.clean_header,
                 'content': self.formatted_content(user),
                 'error_mail': "",
-                'site_see_link': "http://{}{}".format(SITE_DOMAIN, reverse("soon_view"))
+                'site_see_link': "https://{}{}".format(SITE_DOMAIN, reverse("soon_view"))
             }
         )
 
@@ -129,11 +129,11 @@ class Message(models.Model):
                 'title': 'Nouveau message d\'un utilisateur de CAD',
                 'content': "<h2>{}</h2><br/>{}".format(self.subject, self.content),
                 'error_mail': "",
-                'site_see_link': "http://{}{}?id={}".format(SITE_DOMAIN, reverse("message_admin_view"), self.pk)
+                'site_see_link': "https://{}{}?id={}".format(SITE_DOMAIN, reverse("message_admin_view"), self.pk)
             }
         )
 
-        to = MailingList.objects.get(id=1)
+        to, _ = MailingList.objects.get_or_create(id=1)
         from_email = 'CAD - Cours a domicile <{}>'.format(EMAIL_HOST_USER)
         to = [user.email for user in to.users.all()]
         msg = EmailMultiAlternatives(self.subject, self.content, from_email, to)
