@@ -38,9 +38,12 @@
             </div>
             {{ a_home.content|safe }}
 
-            <br />
-            <br />
-            <a href={% url "registerStudent" %}><i class="fas fa-pencil-alt"> Prendre des cours</i></a>
+            {% if not request.user.is_authenticated %}
+                <br />
+                <br />
+
+                <a href={% url "registerStudent" %}><i class="fas fa-pencil-alt"> Prendre des cours</i></a>
+            {% endif %}
         </div>
     </section>
 
@@ -98,7 +101,9 @@
             </h3>
             {{ a_coaches.content|safe }}
 
-            <a class="btn btn-primary" href="{% url "registerCoach" %}"><span style="color: white;">Postuler en ligne</span></a>
+            {% if not request.user.is_authenticated %}
+                <a class="btn btn-primary" href="{% url "registerCoach" %}"><span style="color: white;">Postuler en ligne</span></a>
+            {% endif %}
         </div>
     </section>
 
@@ -132,55 +137,55 @@
     </section>
 
     {% if user.is_authenticated %}
-    <footer style="bottom: 0; position: fixed" class="container text-right">
-        <div class="col-12 mx-auto collapse" id="footerCollapse">
-            <div class="button-group row">
-                <div class="col-md-3">
-                    <a class="btn btn-primary" href="{% url "contact_view" %}" role="button">Contact</a>
-                </div>
-                <div class="col-md-3">
-                    <a class="btn btn-primary" href="{% url "my_account" %}" role="button">
-                        Mon compte
-                        <span class="badge badge-light">{{ nb_notif }}</span>
-                    </a>
-                </div>
-                {% if user.is_staff %}
-                <div class="col-md-3">
-                    <a class="btn btn-primary" href="{% url "home_admin" %}" role="button">Administration</a>
-                </div>
-                {% endif %}
-                <div class="col-md-3">
-                    <a class="btn btn-danger" href="{% url "disconnect_view" %}" role="button">Déconnexion</a>
+        <footer style="bottom: 0; position: fixed" class="container text-right">
+            <div class="col-12 mx-auto collapse" id="footerCollapse">
+                <div class="button-group row">
+                    <div class="col-md-3">
+                        <a class="btn btn-primary" href="{% url "contact_view" %}" role="button">Contact</a>
+                    </div>
+                    <div class="col-md-3">
+                        <a class="btn btn-primary" href="{% url "my_account" %}" role="button">
+                            Mon compte
+                            <span class="badge badge-light">{{ nb_notif }}</span>
+                        </a>
+                    </div>
+                    {% if user.is_staff %}
+                    <div class="col-md-3">
+                        <a class="btn btn-primary" href="{% url "home_admin" %}" role="button">Administration</a>
+                    </div>
+                    {% endif %}
+                    <div class="col-md-3">
+                        <a class="btn btn-danger" href="{% url "disconnect_view" %}" role="button">Déconnexion</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <button class="btn btn-primary" onclick="toggleFAS();" type="button" data-toggle="collapse" data-target="#footerCollapse" aria-expanded="false" aria-controls="collapseExample">
-            <span class="carret">Connecté en tant que {{ user.username}}
-                {% if nb_notif > 0 %}
-                <span class="badge badge-light">{{ nb_notif }}</span>
-                {% endif %}
-                <i id="fas" class="fas fa-angle-up"></i>
+            <button class="btn btn-primary" onclick="toggleFAS();" type="button" data-toggle="collapse" data-target="#footerCollapse" aria-expanded="false" aria-controls="collapseExample">
+                <span class="carret">Connecté en tant que {{ user.username }}
+                    {% if nb_notif > 0 %}
+                    <span class="badge badge-light">{{ nb_notif }}</span>
+                    {% endif %}
+                    <i id="fas" class="fas fa-angle-up"></i>
 
-                <script>
-                    function toggleFAS() {
-                        var div = document.getElementById("fas")
-                        if (div.classList.contains("fa-angle-up")) {
-                            div.classList.remove("fa-angle-up");
-                            div.classList.add("fa-angle-down");
-                        } else {
-                            div.classList.remove("fa-angle-down");
-                            div.classList.add("fa-angle-up");
+                    <script>
+                        function toggleFAS() {
+                            var div = document.getElementById("fas")
+                            if (div.classList.contains("fa-angle-up")) {
+                                div.classList.remove("fa-angle-up");
+                                div.classList.add("fa-angle-down");
+                            } else {
+                                div.classList.remove("fa-angle-down");
+                                div.classList.add("fa-angle-up");
+                            }
                         }
-                    }
-                </script>
-            </span>
-        </button>
-    </footer>
+                    </script>
+                </span>
+            </button>
+        </footer>
     {% else %}
-    <footer style="bottom: 0; position: fixed" class="container text-right">
-        <a class="btn btn-primary" href="{% url "login_view" %}"><span style="color: white;">Connexion</span></a>
-        <a class="btn btn-primary" href="{% url "registerStudent" %}"><span style="color: white;">Inscription</span></a>
-    </footer>
+        <footer style="bottom: 0; position: fixed" class="container text-right">
+            <a class="btn btn-primary" href="{% url "login_view" %}"><span style="color: white;">Connexion</span></a>
+            <a class="btn btn-primary" href="{% url "registerStudent" %}"><span style="color: white;">Inscription</span></a>
+        </footer>
     {% endif %}
 </div>
 {% endblock %}
