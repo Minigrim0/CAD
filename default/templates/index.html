@@ -137,8 +137,8 @@
     </section>
 
     {% if user.is_authenticated %}
-        <footer style="bottom: 0; position: fixed" class="container text-right">
-            <div class="col-12 mx-auto collapse" id="footerCollapse">
+        <footer id="footer_sizer" style="bottom: 0; position: fixed" class="container-fluid text-right">
+            <div class="col-12 collapse" id="footerCollapse">
                 <div class="button-group row">
                     <div class="col-md-3">
                         <a class="btn btn-primary" href="{% url "contact_view" %}" role="button">Contact</a>
@@ -146,7 +146,9 @@
                     <div class="col-md-3">
                         <a class="btn btn-primary" href="{% url "my_account" %}" role="button">
                             Mon compte
-                            <span class="badge badge-light">{{ nb_notif }}</span>
+                            {% if request.user.notification_set.count != 0 %}
+                                <span class="badge badge-light">{{ request.user.notification_set.count }}</span>
+                            {% endif %}
                         </a>
                     </div>
                     {% if user.is_staff %}
@@ -161,8 +163,8 @@
             </div>
             <button class="btn btn-primary" onclick="toggleFAS();" type="button" data-toggle="collapse" data-target="#footerCollapse" aria-expanded="false" aria-controls="collapseExample">
                 <span class="carret">Connecté en tant que {{ user.username }}
-                    {% if nb_notif > 0 %}
-                    <span class="badge badge-light">{{ nb_notif }}</span>
+                    {% if request.user.notification_set.count != 0 %}
+                        <span class="badge badge-light">{{ request.user.notification_set.count }}</span>
                     {% endif %}
                     <i id="fas" class="fas fa-angle-up"></i>
 
@@ -196,5 +198,21 @@
         var href = $(this).attr('href');
         $(this).attr('href', href.replace('badmail.', ''));
     });
+
+    function resize_footer() {
+            $("#footer_sizer").css("width", $("#contact").css("width"));
+        }
+
+    $(document).ready(
+        function(){
+            resize_footer();
+        }
+    );
+
+    $(window).resize(
+        function() {
+            resize_footer();
+        }
+    );
 </script>
 {% endblock %}
