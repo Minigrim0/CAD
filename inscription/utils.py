@@ -40,11 +40,6 @@ def studentRegister(user, form):
     student_profile.resp_phone_number3 = form.cleaned_data["resp_phone_number3"]
     student_profile.save()
 
-    # Follow Element creation
-    folElem = FollowElement(student=user)
-    folElem.comments = "Inscription sur le site CAD - cours à domicile"
-    folElem.save()
-
 
 def coachRegister(user, form):
     coach_profile = CoachAccount(profile=user.profile)
