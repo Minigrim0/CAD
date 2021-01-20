@@ -38,10 +38,6 @@ class TransactionForm(forms.ModelForm):
 class OtherAdminForm(BaseRegistration):
     verifiedAccount = forms.BooleanField(
         required=False, label="A vérifié son addresse mail")
-    secret_key = forms.CharField(
-        max_length=64, label="Clé unique pour l'utilisateur",
-        widget=forms.TextInput(attrs={'readonly': 'readonly'})
-    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
