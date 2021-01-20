@@ -2,8 +2,7 @@ import hashlib
 
 from django.contrib.auth.models import User
 
-from users.models import (CoachAccount, FollowElement, Profile,
-                          StudentAccount)
+from users.models import CoachAccount, Profile, StudentAccount
 
 
 def registerProfile(user, form, account_type="Etudiant"):
