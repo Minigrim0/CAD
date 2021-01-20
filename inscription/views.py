@@ -13,7 +13,10 @@ from inscription import utils
 from users.models import Notification, studentRequest
 from users.forms import StudentRegisterForm, CoachRegisterForm
 
+from inscription.decorators import mustnt_be_logged_in
 
+
+@mustnt_be_logged_in
 def registerStudentView(request):
     """ allows a student to register an account """
 
