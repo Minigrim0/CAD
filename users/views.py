@@ -13,6 +13,7 @@ from django.contrib.auth import authenticate, login
 from administration.utils import populate_data
 from .models import Notification, studentRequest, StudentAccount, FollowElement
 from .forms import StudentReadOnlyForm, BaseReadOnly, CoachReadOnlyForm, addFollowElementForm
+from inscription.decorators import mustnt_be_logged_in
 
 
 def user_home(request):
@@ -188,6 +189,7 @@ def get_users(request):
     return JsonResponse({"users": userData})
 
 
+@mustnt_be_logged_in(action="connecter")
 def login_view(request):
     """
         Allows a user to connect to his account

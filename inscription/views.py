@@ -16,7 +16,7 @@ from users.forms import StudentRegisterForm, CoachRegisterForm
 from inscription.decorators import mustnt_be_logged_in
 
 
-@mustnt_be_logged_in
+@mustnt_be_logged_in(action="inscrire")
 def registerStudentView(request):
     """ allows a student to register an account """
 
@@ -43,6 +43,7 @@ def registerStudentView(request):
     return render(request, "inscription.html", locals())
 
 
+@mustnt_be_logged_in(action="inscrire")
 def registerCoachView(request):
     """ allows a coach to register an account """
     if request.method == "POST":
