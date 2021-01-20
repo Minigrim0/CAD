@@ -10,7 +10,8 @@ def mustnt_be_logged_in(action="inscrire"):
             if request.user.is_authenticated:
                 messages.warning(
                     request,
-                    f"Vous êtes connecté en tant que {request.user.first_name} {request.user.last_name}, si vous souhaiter vous {action} avec un autre compte, déconnectez-vous d'abord !"
+                    f"Vous êtes connecté en tant que {request.user.first_name} {request.user.last_name},\
+                        si vous souhaitez vous {action} avec un autre compte, déconnectez-vous d'abord !"
                 )
                 return HttpResponseRedirect(reverse("home"))
             return func(*args, **kwargs)
