@@ -140,6 +140,13 @@
     const UrlBalance = "{% url 'modify_balance' %}";
     const UrlUnsub = "{% url 'unsubscribe' %}";
     const csrf_token = "{{ csrf_token }}";
+
+
+    function reloadCoach(){
+        if(!confirm("Êtes vous sûr de vouloir relancer une recherche ?")) return;
+        console.log("Confirmé !");
+        // TODO: relancer une racherche de coach
+    }
 </script>
 <script src="{% static 'js/user_admin_view.js' %}"></script>
 

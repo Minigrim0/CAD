@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
@@ -91,12 +93,23 @@ def courses(request):
 
 @staff_member_required
 def approve_course(request):
-    pk = request.POST.get("pk", -1)
-    course = get_object_or_404(FollowElement, pk=pk)
-    course.approved = True
-    course.save()
+    if request.method == "POST":
+        form = request.POST
+        pk = request.POST.get("pk", -1)
+        course = get_object_or_404(FollowElement, pk=pk)
+        if form["isApproved"] == "true":
+            course.approved = True
+            transactions = Transaction.objects.create(
+                student=course.student.profile.studentaccount,
+                amount=-course.duration,
+                date=datetime.today(),
+                admin=request.user,
+                comment="paiement pour cours")
+            course.save()
+        else:
+            course.delete()
 
-    return HttpResponse("Success")
+        return HttpResponse("Success")
 
 
 @staff_member_required

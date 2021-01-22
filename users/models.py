@@ -2,6 +2,7 @@ from django import utils
 from django.contrib.auth.models import User
 from django.db import models
 
+from datetime import datetime
 import cad.settings as settings
 from default.models import Mail
 
@@ -135,7 +136,7 @@ class StudentAccount(models.Model):
     def balance(self):
         transactions = Transaction.objects.filter(student=self)
         balance = sum(transaction.amount for transaction in transactions)
-        return int(balance)
+        return round(balance, 2)
 
     def __str__(self):
         return "{} {}'s student profile".format(
@@ -270,6 +271,10 @@ class FollowElement(models.Model):
         verbose_name="Commentaires du cours")
     approved = models.BooleanField(default=False)
 
+    @property
+    def duration(self):
+        time = datetime.combine(datetime.today(), self.endHour) - datetime.combine(datetime.today(), self.startHour)
+        return round(time.seconds/3600, 2)
 
 class Transaction(models.Model):
     """
@@ -279,7 +284,7 @@ class Transaction(models.Model):
     """
 
     student = models.ForeignKey(StudentAccount, on_delete=models.CASCADE)
-    amount = models.IntegerField(blank=False, default=0)
+    amount = models.FloatField(blank=False, default=0)
     date = models.DateTimeField(auto_now_add=True, null=True)
     admin = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     comment = models.CharField(max_length=300, blank=True)
