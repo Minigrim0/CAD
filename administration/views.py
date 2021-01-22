@@ -99,7 +99,7 @@ def approve_course(request):
         course = get_object_or_404(FollowElement, pk=pk)
         if form["isApproved"] == "true":
             course.approved = True
-            transactions = Transaction.objects.create(
+            Transaction.objects.create(
                 student=course.student.profile.studentaccount,
                 amount=-course.duration,
                 date=datetime.today(),
