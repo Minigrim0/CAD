@@ -274,7 +274,8 @@ class FollowElement(models.Model):
     @property
     def duration(self):
         time = datetime.combine(datetime.today(), self.endHour) - datetime.combine(datetime.today(), self.startHour)
-        return round(time.seconds/3600, 2)
+        return round(time.seconds / 3600, 2)
+
 
 class Transaction(models.Model):
     """
