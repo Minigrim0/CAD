@@ -88,7 +88,7 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
         widget=autocomplete.ListSelect2(url='user-autocomplete'),
         required=False
     )
-    balance = forms.IntegerField(
+    balance = forms.FloatField(
         required=False, label="Balance",
         widget=forms.TextInput(attrs={'readonly': 'readonly'})
     )
@@ -145,7 +145,8 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
                     css_class='form-row'
                 ),
                 'NeedsVisit',
-                'coach',
+                'coach',  # Fix les coach ne sont pas enregistrés
+                HTML('<button class="btn btn-primary" onclick="reloadCoach()">rechercher un nouveau coach</button>'),
                 'balance',
                 bforms.FieldWithButtons(
                     'secret_key',
