@@ -1,0 +1,86 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+<HEAD>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="cours particuliers, cours à domicile, problème scolaire, maths, physique, chimie, français, mathématiques, professeur, coach, bruxelles, belgique, Soutien scolaire, Cours particuliers à domicile, cherche soutien scolaire à domicile, réussite scolaire, professeurs à domicile, professeurs particuliers, recherche professeurs particuliers, aide élèves secondaire" />
+	<meta name="abstract" content="Premier réseau belge spécialisé en cours particuliers en Maths, Physique, Chimie et Français" />
+	<meta name="revisit-after" content="1 day" />
+	<title>Cours à domicile - C.A.D. | Cours particuliers en math, chimie, physique et français</title>
+	<link href="{% static "old_site/fonts/fonts.css" %}" rel="stylesheet" type="text/css" charset="utf-8"/>
+	<link href="{% static "old_site/fonts/fontello.css" %}" rel="stylesheet" type="text/css" charset="utf-8"/>
+	<link href="{% static "old_site/large.css" %}" rel="stylesheet" type="text/css" charset="utf-8" media="(min-width:913px)"/>
+	<link href="{% static "old_site/small.css" %}" rel="stylesheet" type="text/css" charset="utf-8" media="(max-width:912px)"/>
+	<script src="{% static "old_site/scripts/jquery-1.11.3.min.js" %}" type="text/javascript"></script>
+	<script src="{% static "old_site/scripts/url.min.js" %}" type="text/javascript"></script>
+	<script src="{% static "old_site/scripts/prepareEdit.js" %}" type="text/javascript"></script>
+</HEAD>
+<BODY>
+	<div id="emScale"></div>
+	<div id="emScale10"></div>
+	<div id="pxScale"></div>
+	<div id="pxScale10"></div>
+	<div id="mainFrame">
+		<div class="hlayer" id="topMenuLayer">
+			<div id="menuBlock">
+							<div class="menuHLayer">
+				<a class="menuItem" href="/bruxelles/index.htm"><div class="ib"><div class="cell">ACCUEIL</div></div></a>
+				<a class="menuItem" href="/bruxelles/cours.htm"><div class="ib"><div class="cell">INFO SUR LES COURS</div></div></a>
+				<a class="menuItem" href="/bruxelles/pourquoi.htm"><div class="ib"><div class="cell">POURQUOI NOUS</div></div></a>
+				<a class="menuItem" href="/bruxelles/video.htm"><div class="ib"><div class="cell">VIDEO EXPLICATIVE</div></div></a>
+				<a class="menuItem" href="/bruxelles/engage.htm"><div class="ib"><div class="cell">CAD ENGAGE</div></div></a>
+				<a class="menuItem" href="/bruxelles/contact.htm"><div class="ib"><div class="cell">CONTACT</div></div></a>
+			</div>
+			<div class="menuHLayer">
+				<div id="buttonsUnderMenu">
+						<a href="/bruxelles/prendrecours.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+	<a href="https://docs.google.com/forms/d/1WlXDDVnXEt_gCU6yC7NZCfskyf2yWoGIchxc4XOKX9I/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+	<a href="/bruxelles/plusdinfos.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+	<a href="https://docs.google.com/forms/d/1MNbXNLgCLKgglls0fVrjclXUxt5ohGfPMmP93ofArMA/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+				</div>
+			</div>
+			</div>
+		</div>
+		<div class="hlayer" id="topRibbon">
+			<div class="groupInRibbon" id="underButtonsInRibbon">
+					<a href="/bruxelles/prendrecours.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+	<a href="https://docs.google.com/forms/d/1WlXDDVnXEt_gCU6yC7NZCfskyf2yWoGIchxc4XOKX9I/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+	<a href="/bruxelles/plusdinfos.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+	<a href="https://docs.google.com/forms/d/1MNbXNLgCLKgglls0fVrjclXUxt5ohGfPMmP93ofArMA/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+			</div>
+			<div class="groupInRibbon" id="menuIconHolder">
+				<a href="/bruxelles/menu.htm"><span class="icon-menu"/></a>
+			</div>
+		</div>
+		<div class="hlayer" id="editMenuLayer">
+			<a class="underButton editButton" id="downloadAnchor">télécharger le code</a>
+			<a href="javascript:cad.prepEdit();" class="underButton editButton" id="editButton">éditer</a>
+			<a href="javascript:cad.testEdit();" class="underButton editButton" id="testEditButton">tester</a>
+			<a href="javascript:cad.saveEdit();" class="underButton editButton" id="saveButton">sauvegarder</a>
+			<a href="javascript:cad.cancelEdit();" class="underButton editButton" id="cancelButton">annuler l'édition</a>
+        </div>
+        {% block content %}
+        {% endblock %}
+		<div class="hlayer" id="bottomMenuLayer">
+            <div class="menuHLayer">
+    <a class="menuItem" href="/bruxelles/index.htm"><div class="ib"><div class="cell">ACCUEIL</div></div></a>
+    <a class="menuItem" href="/bruxelles/cours.htm"><div class="ib"><div class="cell">INFO SUR LES COURS</div></div></a>
+    <a class="menuItem" href="/bruxelles/pourquoi.htm"><div class="ib"><div class="cell">POURQUOI NOUS</div></div></a>
+    <a class="menuItem" href="/bruxelles/video.htm"><div class="ib"><div class="cell">VIDEO EXPLICATIVE</div></div></a>
+    <a class="menuItem" href="/bruxelles/engage.htm"><div class="ib"><div class="cell">CAD ENGAGE</div></div></a>
+    <a class="menuItem" href="/bruxelles/contact.htm"><div class="ib"><div class="cell">CONTACT</div></div></a>
+</div>
+<div class="menuHLayer">
+    <div id="buttonsUnderMenu">
+            <a href="/bruxelles/prendrecours.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+<a href="https://docs.google.com/forms/d/1WlXDDVnXEt_gCU6yC7NZCfskyf2yWoGIchxc4XOKX9I/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+<a href="/bruxelles/plusdinfos.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+<a href="https://docs.google.com/forms/d/1MNbXNLgCLKgglls0fVrjclXUxt5ohGfPMmP93ofArMA/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+    </div>
+</div>
+</div>
+</div>
+<div id="emptyBottom"/>
+</BODY>
+</HTML>

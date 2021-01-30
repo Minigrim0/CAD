@@ -1,0 +1,11 @@
+{% extends "old_site/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="hlayer" id="content">
+	<script src="{% static "old_site/scripts/setTextOfPlusdinfos.js" %}" type="text/javascript"></script>
+	<div class="leftTitle editable" id="plusTitle"></div>
+	<div class="contentLayer leftContent commonFlow editable" id="plusContent"></div>
+	<div class="contentLayer editable iframeHolder" id="iframeHolderPlus"></div>
+</div>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "old_site/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="hlayer" id="content">
+	<script src="{% static "old_site/scripts/setTextOfCoachinscription.js" %}" type="text/javascript"></script>
+	<div class="contentLayer leftContent editable" id="aboveIframeInscription"></div>
+	<div class="contentLayer editable iframeHolder" id="iframeHolderCoach"></div>
+</div>
+{% endblock %}

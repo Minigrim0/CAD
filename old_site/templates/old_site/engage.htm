@@ -1,0 +1,16 @@
+{% extends "old_site/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="hlayer" id="content">
+	<script src="{% static "old_site/scripts/setTextOfEngage.js" %}" type="text/javascript"></script>
+	<div class="centerTitle editable" id="engageTitle"></div>
+	<div class="contentLayer leftContent commonFlow editable" id="engageContent"></div>
+	<a href="https://docs.google.com/forms/d/1e3kOoPXKxsnTGjzuK0sKj9v763bFQz3mWA3l-e5OIzc/viewform" class="underButton editable butDevenirCoach directLink" id="butDevenirCoach2"></a>
+	<a href="/bruxelles/coachinscription.htm" class="underButton editable butDevenirCoach linkUsingIframe" id="butDevenirCoach">
+		<div class="ib">
+			<div class="cell"></div>
+		</div>
+	</a>
+</div>
+{% endblock %}
