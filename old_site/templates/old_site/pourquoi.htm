@@ -1,0 +1,22 @@
+{% extends "old_site/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="hlayer" id="content">
+	<script src="{% static "old_site/scripts/setTextOfPourquoi.js" %}" type="text/javascript"></script>
+	<div class="centerSubTitle editable" id="pourquoiTitle"></div>
+	<div class="contentLayer raisons">
+		<div id="raisonsRow">
+			<div id="imgPqNousHolder">
+				<img src="{% static "old_site/images/ecoliersTransp.png" %}"/>
+			</div>
+			<div class="editable" id="sevenReasons"></div>
+		</div>
+	</div>
+	<div class="contentLayer centerSubTitle editable" id="coachsTitle"></div>
+	<div class="contentLayer leftContent editable" id="coachsText"></div>
+	<div class="contentLayer">
+		<img src="{% static "old_site/images/cad02blackBackSmall.png" %}"/>
+	</div>
+</div>
+{% endblock %}

@@ -26,10 +26,11 @@ sitemaps = {
 }
 
 urlpatterns = [
-    url('^admin/', admin.site.urls),
-    url('^administration/', include('administration.urls')),
-    url('^inscription/', include('inscription.urls')),
-    url('^users/', include('users.urls')),
-    url('^', include('default.urls')),
-    url('^sitemap.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
+    url('bruxelles/', include('old_site.urls')),
+    url('admin/', admin.site.urls),
+    url('administration/', include('administration.urls')),
+    url('inscription/', include('inscription.urls')),
+    url('users/', include('users.urls')),
+    url('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    url('', include('default.urls')),
 ]

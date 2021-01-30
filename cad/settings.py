@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'users',
     'administration',
     'crispy_forms',
+    'old_site',
     'django_extensions',
 ]
 
