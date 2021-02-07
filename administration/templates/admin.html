@@ -5,7 +5,7 @@
 {% block navlinks %}
 <ul class="navbar-nav text-left">
     <li class="nav-item">
-        <a href="/" class="nav-link">
+        <a href="{% url "home" %}" class="nav-link">
             accueil
         </a>
     </li>
@@ -123,7 +123,7 @@
                     <br>
                     <br>
                     - La <span class="text-primary">balance</span> de l'utilisateur représente, le montant
-                    qu'il lui reste (à dépenser en cours).
+                    qu'il lui reste à dépenser en cours, en nobres d'heures.
                     <br>
                     - Le type de compte de l'utilisateur ne peut pas être changé. Pour le modifier, soit demander à l'utilisateur de
                     se refaire un compte, soit aller <a href="/admin/auth/user/">ici</a> (non recommandé).

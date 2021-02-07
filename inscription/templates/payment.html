@@ -5,7 +5,7 @@
 {% block navlinks %}
 <ul class="navbar-nav">
     <li class="nav-item">
-        <a class="nav-link js-scroll-trigger" href="/">Accueil</a>
+        <a class="nav-link js-scroll-trigger" href="{% url "home" %}">Accueil</a>
     </li>
 </ul>
 {% endblock %}
@@ -24,15 +24,14 @@
             <p class="lead mb-5">
                 {% if user.profile.studentaccount.NeedsVisit %}
                 Un montant total de 100€ vous est demandé afin de terminer la création de votre compte,
-                ce montant couvre les deux premières heures de cours avec un de nos coaches, ainsi que la visite pédagogique demandée.
-                <br/>
-                <div style="font-size: 1.2em;font-weight: bold;">Vous pouvez payer cet accompte sur BE22 7310 4019 4347</div>
+                ce montant couvre les deux premières heures de cours avec un de nos coach, ainsi que la visite pédagogique demandée.
                 {% else %}
                 Un montant total de 50€ vous est demandé afin de terminer la création de votre compte,
-                ce montant couvre les deux premières heures de cours avec un de nos coaches.
+                ce montant couvre les deux premières heures de cours avec un de nos coach.
+                {% endif %}
                 <br/>
                 <div style="font-size: 1.2em;font-weight: bold;">Vous pouvez payer cet accompte sur le compte BE22 7310 4019 4347</div>
-                {% endif %}
+                <p>Une fois votre virement valide par un administrateur, une recherche de coach sera automatiquement creee</p>
             </p>
 
         </div>

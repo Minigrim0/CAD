@@ -13,12 +13,13 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.urls import path
 from django.contrib import admin
 from django.conf.urls import include
 from django.contrib.sitemaps.views import sitemap
 
 from default.sitemap import HomeSitemap
+import cad.views as views
 
 
 sitemaps = {
@@ -26,11 +27,12 @@ sitemaps = {
 }
 
 urlpatterns = [
-    url('bruxelles/', include('old_site.urls')),
-    url('admin/', admin.site.urls),
-    url('administration/', include('administration.urls')),
-    url('inscription/', include('inscription.urls')),
-    url('users/', include('users.urls')),
-    url('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
-    url('', include('default.urls')),
+    path('bruxelles/', include('old_site.urls')),
+    path('admin/', admin.site.urls),
+    path('administration/', include('administration.urls')),
+    path('inscription/', include('inscription.urls')),
+    path('users/', include('users.urls')),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('namur/', include('default.urls')),
+    path('', views.chooseLocation),
 ]
