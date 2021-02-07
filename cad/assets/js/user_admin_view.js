@@ -15,6 +15,7 @@ function copyKey() {
     copyText.innerHTML = "copié!";
 }
 
+
 //Makes a request to create a notification for a specified user
 function sendNotif(_user) {
     _title = document.getElementById("notifTitle").value;
@@ -52,8 +53,8 @@ function sendNotif(_user) {
     );
 }
 
-function updBalance(user, admin) {
 
+function updBalance(user, admin) {
     amout_add = document.getElementById("new_balance").value;
     isFirst = document.getElementById("isFirstPayment").checked;
 
@@ -88,8 +89,8 @@ function updBalance(user, admin) {
     );
 }
 
-function unsub(user_key){
 
+function unsub(user_key){
     $.post(
         UrlUnsub, {
             user_key: user_key,
@@ -106,4 +107,48 @@ function unsub(user_key){
             }
         }
     );
+}
+
+
+function reloadCoach(){
+    if(!confirm("Êtes vous sûr de vouloir relancer une recherche ?")) return;
+
+    id = Math.floor(Math.random() * 100);
+
+    $.post(
+        new_coach_url,
+        {
+            user: user,
+            csrfmiddlewaretoken: csrf_token,
+        }
+    ).done(function(data){
+        if(data['accepted']){
+            $("#notification_div").html(
+                $("#notification_div").html() +
+                '<div class="alert alert-success alert-dismissible fade show m-2" role="alert" id="notif_' + id + '">\
+                    Une nouvelle requete a bien ete creee.\
+                </div>'
+            );
+        } else {
+            $("#notification_div").html(
+                $("#notification_div").html() +
+                '<div class="alert alert-danger alert-dismissible fade show m-2" role="alert" id="notif_' + id + '">\
+                    La requete n\'a pas pu etre creee. Raison : ' + data['reason'] + '.\
+                </div>'
+            );
+        }
+        setTimeout(function(){
+            $("#notif_" + id).alert('close');
+        }, 3000);
+    }).fail(function(data){
+        $("#notification_div").html(
+            $("#notification_div").html() +
+            '<div class="alert alert-danger alert-dismissible fade show m-2" role="alert" id="notiffail_' + id + '">\
+                La requete n\'a pas pu etre creee ! Essayez a nouveau plus tard\
+            </div>'
+        );
+        setTimeout(function(){
+            $("#notiffail_" + id).alert('close');
+        }, 5000);
+    });
 }

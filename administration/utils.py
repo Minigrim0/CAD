@@ -150,7 +150,7 @@ def thanksCoaches(coaches, student):
             new_notif.send_as_mail()
 
 
-def sendNotifToCoaches(student):
+def sendNotifToCoaches(student, request):
     """
         Looks for coaches compatible with the student request
     """
@@ -181,7 +181,7 @@ def sendNotifToCoaches(student):
                 student.user.first_name, student.user.last_name)
             newNotif.content += "!\nVous pouvez cliquer "
             newNotif.content += "<a href='{}?id={}'>ici</a>".format(
-                reverse("request_view"), student.user.studentrequest.id)
+                reverse("request_view"), request.id)
             newNotif.content += " pour voir le profil de l'etudiant"
             newNotif.save()
             newNotif.send_as_mail()

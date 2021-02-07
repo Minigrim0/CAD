@@ -199,7 +199,7 @@ class studentRequest(models.Model):
     """
 
     # represents the user who made the request
-    student = models.OneToOneField(User, on_delete=models.CASCADE)
+    student = models.ForeignKey(User, on_delete=models.CASCADE)
     # represents the coaches who accepted this request
     coaches = models.ManyToManyField(
         "users.CoachAccount", blank=True, related_name="request_participated", through=coachRequestThrough)
@@ -210,25 +210,20 @@ class studentRequest(models.Model):
 
 class Notification(models.Model):
     """
-        Modèle Notification:
-            => Représente une notification envoyée à un utilisateur
+        Notification:
+            => Represents a niotification sent to a user
+            May be sent by email as well
     """
 
-    # represents the user whom the notifiaction is for
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    # Name of the author of the notification
     author = models.CharField(
         blank=True, null=True, max_length=50,
         verbose_name="Auteur de la notification")
-    # Title of the notification
     title = models.CharField(
         blank=True, null=True, max_length=50,
         verbose_name="Titre de la notification")
-    # body of the notification (Html)
     content = models.TextField(
         blank=True, null=True, verbose_name="Contenu de la notification")
-    # Date of the creation
     date_created = models.DateField(
         auto_now_add=True, null=True)
 
@@ -246,19 +241,12 @@ class Notification(models.Model):
 
 class FollowElement(models.Model):
     """
-        Modèle FollowElement:
-            => Représente un élément du suivit de l'élève
+        FollowElement Model:
+            => Represents course given by a coach to a student
     """
 
-    # students whom this followElement is for
-    student = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
-    # Name of the coach who wrote this followElement
-    coach = models.ForeignKey(
-        User,
-        related_name="coach_of",
-        null=True,
-        on_delete=models.CASCADE)
-    # date of the writing of this FollowElement
+    student = models.ForeignKey(User, blank=True, on_delete=models.PROTECT)
+    coach = models.ForeignKey(User, blank=True, related_name="coach_of", on_delete=models.PROTECT)
     date = models.DateField(
         default=utils.timezone.now,
         verbose_name="Date et heure du cours")
@@ -279,9 +267,8 @@ class FollowElement(models.Model):
 
 class Transaction(models.Model):
     """
-        Modèle transaction:
-            => Représente un ajout d'argent par un administrateur sur le compte
-            d'un étudiant ou la dépense d'un étudiant pour payment d'un cours
+        Transaction:
+            => Represents a movement of currency (hours), may be linked to a course
     """
 
     student = models.ForeignKey(StudentAccount, on_delete=models.CASCADE)
@@ -289,3 +276,4 @@ class Transaction(models.Model):
     date = models.DateTimeField(auto_now_add=True, null=True)
     admin = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     comment = models.CharField(max_length=300, blank=True)
+    FollowElement = models.ForeignKey("users.followElement", null=True, blank=True, on_delete=models.CASCADE)
