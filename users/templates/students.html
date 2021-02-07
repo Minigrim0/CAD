@@ -25,19 +25,25 @@
                     <th scope="col">Nom</th>
                     <th scope="col">Niveau scolaire</th>
                     <th scope="col">Cours à enseigner</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Adresse</th>
                     <th scope="col">Horaire</th>
                     </tr>
                 </thead>
 
                 <tbody>
                     {% for student in student_set %}
+                        {% with student.profile.user as student %}
                         <tr>
-                            <td>{{ student.first_name }}  {{ student.last_name }}</td>
+                            <td>{{ student.first_name }} {{ student.last_name }}</td>
                             <td>{{ student.profile.get_school_level_display }}</td>
                             <td>{{ student.profile.courses }}</td>
+                            <td>{{ student.email }}</td>
+                            <td>{{ student.profile.address }}</td>
                             <td>{% final_schedule request.user.profile.coachaccount student %}</td>
                             <td><a style="color: #bd5d38" href="{% url "add_follow" %}?pk={{ student.profile.studentaccount.pk }}">Ajouter un cours <i class="fas fa-plus-square"></i></a></td>
                         </tr>
+                        {% endwith %}
                     {% empty %}
                         <tr>
                             <td></td>

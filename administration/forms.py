@@ -146,19 +146,12 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
                 ),
                 'NeedsVisit',
                 'coach',  # Fix les coach ne sont pas enregistrés
-                HTML('<button class="btn btn-primary" onclick="reloadCoach()">rechercher un nouveau coach</button>'),
+                HTML('<button class="btn btn-primary" type="button" onclick="reloadCoach()">rechercher un nouveau coach</button>'),
                 'balance',
-                bforms.FieldWithButtons(
-                    'secret_key',
-                    HTML(
-                        '<button type="button" id="buttoncopy" class="btn btn-primary" name="Save" onclick="copyKey()">\
-                            copier\
-                        </button>')
-                ),
                 'verifiedAccount'
             ),
             bforms.FormActions(
-                Submit('save', 'Enregistrer les modifications'),
+                Submit('save', 'Enregistrer les modifications', css_class="btn btn-success"),
                 HTML('<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#SendNotif">\
                         Envoyer une notification\
                     </button>\

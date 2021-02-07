@@ -109,21 +109,22 @@
 
         <section class="p-3 p-lg-5 d-flex align-items-center">
             <div class="container-fluid">
-                <h2 class="mb-2">
-                    Modifier un utilisateur:
-                </h2>
+                <h2 class="mb-2">Modifier un utilisateur:</h2>
+                <div id="notification_div" class="fixed-top">
+
+                </div>
                 <p>
-                {% if form_user.profile.account_type == "a" %}
-                    <div class="form-group row col-md-12">
-                        <div id="unsubbutton" class="col-sm-10">
-                            {% if not form_user.profile.studentaccount.confirmedAccount and not form_user.profile.studentaccount.unsub_proposal %}
-                                <button type="button" onclick="unsub('{{form_user.profile.secret_key}}')" class="btn btn-success" name="modify">Envoyer une demande de désincritpion</button>
-                            {% elif form_user.profile.studentaccount.unsub_proposal and not form_user.profile.studentaccount.confirmedAccount %}
-                                <p style="color:red;">Proposition de désinscription envoyée</p>
-                            {% endif %}
+                    {% if form_user.profile.account_type == "a" %}
+                        <div class="form-group row col-md-12">
+                            <div id="unsubbutton" class="col-sm-10">
+                                {% if not form_user.profile.studentaccount.confirmedAccount and not form_user.profile.studentaccount.unsub_proposal %}
+                                    <button type="button" onclick="unsub('{{form_user.profile.secret_key}}')" class="btn btn-success" name="modify">Envoyer une demande de désincritpion</button>
+                                {% elif form_user.profile.studentaccount.unsub_proposal and not form_user.profile.studentaccount.confirmedAccount %}
+                                    <p style="color:red;">Proposition de désinscription envoyée</p>
+                                {% endif %}
+                            </div>
                         </div>
-                    </div>
-                {% endif %}
+                    {% endif %}
                 </p>
                 {% crispy form %}
             </div>
@@ -140,13 +141,8 @@
     const UrlBalance = "{% url 'modify_balance' %}";
     const UrlUnsub = "{% url 'unsubscribe' %}";
     const csrf_token = "{{ csrf_token }}";
-
-
-    function reloadCoach(){
-        if(!confirm("Êtes vous sûr de vouloir relancer une recherche ?")) return;
-        console.log("Confirmé !");
-        // TODO: relancer une racherche de coach
-    }
+    const user = "{{ form_user.username }}";
+    const new_coach_url = "{% url "request_new_coach" %}";
 </script>
 <script src="{% static 'js/user_admin_view.js' %}"></script>
 

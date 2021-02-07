@@ -57,7 +57,7 @@ def followView(request):
 @login_required
 def studentsView(request):
     coach = request.user.profile.coachaccount
-    student_set = User.objects.filter(profile__studentaccount__coach=coach)
+    student_set = coach.students.all()
 
     view_title = "Mes étudiants"
     return render(request, 'students.html', locals())

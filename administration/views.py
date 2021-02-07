@@ -3,7 +3,8 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
@@ -92,24 +93,24 @@ def courses(request):
 
 
 @staff_member_required
+@require_http_methods(["POST"])
 def approve_course(request):
-    if request.method == "POST":
-        form = request.POST
-        pk = request.POST.get("pk", -1)
-        course = get_object_or_404(FollowElement, pk=pk)
-        if form["isApproved"] == "true":
-            course.approved = True
-            Transaction.objects.create(
-                student=course.student.profile.studentaccount,
-                amount=-course.duration,
-                date=datetime.today(),
-                admin=request.user,
-                comment="paiement pour cours")
-            course.save()
-        else:
-            course.delete()
+    form = request.POST
+    pk = request.POST.get("pk", -1)
+    course = get_object_or_404(FollowElement, pk=pk)
+    if form["isApproved"] == "true":
+        course.approved = True
+        Transaction.objects.create(
+            student=course.student.profile.studentaccount,
+            amount=-course.duration,
+            date=datetime.today(),
+            admin=request.user,
+            comment="paiement pour cours")
+        course.save()
+    else:
+        course.delete()
 
-        return HttpResponse("Success")
+    return HttpResponse("Success")
 
 
 @staff_member_required
@@ -183,11 +184,8 @@ def user_admin_view(request):
 
 
 @staff_member_required
+@require_http_methods(["POST"])
 def sendUnsubscriptionMail(request):
-    if request.method != "POST":
-        return HttpResponseBadRequest(
-            "Invalid method : Requets must be type POST")
-
     user = getUser(request.POST.get("user_key"))
     mail = Mail.objects.get(role='c')
     if not DEBUG:
@@ -229,23 +227,43 @@ def message_admin_view(request):
 @staff_member_required
 def student_requests(request):
     student_requests = studentRequest.objects.all().exclude(
-        is_closed=True)
+        is_closed=True).order_by("-id")
     student_requests_closed = studentRequest.objects.all().exclude(
-        is_closed=False)
+        is_closed=False).order_by("-id")
 
     view_title = "Requêtes"
     return render(request, "requestsAdmin.html", locals())
 
 
 @staff_member_required
+@require_http_methods(["POST"])
+def create_new_request(request):
+    """
+        from user_admin_view
+            Creates a new coach request if the user has no pending request
+    """
+
+    student = get_object_or_404(User, username=request.POST.get("user", None))
+    if studentRequest.objects.filter(student=student, is_closed=False).count():
+        response = {
+            "accepted": False,
+            "reason": "Une requete ouverte pour cet etudiant existe deja"
+        }
+    else:
+        request = studentRequest.objects.create(student=student)
+        sendNotifToCoaches(student.profile, request)
+        response = {
+            "accepted": True,
+        }
+    return JsonResponse(response)
+
+
+@staff_member_required
+@require_http_methods(["POST"])
 def chooseCoach(request):
     """
         Selects a coach to be chosen for a certain request
     """
-    if request.method != "POST":
-        messages.error(request, "Vous n'avez pas le droit d'accéder à cette page de cette façon là")
-        return HttpResponse(reverse("home"))
-
     query = request.POST
 
     studentrequest = studentRequest.objects.get(id=query['id'])
@@ -280,10 +298,8 @@ def chooseCoach(request):
 
 
 @staff_member_required
+@require_http_methods(["POST"])
 def modify_balance(request):
-    if request.method != "POST":
-        return HttpResponseBadRequest("Invalid method")
-
     isCoachLaunching = True if request.POST.get('isFirstPayment', False) == 'true' else False
 
     student = User.objects.get(username=request.POST["user"])
@@ -301,6 +317,6 @@ def modify_balance(request):
         studentAccount.confirmedAccount = True
         studentAccount.save()
 
-        sendNotifToCoaches(student.profile)
+        sendNotifToCoaches(student.profile, newRequest)
 
     return JsonResponse({"new_balance": student.profile.studentaccount.balance})
