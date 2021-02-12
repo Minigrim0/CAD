@@ -83,9 +83,8 @@ class OtherAdminForm(BaseRegistration):
 
 
 class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
-    coach = forms.ModelChoiceField(
-        queryset=User.objects.filter(profile__account_type="Coach"),
-        widget=autocomplete.ListSelect2(url='user-autocomplete'),
+    coach = forms.CharField(
+        widget=forms.TextInput(attrs={'readonly': 'readonly', 'placeholder': "Aucun coach pour l'instant"}),
         required=False
     )
     balance = forms.FloatField(
@@ -145,8 +144,11 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
                     css_class='form-row'
                 ),
                 'NeedsVisit',
-                'coach',  # Fix les coach ne sont pas enregistrés
-                HTML('<button class="btn btn-primary" type="button" onclick="reloadCoach()">rechercher un nouveau coach</button>'),
+                Row(
+                    Column('coach', css_class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"),
+                    HTML('<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center"><button class="btn btn-primary" type="button" onclick="chooseCoach()">Choisir un nouveau coach</button></div>'),
+                    HTML('<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center"><button class="btn btn-primary" type="button" onclick="reloadCoach()">Rechercher un nouveau coach</button></div>'),
+                ),
                 'balance',
                 'verifiedAccount'
             ),
