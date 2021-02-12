@@ -99,7 +99,7 @@ def populate_data(usertype, user):
             'resp_phone_number1': user.profile.studentaccount.resp_phone_number1,
             'resp_phone_number2': user.profile.studentaccount.resp_phone_number2,
             'resp_phone_number3': user.profile.studentaccount.resp_phone_number3,
-            # 'coach': user.profile.studentaccount.coach.profile.user,  # TODO: Fix this
+            'coach': user.profile.studentaccount.coach,
             'courses': list(filter((None).__ne__, [
                 'a' if user.profile.Maths_course else None,
                 'b' if user.profile.Physique_course else None,
