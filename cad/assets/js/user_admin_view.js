@@ -152,3 +152,8 @@ function reloadCoach(){
         }, 5000);
     });
 }
+
+
+function chooseCoach(){
+    console.log("launching coach choice");
+}
