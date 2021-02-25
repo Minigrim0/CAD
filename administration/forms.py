@@ -35,6 +35,14 @@ class TransactionForm(forms.ModelForm):
         fields = ['amount', 'comment']
 
 
+class newCoachForm(forms.Form):
+    coach = forms.ModelChoiceField(
+        queryset=User.objects.filter(profile__account_type='b'),
+        widget=autocomplete.ModelSelect2(url='coach-autocomplete'),
+        required=True
+    )
+
+
 class OtherAdminForm(BaseRegistration):
     verifiedAccount = forms.BooleanField(
         required=False, label="A vérifié son addresse mail")
@@ -84,7 +92,13 @@ class OtherAdminForm(BaseRegistration):
 
 class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
     coach = forms.CharField(
-        widget=forms.TextInput(attrs={'readonly': 'readonly', 'placeholder': "Aucun coach pour l'instant"}),
+        widget=forms.TextInput(
+            attrs={
+                "readonly": "readonly",
+                "placeholder": "Aucun coach pour l'instant",
+                "class": "coach_readonly"
+            }
+        ),
         required=False
     )
     balance = forms.FloatField(
@@ -146,7 +160,7 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
                 'NeedsVisit',
                 Row(
                     Column('coach', css_class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8"),
-                    HTML('<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center"><button class="btn btn-primary" type="button" onclick="chooseCoach()">Choisir un nouveau coach</button></div>'),
+                    HTML('<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center"><button class="btn btn-primary" type="button" onclick="$(\'#chooseCoach\').modal(\'toggle\');">Choisir un nouveau coach</button></div>'),
                     HTML('<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center"><button class="btn btn-primary" type="button" onclick="reloadCoach()">Rechercher un nouveau coach</button></div>'),
                 ),
                 'balance',
