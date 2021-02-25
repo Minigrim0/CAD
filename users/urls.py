@@ -1,5 +1,5 @@
 from django.urls import path
-from users.autocomplete import UserAutocomplete
+from users.autocomplete import CoachAutocomplete
 import users.views as views
 
 
@@ -14,7 +14,7 @@ urlpatterns = [
     path('me/', views.userView, name="my_account"),
     path('requests/', views.requestView, name="request_view"),
     path('requests/accept/', views.acceptRequest, name="manage_request"),
-    path('user-autocomplete/', UserAutocomplete.as_view(), name='user-autocomplete'),
+    path('user-autocomplete/', CoachAutocomplete.as_view(), name='coach-autocomplete'),
     path('login/', views.login_view, name="login_view"),
     path('usermail/', views.get_users, name="get_users_mail"),
 ]
