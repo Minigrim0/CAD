@@ -105,6 +105,43 @@
         </div>
     </div>
 
+    <div class="modal fade" id="chooseCoach" tabindex="-1" role="dialog" aria-labelledby="chooseNewCoach" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="chooseNewCoach">Choisir un nouveau coach pour {{ form_user.first_name }} {{ form_user.last_name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form id="newCoachForm">
+                            <div class="form-row">
+                                <div class="form-group row col-sm-12">
+                                    {{ new_coach_form.as_p }}
+                                </div>
+                            </div>
+                        </form>
+                        <p class="text-danger" id="errorNewCoachForm" style="display:none;">
+                            Vous devez sélectionner un coach
+                        </p>
+                        <div class="alert alert-danger" role="alert" id="errorNewCoach" style="display:none;">
+                            Une erreur est survenue, essayez plus tard!
+                        </div>
+                        <div class="alert alert-success" role="alert" id="successNewCoach" style="display:none;">
+                            Votre mise à jour a bien été effectuée !
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary" onclick="updCoach()">Envoyer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container-fluid p-0">
 
         <section class="p-3 p-lg-5 d-flex align-items-center">
@@ -135,14 +172,17 @@
 
 {% block extra_imports %}
 {{ form.media }}
+{{ new_coach_form.media }}
 
 <script>
     const UrlNotif = "{% url 'send_notif' %}";
     const UrlBalance = "{% url 'modify_balance' %}";
     const UrlUnsub = "{% url 'unsubscribe' %}";
+    const new_coach_url = "{% url 'request_new_coach' %}";
+    const newCoachUrl = "{% url 'set_new_coach' %}";
+
     const csrf_token = "{{ csrf_token }}";
     const user = "{{ form_user.username }}";
-    const new_coach_url = "{% url "request_new_coach" %}";
 </script>
 <script src="{% static 'js/user_admin_view.js' %}"></script>
 

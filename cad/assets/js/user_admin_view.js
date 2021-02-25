@@ -154,6 +154,36 @@ function reloadCoach(){
 }
 
 
-function chooseCoach(){
-    console.log("launching coach choice");
+function updCoach(){
+    if(!$("#newCoachForm").valid()){
+        $("#id_coach-error").css("display", "none");
+        $("#errorNewCoachForm").css("display", "block");
+        return;
+    }
+    $("#errorNewCoachForm").css("display", "none");
+    var coachId = $("#newCoachForm").serialize().split("=")[1];
+
+    var post_data = {
+        csrfmiddlewaretoken: csrf_token,
+        coach: coachId,
+        student: user
+    }
+
+    $.post(newCoachUrl, post_data).done(
+        function(data) {
+            $(".coach_readonly").val(data["coach_name"]);
+            $("#successNewCoach").css("display", "block");
+            setTimeout(function(){
+                $("#chooseCoach").modal('hide');
+                $("#successNewCoach").css("display", "none");
+            }, 1500);
+        }
+    ).fail(
+        function() {
+            $("#errorNewCoach").css("display", "block");
+            setTimeout(function(){
+                $("#errorNewCoach").css("display", "none");
+            }, 5000);
+        }
+    );
 }
