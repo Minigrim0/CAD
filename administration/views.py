@@ -3,13 +3,13 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 
-from administration.forms import ArticleForm, MailForm, StudentAdminForm, CoachAdminForm, OtherAdminForm
+from administration.forms import ArticleForm, MailForm, StudentAdminForm, CoachAdminForm, OtherAdminForm, newCoachForm
 from administration.utils import modifyUser, populate_data, thanksCoaches, sendNotifToCoaches
 from cad.settings import DEBUG
 from default.models import Article, Mail, Message
@@ -170,6 +170,7 @@ def user_admin_view(request):
 
     if usertype.lower() == "a":
         form = StudentAdminForm(data)
+        new_coach_form = newCoachForm()
     elif usertype.lower() == "b":
         form = CoachAdminForm(data)
     else:
@@ -180,7 +181,15 @@ def user_admin_view(request):
             modifyUser(username, form)
 
     view_title = "{} {}".format(user.last_name, user.first_name)
-    return render(request, "user_admin_view.html", {"form": form, "form_user": user, "view_title": view_title})
+    return render(
+        request,
+        "user_admin_view.html",
+        {
+            "form": form,
+            "form_user": user,
+            "view_title": view_title,
+            "new_coach_form": new_coach_form
+        })
 
 
 @staff_member_required
@@ -256,6 +265,26 @@ def create_new_request(request):
             "accepted": True,
         }
     return JsonResponse(response)
+
+
+@staff_member_required
+@require_http_methods(["POST"])
+def set_new_coach(request):
+    coach_id = request.POST.get("coach", None)
+    student_username = request.POST.get("student", None)
+    if coach_id is None:
+        return HttpResponseBadRequest("no coach id given")
+
+    coach = get_object_or_404(User, profile__account_type="b", id=coach_id)
+    student = get_object_or_404(User, username=student_username, profile__account_type="a")
+
+    coach_account = coach.profile.coachaccount
+    student_account = student.profile.studentaccount
+
+    student_account.coach = coach_account
+    student_account.save()
+
+    return JsonResponse({"coach_name": f"{coach.first_name} {coach.last_name}"})
 
 
 @staff_member_required
