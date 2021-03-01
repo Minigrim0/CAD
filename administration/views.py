@@ -294,6 +294,8 @@ def create_new_request(request):
 @require_http_methods(["POST"])
 def set_new_coach(request):
     coach_id = request.POST.get("coach", None)
+    finalSchedule = request.POST.get("finalSchedule", None)
+
     student_username = request.POST.get("student", None)
     if coach_id is None:
         return HttpResponseBadRequest("no coach id given")
@@ -308,6 +310,13 @@ def set_new_coach(request):
 
     student_account.coach = coach_account
     student_account.save()
+
+    studentRequest.objects.create(
+        student=student,
+        is_closed=True,
+        choosenCoach=coach_account,
+        finalschedule=finalSchedule,
+    )
 
     return JsonResponse({"coach_name": f"{coach.first_name} {coach.last_name}"})
 
