@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from datetime import datetime
-import cad.settings as settings
 from default.models import Mail
 
 
@@ -285,15 +284,14 @@ class Notification(models.Model):
     date_created = models.DateField(auto_now_add=True, null=True)
 
     def send_as_mail(self):
-        if settings.DEBUG is False:
-            mail = Mail(
-                name="notification - {}".format(self.title),
-                subject="Nouvelle notification - {}".format(self.title),
-                content=self.content,
-                role="i",  # Sent message
-                to=self.user,
-            )
-            mail.send(self.user)
+        mail = Mail(
+            name="notification - {}".format(self.title),
+            subject="Nouvelle notification - {}".format(self.title),
+            content=self.content,
+            role="i",  # Sent message
+            to=self.user,
+        )
+        mail.send(self.user)
 
 
 class FollowElement(models.Model):

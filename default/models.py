@@ -6,7 +6,7 @@ from django.db import models
 from django.shortcuts import reverse
 from django.utils.html import format_html
 
-from cad.settings import EMAIL_HOST_USER, SITE_DOMAIN
+from cad.settings import EMAIL_HOST_USER, SITE_DOMAIN, DEBUG
 
 from django.template.loader import render_to_string
 from django.core.mail import EmailMultiAlternatives
@@ -95,7 +95,10 @@ class Mail(models.Model):
             self.clean_header, self.formatted_content(user), from_email, to
         )
         msg.attach_alternative(html_message, "text/html")
-        msg.send()
+        if not DEBUG:
+            msg.send()
+        else:
+            logging.warning(f"Mail {self.id} not send because settings.DEBUG is True")
 
         # Duplicates the email, setting it as "sent" email
         self.pk = None
