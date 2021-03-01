@@ -1,86 +1,100 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block navlinks %}
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a href="/administration" class="nav-link">retour</a>
-        </li>
-    </ul>
-{% endblock %}
-
-{% block content %}
-    <div class="container-fluid">
-
-        <section class="p-3 p-lg-5 align-items-center">
-            <div id="container">
-
-                <h2>Utilisateurs</h2>
-                <div>
-                    <img src="/static/admin/img/search.svg" alt="True">
-                    <input id="searchbar" type="text" size="40" name="q">
-                    <a class="btn btn-primary" id="searchbutton" style="color: white" href="" onclick="doSearch()">rechercher</a>
+{% extends 'base.html' %} {% load static %} {% block navlinks %}
+<ul class="navbar-nav">
+  <li class="nav-item">
+    {% if usertype != "a" %}
+    <a href="{% url "userlist" %}?type=a" class="nav-link">Étudiants</a>
+    {% endif %} {% if usertype != "b" %}
+    <a href="{% url "userlist" %}?type=b" class="nav-link">Coach</a>
+    {% endif %} {% if usertype != "c" %}
+    <a href="{% url "userlist" %}?type=c" class="nav-link">Autres</a>
+    {% endif %} {% if usertype != "d" %}
+    <a href="{% url "userlist" %}" class="nav-link">Tous</a>
+    {% endif %}
+    <a href="/administration" class="nav-link">retour</a>
+  </li>
+</ul>
+{% endblock %} {% block content %}
+<div class="container-fluid">
+  <section class="p-3 p-lg-5 align-items-center">
+    <div id="container">
+      <h2>Utilisateurs ({% if usertype == "a" %}Étudiants{% elif usertype == "b" %}Coach{% elif usertype == "c" %}Autres{% else %}Tous{% endif %})</h2>
+      <div>
+        <img src="/static/admin/img/search.svg" alt="True" />
+        <input id="searchbar" type="text" size="40" name="q" />
+        <a
+          class="btn btn-primary"
+          id="searchbutton"
+          style="color: white"
+          href=""
+          onclick="doSearch()"
+          >rechercher</a
+        >
+      </div>
+      <hr class="mb-2" />
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Type de compte</th>
+            <th scope="col">état</th>
+            <th scope="col">mail vérifié</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in users %}
+          <tr>
+            <td>{{ user.id }}</td>
+            <td>
+              <a
+                class="list_link text-primary col-12"
+                href="{% url 'user_admin_view' %}?type={{ user.profile.account_type }}&user={{ user.username }}"
+              >
+                {{ user.first_name }} {{ user.last_name }}
+              </a>
+            </td>
+            <td>{{ user.profile.get_account_type_display }}</td>
+            <td class="text-center">
+              {% if user.is_active %}
+              <button
+                class="btn btn-link"
+                id="activationbutton_{{ user.id }}"
+                onclick="activate('{{ user.id }}', 'false')"
+              >
+                <div id="status_{{ user.id }}">
+                  <i class="fas fa-user-check"></i>
                 </div>
-                <hr class="mb-2">
-                <table class="table table-hover table-bordered">
-                    <thead>
-                        <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Nom</th>
-                        <th scope="col">Type de compte</th>
-                        <th scope="col">état</th>
-                        <th scope="col">mail vérifié</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for user in users %}
-                            <tr>
-                                <td>{{ user.id }}</td>
-                                <td>
-                                    <a
-                                        class="list_link text-primary col-12"
-                                        href="{% url 'user_admin_view' %}?type={{ user.profile.account_type }}&user={{ user.username }}"
-                                    >
-                                        {{ user.first_name }} {{ user.last_name }}
-                                    </a>
-                                </td>
-                                <td>{{ user.profile.get_account_type_display }}</td>
-                                <td class="text-center">
-                                    {% if user.is_active %}
-                                        <button class="btn btn-link" id="activationbutton_{{ user.id }}" onclick="activate('{{ user.id }}', 'false')">
-                                            <div id="status_{{ user.id }}">
-                                                <i class="fas fa-user-check"></i>
-                                            </div>
-                                        </button>
-                                    {% else %}
-                                        <button class="btn btn-link" id="activationbutton_{{ user.id }}" onclick="activate('{{ user.id }}', 'true')">
-                                            <div id="status_{{ user.id }}">
-                                                <i class="fas fa-user-slash"></i>
-                                            </div>
-                                        </button>
-                                    {% endif %}
-                                </td>
-                                <td class="text-center">
-                                    {% if user.profile.verifiedAccount %}
-                                        <img src="/static/admin/img/icon-yes.svg" alt="True"/>
-                                    {% else %}
-                                        <img src="/static/admin/img/icon-no.svg" alt="True"/>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-
-            </div>
-        </section>
+              </button>
+              {% else %}
+              <button
+                class="btn btn-link"
+                id="activationbutton_{{ user.id }}"
+                onclick="activate('{{ user.id }}', 'true')"
+              >
+                <div id="status_{{ user.id }}">
+                  <i class="fas fa-user-slash"></i>
+                </div>
+              </button>
+              {% endif %}
+            </td>
+            <td class="text-center">
+              {% if user.profile.verifiedAccount %}
+              <img src="/static/admin/img/icon-yes.svg" alt="True" />
+              {% else %}
+              <img src="/static/admin/img/icon-no.svg" alt="True" />
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-{% endblock %}
-
-{% block extra_imports %}
+  </section>
+</div>
+{% endblock %} {% block extra_imports %}
 <script>
-    let ActivateUserUrl = "{% url 'activate_user' %}";
-    let csrf_token = "{{ csrf_token }}";
+  let ActivateUserUrl = "{% url 'activate_user' %}";
+  let csrf_token = "{{ csrf_token }}";
 </script>
 <script src="{% static 'js/user_list.js' %}"></script>
 {% endblock %}
