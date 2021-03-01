@@ -17,7 +17,7 @@
 <div class="container-fluid">
   <section class="p-3 p-lg-5 align-items-center">
     <div id="container">
-      <h2>Utilisateurs ({% if usertype == "a" %}Étudiants{% elif usertype == "b" %}Coach{% elif usertype == "c" %}Autres{% else %}Tous{% endif %})</h2>
+      <h2>Utilisateurs</h2><h4>({% if query != "" %}Recherche{% elif usertype == "a" %}Étudiants{% elif usertype == "b" %}Coach{% elif usertype == "c" %}Autres{% else %}Tous{% endif %})</h4>
       <div>
         <img src="/static/admin/img/search.svg" alt="True" />
         <input id="searchbar" type="text" size="40" name="q" />
@@ -44,7 +44,7 @@
         <tbody>
           {% for user in users %}
           <tr>
-            <td>{{ user.id }}</td>
+            <td>{{ forloop.counter }}</td>
             <td>
               <a
                 class="list_link text-primary col-12"
@@ -85,6 +85,14 @@
               {% endif %}
             </td>
           </tr>
+          {% empty %}
+            <tr>
+              <td></td>
+              <td>Aucun utilisateur ne correspond à ces critères</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
           {% endfor %}
         </tbody>
       </table>
