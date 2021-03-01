@@ -74,7 +74,7 @@
         if(!approved && !confirm("Êtes vous sûr de vouloir supprimer ce cours ?")) return;
 
         $.post(
-            "{% url "approve_course" %}",
+            "{% url 'api:approve_course' %}",
             {
                 pk: pk,
                 csrfmiddlewaretoken: "{{csrf_token}}",

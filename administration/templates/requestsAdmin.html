@@ -155,7 +155,7 @@
 
             document.getElementById("coaches_" + id).style = "filter: opacity(10%);";
             document.getElementById("spin_" + id).style.display = "block";
-            var Url = "{% url 'request_select_coach' %}";
+            var Url = "{% url 'api:request_select_coach' %}";
 
             $.post(
                 Url, {
