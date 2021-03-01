@@ -152,7 +152,7 @@ def activate(request):
 
 @staff_member_required
 def user_list(request):
-    usertype = request.GET.get("type", "")
+    usertype = request.GET.get("type", "d")
     query = request.GET.get("q", "")
 
     if usertype == "a":
