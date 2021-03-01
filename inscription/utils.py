@@ -12,10 +12,10 @@ def registerProfile(user, form, account_type="Etudiant"):
     profile.address = form.cleaned_data["address"]
     profile.birthDate = form.cleaned_data["birthdate"]
 
-    profile.Maths_course = "a" in form.cleaned_data['courses']
-    profile.Physique_course = "b" in form.cleaned_data['courses']
-    profile.Francais_course = "c" in form.cleaned_data['courses']
-    profile.Chimie_course = "d" in form.cleaned_data['courses']
+    profile.Maths_course = "a" in form.cleaned_data["courses"]
+    profile.Physique_course = "b" in form.cleaned_data["courses"]
+    profile.Francais_course = "c" in form.cleaned_data["courses"]
+    profile.Chimie_course = "d" in form.cleaned_data["courses"]
 
     profile.secret_key = hashlib.sha256(user.username.encode("utf-8")).hexdigest()
     profile.verifiedAccount = False
@@ -62,16 +62,14 @@ def registerUser(form, usertype):
         user: the user newly created
     """
 
-    username = '{}_{}'.format(
-        form.cleaned_data['last_name'],
-        form.cleaned_data['first_name']
+    username = "{}_{}".format(
+        form.cleaned_data["last_name"], form.cleaned_data["first_name"]
     )
-    user = User.objects.create(
-        username=username)
-    user.first_name = form.cleaned_data['first_name']
-    user.last_name = form.cleaned_data['last_name']
-    user.email = form.cleaned_data['email']
-    user.set_password(form.cleaned_data['password'])
+    user = User.objects.create(username=username)
+    user.first_name = form.cleaned_data["first_name"]
+    user.last_name = form.cleaned_data["last_name"]
+    user.email = form.cleaned_data["email"]
+    user.set_password(form.cleaned_data["password"])
     user.save()
 
     registerProfile(user, form, usertype)

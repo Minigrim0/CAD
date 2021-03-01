@@ -9,10 +9,11 @@ from default.models import Mail
 
 class Profile(models.Model):
     """
-        Modèle Profile:
-            => Extension du modèle User, est utilisé pour sauvegarder les infos
-            autant des profils étudiants que des profils coach
+    Modèle Profile:
+        => Extension du modèle User, est utilisé pour sauvegarder les infos
+        autant des profils étudiants que des profils coach
     """
+
     levels = [
         ("a", "Primaire"),
         ("b", "1ère humanité"),
@@ -24,46 +25,61 @@ class Profile(models.Model):
         ("h", "Primaire"),
         ("i", "Humanité"),
         ("j", "Les deux"),
-        ("k", "autre")
+        ("k", "autre"),
     ]
 
-    account_types = [
-        ("a", "Etudiant"),
-        ("b", "Coach"),
-        ("c", "Administrateur")
-    ]
+    account_types = [("a", "Etudiant"), ("b", "Coach"), ("c", "Administrateur")]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone_number = models.CharField(
-        null=True, blank=True, verbose_name="numéro de téléphone",
-        default="", max_length=25)
+        null=True,
+        blank=True,
+        verbose_name="numéro de téléphone",
+        default="",
+        max_length=25,
+    )
     account_type = models.CharField(
-        null=True, blank=True, choices=account_types, default="a", max_length=1,
-        verbose_name="Role")
+        null=True,
+        blank=True,
+        choices=account_types,
+        default="a",
+        max_length=1,
+        verbose_name="Role",
+    )
     address = models.CharField(
-        null=True, blank=True, default="unknown", max_length=150,
-        verbose_name="Adresse de l'étudiant")
+        null=True,
+        blank=True,
+        default="unknown",
+        max_length=150,
+        verbose_name="Adresse de l'étudiant",
+    )
     birthDate = models.CharField(
-        max_length=25, default="01/01/00", verbose_name="Date de naissance")
-    Maths_course = models.BooleanField(
-        default=False, verbose_name="Maths")
-    Chimie_course = models.BooleanField(
-        default=False, verbose_name="Chimie")
-    Physique_course = models.BooleanField(
-        default=False, verbose_name="Physique")
-    Francais_course = models.BooleanField(
-        default=False, verbose_name="Francais")
+        max_length=25, default="01/01/00", verbose_name="Date de naissance"
+    )
+    Maths_course = models.BooleanField(default=False, verbose_name="Maths")
+    Chimie_course = models.BooleanField(default=False, verbose_name="Chimie")
+    Physique_course = models.BooleanField(default=False, verbose_name="Physique")
+    Francais_course = models.BooleanField(default=False, verbose_name="Francais")
     secret_key = models.CharField(
-        null=True, blank=True, default="", max_length=64,
-        verbose_name="Clé unique pour l'utilisateur")
+        null=True,
+        blank=True,
+        default="",
+        max_length=64,
+        verbose_name="Clé unique pour l'utilisateur",
+    )
     # User has verified his account via mail
     verifiedAccount = models.BooleanField(
-        default=False, verbose_name="A vérifié son addresse mail")
+        default=False, verbose_name="A vérifié son addresse mail"
+    )
     # Represents school level for student
     # Represents either if coach give course to humanité or primaire
     school_level = models.CharField(
-        null=True, blank=True, choices=levels, max_length=1,
-        verbose_name="Niveau scolaire")
+        null=True,
+        blank=True,
+        choices=levels,
+        max_length=1,
+        verbose_name="Niveau scolaire",
+    )
 
     @property
     def courses(self):
@@ -89,8 +105,7 @@ class Profile(models.Model):
         return string
 
     def __str__(self):
-        return "{} {}'s profile".format(
-            self.user.first_name, self.user.last_name)
+        return "{} {}'s profile".format(self.user.first_name, self.user.last_name)
 
 
 class StudentAccount(models.Model):
@@ -98,39 +113,65 @@ class StudentAccount(models.Model):
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
     tutor_name = models.CharField(
-        null=True, blank=True, default="inconnu", max_length=50,
-        verbose_name="Nom du tuteur")
+        null=True,
+        blank=True,
+        default="inconnu",
+        max_length=50,
+        verbose_name="Nom du tuteur",
+    )
     tutor_firstName = models.CharField(
-        null=True, blank=True, default="inconnu", max_length=50,
-        verbose_name="Prénom du tuteur")
+        null=True,
+        blank=True,
+        default="inconnu",
+        max_length=50,
+        verbose_name="Prénom du tuteur",
+    )
     NeedsVisit = models.BooleanField(
-        default=False, verbose_name="Désire une visite pédagogique ?")
+        default=False, verbose_name="Désire une visite pédagogique ?"
+    )
     comments = models.TextField(
-        null=True, blank=True, verbose_name="Commentaires",
-        default="Aucun commentaire")
+        null=True, blank=True, verbose_name="Commentaires", default="Aucun commentaire"
+    )
     wanted_schedule = models.TextField(
-        null=True, blank=True, default="",
-        verbose_name="Horaire")
+        null=True, blank=True, default="", verbose_name="Horaire"
+    )
     unsub_proposal = models.BooleanField(
-        default=False, verbose_name="Proposition de désinscription envoyée")
+        default=False, verbose_name="Proposition de désinscription envoyée"
+    )
     # User has payed the two first hours of course
     coach = models.ForeignKey(
-        "users.CoachAccount", null=True, blank=True, related_name="students", on_delete=models.SET_NULL)
+        "users.CoachAccount",
+        null=True,
+        blank=True,
+        related_name="students",
+        on_delete=models.SET_NULL,
+    )
     confirmedAccount = models.BooleanField(
-        default=False, verbose_name="A payé ses 2 premières heures de cours")
-    zip = models.CharField(
-        default='0000', max_length=4, blank=True)
-    ville = models.CharField(
-        max_length=50, default="None", blank=True)
+        default=False, verbose_name="A payé ses 2 premières heures de cours"
+    )
+    zip = models.CharField(default="0000", max_length=4, blank=True)
+    ville = models.CharField(max_length=50, default="None", blank=True)
     resp_phone_number1 = models.CharField(
-        null=True, blank=True, verbose_name="numéro de téléphone d'un responsable",
-        default="", max_length=25)
+        null=True,
+        blank=True,
+        verbose_name="numéro de téléphone d'un responsable",
+        default="",
+        max_length=25,
+    )
     resp_phone_number2 = models.CharField(
-        null=True, blank=True, verbose_name="numéro de téléphone d'un responsable",
-        default="", max_length=25)
+        null=True,
+        blank=True,
+        verbose_name="numéro de téléphone d'un responsable",
+        default="",
+        max_length=25,
+    )
     resp_phone_number3 = models.CharField(
-        null=True, blank=True, verbose_name="numéro de téléphone d'un responsable",
-        default="", max_length=25)
+        null=True,
+        blank=True,
+        verbose_name="numéro de téléphone d'un responsable",
+        default="",
+        max_length=25,
+    )
 
     @property
     def balance(self):
@@ -140,36 +181,47 @@ class StudentAccount(models.Model):
 
     def __str__(self):
         return "{} {}'s student profile".format(
-            self.profile.user.first_name, self.profile.user.last_name)
+            self.profile.user.first_name, self.profile.user.last_name
+        )
 
 
 class CoachAccount(models.Model):
     coach_states = [
-        ('a', '----'),
-        ('b', 'Engagé'),
-        ('c', 'Refusé'),
+        ("a", "----"),
+        ("b", "Engagé"),
+        ("c", "Refusé"),
     ]
 
     # Coach
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
     school = models.CharField(
-        null=True, blank=True, default="None", max_length=50,
-        verbose_name="Ecole")
+        null=True, blank=True, default="None", max_length=50, verbose_name="Ecole"
+    )
     French_level = models.CharField(
-        null=True, blank=True, default="Inconnu", max_length=50)
+        null=True, blank=True, default="Inconnu", max_length=50
+    )
     English_level = models.CharField(
-        null=True, blank=True, default="Inconnu", max_length=50)
+        null=True, blank=True, default="Inconnu", max_length=50
+    )
     Dutch_level = models.CharField(
-        null=True, blank=True, default="Inconnu", max_length=50)
+        null=True, blank=True, default="Inconnu", max_length=50
+    )
     IBAN = models.CharField(
-        null=False, verbose_name="numéro de compte IBAN",
-        default="inconnu", max_length=50)
+        null=False,
+        verbose_name="numéro de compte IBAN",
+        default="inconnu",
+        max_length=50,
+    )
     nationalRegisterID = models.CharField(
-        null=False, verbose_name="numéro de registre national",
-        default="Inconnu", max_length=50)
+        null=False,
+        verbose_name="numéro de registre national",
+        default="Inconnu",
+        max_length=50,
+    )
     confirmedAccount = models.CharField(
-        default="a", blank=True, choices=coach_states, verbose_name="Etat", max_length=1)
+        default="a", blank=True, choices=coach_states, verbose_name="Etat", max_length=1
+    )
 
     @property
     def nb_students(self):
@@ -177,16 +229,15 @@ class CoachAccount(models.Model):
 
     def schedule(self, studentRequest):
         if studentRequest.coachrequestthrough_set.filter(coach=self).count() == 1:
-            return studentRequest.coachrequestthrough_set.get(
-                coach=self).coachschedule
+            return studentRequest.coachrequestthrough_set.get(coach=self).coachschedule
 
     def __str__(self):
         return "{} {}".format(self.profile.user.first_name, self.profile.user.last_name)
 
 
 class coachRequestThrough(models.Model):
-    request = models.ForeignKey('users.studentRequest', on_delete=models.CASCADE)
-    coach = models.ForeignKey('users.coachAccount', on_delete=models.CASCADE)
+    request = models.ForeignKey("users.studentRequest", on_delete=models.CASCADE)
+    coach = models.ForeignKey("users.coachAccount", on_delete=models.CASCADE)
 
     coachschedule = models.TextField(null=False, blank=False)
     has_accepted = models.BooleanField(default=True)
@@ -194,38 +245,44 @@ class coachRequestThrough(models.Model):
 
 class studentRequest(models.Model):
     """
-        Modèle studentRequest:
-            => Représente une recherche de coach de la part d'un etudiant
+    Modèle studentRequest:
+        => Représente une recherche de coach de la part d'un etudiant
     """
 
     # represents the user who made the request
     student = models.ForeignKey(User, on_delete=models.CASCADE)
     # represents the coaches who accepted this request
     coaches = models.ManyToManyField(
-        "users.CoachAccount", blank=True, related_name="request_participated", through=coachRequestThrough)
+        "users.CoachAccount",
+        blank=True,
+        related_name="request_participated",
+        through=coachRequestThrough,
+    )
     is_closed = models.BooleanField(default=False)
-    choosenCoach = models.ForeignKey("users.CoachAccount", blank=True, null=True, on_delete=models.SET_NULL)
+    choosenCoach = models.ForeignKey(
+        "users.CoachAccount", blank=True, null=True, on_delete=models.SET_NULL
+    )
     finalschedule = models.TextField(null=True, blank=True)
 
 
 class Notification(models.Model):
     """
-        Notification:
-            => Represents a niotification sent to a user
-            May be sent by email as well
+    Notification:
+        => Represents a niotification sent to a user
+        May be sent by email as well
     """
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     author = models.CharField(
-        blank=True, null=True, max_length=50,
-        verbose_name="Auteur de la notification")
+        blank=True, null=True, max_length=50, verbose_name="Auteur de la notification"
+    )
     title = models.CharField(
-        blank=True, null=True, max_length=50,
-        verbose_name="Titre de la notification")
+        blank=True, null=True, max_length=50, verbose_name="Titre de la notification"
+    )
     content = models.TextField(
-        blank=True, null=True, verbose_name="Contenu de la notification")
-    date_created = models.DateField(
-        auto_now_add=True, null=True)
+        blank=True, null=True, verbose_name="Contenu de la notification"
+    )
+    date_created = models.DateField(auto_now_add=True, null=True)
 
     def send_as_mail(self):
         if settings.DEBUG is False:
@@ -234,41 +291,45 @@ class Notification(models.Model):
                 subject="Nouvelle notification - {}".format(self.title),
                 content=self.content,
                 role="i",  # Sent message
-                to=self.user
+                to=self.user,
             )
             mail.send(self.user)
 
 
 class FollowElement(models.Model):
     """
-        FollowElement Model:
-            => Represents course given by a coach to a student
+    FollowElement Model:
+        => Represents course given by a coach to a student
     """
 
     student = models.ForeignKey(User, blank=True, on_delete=models.PROTECT)
-    coach = models.ForeignKey(User, blank=True, related_name="coach_of", on_delete=models.PROTECT)
+    coach = models.ForeignKey(
+        User, blank=True, related_name="coach_of", on_delete=models.PROTECT
+    )
     date = models.DateField(
-        default=utils.timezone.now,
-        verbose_name="Date et heure du cours")
+        default=utils.timezone.now, verbose_name="Date et heure du cours"
+    )
     startHour = models.TimeField(default="10:00", verbose_name="Heure de début")
     endHour = models.TimeField(default="12:00", verbose_name="Heure de fin")
 
     # comments of the coach about the course represented by this FollowElement
     comments = models.TextField(
-        default="Pas de commentaires",
-        verbose_name="Commentaires du cours")
+        default="Pas de commentaires", verbose_name="Commentaires du cours"
+    )
     approved = models.BooleanField(default=False)
 
     @property
     def duration(self):
-        time = datetime.combine(datetime.today(), self.endHour) - datetime.combine(datetime.today(), self.startHour)
+        time = datetime.combine(datetime.today(), self.endHour) - datetime.combine(
+            datetime.today(), self.startHour
+        )
         return round(time.seconds / 3600, 2)
 
 
 class Transaction(models.Model):
     """
-        Transaction:
-            => Represents a movement of currency (hours), may be linked to a course
+    Transaction:
+        => Represents a movement of currency (hours), may be linked to a course
     """
 
     student = models.ForeignKey(StudentAccount, on_delete=models.CASCADE)
@@ -276,4 +337,6 @@ class Transaction(models.Model):
     date = models.DateTimeField(auto_now_add=True, null=True)
     admin = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
     comment = models.CharField(max_length=300, blank=True)
-    FollowElement = models.ForeignKey("users.followElement", null=True, blank=True, on_delete=models.CASCADE)
+    FollowElement = models.ForeignKey(
+        "users.followElement", null=True, blank=True, on_delete=models.CASCADE
+    )

@@ -1,13 +1,13 @@
-from django.conf.urls import url
+from django.urls import path
 
 import inscription.views
 
 urlpatterns = [
-    url('^confirm/$', inscription.views.confirmation_view, name="confirmation"),
-    url('^payment/$', inscription.views.paymentView, name="paymentView"),
-    url('^paylater/$', inscription.views.pay_later, name="pay_later"),
-    url('^thanks/$', inscription.views.thanks, name="thanks_view"),
-    url('^student/$', inscription.views.registerStudentView, name="registerStudent"),
-    url('^coach/$', inscription.views.registerCoachView, name="registerCoach"),
-    url('^$', inscription.views.registerStudentView, name="registerStudentDefault"),
+    path("confirm/", inscription.views.confirmation_view, name="confirmation"),
+    path("payment/", inscription.views.paymentView, name="paymentView"),
+    path("paylater/", inscription.views.pay_later, name="pay_later"),
+    path("thanks/", inscription.views.thanks, name="thanks_view"),
+    path("student/", inscription.views.registerStudentView, name="registerStudent"),
+    path("coach/", inscription.views.registerCoachView, name="registerCoach"),
+    path("", inscription.views.registerStudentView, name="registerStudentDefault"),
 ]
