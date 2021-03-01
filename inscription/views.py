@@ -1,5 +1,3 @@
-import logging
-
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
@@ -66,38 +64,16 @@ def registerUserView(request):
     return render(request, "inscription.html", locals())
 
 
-def welcomeUser(request, user, host):
-    """Welcomes the new user, by sending him an email and a notification
-
-    Args:
-        user (django.contrib.auth.models.User): The new user
-    """
-
-    author = "L'équipe CAD"
-    title = "Bienvenue parmi nous!"
-    content = "Au nom de toute l'équipe de CAD, \
-        nous vous souhaitons la bienvenue! \
-        N'oubliez pas que vous pouvez nous contacter \
-        si vous avez le moindre souci via ce \
-        <a href='/contact/'>formulaire</a>!"
-
-    newNotif = Notification(user=user)
-    newNotif.title = title
-    newNotif.content = content
-    newNotif.author = author
-    newNotif.save()
-
-    mail = Mail.objects.get(id=1)
-    if not DEBUG:
-        logging.warning("Sending mail to {}".format(user.email))
-        mail.send(user)
-    else:
-        logging.error("Couldn't send mail to {}, debug is true".format(user.email))
-        messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
-
-
 @login_required
 def confirmation_view(request):
+    """A view to verify the email address of the user
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        [type]: [description]
+    """
     token = request.GET.get("key", "")
     user = utils.getUser(token)
     # token manquant ou non valide

@@ -2,7 +2,8 @@ import hashlib
 
 from django.contrib.auth.models import User
 
-from users.models import CoachAccount, Profile, StudentAccount
+from users.models import CoachAccount, Profile, StudentAccount, Notification
+from default.models import Mail
 
 
 def registerProfile(user, form, account_type="Etudiant"):
@@ -86,3 +87,28 @@ def getUser(token):
     if profile.count() == 1:
         return profile.first().user
     return None
+
+
+def welcomeUser(request, user, host):
+    """Welcomes the new user, by sending him an email and a notification
+
+    Args:
+        user (django.contrib.auth.models.User): The new user
+    """
+
+    author = "L'équipe CAD"
+    title = "Bienvenue parmi nous!"
+    content = "Au nom de toute l'équipe de CAD, \
+        nous vous souhaitons la bienvenue! \
+        N'oubliez pas que vous pouvez nous contacter \
+        si vous avez le moindre souci via ce \
+        <a href='/contact/'>formulaire</a>!"
+
+    newNotif = Notification(user=user)
+    newNotif.title = title
+    newNotif.content = content
+    newNotif.author = author
+    newNotif.save()
+
+    mail = Mail.objects.get(id=1)
+    mail.send(user)
