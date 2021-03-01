@@ -8,10 +8,10 @@
         <a href="{% url "home" %}" class="nav-link js-scroll-trigger">Accueil</a>
     </li>
     <li class="nav-item mb-1">
-        <a href="{% url "registerStudent" %}" class="nav-link js-scroll-trigger">Inscription <br/>(nouvel étudiant)</a>
+        <a href="{% url "registerUser" %}?type=a" class="nav-link js-scroll-trigger">Inscription <br/>(nouvel étudiant)</a>
     </li>
     <li class="nav-item mb-1">
-        <a href="{% url "registerCoach" %}" class="nav-link js-scroll-trigger">Inscription <br/>(nouveau coach)</a>
+        <a href="{% url "registerUser" %}?type=b" class="nav-link js-scroll-trigger">Inscription <br/>(nouveau coach)</a>
     </li>
 </ul>
 {% endblock %}

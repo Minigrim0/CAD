@@ -42,7 +42,7 @@
                 <br />
                 <br />
 
-                <a href={% url "registerStudent" %}><i class="fas fa-pencil-alt"> Prendre des cours</i></a>
+                <a href="{% url "registerUser" %}?type=a"><i class="fas fa-pencil-alt"> Prendre des cours</i></a>
             {% endif %}
         </div>
     </section>
@@ -102,7 +102,7 @@
             {{ a_coaches.content|safe }}
 
             {% if not request.user.is_authenticated %}
-                <a class="btn btn-primary" href="{% url "registerCoach" %}"><span style="color: white;">Postuler en ligne</span></a>
+                <a class="btn btn-primary" href="{% url "registerUser" %}?type=b"><span style="color: white;">Postuler en ligne</span></a>
             {% endif %}
         </div>
     </section>
@@ -186,7 +186,7 @@
     {% else %}
         <footer id="footer_sizer" style="bottom: 0; position: fixed" class="container text-right">
             <a class="btn btn-primary" href="{% url "login_view" %}"><span style="color: white;">Connexion</span></a>
-            <a class="btn btn-primary" href="{% url "registerStudent" %}"><span style="color: white;">Inscription</span></a>
+            <a class="btn btn-primary" href="{% url "registerUser" %}?type=a"><span style="color: white;">Inscription</span></a>
         </footer>
     {% endif %}
 </div>
