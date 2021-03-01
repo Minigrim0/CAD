@@ -191,9 +191,10 @@ def user_admin_view(request):
     else:
         data = populate_data(usertype.lower(), user)
 
+    context = {}
     if usertype.lower() == "a":
         form = StudentAdminForm(data)
-        new_coach_form = newCoachForm()
+        context["new_coach_form"] = newCoachForm()
     elif usertype.lower() == "b":
         form = CoachAdminForm(data)
     else:
@@ -204,15 +205,11 @@ def user_admin_view(request):
             modifyUser(username, form)
 
     view_title = "{} {}".format(user.last_name, user.first_name)
+    context.update({"form": form, "form_user": user, "view_title": view_title})
     return render(
         request,
         "user_admin_view.html",
-        {
-            "form": form,
-            "form_user": user,
-            "view_title": view_title,
-            "new_coach_form": new_coach_form,
-        },
+        context,
     )
 
 
