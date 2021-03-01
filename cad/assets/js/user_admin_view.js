@@ -161,12 +161,15 @@ function updCoach(){
         return;
     }
     $("#errorNewCoachForm").css("display", "none");
-    var coachId = $("#newCoachForm").serialize().split("=")[1];
+    var dataArray = $("#newCoachForm").serializeArray();
 
     var post_data = {
         csrfmiddlewaretoken: csrf_token,
-        coach: coachId,
         student: user
+    }
+
+    for(var x = 0;x<dataArray.length;x++){
+        post_data[dataArray[x]["name"]] = dataArray[x]["value"];
     }
 
     $.post(newCoachUrl, post_data).done(
