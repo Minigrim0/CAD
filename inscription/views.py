@@ -26,15 +26,17 @@ def registerStudentView(request):
             user = utils.registerUser(form, "a")
 
             user = authenticate(
-                username=user.username,
-                password=form.cleaned_data["password"])
+                username=user.username, password=form.cleaned_data["password"]
+            )
             if user:
                 login(request, user)
 
             messages.add_message(
-                request, messages.SUCCESS,
-                "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.")
-            welcomeUser(request, user, host=request.META['HTTP_HOST'])
+                request,
+                messages.SUCCESS,
+                "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.",
+            )
+            welcomeUser(request, user, host=request.META["HTTP_HOST"])
             return HttpResponseRedirect(reverse("home"))
     else:
         form = StudentRegisterForm()
@@ -52,15 +54,17 @@ def registerCoachView(request):
             user = utils.registerUser(form, "b")
 
             user = authenticate(
-                username=user.username,
-                password=form.cleaned_data["password"])
+                username=user.username, password=form.cleaned_data["password"]
+            )
             if user:
                 login(request, user)
 
             messages.add_message(
-                request, messages.SUCCESS,
-                "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.")
-            welcomeUser(request, user, host=request.META['HTTP_HOST'])
+                request,
+                messages.SUCCESS,
+                "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.",
+            )
+            welcomeUser(request, user, host=request.META["HTTP_HOST"])
             return HttpResponseRedirect(reverse("home"))
     else:
         form = CoachRegisterForm()
@@ -111,8 +115,8 @@ def confirmation_view(request):
     # l'utilisateur ne doit plus accéder à cette page
     if user.profile.verifiedAccount:
         messages.add_message(
-            request, messages.WARNING,
-            "Vous avez déjà confirmé votre compte!")
+            request, messages.WARNING, "Vous avez déjà confirmé votre compte!"
+        )
         return HttpResponseRedirect(reverse("home"))
 
     # L'utilisateur a vérifié son adresse mail
@@ -123,7 +127,7 @@ def confirmation_view(request):
     profile.save()
 
     if profile.account_type == "a":
-        mail = Mail.objects.get(role='b')
+        mail = Mail.objects.get(role="b")
         if not DEBUG:
             mail.send(user)
         else:
@@ -132,9 +136,11 @@ def confirmation_view(request):
         return HttpResponseRedirect(reverse("paymentView"))
     else:
         messages.add_message(
-            request, messages.SUCCESS,
+            request,
+            messages.SUCCESS,
             "Votre compte à bien été confirmé! Nous allons\
-            bientôt entrer en contact avec vous!")
+            bientôt entrer en contact avec vous!",
+        )
         return HttpResponseRedirect(reverse("home"))
 
 
@@ -166,10 +172,12 @@ def pay_later(request):
     user.profile.save()
 
     messages.add_message(
-        request, messages.WARNING,
+        request,
+        messages.WARNING,
         "Votre paiement a été annulé, n'oubliez pas \
         de le compléter au plus vite, afin de pouvoir commencer a suivre des \
-        cours avec nos coaches!")
+        cours avec nos coaches!",
+    )
 
     return HttpResponseRedirect(reverse("home"))
 
@@ -198,7 +206,9 @@ def thanks(request):
     utils.sendNotifToCoaches(user.profile)
 
     messages.add_message(
-        request, messages.SUCCESS,
+        request,
+        messages.SUCCESS,
         "Merci d'avoir complété votre inscription! \
-        Nous allons de ce pas chercher un coach pour vous!")
+        Nous allons de ce pas chercher un coach pour vous!",
+    )
     return HttpResponseRedirect(reverse("home"))

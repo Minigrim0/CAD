@@ -4,5 +4,5 @@ import old_site.views as views
 
 
 urlpatterns = [
-    path('<str:name>/', views.old, name="old_site"),
+    path("<str:name>/", views.old, name="old_site"),
 ]

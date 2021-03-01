@@ -1,13 +1,22 @@
 from django.contrib import admin
-from users.models import StudentAccount, CoachAccount, studentRequest,\
-    FollowElement, Transaction, Profile
+from users.models import (
+    StudentAccount,
+    CoachAccount,
+    studentRequest,
+    FollowElement,
+    Transaction,
+    Profile,
+)
 
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = (
-        "user", "verifiedAccount", "courses", )
+        "user",
+        "verifiedAccount",
+        "courses",
+    )
     list_filter = ("user", "verifiedAccount")
-    ordering = ("user", )
+    ordering = ("user",)
     search_fields = ("user",)
 
     def courses(self, profile):
@@ -17,14 +26,21 @@ class ProfileAdmin(admin.ModelAdmin):
 class CoachAdmin(admin.ModelAdmin):
 
     list_display = (
-        "first_name", "last_name", "email", )
+        "first_name",
+        "last_name",
+        "email",
+    )
     list_filter = (
-        "profile__user__first_name", "profile__user__last_name",
-        "profile__user__email")
-    ordering = ("profile__user__last_name", )
+        "profile__user__first_name",
+        "profile__user__last_name",
+        "profile__user__email",
+    )
+    ordering = ("profile__user__last_name",)
     search_fields = (
-        "profile__user__first_name", "profile__user__last_name",
-        "profile__user__email")
+        "profile__user__first_name",
+        "profile__user__last_name",
+        "profile__user__email",
+    )
 
     def first_name(self, coachaccount):
         return coachaccount.profile.user.first_name
@@ -38,8 +54,7 @@ class CoachAdmin(admin.ModelAdmin):
 
 class StudentAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "first_name", "last_name", "email")
+    list_display = ("first_name", "last_name", "email")
 
     def first_name(self, studentaccount):
         return studentaccount.profile.user.first_name
@@ -53,21 +68,19 @@ class StudentAdmin(admin.ModelAdmin):
 
 class StudentRequestAdmin(admin.ModelAdmin):
     list_display = (
-        "student", "is_closed", )
+        "student",
+        "is_closed",
+    )
 
 
 class FollowElementAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'student', 'coach', 'date')
-    list_filter = (
-        "id", "student", "coach")
+    list_display = ("id", "student", "coach", "date")
+    list_filter = ("id", "student", "coach")
 
 
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = (
-        'id', 'student', 'amount', 'admin', 'date')
-    list_filter = (
-        "id", "student", "amount", "admin", 'date')
+    list_display = ("id", "student", "amount", "admin", "date")
+    list_filter = ("id", "student", "amount", "admin", "date")
 
 
 admin.site.register(Profile, ProfileAdmin)

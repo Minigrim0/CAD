@@ -13,14 +13,18 @@ class UserTestCase(TestCase):
         User.objects.create(username="d", first_name="user", last_name="coach3")
         User.objects.create(username="e", first_name="user", last_name="coach4")
 
-        student = models.Profile.objects.create(user=User.objects.get(username="a"), account_type="a")
+        student = models.Profile.objects.create(
+            user=User.objects.get(username="a"), account_type="a"
+        )
         student.Maths_course = True
         student.Francais_course = True
         student.school_level = "d"  # 3 ieme humanité
         student.save()
         models.StudentAccount.objects.create(profile=student)
 
-        coach = models.Profile.objects.create(user=User.objects.get(username="b"), account_type="b")
+        coach = models.Profile.objects.create(
+            user=User.objects.get(username="b"), account_type="b"
+        )
         coach.Maths_course = True
         coach.Chimie_course = True
         coach.school_level = "i"  # humanité
@@ -29,7 +33,9 @@ class UserTestCase(TestCase):
         coach_account1.confirmedAccount = "b"
         coach_account1.save()
 
-        coach2 = models.Profile.objects.create(user=User.objects.get(username="c"), account_type="b")
+        coach2 = models.Profile.objects.create(
+            user=User.objects.get(username="c"), account_type="b"
+        )
         coach2.Physique_course = True
         coach2.Chimie_course = True
         coach2.school_level = "j"  # humanité et primaire
@@ -38,7 +44,9 @@ class UserTestCase(TestCase):
         coach_account2.confirmedAccount = "b"
         coach_account2.save()
 
-        coach3 = models.Profile.objects.create(user=User.objects.get(username="d"), account_type="b")
+        coach3 = models.Profile.objects.create(
+            user=User.objects.get(username="d"), account_type="b"
+        )
         coach3.Francais_course = True
         coach3.Chimie_course = True
         coach3.school_level = "h"  # primaire seulement
@@ -47,7 +55,9 @@ class UserTestCase(TestCase):
         coach_account3.confirmedAccount = "b"
         coach_account3.save()
 
-        coach4 = models.Profile.objects.create(user=User.objects.get(username="e"), account_type="b")
+        coach4 = models.Profile.objects.create(
+            user=User.objects.get(username="e"), account_type="b"
+        )
         coach4.Francais_course = True
         coach4.Chimie_course = True
         coach4.school_level = "j"  # primaire seulement
@@ -60,8 +70,8 @@ class UserTestCase(TestCase):
         """User courses render correctly"""
         student = User.objects.get(username="a")
         coach = User.objects.get(username="b")
-        self.assertEqual(student.profile.courses, 'Maths, Francais')
-        self.assertEqual(coach.profile.courses, 'Maths, Chimie, ')
+        self.assertEqual(student.profile.courses, "Maths, Francais")
+        self.assertEqual(coach.profile.courses, "Maths, Chimie, ")
 
     def test_user_notification(self):
         """User correctly receives notification"""
@@ -78,13 +88,17 @@ class UserTestCase(TestCase):
         """The student's balance is correctly calculated"""
         student = User.objects.get(username="a")
 
-        transaction = models.Transaction.objects.create(student=student.profile.studentaccount)
+        transaction = models.Transaction.objects.create(
+            student=student.profile.studentaccount
+        )
         transaction.amount = 20
         transaction.save()
 
         self.assertEqual(student.profile.studentaccount.balance, 20)
 
-        transaction = models.Transaction.objects.create(student=student.profile.studentaccount)
+        transaction = models.Transaction.objects.create(
+            student=student.profile.studentaccount
+        )
         transaction.amount = -10
         transaction.save()
 
@@ -125,7 +139,9 @@ class UserTestCase(TestCase):
 
         request = models.studentRequest.objects.get(student=student)
         coach = request.coaches.get(profile__user__username=coach1.username)
-        other_coaches = request.coaches.all().exclude(profile__user__username=coach1.username)
+        other_coaches = request.coaches.all().exclude(
+            profile__user__username=coach1.username
+        )
 
         request.is_closed = True
         request.choosenCoach = coach
@@ -139,8 +155,12 @@ class UserTestCase(TestCase):
         title = "Félicitations!"
         content = "Vous avez été choisi pour enseigner à {} {}! Vous pouvez \
         vous rendre sur votre profil pour retrouver les coordonées de cet \
-        étudiant".format(student.profile.user.first_name, student.profile.user.last_name)
-        models.Notification.objects.create(user=coach.profile.user, author=author, title=title, content=content)
+        étudiant".format(
+            student.profile.user.first_name, student.profile.user.last_name
+        )
+        models.Notification.objects.create(
+            user=coach.profile.user, author=author, title=title, content=content
+        )
 
         self.assertEqual(coach1.notification_set.count(), 1)
         self.assertEqual(coach2.notification_set.count(), 0)

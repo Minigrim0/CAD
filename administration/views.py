@@ -3,14 +3,31 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, HttpResponseBadRequest
+from django.http import (
+    HttpResponse,
+    HttpResponseRedirect,
+    JsonResponse,
+    HttpResponseBadRequest,
+)
 from django.views.decorators.http import require_http_methods
 from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 
-from administration.forms import ArticleForm, MailForm, StudentAdminForm, CoachAdminForm, OtherAdminForm, newCoachForm
-from administration.utils import modifyUser, populate_data, thanksCoaches, sendNotifToCoaches
+from administration.forms import (
+    ArticleForm,
+    MailForm,
+    StudentAdminForm,
+    CoachAdminForm,
+    OtherAdminForm,
+    newCoachForm,
+)
+from administration.utils import (
+    modifyUser,
+    populate_data,
+    thanksCoaches,
+    sendNotifToCoaches,
+)
 from cad.settings import DEBUG
 from default.models import Article, Mail, Message
 from inscription.utils import getUser
@@ -35,17 +52,17 @@ def adminPage(request):
 def mailAdminView(request):
     if request.method == "POST":
         form = request.POST
-        mail = Mail.objects.get(id=int(form['mailid']))
-        mail.name = form['name'].replace("\r", " ")
-        mail.subject = form['subject'].replace("\r", " ")
-        mail.content = form['content'].replace("\r", " ")
-        mail.role = form['role']
+        mail = Mail.objects.get(id=int(form["mailid"]))
+        mail.name = form["name"].replace("\r", " ")
+        mail.subject = form["subject"].replace("\r", " ")
+        mail.content = form["content"].replace("\r", " ")
+        mail.role = form["role"]
         mail.save()
 
     mails = [MailForm(instance=mail) for mail in Mail.objects.all().exclude(role="i")]
     view_title = "Mails"
 
-    return render(request, 'mailsAdmin.html', locals())
+    return render(request, "mailsAdmin.html", locals())
 
 
 @staff_member_required
@@ -53,10 +70,10 @@ def articleAdminView(request):
     if request.method == "POST":
         form = ArticleForm(request.POST)
         if form.is_valid():
-            article = get_object_or_404(Article, name=form.cleaned_data['name'])
-            article.title = form.cleaned_data['title'].replace("\r", " ")
-            article.subtitle = form.cleaned_data['subtitle'].replace("\r", " ")
-            article.content = form.cleaned_data['content'].replace("\r", " ")
+            article = get_object_or_404(Article, name=form.cleaned_data["name"])
+            article.title = form.cleaned_data["title"].replace("\r", " ")
+            article.subtitle = form.cleaned_data["subtitle"].replace("\r", " ")
+            article.content = form.cleaned_data["content"].replace("\r", " ")
             article.save()
 
     articles = [ArticleForm(instance=article) for article in Article.objects.all()]
@@ -70,10 +87,10 @@ def mailAdminCreate(request):
     if request.method == "POST":
         form = request.POST
         mail = Mail()
-        mail.name = form['name'].replace("\r", " ")
-        mail.subject = form['subject'].replace("\r", " ")
-        mail.content = form['content'].replace("\r", " ")
-        mail.role = form['role']
+        mail.name = form["name"].replace("\r", " ")
+        mail.subject = form["subject"].replace("\r", " ")
+        mail.content = form["content"].replace("\r", " ")
+        mail.role = form["role"]
         mail.save()
 
         return HttpResponseRedirect(reverse("mails_admin"))
@@ -81,7 +98,7 @@ def mailAdminCreate(request):
     form = MailForm()
     view_title = "Créer un mail"
 
-    return render(request, 'mailsAdminCreate.html', locals())
+    return render(request, "mailsAdminCreate.html", locals())
 
 
 @staff_member_required
@@ -105,7 +122,8 @@ def approve_course(request):
             amount=-course.duration,
             date=datetime.today(),
             admin=request.user,
-            comment="paiement pour cours")
+            comment="paiement pour cours",
+        )
         course.save()
     else:
         course.delete()
@@ -138,13 +156,18 @@ def user_list(request):
     query = request.GET.get("q", "")
 
     if usertype == "a":
-        users = User.objects.filter(profile__account_type="a").order_by('id')
+        users = User.objects.filter(profile__account_type="a").order_by("id")
     elif usertype == "b":
-        users = User.objects.filter(profile__account_type="b").order_by('id')
+        users = User.objects.filter(profile__account_type="b").order_by("id")
     elif usertype == "c":
-        users = User.objects.all().exclude(profile__account_type="a").exclude(profile__account_type="b").order_by('id')
+        users = (
+            User.objects.all()
+            .exclude(profile__account_type="a")
+            .exclude(profile__account_type="b")
+            .order_by("id")
+        )
     else:
-        users = User.objects.all().order_by('id')
+        users = User.objects.all().order_by("id")
 
     if query != "":
         users = users.filter(username__icontains=query)
@@ -188,15 +211,16 @@ def user_admin_view(request):
             "form": form,
             "form_user": user,
             "view_title": view_title,
-            "new_coach_form": new_coach_form
-        })
+            "new_coach_form": new_coach_form,
+        },
+    )
 
 
 @staff_member_required
 @require_http_methods(["POST"])
 def sendUnsubscriptionMail(request):
     user = getUser(request.POST.get("user_key"))
-    mail = Mail.objects.get(role='c')
+    mail = Mail.objects.get(role="c")
     if not DEBUG:
         mail.send(user)
     else:
@@ -219,7 +243,7 @@ def message_list(request):
         messages = Message.objects.all()
 
     view_title = "Messages"
-    return render(request, 'message_list.html', locals())
+    return render(request, "message_list.html", locals())
 
 
 @staff_member_required
@@ -230,15 +254,17 @@ def message_admin_view(request):
     message.save()
 
     view_title = "Messages"
-    return render(request, 'message_admin_view.html', locals())
+    return render(request, "message_admin_view.html", locals())
 
 
 @staff_member_required
 def student_requests(request):
-    student_requests = studentRequest.objects.all().exclude(
-        is_closed=True).order_by("-id")
-    student_requests_closed = studentRequest.objects.all().exclude(
-        is_closed=False).order_by("-id")
+    student_requests = (
+        studentRequest.objects.all().exclude(is_closed=True).order_by("-id")
+    )
+    student_requests_closed = (
+        studentRequest.objects.all().exclude(is_closed=False).order_by("-id")
+    )
 
     view_title = "Requêtes"
     return render(request, "requestsAdmin.html", locals())
@@ -248,15 +274,15 @@ def student_requests(request):
 @require_http_methods(["POST"])
 def create_new_request(request):
     """
-        from user_admin_view
-            Creates a new coach request if the user has no pending request
+    from user_admin_view
+        Creates a new coach request if the user has no pending request
     """
 
     student = get_object_or_404(User, username=request.POST.get("user", None))
     if studentRequest.objects.filter(student=student, is_closed=False).count():
         response = {
             "accepted": False,
-            "reason": "Une requete ouverte pour cet etudiant existe deja"
+            "reason": "Une requete ouverte pour cet etudiant existe deja",
         }
     else:
         request = studentRequest.objects.create(student=student)
@@ -276,7 +302,9 @@ def set_new_coach(request):
         return HttpResponseBadRequest("no coach id given")
 
     coach = get_object_or_404(User, profile__account_type="b", id=coach_id)
-    student = get_object_or_404(User, username=student_username, profile__account_type="a")
+    student = get_object_or_404(
+        User, username=student_username, profile__account_type="a"
+    )
 
     coach_account = coach.profile.coachaccount
     student_account = student.profile.studentaccount
@@ -291,11 +319,11 @@ def set_new_coach(request):
 @require_http_methods(["POST"])
 def chooseCoach(request):
     """
-        Selects a coach to be chosen for a certain request
+    Selects a coach to be chosen for a certain request
     """
     query = request.POST
 
-    studentrequest = studentRequest.objects.get(id=query['id'])
+    studentrequest = studentRequest.objects.get(id=query["id"])
 
     # Profile objects
     coach = studentrequest.coaches.get(pk=query["coach"])
@@ -315,9 +343,12 @@ def chooseCoach(request):
     title = "Félicitations!"
     content = "Vous avez été choisi pour enseigner à {} {}! Vous pouvez \
     vous rendre sur votre profil pour retrouver les coordonées de cet \
-    étudiant".format(student.profile.user.first_name, student.profile.user.last_name)
+    étudiant".format(
+        student.profile.user.first_name, student.profile.user.last_name
+    )
     new_Notif = Notification(
-        user=coach.profile.user, author=author, title=title, content=content)
+        user=coach.profile.user, author=author, title=title, content=content
+    )
     new_Notif.send_as_mail()
     new_Notif.save()
 
@@ -329,7 +360,9 @@ def chooseCoach(request):
 @staff_member_required
 @require_http_methods(["POST"])
 def modify_balance(request):
-    isCoachLaunching = True if request.POST.get('isFirstPayment', False) == 'true' else False
+    isCoachLaunching = (
+        True if request.POST.get("isFirstPayment", False) == "true" else False
+    )
 
     student = User.objects.get(username=request.POST["user"])
 
