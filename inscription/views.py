@@ -3,7 +3,7 @@ import logging
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -17,59 +17,52 @@ from inscription.decorators import mustnt_be_logged_in
 
 
 @mustnt_be_logged_in(action="inscrire")
-def registerStudentView(request):
-    """ allows a student to register an account """
+def registerUserView(request):
+    """The view allowing a user to register as either a coach or a student
+
+    Args:
+        request (request): request object needed by all the views
+
+    Raises:
+        HttpResponseBadRequest: In case the GET parameter specifying the type of account isn't correct
+
+    Returns:
+        render: The render of the register template in case the request method was 'GET' or the user
+        could not successfully register
+        redirect: a redirection to the home page if the user sucessfully registered
+    """
+
+    userType = request.GET.get("type", "a")
+    if userType not in "ab":
+        raise HttpResponseBadRequest("Le type de compte est invalide")
 
     if request.method == "POST":
-        form = StudentRegisterForm(request.POST)
-        if form.is_valid():
-            user = utils.registerUser(form, "a")
+        form = (
+            StudentRegisterForm(request.POST)
+            if userType == "a"
+            else CoachRegisterForm(request.POST)
+        )
 
+        if form.is_valid():
+            user = utils.registerUser(form, userType)
             user = authenticate(
                 username=user.username, password=form.cleaned_data["password"]
             )
             if user:
                 login(request, user)
 
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.",
-            )
-            welcomeUser(request, user, host=request.META["HTTP_HOST"])
-            return HttpResponseRedirect(reverse("home"))
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.",
+                )
+                utils.welcomeUser(request, user, host=request.META["HTTP_HOST"])
+                return HttpResponseRedirect(reverse("home"))
     else:
-        form = StudentRegisterForm()
+        form = StudentRegisterForm() if userType == "a" else CoachRegisterForm()
 
-    view_title = "Inscription - Etudiant"
-    return render(request, "inscription.html", locals())
+    view_title = "Inscription - Etudiant" if userType == "a" else "Inscription - Coach"
 
-
-@mustnt_be_logged_in(action="inscrire")
-def registerCoachView(request):
-    """ allows a coach to register an account """
-    if request.method == "POST":
-        form = CoachRegisterForm(request.POST)
-        if form.is_valid():
-            user = utils.registerUser(form, "b")
-
-            user = authenticate(
-                username=user.username, password=form.cleaned_data["password"]
-            )
-            if user:
-                login(request, user)
-
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.",
-            )
-            welcomeUser(request, user, host=request.META["HTTP_HOST"])
-            return HttpResponseRedirect(reverse("home"))
-    else:
-        form = CoachRegisterForm()
-
-    view_title = "Inscription - Coach"
     return render(request, "inscription.html", locals())
 
 

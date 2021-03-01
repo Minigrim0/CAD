@@ -11,8 +11,7 @@ class HomeSitemap(Sitemap):
             "home",
             "contact_view",
             "login_view",
-            "registerStudent",
-            "registerCoach",
+            "registerUser",
         ]
 
     def location(self, item):
