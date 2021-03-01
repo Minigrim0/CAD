@@ -167,7 +167,7 @@ def user_list(request):
             .order_by("id")
         )
     else:
-        users = User.objects.all().order_by("id")
+        users = User.objects.all().order_by("last_name")
 
     if query != "":
         users = users.filter(username__icontains=query)
