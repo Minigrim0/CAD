@@ -36,6 +36,14 @@ from users.models import FollowElement, studentRequest, Transaction, Notificatio
 
 @staff_member_required
 def adminPage(request):
+    """The home view of the administration of the website
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the administration home page
+    """
     nbr_accounts = User.objects.all().count()
     nbr_students = User.objects.filter(profile__account_type="a").count()
     nbr_coaches = User.objects.filter(profile__account_type="b").count()
@@ -50,6 +58,14 @@ def adminPage(request):
 
 @staff_member_required
 def mailAdminView(request):
+    """Mail modification view in the administration
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the mail modification page
+    """
     if request.method == "POST":
         form = request.POST
         mail = Mail.objects.get(id=int(form["mailid"]))
@@ -67,6 +83,14 @@ def mailAdminView(request):
 
 @staff_member_required
 def articleAdminView(request):
+    """Articles modification view in the administration
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the article modification page
+    """
     if request.method == "POST":
         form = ArticleForm(request.POST)
         if form.is_valid():
@@ -84,6 +108,14 @@ def articleAdminView(request):
 
 @staff_member_required
 def mailAdminCreate(request):
+    """Mail creation view in the administration
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the mail creation page
+    """
     if request.method == "POST":
         form = request.POST
         mail = Mail()
@@ -103,6 +135,14 @@ def mailAdminCreate(request):
 
 @staff_member_required
 def courses(request):
+    """A view rendering all the courses that happened on the website
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the course page
+    """
     courses = FollowElement.objects.all().order_by("date")
     view_title = "Cours donnés"
 
@@ -110,29 +150,15 @@ def courses(request):
 
 
 @staff_member_required
-@require_http_methods(["POST"])
-def approve_course(request):
-    form = request.POST
-    pk = request.POST.get("pk", -1)
-    course = get_object_or_404(FollowElement, pk=pk)
-    if form["isApproved"] == "true":
-        course.approved = True
-        Transaction.objects.create(
-            student=course.student.profile.studentaccount,
-            amount=-course.duration,
-            date=datetime.today(),
-            admin=request.user,
-            comment="paiement pour cours",
-        )
-        course.save()
-    else:
-        course.delete()
-
-    return HttpResponse("Success")
-
-
-@staff_member_required
 def transactions(request):
+    """A view rendering all the transactions that happened on the website
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the transaction view
+    """
     transactions = Transaction.objects.all().order_by("date")
     view_title = "Transactions effectuées"
 
@@ -140,18 +166,15 @@ def transactions(request):
 
 
 @staff_member_required
-def activate(request):
-    userid = request.GET.get("userid", -1)
-    active = True if request.GET.get("active", "false") == "true" else False
-    usr = get_object_or_404(User, id=userid)
-
-    usr.is_active = active
-    usr.save()
-    return HttpResponse("Success")
-
-
-@staff_member_required
 def user_list(request):
+    """A view rendering users' basic information based on certain queries
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the user list page
+    """
     usertype = request.GET.get("type", "d")
     query = request.GET.get("q", "")
 
@@ -178,6 +201,14 @@ def user_list(request):
 
 @staff_member_required
 def user_admin_view(request):
+    """A view rendering every information about a certain user
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the user_details page
+    """
     username = request.GET.get("user", "")
     usertype = request.GET.get("type", "")
 
@@ -214,23 +245,15 @@ def user_admin_view(request):
 
 
 @staff_member_required
-@require_http_methods(["POST"])
-def sendUnsubscriptionMail(request):
-    user = getUser(request.POST.get("user_key"))
-    mail = Mail.objects.get(role="c")
-    if not DEBUG:
-        mail.send(user)
-    else:
-        messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
-
-    student_account = user.profile.studentaccount
-    student_account.unsub_proposal = True
-    student_account.save()
-    return HttpResponse("Success")
-
-
-@staff_member_required
 def message_list(request):
+    """A view rendering a list of every messages received from the contact form
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the message page
+    """
     status = request.GET.get("status", "")
     if status == "unread":
         messages = Message.objects.filter(seen=False)
@@ -245,6 +268,14 @@ def message_list(request):
 
 @staff_member_required
 def message_admin_view(request):
+    """A view rendering every information about a certain message sent from the contact form
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the message_details page
+    """
     id = request.GET.get("id", -1)
     message = get_object_or_404(Message, id=id)
     message.seen = True
@@ -256,6 +287,14 @@ def message_admin_view(request):
 
 @staff_member_required
 def student_requests(request):
+    """A view rendering informations about every student request
+
+    Args:
+        request (request): request object needed by all the views
+
+    Returns:
+        HttpResponse: The render of the requests page
+    """
     student_requests = (
         studentRequest.objects.all().exclude(is_closed=True).order_by("-id")
     )
@@ -388,3 +427,52 @@ def modify_balance(request):
         sendNotifToCoaches(student.profile, newRequest)
 
     return JsonResponse({"new_balance": student.profile.studentaccount.balance})
+
+
+@staff_member_required
+@require_http_methods(["POST"])
+def sendUnsubscriptionMail(request):
+    user = getUser(request.POST.get("user_key"))
+    mail = Mail.objects.get(role="c")
+    if not DEBUG:
+        mail.send(user)
+    else:
+        messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
+
+    student_account = user.profile.studentaccount
+    student_account.unsub_proposal = True
+    student_account.save()
+    return HttpResponse("Success")
+
+
+@staff_member_required
+def activate(request):
+    userid = request.GET.get("userid", -1)
+    active = True if request.GET.get("active", "false") == "true" else False
+    usr = get_object_or_404(User, id=userid)
+
+    usr.is_active = active
+    usr.save()
+    return HttpResponse("Success")
+
+
+@staff_member_required
+@require_http_methods(["POST"])
+def approve_course(request):
+    form = request.POST
+    pk = request.POST.get("pk", -1)
+    course = get_object_or_404(FollowElement, pk=pk)
+    if form["isApproved"] == "true":
+        course.approved = True
+        Transaction.objects.create(
+            student=course.student.profile.studentaccount,
+            amount=-course.duration,
+            date=datetime.today(),
+            admin=request.user,
+            comment="paiement pour cours",
+        )
+        course.save()
+    else:
+        course.delete()
+
+    return HttpResponse("Success")
