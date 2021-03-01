@@ -176,10 +176,10 @@
 
 <script>
     const UrlNotif = "{% url 'send_notif' %}";
-    const UrlBalance = "{% url 'modify_balance' %}";
-    const UrlUnsub = "{% url 'unsubscribe' %}";
-    const new_coach_url = "{% url 'request_new_coach' %}";
-    const newCoachUrl = "{% url 'set_new_coach' %}";
+    const UrlBalance = "{% url 'api:modify_balance' %}";
+    const UrlUnsub = "{% url 'api:unsubscribe' %}";
+    const new_coach_url = "{% url 'api:request_new_coach' %}";
+    const newCoachUrl = "{% url 'api:set_new_coach' %}";
 
     const csrf_token = "{{ csrf_token }}";
     const user = "{{ form_user.username }}";
