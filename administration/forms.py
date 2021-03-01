@@ -43,6 +43,9 @@ class newCoachForm(forms.Form):
         widget=autocomplete.ModelSelect2(url="coach-autocomplete"),
         required=True,
     )
+    finalSchedule = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 5}), required=True, label="Horaire final"
+    )
 
 
 class OtherAdminForm(BaseRegistration):
