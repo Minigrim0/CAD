@@ -11,9 +11,6 @@ from default.models import Article, Message
 def home(request):
     """Home view
 
-    Args:
-        request (request): request object needed by all the views
-
     Returns:
         render: A render of the home page
     """
@@ -42,9 +39,6 @@ def home(request):
 
 def contactView(request):
     """Contact view
-
-    Args:
-        request (request): The request object needed by all views
 
     Returns:
         HttpResponseRedirect: A redirection to the home page if the user clicked on "send" in the form
