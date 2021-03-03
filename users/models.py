@@ -234,17 +234,17 @@ class CoachAccount(models.Model):
         return "{} {}".format(self.profile.user.first_name, self.profile.user.last_name)
 
 
-class coachRequestThrough(models.Model):
-    request = models.ForeignKey("users.studentRequest", on_delete=models.CASCADE)
+class CoachRequestThrough(models.Model):
+    request = models.ForeignKey("users.StudentRequest", on_delete=models.CASCADE)
     coach = models.ForeignKey("users.coachAccount", on_delete=models.CASCADE)
 
     coachschedule = models.TextField(null=False, blank=False)
     has_accepted = models.BooleanField(default=True)
 
 
-class studentRequest(models.Model):
+class StudentRequest(models.Model):
     """
-    Modèle studentRequest:
+    Modèle StudentRequest:
         => Représente une recherche de coach de la part d'un etudiant
     """
 
@@ -255,7 +255,7 @@ class studentRequest(models.Model):
         "users.CoachAccount",
         blank=True,
         related_name="request_participated",
-        through=coachRequestThrough,
+        through=CoachRequestThrough,
     )
     is_closed = models.BooleanField(default=False)
     choosenCoach = models.ForeignKey(

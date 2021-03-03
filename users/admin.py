@@ -2,7 +2,7 @@ from django.contrib import admin
 from users.models import (
     StudentAccount,
     CoachAccount,
-    studentRequest,
+    StudentRequest,
     FollowElement,
     Transaction,
     Profile,
@@ -86,6 +86,6 @@ class TransactionAdmin(admin.ModelAdmin):
 admin.site.register(Profile, ProfileAdmin)
 admin.site.register(StudentAccount, StudentAdmin)
 admin.site.register(CoachAccount, CoachAdmin)
-admin.site.register(studentRequest, StudentRequestAdmin)
+admin.site.register(StudentRequest, StudentRequestAdmin)
 admin.site.register(FollowElement, FollowElementAdmin)
 admin.site.register(Transaction, TransactionAdmin)

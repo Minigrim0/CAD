@@ -107,7 +107,7 @@ class UserTestCase(TestCase):
     def test_student_request(self):
         """The requests notify the expected coaches"""
         student = User.objects.get(username="a")
-        models.studentRequest.objects.create(student=student)
+        models.StudentRequest.objects.create(student=student)
         sendNotifToCoaches(student.profile)
 
         coach1 = User.objects.get(username="b")
@@ -124,7 +124,7 @@ class UserTestCase(TestCase):
         """The requests workflow to choose a coach works"""
 
         student = User.objects.get(username="a")
-        models.studentRequest.objects.create(student=student)
+        models.StudentRequest.objects.create(student=student)
 
         coach1 = User.objects.get(username="b")
         coach2 = User.objects.get(username="c")
@@ -132,12 +132,12 @@ class UserTestCase(TestCase):
         coach4 = User.objects.get(username="e")
 
         # Make all the coaches 1 and 4 accept the request (they're the invited ones)
-        student_request = models.studentRequest.objects.get(student=student)
+        student_request = models.StudentRequest.objects.get(student=student)
         student_request.coaches.add(coach1.profile.coachaccount)
         student_request.coaches.add(coach4.profile.coachaccount)
         student_request.save()
 
-        request = models.studentRequest.objects.get(student=student)
+        request = models.StudentRequest.objects.get(student=student)
         coach = request.coaches.get(profile__user__username=coach1.username)
         other_coaches = request.coaches.all().exclude(
             profile__user__username=coach1.username
