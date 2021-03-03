@@ -101,7 +101,7 @@
 </div>
 {% endblock %} {% block extra_imports %}
 <script>
-  let ActivateUserUrl = "{% url 'activate_user' %}";
+  let ActivateUserUrl = "{% url 'api:activate_user' %}";
   let csrf_token = "{{ csrf_token }}";
 </script>
 <script src="{% static 'js/user_list.js' %}"></script>
