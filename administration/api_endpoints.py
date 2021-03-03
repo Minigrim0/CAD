@@ -9,17 +9,10 @@ from django.http import (
     HttpResponseBadRequest,
 )
 from django.views.decorators.http import require_http_methods
-from django.shortcuts import get_object_or_404
-
-from administration.utils import (
-    thanksCoaches,
-    sendNotifToCoaches,
-)
-from cad.settings import DEBUG
-from default.models import Mail
 from inscription.utils import getUser
 from users.models import FollowElement, studentRequest, Transaction, Notification
 
+import administration.utils as utils
 
 @staff_member_required
 @require_http_methods(["POST"])
@@ -36,8 +29,7 @@ def create_new_request(request):
             "reason": "Une requete ouverte pour cet etudiant existe deja",
         }
     else:
-        request = studentRequest.objects.create(student=student)
-        sendNotifToCoaches(student.profile, request)
+        utils.create_studentRequest(student)
         response = {
             "accepted": True,
         }
@@ -112,7 +104,7 @@ def chooseCoach(request):
     new_Notif.send_as_mail()
     new_Notif.save()
 
-    thanksCoaches(other_coaches, student)
+    utils.thanksCoaches(other_coaches, student)
 
     return HttpResponse("success")
 
@@ -132,14 +124,11 @@ def modify_balance(request):
     tran.save()
 
     if isCoachLaunching:
-        newRequest = studentRequest(student=student)
-        newRequest.save()
-
         studentAccount = student.profile.studentaccount
         studentAccount.confirmedAccount = True
         studentAccount.save()
 
-        sendNotifToCoaches(student.profile, newRequest)
+        utils.create_studentRequest(student)
 
     return JsonResponse({"new_balance": student.profile.studentaccount.balance})
 
