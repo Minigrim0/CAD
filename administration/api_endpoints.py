@@ -100,18 +100,7 @@ def chooseCoach(request):
     student.coach = coach
     student.save()
 
-    author = "L'équipe CAD"
-    title = "Félicitations!"
-    content = "Vous avez été choisi pour enseigner à {} {}! Vous pouvez \
-    vous rendre sur votre profil pour retrouver les coordonées de cet \
-    étudiant".format(
-        student.profile.user.first_name, student.profile.user.last_name
-    )
-    new_Notif = Notification(
-        user=coach.profile.user, author=author, title=title, content=content
-    )
-    new_Notif.send_as_mail()
-    new_Notif.save()
+    utils.advert_actors(student, coach)
 
     utils.thanksCoaches(other_coaches, student)
 
