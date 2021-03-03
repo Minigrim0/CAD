@@ -80,10 +80,11 @@
     //Has to be an id related to the current user's notification
     function acceptRequest(id, decision, coach) {
         schedule = document.getElementById("coach_schedule").value;
+        document.getElementById("error_schedule").innerHTML = "";
         if (decision == "true"){
             if (schedule == ""){
-                document.getElementById("error_schedule").innerHTML = "Vous devez renseigner ces informations pour pouvoir accepter la requête"
-                return
+                document.getElementById("error_schedule").innerHTML = "Vous devez renseigner ces informations pour pouvoir accepter la requête";
+                return;
             }
         }
 
