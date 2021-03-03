@@ -40,7 +40,7 @@ def ErrorView(request):
 @login_required
 def userView(request):
     user = request.user
-    notifications = user.notification_set.all()
+    notifications = user.notification_set.all().order_by("-date_created")
 
     data = populate_data(user.profile.account_type, user)
     if user.profile.account_type == "a":
