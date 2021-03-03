@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
 import users.models as models
-import inscription.utils as utils
 from administration.utils import thanksCoaches, sendNotifToCoaches
 
 
@@ -108,7 +107,8 @@ class UserTestCase(TestCase):
         """The requests notify the expected coaches"""
         student = User.objects.get(username="a")
         models.StudentRequest.objects.create(student=student)
-        sendNotifToCoaches(student.profile)
+        request = models.StudentRequest.objects.first()
+        sendNotifToCoaches(student.profile, request)
 
         coach1 = User.objects.get(username="b")
         coach2 = User.objects.get(username="c")
