@@ -126,14 +126,14 @@ function reloadCoach(){
             $("#notification_div").html(
                 $("#notification_div").html() +
                 '<div class="alert alert-success alert-dismissible fade show m-2" role="alert" id="notif_' + id + '">\
-                    Une nouvelle requete a bien ete creee.\
+                    Une nouvelle requete a bien ete créée.\
                 </div>'
             );
         } else {
             $("#notification_div").html(
                 $("#notification_div").html() +
                 '<div class="alert alert-danger alert-dismissible fade show m-2" role="alert" id="notif_' + id + '">\
-                    La requete n\'a pas pu etre creee. Raison : ' + data['reason'] + '.\
+                    La requete n\'a pas pu etre créée. Raison : ' + data['reason'] + '.\
                 </div>'
             );
         }
@@ -144,7 +144,7 @@ function reloadCoach(){
         $("#notification_div").html(
             $("#notification_div").html() +
             '<div class="alert alert-danger alert-dismissible fade show m-2" role="alert" id="notiffail_' + id + '">\
-                La requete n\'a pas pu etre creee ! Essayez a nouveau plus tard\
+                La requete n\'a pas pu etre créée ! Essayez a nouveau plus tard\
             </div>'
         );
         setTimeout(function(){

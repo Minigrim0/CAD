@@ -122,6 +122,8 @@
                                             {% include "request_user_card_closed.html" %}
                                         </div>
                                         {% endif %}
+                                    {% empty %}
+                                        Aucun coach trouvé. Cette requête provient probablement d'un choix de coach direct
                                     {% endfor %}
                                 </div>
                             </div>
