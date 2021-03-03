@@ -196,12 +196,10 @@ def sendNotifToCoaches(student, request):
             )
             newNotif.title = "Recherche de coach"
             newNotif.content = "Vos matières/niveaux correspondent avec "
-            newNotif.content += "{} {} ".format(
-                student.user.first_name, student.user.last_name
-            )
+            newNotif.content += f"{student.user.first_name} {student.user.last_name} "
             newNotif.content += "!\nVous pouvez cliquer "
-            newNotif.content += "<a href='{}?id={}'>ici</a>".format(
-                reverse("request_view"), request.id
+            newNotif.content += (
+                f"<a href='{reverse('request_view')}?id={request.id}'>ici</a>"
             )
             newNotif.content += " pour voir le profil de l'etudiant"
             newNotif.save()
