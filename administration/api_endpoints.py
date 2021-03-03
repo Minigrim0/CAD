@@ -1,18 +1,16 @@
 from datetime import datetime
 
-from django.contrib import messages
+from default.models import Mail
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.http import (
-    HttpResponse,
-    JsonResponse,
-    HttpResponseBadRequest,
-)
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from inscription.utils import getUser
-from users.models import FollowElement, studentRequest, Transaction, Notification
+from users.models import FollowElement, Notification, Transaction, studentRequest
 
 import administration.utils as utils
+
 
 @staff_member_required
 @require_http_methods(["POST"])
