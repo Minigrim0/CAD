@@ -22,19 +22,19 @@ def home(request):
     contact = Article.objects.filter(name="Contact")
 
     dico = {
-        'a_home': home[0],
-        'a_info': info[0],
-        'a_video': video[0],
-        'a_coaches': coaches[0],
-        'a_about': about[0],
-        'a_contact': contact[0],
-        'view_title': 'cours à domicile'
+        "a_home": home[0],
+        "a_info": info[0],
+        "a_video": video[0],
+        "a_coaches": coaches[0],
+        "a_about": about[0],
+        "a_contact": contact[0],
+        "view_title": "cours à domicile",
     }
 
     if request.user.is_authenticated:
         dico["nb_notif"] = request.user.notification_set.count()
 
-    return render(request, 'index.html', dico)
+    return render(request, "index.html", dico)
 
 
 def contactView(request):
@@ -44,13 +44,13 @@ def contactView(request):
         HttpResponseRedirect: A redirection to the home page if the user clicked on "send" in the form
         render: A render of the contact form
     """
-    if request.method == 'POST':
+    if request.method == "POST":
         form = contactForm(request.POST)
         if form.is_valid():
             msg = Message()
-            msg.subject = form.cleaned_data['sujet']
-            msg.content = form.cleaned_data['message']
-            msg.contact_mail = form.cleaned_data['envoyeur']
+            msg.subject = form.cleaned_data["sujet"]
+            msg.content = form.cleaned_data["message"]
+            msg.contact_mail = form.cleaned_data["envoyeur"]
             msg.save()
             msg.send_as_mail()
 
@@ -63,7 +63,7 @@ def contactView(request):
         form = contactForm()
 
     view_title = "Formulaire de contact"
-    return render(request, 'contact.html', locals())
+    return render(request, "contact.html", locals())
 
 
 def soon(request):
