@@ -15,9 +15,11 @@ import administration.utils as utils
 @staff_member_required
 @require_http_methods(["POST"])
 def create_new_request(request):
-    """
-    from user_admin_view
-        Creates a new coach request if the user has no pending request
+    """Generates a new studentRequest if the student has no pending request
+
+    Returns:
+        JsonResponse: A Json response containing information about whether the request succeeded or not,
+        and information aout the failure if necessary
     """
 
     student = get_object_or_404(User, username=request.POST.get("user", None))
@@ -37,6 +39,12 @@ def create_new_request(request):
 @staff_member_required
 @require_http_methods(["POST"])
 def set_new_coach(request):
+    """Force a new coach for a student. The endpoint creates a finished request in order to make things work properly
+
+    Returns:
+        JsonResponse: A Json Response containing information about the coach
+    """
+
     coach_id = request.POST.get("coach", None)
     finalSchedule = request.POST.get("finalSchedule", None)
 
@@ -68,9 +76,12 @@ def set_new_coach(request):
 @staff_member_required
 @require_http_methods(["POST"])
 def chooseCoach(request):
+    """Selects the given coach from the studentRequest as the one chosen by the administration
+
+    Returns:
+        HttpResponse: A response containing the text "success" if no error occured (Otherwise an Http500)
     """
-    Selects a coach to be chosen for a certain request
-    """
+
     query = request.POST
 
     studentrequest = studentRequest.objects.get(id=query["id"])
@@ -110,6 +121,12 @@ def chooseCoach(request):
 @staff_member_required
 @require_http_methods(["POST"])
 def modify_balance(request):
+    """Creates a transaction from or to the student's account, updating its balance
+
+    Returns:
+        JsonResponse: A JsonResponse containing the new balance of the student
+    """
+
     isCoachLaunching = (
         True if request.POST.get("isFirstPayment", False) == "true" else False
     )
@@ -134,12 +151,15 @@ def modify_balance(request):
 @staff_member_required
 @require_http_methods(["POST"])
 def sendUnsubscriptionMail(request):
+    """Sends an email proposing a user to unsubscribe from the website (If the account is not confirmed)
+
+    Returns:
+        HttpResponse: A response indicating success if nothing went wrong
+    """
+
     user = getUser(request.POST.get("user_key"))
     mail = Mail.objects.get(role="c")
-    if not DEBUG:
-        mail.send(user)
-    else:
-        messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
+    mail.send(user)
 
     student_account = user.profile.studentaccount
     student_account.unsub_proposal = True
@@ -149,6 +169,11 @@ def sendUnsubscriptionMail(request):
 
 @staff_member_required
 def activate(request):
+    """Either activate a deactivated user of deactivate an active user
+
+    Returns:
+        HttpResponse: A response indicating success if nothing went wrong
+    """
     userid = request.GET.get("userid", -1)
     active = True if request.GET.get("active", "false") == "true" else False
     usr = get_object_or_404(User, id=userid)
@@ -161,6 +186,11 @@ def activate(request):
 @staff_member_required
 @require_http_methods(["POST"])
 def approve_course(request):
+    """Marks a course as approved by the administration or deletes it
+
+    Returns:
+        HttpResponse: A response indicating success if nothing went wrong
+    """
     form = request.POST
     pk = request.POST.get("pk", -1)
     course = get_object_or_404(FollowElement, pk=pk)
