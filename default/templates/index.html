@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load requests_tags %}
 
 {% block navlinks %}
 <ul class="navbar-nav">
@@ -163,8 +164,9 @@
             </div>
             <button class="btn btn-primary" onclick="toggleFAS();" type="button" data-toggle="collapse" data-target="#footerCollapse" aria-expanded="false" aria-controls="collapseExample">
                 <span class="carret">Connecté en tant que {{ user.username }}
-                    {% if request.user.notification_set.count != 0 %}
-                        <span class="badge badge-light">{{ request.user.notification_set.count }}</span>
+                    {% nb_notifs request.user as user_notifs %}
+                    {% if user_notifs != 0 %}
+                        <span class="badge badge-light">{{ user_notifs }}</span>
                     {% endif %}
                     <i id="fas" class="fas fa-angle-up"></i>
 
