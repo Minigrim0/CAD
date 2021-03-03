@@ -222,3 +222,33 @@ def create_studentRequest(student: User):
     """
     request = StudentRequest.objects.create(student=student)
     sendNotifToCoaches(student.profile, request)
+
+
+def advert_actors(student: StudentAccount, coach: CoachAccount):
+    """Sends a mail to both the student and the coach to advert them the request
+
+    Args:
+        student (StudentAccount): The student for whom a coach has been chosen
+        coach (CoachAccount): The coach chosen for the student
+    """
+    author = "L'équipe CAD"
+    title = "Félicitations!"
+    content = "Vous avez été choisi pour enseigner à {} {}! Vous pouvez \
+    vous rendre sur votre profil pour retrouver les coordonées de cet \
+    étudiant.".format(
+        student.profile.user.first_name, student.profile.user.last_name
+    )
+    coachNotif = Notification(
+        user=coach.profile.user, author=author, title=title, content=content
+    )
+    coachNotif.save()
+    coachNotif.send_as_mail()
+
+    author = "L'équipe CAD"
+    title = "Nous avons trouvé un coach pour vous!"
+    content = "Un coach a été choisi par l'équipe pour vous donner cours."
+    studentNotif = Notification(
+        user=student.profile.user, author=author, title=title, content=content
+    )
+    studentNotif.save()
+    studentNotif.send_as_mail()
