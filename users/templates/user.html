@@ -2,6 +2,7 @@
 
 {% load static %}
 {% load crispy_forms_tags %}
+{% load requests_tags %}
 
 {% block navlinks %}
     <ul class="navbar-nav">
@@ -60,7 +61,11 @@
                                         <h3>{{ notification.author }}</h3>
                                         <h5>{{ notification.title }}</h5>
                                         <p> {{ notification.content|safe }}</p>
-                                        <small>{{ notification.date_created|date:"SHORT_DATE_FORMAT" }}</small>
+                                        <div class="row">
+                                            <small class="row-element col-6">{{ notification.date_created|date:"SHORT_DATETIME_FORMAT" }}</small>
+                                            <small class="row-element col-6 text-right">{% if notification.read %}Lu{% else %}Nouveau{% endif %}</small>
+                                        </div>
+                                        {% read_notification notification as nothing %}
                                     </li>
                                 {% empty %}
                                     <p>Pas de notifications</p>

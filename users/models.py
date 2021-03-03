@@ -236,7 +236,7 @@ class CoachAccount(models.Model):
 
 class CoachRequestThrough(models.Model):
     request = models.ForeignKey("users.StudentRequest", on_delete=models.CASCADE)
-    coach = models.ForeignKey("users.coachAccount", on_delete=models.CASCADE)
+    coach = models.ForeignKey("users.CoachAccount", on_delete=models.CASCADE)
 
     coachschedule = models.TextField(null=False, blank=False)
     has_accepted = models.BooleanField(default=True)
@@ -255,7 +255,7 @@ class StudentRequest(models.Model):
         "users.CoachAccount",
         blank=True,
         related_name="request_participated",
-        through=CoachRequestThrough,
+        through="users.CoachRequestThrough",
     )
     is_closed = models.BooleanField(default=False)
     choosenCoach = models.ForeignKey(
@@ -281,7 +281,8 @@ class Notification(models.Model):
     content = models.TextField(
         blank=True, null=True, verbose_name="Contenu de la notification"
     )
-    date_created = models.DateField(auto_now_add=True, null=True)
+    date_created = models.DateTimeField(auto_now_add=True, null=True)
+    read = models.BooleanField(default=False)
 
     def send_as_mail(self):
         mail = Mail(
@@ -291,6 +292,7 @@ class Notification(models.Model):
             role="i",  # Sent message
             to=self.user,
         )
+
         mail.send(self.user)
 
 
