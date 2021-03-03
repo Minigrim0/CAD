@@ -15,7 +15,7 @@ from administration.forms import (
 )
 from administration.utils import modifyUser, populate_data
 from default.models import Article, Mail, Message
-from users.models import FollowElement, studentRequest, Transaction
+from users.models import FollowElement, StudentRequest, Transaction
 
 
 @staff_member_required
@@ -32,7 +32,7 @@ def adminPage(request):
     nbr_students = User.objects.filter(profile__account_type="a").count()
     nbr_coaches = User.objects.filter(profile__account_type="b").count()
     nbr_other = nbr_accounts - nbr_students - nbr_coaches
-    nbr_requests = studentRequest.objects.all().exclude(is_closed=True).count()
+    nbr_requests = StudentRequest.objects.all().exclude(is_closed=True).count()
     nbr_messages = Message.objects.filter(seen=False).count()
 
     view_title = "Administration"
@@ -280,10 +280,10 @@ def student_requests(request):
         HttpResponse: The render of the requests page
     """
     student_requests = (
-        studentRequest.objects.all().exclude(is_closed=True).order_by("-id")
+        StudentRequest.objects.all().exclude(is_closed=True).order_by("-id")
     )
     student_requests_closed = (
-        studentRequest.objects.all().exclude(is_closed=False).order_by("-id")
+        StudentRequest.objects.all().exclude(is_closed=False).order_by("-id")
     )
 
     view_title = "Requêtes"

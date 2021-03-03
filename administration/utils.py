@@ -2,7 +2,14 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-from users.models import Profile, Notification, coachRequestThrough, studentRequest
+from users.models import (
+    Profile,
+    Notification,
+    CoachRequestThrough,
+    StudentRequest,
+    CoachAccount,
+    StudentAccount,
+)
 
 
 def modifyUser(username, form):
@@ -156,7 +163,7 @@ def thanksCoaches(coaches, student):
     )
     for coach in coaches:
         if (
-            coachRequestThrough.objects.get(
+            CoachRequestThrough.objects.get(
                 coach=coach, request__student=student.profile.user
             ).has_accepted
             is True
@@ -168,7 +175,7 @@ def thanksCoaches(coaches, student):
             new_notif.send_as_mail()
 
 
-def sendNotifToCoaches(student, request):
+def sendNotifToCoaches(student: Profile, request: StudentRequest):
     """
     Looks for coaches compatible with the student request
     """
@@ -213,5 +220,5 @@ def create_studentRequest(student: User):
     Args:
         student (User): The user object to create a request to
     """
-    request = studentRequest.objects.create(student=student)
+    request = StudentRequest.objects.create(student=student)
     sendNotifToCoaches(student.profile, request)

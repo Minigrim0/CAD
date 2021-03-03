@@ -16,7 +16,7 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login
 
 from administration.utils import populate_data
-from .models import Notification, studentRequest, StudentAccount, FollowElement
+from .models import Notification, StudentRequest, StudentAccount, FollowElement
 from .forms import (
     StudentReadOnlyForm,
     BaseReadOnly,
@@ -147,7 +147,7 @@ def requestView(request):
 
     allowed = request.user.profile.account_type == "b"
     if request.user.is_authenticated and allowed:
-        student_request = studentRequest.objects.get(id=request_id)
+        student_request = StudentRequest.objects.get(id=request_id)
         student = student_request.student
         coaches = [
             coach.profile.user.username for coach in student_request.coaches.all()
@@ -170,7 +170,7 @@ def acceptRequest(request):
     accepted = request.POST.get("decision", False) == "true"
     coachschedule = request.POST.get("schedule", "")
 
-    student_request = get_object_or_404(studentRequest, id=request.POST["id"])
+    student_request = get_object_or_404(StudentRequest, id=request.POST["id"])
     coach = get_object_or_404(User, id=request.POST["coach"])
     student_request.coaches.add(coach.profile.coachaccount)
     student_request.save()

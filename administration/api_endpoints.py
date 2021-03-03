@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from inscription.utils import getUser
-from users.models import FollowElement, Notification, Transaction, studentRequest
+from users.models import FollowElement, Notification, Transaction, StudentRequest
 
 import administration.utils as utils
 
@@ -23,7 +23,7 @@ def create_new_request(request):
     """
 
     student = get_object_or_404(User, username=request.POST.get("user", None))
-    if studentRequest.objects.filter(student=student, is_closed=False).count():
+    if StudentRequest.objects.filter(student=student, is_closed=False).count():
         response = {
             "accepted": False,
             "reason": "Une requete ouverte pour cet etudiant existe deja",
@@ -63,7 +63,7 @@ def set_new_coach(request):
     student_account.coach = coach_account
     student_account.save()
 
-    studentRequest.objects.create(
+    StudentRequest.objects.create(
         student=student,
         is_closed=True,
         choosenCoach=coach_account,
@@ -84,20 +84,20 @@ def chooseCoach(request):
 
     query = request.POST
 
-    studentrequest = studentRequest.objects.get(id=query["id"])
+    studentrequest = StudentRequest.objects.get(id=query["id"])
 
     # Profile objects
     coach = studentrequest.coaches.get(pk=query["coach"])
     other_coaches = studentrequest.coaches.all().exclude(pk=query["coach"])
     finalschedule = query["schedule"]
-    student = studentrequest.student.profile.studentaccount
 
     studentrequest.is_closed = True
     studentrequest.choosenCoach = coach
     studentrequest.finalschedule = finalschedule
-    student.coach = coach
-
     studentrequest.save()
+
+    student = studentrequest.student.profile.studentaccount
+    student.coach = coach
     student.save()
 
     author = "L'équipe CAD"
