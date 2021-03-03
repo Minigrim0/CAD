@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 
-from users.models import Profile, Notification, coachRequestThrough
+from users.models import Profile, Notification, coachRequestThrough, studentRequest
 
 
 def modifyUser(username, form):
@@ -207,3 +207,13 @@ def sendNotifToCoaches(student, request):
             newNotif.save()
             newNotif.send_as_mail()
             coach.save()
+
+
+def create_studentRequest(student: User):
+    """Creates a request for the given user, and notifies the appropriate coaches
+
+    Args:
+        student (User): The user object to create a request to
+    """
+    request = studentRequest.objects.create(student=student)
+    sendNotifToCoaches(student.profile, request)
