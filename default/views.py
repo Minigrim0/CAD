@@ -7,8 +7,6 @@ from django.urls import reverse
 from default.forms import contactForm
 from default.models import Article, Message
 
-from cad.settings import DEBUG
-
 
 def home(request):
     """Home view
@@ -60,14 +58,11 @@ def contactView(request):
             msg.content = form.cleaned_data['message']
             msg.contact_mail = form.cleaned_data['envoyeur']
             msg.save()
-            if not DEBUG:
-                msg.send_as_mail()
-            else:
-                messages.warning(request, "L'envoi d'email est désactivé sur cette platforme!")
+            msg.send_as_mail()
 
             messages.add_message(
-                request, messages.SUCCESS,
-                "Votre message a bien été envoyé!")
+                request, messages.SUCCESS, "Votre message a bien été envoyé!"
+            )
 
             return HttpResponseRedirect(reverse("home"))
     else:

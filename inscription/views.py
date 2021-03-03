@@ -5,7 +5,6 @@ from django.http import HttpResponseRedirect, HttpResponseBadRequest
 from django.shortcuts import render
 from django.urls import reverse
 
-from cad.settings import DEBUG
 from default.models import Mail
 from inscription import utils
 from users.models import Notification, studentRequest
@@ -97,10 +96,7 @@ def confirmation_view(request):
 
     if profile.account_type == "a":
         mail = Mail.objects.get(role="b")
-        if not DEBUG:
-            mail.send(user)
-        else:
-            mail = Mail.objects.get(id=1)
+        mail.send(user)
 
         return HttpResponseRedirect(reverse("paymentView"))
     else:
