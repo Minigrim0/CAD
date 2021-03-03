@@ -158,7 +158,12 @@ class Message(models.Model):
         to = [user.email for user in to.users.all()]
         msg = EmailMultiAlternatives(self.subject, self.content, from_email, to)
         msg.attach_alternative(html_message, "text/html")
-        msg.send()
+        if not DEBUG:
+            msg.send()
+        else:
+            logging.warning(
+                f"Message {self.id} not send because settings.DEBUG is True"
+            )
 
 
 class MailingList(models.Model):
