@@ -147,8 +147,9 @@
                     <div class="col-md-3">
                         <a class="btn btn-primary" href="{% url "my_account" %}" role="button">
                             Mon compte
-                            {% if request.user.notification_set.count != 0 %}
-                                <span class="badge badge-light">{{ request.user.notification_set.count }}</span>
+                            {% nb_notifs request.user as user_notifs %}
+                            {% if user_notifs != 0 %}
+                                <span class="badge badge-light"> {{ user_notifs }}</span>
                             {% endif %}
                         </a>
                     </div>

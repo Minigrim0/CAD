@@ -54,7 +54,7 @@
                             <hr class="my-4">
                             <ul class="list-group">
                                 {% for notification in notifications %}
-                                    <li class="list-group-item" id="msg{{ notification.id }}">
+                                    <li class="list-group-item {% if not notification.read %}list-group-item-danger{% endif %}" id="msg{{ notification.id }}">
                                         <div class="text-right">
                                             <button type="button" onclick="del_notif('{{ notification.id }}')" class="btn btn-danger">X</button>
                                         </div>
