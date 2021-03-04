@@ -17,7 +17,7 @@ def accepted_by_coach(request: StudentRequest, coach: CoachAccount):
 
 @register.simple_tag
 def final_schedule(coach: CoachAccount, student: User):
-    request = coach.studentrequest_set.get(student=student)
+    request = coach.studentrequest_set.filter(student=student).last()
     return request.finalschedule
 
 
