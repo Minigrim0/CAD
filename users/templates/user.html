@@ -87,24 +87,6 @@
 <script>
     const UrlNotif = "{% url "rm_notif" %}";
     const csrf_token = '{{ csrf_token }}';
-
-    //Makes a request to remove the notification with the specified ID
-    //Has to be an id related to the current user's notification
-    function del_notif(notif_id){
-        $.post(
-            UrlNotif, {
-                id: notif_id,
-                csrfmiddlewaretoken: csrf_token
-            },
-            function(data, status) {
-                if (status == "success") {
-                    console.log("request successfully sent");
-                } else {
-                    console.log("request failed...");
-                }
-            }
-        );
-        document.getElementById("msg" + notif_id).style.display = "none";
-    }
 </script>
+<script src="{% static "js/user_home.js" %}"></script>
 {% endblock %}
