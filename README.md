@@ -28,5 +28,5 @@ source source.sh env.dev.sh
 
 * [ ] Add admin filtering in lists
 * [ ] setup CI/CD
-* [ ] Test coach swap
+* [X] Test coach swap
 * [ ] Add password retrieving
