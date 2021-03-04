@@ -64,7 +64,7 @@
 
             <div id="dejarepondu">
                 {% if request.user.username in coaches %}
-               <p style="color:red;">Merci d'avoir répondu à cette requête</p>
+                    <p style="color:red;">Merci d'avoir répondu à cette requête</p>
                 {% endif %}
             </div>
         {% endif %}
@@ -75,34 +75,7 @@
 {% block extra_imports %}
 <script>
     const Url = "{% url "manage_request" %}";
-
-    //Makes a request to remove the notification with the specified ID
-    //Has to be an id related to the current user's notification
-    function acceptRequest(id, decision, coach) {
-        schedule = document.getElementById("coach_schedule").value;
-        document.getElementById("error_schedule").innerHTML = "";
-        if (decision == "true"){
-            if (schedule == ""){
-                document.getElementById("error_schedule").innerHTML = "Vous devez renseigner ces informations pour pouvoir accepter la requête";
-                return;
-            }
-        }
-
-        $.post(
-            Url, {
-                id: id,
-                decision: decision,
-                schedule: schedule,
-                coach: coach,
-                csrfmiddlewaretoken: '{{ csrf_token }}'
-            },
-            function(data, status) {
-                console.log(data);
-                console.log(status);
-            }
-        );
-        document.getElementById("buttons").style.display = "none";
-        document.getElementById("dejarepondu").innerHTML = '<p style="color:red;">Merci d\'avoir répondu à cette requête</p>';
-    }
+    const csrfToken = '{{ csrf_token }}';
 </script>
+<script src="{% static "js/requests.js" %}"></script>
 {% endblock %}
