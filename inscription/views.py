@@ -53,7 +53,7 @@ def registerUserView(request):
                     messages.SUCCESS,
                     "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.",
                 )
-                utils.welcomeUser(request, user, host=request.META["HTTP_HOST"])
+                utils.welcomeUser(request, user)
                 return HttpResponseRedirect(reverse("home"))
     else:
         form = StudentRegisterForm() if userType == "a" else CoachRegisterForm()
