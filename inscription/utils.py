@@ -89,7 +89,7 @@ def getUser(token):
     return None
 
 
-def welcomeUser(request, user, host):
+def welcomeUser(request, user):
     """Welcomes the new user, by sending him an email and a notification
 
     Args:
