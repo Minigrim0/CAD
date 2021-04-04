@@ -99,14 +99,13 @@ def confirmation_view(request):
         mail.send(user)
 
         return HttpResponseRedirect(reverse("paymentView"))
-    else:
-        messages.add_message(
-            request,
-            messages.SUCCESS,
-            "Votre compte à bien été confirmé! Nous allons\
-            bientôt entrer en contact avec vous!",
-        )
-        return HttpResponseRedirect(reverse("home"))
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        "Votre compte à bien été confirmé! Nous allons\
+        bientôt entrer en contact avec vous!",
+    )
+    return HttpResponseRedirect(reverse("home"))
 
 
 def paymentView(request):

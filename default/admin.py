@@ -18,8 +18,7 @@ class ArticleAdmin(admin.ModelAdmin):
         text = article.title[0:ARTICLE_DISPLAY_SIZE]
         if len(article.title) > ARTICLE_DISPLAY_SIZE:
             return text + "..."
-        else:
-            return text
+        return text
 
     content_preview.short_description = u"Titre de la section"
 

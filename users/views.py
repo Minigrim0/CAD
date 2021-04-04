@@ -158,8 +158,7 @@ def requestView(request):
 
         view_title = "Requête"
         return render(request, "requests.html", locals())
-    else:
-        return ErrorView(request)
+    return ErrorView(request)
 
 
 @login_required
