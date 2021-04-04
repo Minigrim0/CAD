@@ -198,8 +198,7 @@ def user_admin_view(request):
 
     if username == "":
         return HttpResponseRedirect("{}?type={}".format(reverse("userlist"), usertype))
-    else:
-        user = get_object_or_404(User, username=username)
+    user = get_object_or_404(User, username=username)
 
     if request.method == "POST":
         data = request.POST
