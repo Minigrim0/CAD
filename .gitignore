@@ -6,4 +6,5 @@ db.sqlite3
 core
 .vscode
 static/
+logs/*.log
 *.pyc
