@@ -26,7 +26,7 @@ services:
   nginx:
     build: ./nginx
     volumes:
-      - static_volume:/srv/static
+      - static_volume:/srv/collected_static
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.web.entrypoints=http"
