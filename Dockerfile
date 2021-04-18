@@ -16,4 +16,4 @@ RUN pip install -r requirements.txt
 COPY . .
 
 ENTRYPOINT ["./entrypoint.sh"]
-CMD ["gunicorn", "incubator.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["gunicorn", "cad.wsgi:application", "--bind", "0.0.0.0:8000"]
