@@ -46,6 +46,15 @@ logging.warning("Allowed hosts : {}".format("\n   ".join(ALLOWED_HOSTS)))
 
 INSTALLED_APPS = [
     "dal",
+    "cad",
+    "default",
+    "inscription",
+    "users",
+    "administration",
+    "crispy_forms",
+    "old_site",
+    "bootstrap4",
+    "django_extensions",
     "dal_select2",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -55,14 +64,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     "django.contrib.sitemaps",
-    "cad",
-    "default",
-    "inscription",
-    "users",
-    "administration",
-    "crispy_forms",
-    "old_site",
-    "django_extensions",
 ]
 
 MIDDLEWARE = [
