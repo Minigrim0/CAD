@@ -25,4 +25,6 @@ urlpatterns = [
     ),
     path("namur/", include("default.urls")),
     path("", views.chooseLocation),
+    path('auth/reset/done/', views.password_reset_done),
+    path('auth/', include('django.contrib.auth.urls')),
 ]
