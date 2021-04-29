@@ -50,12 +50,112 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                        <th scope="col" class="col-2">Date</th>
-                        <th scope="col" class="col-2">Étudiant</th>
-                        <th scope="col" class="col-4">Commentaires</th>
-                        <th scope="col" class="col-4">Nombre d'heures</th>
-                        <th scope="col" class="col-2">Coach</th>
-                        <th scope="col" class="col-2">Approuvé</th>
+                        <th scope="col" class="col-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    {% if "date" not in sorter %}
+                                        <a onclick="setParameter('sort_by', '-date')" class="text-primary">
+                                            Date
+                                        </a>
+                                    {% else %}
+                                        Date
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 text-right">
+                                    {% if "date" in sorter %}
+                                        {% if "-" in sorter %}
+                                            <a onclick="setParameter('sort_by', 'date')" class="text-primary">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        {% else %}
+                                            <a onclick="setParameter('sort_by', '-date')" class="text-primary">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="col-1">
+                            <div class="row">
+                                <div class="col-6">
+                                    {% if "student__username" not in sorter %}
+                                        <a onclick="setParameter('sort_by', '-student__username')" class="text-primary">
+                                            Étudiant
+                                        </a>
+                                    {% else %}
+                                        Étudiant
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 text-right">
+                                    {% if "student__username" in sorter %}
+                                        {% if "-" in sorter %}
+                                            <a onclick="setParameter('sort_by', 'student__username')" class="text-primary">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        {% else %}
+                                            <a onclick="setParameter('sort_by', '-student__username')" class="text-primary">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="col-3">Commentaires</th>
+                        <th scope="col" class="col-2">Nombre d'heures</th>
+                        <th scope="col" class="col-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    {% if "coach__username" not in sorter %}
+                                        <a onclick="setParameter('sort_by', '-coach__username')" class="text-primary">
+                                            Coach
+                                        </a>
+                                    {% else %}
+                                        Coach
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 text-right">
+                                    {% if "coach__username" in sorter %}
+                                        {% if "-" in sorter %}
+                                            <a onclick="setParameter('sort_by', 'coach__username')" class="text-primary">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        {% else %}
+                                            <a onclick="setParameter('sort_by', '-coach__username')" class="text-primary">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="col-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    {% if "approved" not in sorter %}
+                                        <a onclick="setParameter('sort_by', '-approved')" class="text-primary">
+                                            Approuvé
+                                        </a>
+                                    {% else %}
+                                        Approuvé
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 text-right">
+                                    {% if "approved" in sorter %}
+                                        {% if "-" in sorter %}
+                                            <a onclick="setParameter('sort_by', 'approved')" class="text-primary">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        {% else %}
+                                            <a onclick="setParameter('sort_by', '-approved')" class="text-primary">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </th>
                         </tr>
                     </thead>
                     <tbody>
