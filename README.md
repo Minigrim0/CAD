@@ -25,8 +25,7 @@ source source.sh env.dev.sh
 * [X] Send notifications by mail
 * [X] Final schedule by admin
 * [X] Start and End hours in followElements
-
-* [ ] Add admin filtering in lists
+* [X] Add admin filtering in lists
 * [ ] setup CI/CD
 * [X] Test coach swap
-* [ ] Add password retrieving
+* [X] Add password retrieving
