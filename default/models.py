@@ -67,7 +67,7 @@ class Mail(models.Model):
             "<CONFIRMLINK>",
             format_html(
                 '<a href="{0}">{0}</a>'.format(
-                    "https://{}{}?key={}".format(
+                    "{}{}?key={}".format(
                         SITE_DOMAIN, reverse("confirmation"), user.profile.secret_key
                     )
                 )
@@ -83,7 +83,7 @@ class Mail(models.Model):
                 "title": self.clean_header,
                 "content": self.formatted_content(user),
                 "error_mail": "",
-                "site_see_link": "https://{}{}".format(
+                "site_see_link": "{}{}".format(
                     SITE_DOMAIN, reverse("soon_view")
                 ),
             },
@@ -147,7 +147,7 @@ class Message(models.Model):
                 "title": "Nouveau message d'un utilisateur de CAD",
                 "content": "<h2>{}</h2><br/>{}".format(self.subject, self.content),
                 "error_mail": "",
-                "site_see_link": "https://{}{}?id={}".format(
+                "site_see_link": "{}{}?id={}".format(
                     SITE_DOMAIN, reverse("message_admin_view"), self.pk
                 ),
             },
