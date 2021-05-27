@@ -81,7 +81,7 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 ROOT_URLCONF = "cad.urls"
 LOGIN_URL = "login_view"
 SITE_ID = 1
-SITE_DOMAIN = os.environ.get("DEPLOYED_DOMAIN", "127.0.0.1:8000")
+SITE_DOMAIN = os.environ.get("DEPLOYED_DOMAIN", "http://127.0.0.1:8000")
 
 TEMPLATES = [
     {
