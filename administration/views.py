@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
+from django.core.paginator import Paginator
 
 from administration.forms import (
     ArticleForm,
@@ -127,10 +128,27 @@ def courses(request):
     Returns:
         HttpResponse: The render of the course page
     """
-    courses = FollowElement.objects.all().order_by("date")
     view_title = "Cours donnés"
 
-    return render(request, "courses.html", locals())
+    sorter = request.GET.get("sort_by", "-date")
+    if sorter not in ["date", "-date", "approved", "-approved", "student__username", "-student__username", "coach__username", "-coach__username"]:
+        sorter = "date"
+
+    courses_list = FollowElement.objects.all().order_by(sorter)
+    paginator = Paginator(courses_list, 25)
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(
+        request,
+        "courses.html",
+        {
+            'page_obj': page_obj,
+            "view_title": view_title,
+            "sorter": sorter
+        }
+    )
 
 
 @staff_member_required
