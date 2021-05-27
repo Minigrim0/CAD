@@ -20,19 +20,146 @@
                 <div id="notification_div">
 
                 </div>
+                <div class="col-12 text-center">
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                                <a onClick="setParameter('page', 1)" class="text-primary">
+                                    <i class="fas fa-fast-backward"></i>
+                                </a>
+                                <a onClick="setParameter('page', {{ page_obj.previous_page_number }})" class="text-primary">
+                                    <i class="fas fa-step-backward"></i>
+                                </a>
+                            {% endif %}
+
+                            <span class="current">
+                                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                            </span>
+
+                            {% if page_obj.has_next %}
+                                <a onClick="setParameter('page', {{ page_obj.next_page_number }})" class="text-primary">
+                                    <i class="fas fa-step-forward"></i>
+                                </a>
+                                <a onClick="setParameter('page', {{ page_obj.paginator.num_pages }})" class="text-primary">
+                                    <i class="fas fa-fast-forward"></i>
+                                </a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </div>
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                        <th scope="col" class="col-2">Date</th>
-                        <th scope="col" class="col-2">Étudiant</th>
-                        <th scope="col" class="col-4">Commentaires</th>
-                        <th scope="col" class="col-4">Nombre d'heures</th>
-                        <th scope="col" class="col-2">Coach</th>
-                        <th scope="col" class="col-2">Approuvé</th>
+                        <th scope="col" class="col-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    {% if "date" not in sorter %}
+                                        <a onclick="setParameter('sort_by', '-date')" class="text-primary">
+                                            Date
+                                        </a>
+                                    {% else %}
+                                        Date
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 text-right">
+                                    {% if "date" in sorter %}
+                                        {% if "-" in sorter %}
+                                            <a onclick="setParameter('sort_by', 'date')" class="text-primary">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        {% else %}
+                                            <a onclick="setParameter('sort_by', '-date')" class="text-primary">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="col-1">
+                            <div class="row">
+                                <div class="col-6">
+                                    {% if "student__username" not in sorter %}
+                                        <a onclick="setParameter('sort_by', '-student__username')" class="text-primary">
+                                            Étudiant
+                                        </a>
+                                    {% else %}
+                                        Étudiant
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 text-right">
+                                    {% if "student__username" in sorter %}
+                                        {% if "-" in sorter %}
+                                            <a onclick="setParameter('sort_by', 'student__username')" class="text-primary">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        {% else %}
+                                            <a onclick="setParameter('sort_by', '-student__username')" class="text-primary">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="col-3">Commentaires</th>
+                        <th scope="col" class="col-2">Nombre d'heures</th>
+                        <th scope="col" class="col-2">
+                            <div class="row">
+                                <div class="col-6">
+                                    {% if "coach__username" not in sorter %}
+                                        <a onclick="setParameter('sort_by', '-coach__username')" class="text-primary">
+                                            Coach
+                                        </a>
+                                    {% else %}
+                                        Coach
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 text-right">
+                                    {% if "coach__username" in sorter %}
+                                        {% if "-" in sorter %}
+                                            <a onclick="setParameter('sort_by', 'coach__username')" class="text-primary">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        {% else %}
+                                            <a onclick="setParameter('sort_by', '-coach__username')" class="text-primary">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </th>
+                        <th scope="col" class="col-4">
+                            <div class="row">
+                                <div class="col-6">
+                                    {% if "approved" not in sorter %}
+                                        <a onclick="setParameter('sort_by', '-approved')" class="text-primary">
+                                            Approuvé
+                                        </a>
+                                    {% else %}
+                                        Approuvé
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 text-right">
+                                    {% if "approved" in sorter %}
+                                        {% if "-" in sorter %}
+                                            <a onclick="setParameter('sort_by', 'approved')" class="text-primary">
+                                                <i class="fas fa-arrow-down"></i>
+                                            </a>
+                                        {% else %}
+                                            <a onclick="setParameter('sort_by', '-approved')" class="text-primary">
+                                                <i class="fas fa-arrow-up"></i>
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for course in courses %}
+                        {% for course in page_obj %}
                             <tr>
                                 <td>{{ course.date|date:"d/m/Y" }} <br/> {{ course.startHour }} à {{ course.endHour }}</td>
                                 <td>
@@ -72,6 +199,17 @@
 <script>
     const csrfToken = "{{csrf_token}}";
     const approveCourseUrl = "{% url 'api:approve_course' %}";
+
+    function setParameter(param, value){
+        var url = new URL(window.location);
+        var search_params = url.searchParams;
+
+        search_params.set(param, value);
+        url.search = search_params.toString();
+
+        var new_url = url.toString();
+        window.location = new_url;
+    }
 </script>
 <script src="{% static "js/admin/courses.js" %}"></script>
 {% endblock %}
