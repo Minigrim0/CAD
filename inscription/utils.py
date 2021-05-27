@@ -1,6 +1,7 @@
 import hashlib
 
 from django.contrib.auth.models import User
+from django.shortcuts import reverse
 
 from users.models import CoachAccount, Profile, StudentAccount, Notification
 from default.models import Mail
@@ -102,7 +103,7 @@ def welcomeUser(request, user):
         nous vous souhaitons la bienvenue! \
         N'oubliez pas que vous pouvez nous contacter \
         si vous avez le moindre souci via ce \
-        <a href='/contact/'>formulaire</a>!"
+        <a href='{}'>formulaire</a>!".format(reverse("contact_view"))
 
     newNotif = Notification(user=user)
     newNotif.title = title
