@@ -55,7 +55,7 @@ class Mail(models.Model):
         User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE
     )
 
-    def formatted_content(self, user):
+    def formatted_content(self, user: User):
         content = str(self.content)
         content = content.replace("<LASTNAME>", str(user.last_name))
         content = content.replace("<FIRSTNAME>", str(user.first_name))
@@ -63,6 +63,8 @@ class Mail(models.Model):
         content = content.replace("<COURSES>", str(user.profile.courses))
         content = content.replace("<SCHOOLLEVEL>", str(user.profile.birthDate))
         content = content.replace("<SECRETKEY>", str(user.profile.secret_key))
+        if user.profile.account_type == "a":
+            content = content.replace("<BALANCE>", str(user.profile.studentaccount.balance))
         content = content.replace(
             "<CONFIRMLINK>",
             format_html(
@@ -76,7 +78,7 @@ class Mail(models.Model):
         content = content.replace("\n", "<br/>")
         return content
 
-    def send(self, user):
+    def send(self, user: User):
         html_message = render_to_string(
             "mail.html",
             {
