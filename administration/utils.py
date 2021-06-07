@@ -54,7 +54,6 @@ def modifyStudent(student_account, cleaned_data):
     student_account.zip = cleaned_data["zip"]
     student_account.ville = cleaned_data["ville"]
     student_account.zip = cleaned_data["zip"]
-    student_account.coach = cleaned_data["coach"]
     student_account.resp_phone_number1 = cleaned_data["resp_phone_number1"]
     student_account.resp_phone_number2 = cleaned_data["resp_phone_number2"]
     student_account.resp_phone_number3 = cleaned_data["resp_phone_number3"]
