@@ -116,11 +116,8 @@ def modify_balance(request):
         JsonResponse: A JsonResponse containing the new balance of the student
     """
 
-    isCoachLaunching = (
-        True if request.POST.get("isFirstPayment", False) == "true" else False
-    )
-
     student = User.objects.get(username=request.POST["user"])
+    isCoachLaunching = StudentRequest.objects.filter(student=student).count() == 0
 
     tran = Transaction(student=student.profile.studentaccount)
     tran.amount = request.POST["amout_add"]
@@ -134,7 +131,12 @@ def modify_balance(request):
 
         utils.create_studentRequest(student)
 
-    return JsonResponse({"new_balance": student.profile.studentaccount.balance})
+    new_balance = float(student.profile.studentaccount.balance)
+    if new_balance < 0 and float(tran.amount) < 0:
+        mail = Mail.objects.get(role="d")
+        mail.send(student)
+
+    return JsonResponse({"new_balance": new_balance})
 
 
 @staff_member_required
