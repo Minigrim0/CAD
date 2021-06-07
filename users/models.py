@@ -26,7 +26,6 @@ class Profile(models.Model):
         ("j", "Les deux"),
         ("k", "autre"),
     ]
-
     account_types = [("a", "Etudiant"), ("b", "Coach"), ("c", "Administrateur")]
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -52,9 +51,7 @@ class Profile(models.Model):
         max_length=150,
         verbose_name="Adresse de l'étudiant",
     )
-    birthDate = models.CharField(
-        max_length=25, default="01/01/00", verbose_name="Date de naissance"
-    )
+    birthDate = models.CharField(max_length=25, default="01/01/00", verbose_name="Date de naissance")
     Maths_course = models.BooleanField(default=False, verbose_name="Maths")
     Chimie_course = models.BooleanField(default=False, verbose_name="Chimie")
     Physique_course = models.BooleanField(default=False, verbose_name="Physique")
@@ -66,10 +63,7 @@ class Profile(models.Model):
         max_length=64,
         verbose_name="Clé unique pour l'utilisateur",
     )
-    # User has verified his account via mail
-    verifiedAccount = models.BooleanField(
-        default=False, verbose_name="A vérifié son addresse mail"
-    )
+    verifiedAccount = models.BooleanField(default=False, verbose_name="A vérifié son addresse mail")
     # Represents school level for student
     # Represents either if coach give course to humanité or primaire
     school_level = models.CharField(
@@ -125,18 +119,10 @@ class StudentAccount(models.Model):
         max_length=50,
         verbose_name="Prénom du tuteur",
     )
-    NeedsVisit = models.BooleanField(
-        default=False, verbose_name="Désire une visite pédagogique ?"
-    )
-    comments = models.TextField(
-        null=True, blank=True, verbose_name="Commentaires", default="Aucun commentaire"
-    )
-    wanted_schedule = models.TextField(
-        null=True, blank=True, default="", verbose_name="Horaire"
-    )
-    unsub_proposal = models.BooleanField(
-        default=False, verbose_name="Proposition de désinscription envoyée"
-    )
+    NeedsVisit = models.BooleanField(default=False, verbose_name="Désire une visite pédagogique ?")
+    comments = models.TextField(null=True, blank=True, verbose_name="Commentaires", default="Aucun commentaire")
+    wanted_schedule = models.TextField(null=True, blank=True, default="", verbose_name="Horaire")
+    unsub_proposal = models.BooleanField(default=False, verbose_name="Proposition de désinscription envoyée")
     # User has payed the two first hours of course
     coach = models.ForeignKey(
         "users.CoachAccount",
@@ -145,9 +131,7 @@ class StudentAccount(models.Model):
         related_name="students",
         on_delete=models.SET_NULL,
     )
-    confirmedAccount = models.BooleanField(
-        default=False, verbose_name="A payé ses 2 premières heures de cours"
-    )
+    confirmedAccount = models.BooleanField(default=False, verbose_name="A payé ses 2 premières heures de cours")
     zip = models.CharField(default="0000", max_length=4, blank=True)
     ville = models.CharField(max_length=50, default="None", blank=True)
     resp_phone_number1 = models.CharField(
@@ -194,18 +178,10 @@ class CoachAccount(models.Model):
     # Coach
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
-    school = models.CharField(
-        null=True, blank=True, default="None", max_length=50, verbose_name="Ecole"
-    )
-    French_level = models.CharField(
-        null=True, blank=True, default="Inconnu", max_length=50
-    )
-    English_level = models.CharField(
-        null=True, blank=True, default="Inconnu", max_length=50
-    )
-    Dutch_level = models.CharField(
-        null=True, blank=True, default="Inconnu", max_length=50
-    )
+    school = models.CharField(null=True, blank=True, default="None", max_length=50, verbose_name="Ecole")
+    French_level = models.CharField(null=True, blank=True, default="Inconnu", max_length=50)
+    English_level = models.CharField(null=True, blank=True, default="Inconnu", max_length=50)
+    Dutch_level = models.CharField(null=True, blank=True, default="Inconnu", max_length=50)
     IBAN = models.CharField(
         null=False,
         verbose_name="numéro de compte IBAN",
