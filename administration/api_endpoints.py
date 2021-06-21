@@ -166,7 +166,7 @@ def activate(request):
         HttpResponse: A response indicating success if nothing went wrong
     """
     userid = request.GET.get("userid", -1)
-    active = True if request.GET.get("active", "false") == "true" else False
+    active = request.GET.get("active", "false") == "true"
     usr = get_object_or_404(User, id=userid)
 
     usr.is_active = active
