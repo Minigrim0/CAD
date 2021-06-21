@@ -34,7 +34,7 @@
             <div id="Open">
                 <h3>Etudiants en attente</h3>
                 <ul class="list-group">
-                    {% for student_request in student_requests %}
+                    {% for student_request in opened_student_requests %}
                     <li class="list-group-item">
                         <h4>{{ student_request.student.first_name }} {{ student_request.student.last_name }}</h4>
                         <p>Cherche des cours de:</p>
@@ -81,7 +81,7 @@
             <div id="Closed" style="display: none;">
                 <h3>Requêtes complétées</h3>
                 <ul class="list-group">
-                    {% for student_request in student_requests_closed %}
+                    {% for student_request in closed_student_requests %}
                     <li class="list-group-item mt-2">
                         <div class="row">
                             <div class="col-lg-4 col-md-12">
