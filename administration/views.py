@@ -161,7 +161,7 @@ def transactions(request):
     Returns:
         HttpResponse: The render of the transaction view
     """
-    transactions = Transaction.objects.all().order_by("date")
+    transaction_list = Transaction.objects.all().order_by("date")
     view_title = "Transactions effectuées"
 
     return render(request, "transactions.html", locals())
