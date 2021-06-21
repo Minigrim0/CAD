@@ -7,7 +7,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from inscription.utils import getUser
-from users.models import FollowElement, Notification, Transaction, StudentRequest
+from users.models import FollowElement, Transaction, StudentRequest
 
 import administration.utils as utils
 
@@ -134,7 +134,7 @@ def modify_balance(request):
     new_balance = float(student.profile.studentaccount.balance)
     if new_balance < 0 and float(tran.amount) < 0:
         mail = Mail.objects.get(role="d")
-        mail.send(student)
+        mail.send(student, bcc=["cadcours@cadcoursadomicile.com"])
 
     return JsonResponse({"new_balance": new_balance})
 

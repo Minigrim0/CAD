@@ -78,7 +78,7 @@ class Mail(models.Model):
         content = content.replace("\n", "<br/>")
         return content
 
-    def send(self, user: User):
+    def send(self, user: User, bcc=None):
         html_message = render_to_string(
             "mail.html",
             {
@@ -93,9 +93,15 @@ class Mail(models.Model):
 
         to = [user.email]
         from_email = "CAD - Cours a domicile <{}>".format(EMAIL_HOST_USER)
-        msg = EmailMultiAlternatives(
-            self.clean_header, self.formatted_content(user), from_email, to
-        )
+        
+        if bcc is not None:
+            msg = EmailMultiAlternatives(
+                self.clean_header, self.formatted_content(user), from_email, to, bcc=bcc
+            )
+        else:
+            msg = EmailMultiAlternatives(
+                self.clean_header, self.formatted_content(user), from_email, to
+            )
         msg.attach_alternative(html_message, "text/html")
         if not DEBUG:
             msg.send()
