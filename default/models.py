@@ -93,7 +93,7 @@ class Mail(models.Model):
 
         to = [user.email]
         from_email = "CAD - Cours a domicile <{}>".format(EMAIL_HOST_USER)
-        
+
         if bcc is not None:
             msg = EmailMultiAlternatives(
                 self.clean_header, self.formatted_content(user), from_email, to, bcc=bcc
