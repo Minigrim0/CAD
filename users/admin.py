@@ -19,7 +19,7 @@ class ProfileAdmin(admin.ModelAdmin):
     ordering = ("user",)
     search_fields = ("user",)
 
-    def courses(self, profile):
+    def courses(_, profile):
         return profile.courses
 
 
@@ -42,13 +42,13 @@ class CoachAdmin(admin.ModelAdmin):
         "profile__user__email",
     )
 
-    def first_name(self, coachaccount):
+    def first_name(_, coachaccount):
         return coachaccount.profile.user.first_name
 
-    def last_name(self, coachaccount):
+    def last_name(_, coachaccount):
         return coachaccount.profile.user.last_name
 
-    def email(self, coachaccount):
+    def email(_, coachaccount):
         return coachaccount.profile.user.email
 
 
@@ -56,13 +56,13 @@ class StudentAdmin(admin.ModelAdmin):
 
     list_display = ("first_name", "last_name", "email")
 
-    def first_name(self, studentaccount):
+    def first_name(_, studentaccount):
         return studentaccount.profile.user.first_name
 
-    def last_name(self, studentaccount):
+    def last_name(_, studentaccount):
         return studentaccount.profile.user.last_name
 
-    def email(self, studentaccount):
+    def email(_, studentaccount):
         return studentaccount.profile.user.email
 
 
