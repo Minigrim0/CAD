@@ -1,0 +1,90 @@
+{% load requests_tags %}
+
+
+{% if not student_request.is_closed %}
+    <li class="list-group-item">
+        <h4>{{ student_request.student.first_name }} {{ student_request.student.last_name }}</h4>
+        <p>Cherche des cours de:</p>
+        <ul>
+            {% if student_request.student.profile.Maths_course %}
+            <li>Maths</li>
+            {% endif %}
+            {% if student_request.student.profile.Chimie_course %}
+            <li>Chimie</li>
+            {% endif %}
+            {% if student_request.student.profile.Physique_course %}
+            <li>Physique</li>
+            {% endif %}
+            {% if student_request.student.profile.Francais_course %}
+            <li>Francais</li>
+            {% endif %}
+        </ul>
+        <hr>
+        <p>Coaches ayant postulé:</p>
+        <div class="spinner-border" id="spin_{{ student_request.id }}" role="status" style="display: none;">
+            <span class="sr-only">Loading...</span>
+        </div>
+        <div id="total_{{ student_request.id }}">
+            <div class="row col-md-12" id="coaches_{{ student_request.id }}">
+                {% for coach in student_request.coaches.all %}
+                    {% accepted_by_coach student_request coach as accepted %}
+                    {% if accepted %}
+                    <div class="col-xl-4 col-lg-6 col-sm-12">
+                        {% include "request_user_card.html" %}
+                    </div>
+                    {% endif %}
+                {% empty %}
+                <h5>Aucun coach n'a encore accepté cette requête</h5>
+                {% endfor %}
+            </div>
+        </div>
+    </li>
+{% else %}
+    <li class="list-group-item mt-2">
+        <div class="row">
+            <div class="col-lg-4 col-md-12">
+                <h4>{{ student_request.student.first_name }} {{ student_request.student.last_name }}</h4>
+                <p>Cherchait des cours de:</p>
+                <p style="font-weight: bold;">{{ student_request.student.profile.courses }}</p>
+
+                <h6>Horaire de l'étudiant</h6>
+                <textarea class="col-md-12" readonly="readonly">{{ student_request.student.profile.studentaccount.wanted_schedule }}</textarea>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <h4>Horaire final</h4>
+                <textarea class="col-md-12" readonly="readonly" rows=5>{{ student_request.finalschedule }}</textarea>
+            </div>
+            <div class="col-lg-4 col-md-12">
+                <h4>Coach sélectionné</h4>
+                {% with coach=student_request.choosenCoach %}
+                    <div class="col-md-12">
+                        {% include "request_user_card_closed.html" %}
+                    </div>
+                {% endwith %}
+            </div>
+        </div>
+        <hr>
+        <a data-toggle="collapse" href="#coachesApplied{{ student_request.id }}" role="button" aria-expanded="false" aria-controls="coachesApplied{{ student_request.id }}">
+            Coaches ayant accepté: <i id="fas" class="fas fa-angle-down"></i>
+        </a>
+        <div class="collapse" id="coachesApplied{{ student_request.id }}">
+            <div class="spinner-border" id="spin_{{ student_request.id }}" role="status" style="display: none;">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <div id="total_{{ student_request.id }}">
+                <div class="row" id="coaches_{{ student_request.id }}">
+                    {% for coach in student_request.coaches.all %}
+                        {% accepted_by_coach student_request coach as accepted %}
+                        {% if accepted %}
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            {% include "request_user_card_closed.html" %}
+                        </div>
+                        {% endif %}
+                    {% empty %}
+                        Aucun coach trouvé. Cette requête provient probablement d'un choix de coach direct
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </li>
+{% endif %}
