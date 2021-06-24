@@ -8,6 +8,23 @@ function showdetailmodal(coach_pk, id){
     $('#tobechosen_' + coach_pk + id).css('display', 'none');
 }
 
+function updateRequestDisplay(id){
+    var infoUrl = RequestInformationUrl + "?id=" + id;
+    $.get(
+        infoUrl,
+        function(data, status) {
+            if(status == "success"){
+                document.getElementById("closed_request_" + id).remove();
+
+                var closedList = document.getElementById("ClosedRequestsList");
+                closedList.innerHTML = data["content"] + closedList.innerHTML;
+            } else {
+                // TODO : Show Error Message
+            }
+        }
+    )
+}
+
 function chooseCoach(coach_pk, id) {
     var finalschedule = $('#schedulefor' + coach_pk + id).val()
     if(finalschedule == ""){
@@ -28,19 +45,7 @@ function chooseCoach(coach_pk, id) {
         },
         function(data, status) {
             if (status == "success") {
-                document.getElementById("coaches_" + id).style = "filter: opacity(100%);";;
-                document.getElementById("spin_" + id).style.display = "none";
-
-                var cards = document.getElementsByClassName("card");
-                for (var x = 0; x < cards.length; x++) {
-                    if (cards[x].id == "card_" + id + "_" + coach_pk) {
-                        cards[x].style = "filter: opacity(100%)";
-                        cards[x].getElementsByClassName("choose")[0].style.display = "none";
-                    } else if (cards[x].id.search("card_" + id + "_") != -1) {
-                        cards[x].style = "filter: opacity(25%)";
-                        cards[x].getElementsByClassName("choose")[0].style.display = "none";
-                    }
-                }
+                updateRequestDisplay(id);
             } else {
                 document.getElementById("coaches_" + id).style = "filter: opacity(0%);";
             }
