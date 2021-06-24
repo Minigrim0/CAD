@@ -2,7 +2,7 @@
 
 
 {% if not student_request.is_closed %}
-    <li class="list-group-item">
+    <li class="list-group-item" id="closed_request_{{ student_request.id }}">
         <h4>{{ student_request.student.first_name }} {{ student_request.student.last_name }}</h4>
         <p>Cherche des cours de:</p>
         <ul>
@@ -40,7 +40,7 @@
         </div>
     </li>
 {% else %}
-    <li class="list-group-item mt-2">
+    <li class="list-group-item mt-2" id="opened_request_{{ student_request.id }}">
         <div class="row">
             <div class="col-lg-4 col-md-12">
                 <h4>{{ student_request.student.first_name }} {{ student_request.student.last_name }}</h4>

@@ -43,7 +43,7 @@
 
             <div id="Closed" style="display: none;">
                 <h3>Requêtes complétées</h3>
-                <ul class="list-group">
+                <ul class="list-group" id="ClosedRequestsList">
                     {% for student_request in closed_student_requests %}
                         {% include "student_request_section.html" %}
                     {% endfor %}
@@ -55,8 +55,8 @@
     <script>
         const csrfToken = '{{ csrf_token }}';
         const SelectCoachUrl = "{% url 'api:request_select_coach' %}";
+        const RequestInformationUrl = "{% url 'api:request_details' %}"
     </script>
     <script src="{% static "js/admin/requests.js" %}" ></script>
-
 </div>
 {% endblock %}
