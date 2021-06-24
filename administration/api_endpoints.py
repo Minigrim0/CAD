@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from default.models import Mail
+from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
@@ -199,3 +200,11 @@ def approve_course(request):
         course.delete()
 
     return HttpResponse("Success")
+
+
+@staff_member_required
+@require_http_methods(["GET"])
+def request_informations(request):
+    id = request.GET.get("id", None)
+    student_request = get_object_or_404(StudentRequest, id=id)
+    return render(request, "student_request_section.html", {"student_request": student_request})
