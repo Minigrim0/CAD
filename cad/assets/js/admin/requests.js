@@ -34,14 +34,15 @@ function updateRequestDisplay(id){
     ).done(
         function(data) {
             $("#closed_request_" + id).empty();
-            createTempAlert("#closed_request_" + id, "success", 3000, "Le coach a bien été choisi", id, deleteDiv, ["#closed_request_" + id]);
+            createTempAlert("#closed_request_" + id, "success", 5000, "Le coach a bien été choisi", id, deleteDiv, ["#closed_request_" + id]);
 
             var closedList = document.getElementById("ClosedRequestsList");
             closedList.innerHTML = data["content"] + closedList.innerHTML;
         }
     ).fail(
         function() {
-            // TODO : Show Error Message
+            $("#closed_request_" + id).empty();
+            createTempAlert("#closed_request_" + id, "danger", 5000, "Une erreur est survenue lors de la récupération d'informations. Le coach à cependant pu être choisi", id, deleteDiv, ["#closed_request_" + id]);
         }
     )
 }
