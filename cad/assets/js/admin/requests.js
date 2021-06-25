@@ -8,19 +8,40 @@ function showdetailmodal(coach_pk, id){
     $('#tobechosen_' + coach_pk + id).css('display', 'none');
 }
 
+function createTempAlert(parent, level, time, message, id, callback=null, args=[]){
+    $(parent).append($('<div class="alert alert-' + level + ' fade show" role="alert" id="notif_' + id + '">\
+        ' + message + '\
+    </div>'));
+
+    setTimeout(function(){
+        $("#notif_" + id).alert('close');
+        if(callback != null){
+            callback(args);
+        }
+    }, time);
+}
+
+function deleteDiv(divs=[]){
+    for(var x=0;x<divs.length; x++){
+        $(divs[x]).detach();
+    }
+}
+
 function updateRequestDisplay(id){
     var infoUrl = RequestInformationUrl + "?id=" + id;
     $.get(
-        infoUrl,
-        function(data, status) {
-            if(status == "success"){
-                document.getElementById("closed_request_" + id).remove();
+        infoUrl
+    ).done(
+        function(data) {
+            $("#closed_request_" + id).empty();
+            createTempAlert("#closed_request_" + id, "success", 3000, "Le coach a bien été choisi", id, deleteDiv, ["#closed_request_" + id]);
 
-                var closedList = document.getElementById("ClosedRequestsList");
-                closedList.innerHTML = data["content"] + closedList.innerHTML;
-            } else {
-                // TODO : Show Error Message
-            }
+            var closedList = document.getElementById("ClosedRequestsList");
+            closedList.innerHTML = data["content"] + closedList.innerHTML;
+        }
+    ).fail(
+        function() {
+            // TODO : Show Error Message
         }
     )
 }
