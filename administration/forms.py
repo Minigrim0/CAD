@@ -17,12 +17,18 @@ from users.forms import (
 
 
 class MailForm(forms.ModelForm):
+    """A form to create and modify mail objects
+    """
+
     class Meta:
         model = Mail
         fields = ["name", "subject", "content", "role"]
 
 
 class ArticleForm(forms.ModelForm):
+    """A form to create and modify article objects
+    """
+
     class Meta:
         model = Article
         fields = ["name", "title", "subtitle", "content"]
@@ -32,12 +38,18 @@ class ArticleForm(forms.ModelForm):
 
 
 class TransactionForm(forms.ModelForm):
+    """A form to create and modify transaction objects
+    """
+
     class Meta:
         model = Transaction
         fields = ["amount", "comment"]
 
 
 class newCoachForm(forms.Form):
+    """A form to select the final coach and schedule for a student request
+    """
+
     coach = forms.ModelChoiceField(
         queryset=User.objects.filter(profile__account_type="b"),
         widget=autocomplete.ModelSelect2(url="coach-autocomplete"),
@@ -49,6 +61,8 @@ class newCoachForm(forms.Form):
 
 
 class OtherAdminForm(BaseRegistration):
+    """A form to see and modify accounts that are neither coach nor student accounts as administrator
+    """
     verifiedAccount = forms.BooleanField(
         required=False, label="A vérifié son addresse mail"
     )
@@ -109,6 +123,9 @@ class OtherAdminForm(BaseRegistration):
 
 
 class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
+    """A form to see and modify student accounts as administrator
+    """
+
     coach = forms.CharField(
         widget=forms.TextInput(
             attrs={
@@ -218,6 +235,8 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
 
 
 class CoachAdminForm(CoachRegisterForm, OtherAdminForm):
+    """A form to see and modify coach accounts as administrator
+    """
     coach_states = [
         ("a", "----"),
         ("b", "Engagé"),

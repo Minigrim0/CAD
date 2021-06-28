@@ -1,6 +1,10 @@
 function approveCourse(pk, approved){
     if(!approved && !confirm("Êtes vous sûr de vouloir supprimer ce cours ?")) return;
 
+    var alert_type;
+    var alert_text = "default-alert";
+    var alert_id;
+
     $.post(
         approveCourseUrl,
         {
@@ -11,33 +15,35 @@ function approveCourse(pk, approved){
     ).done(function(data){
         if(approved){
             $("#approved_" + pk).html('<img src="/static/admin/img/icon-yes.svg" alt="True"/>');
-            $("#notification_div").html(
-                $("#notification_div").html() +
-                '<div class="alert alert-success fade show" role="alert" id="notif_' + pk + '">\
-                    Ce cours a bien été approuvé.\
-                </div>'
-            );
+            alert_type = "alert-success";
+            alert_text = "Ce cours a bien été approuvé.";
+            alert_id = "notif_" + pk;
         } else {
             $("#approved_" + pk).html('<img src="/static/admin/img/icon-no.svg" alt="True"/>');
-            $("#notification_div").html(
-                $("#notification_div").html() +
-                '<div class="alert alert-danger fade show" role="alert" id="notif_' + pk + '">\
-                    Ce cours a bien été supprimé.\
-                </div>'
-            );
+            alert_type = "alert-danger";
+            alert_text = "Ce cours a bien été supprimé.";
+            alert_id = "notif_" + pk;
         }
-        setTimeout(function(){
-            $("#notif_" + pk).alert('close');
-        }, 3000);
+
+        createNotif(alert_id, alert_type, alert_text);
     }).fail(function(data){
-        $("#notification_div").html(
-            $("#notification_div").html() +
-            '<div class="alert alert-danger fade show" role="alert" id="notiffail_' + pk + '">\
-                Ce cours n\'a pas pu être approuvé. Réessayez plus tard !\
-            </div>'
-        );
-        setTimeout(function(){
-            $("#notiffail_" + pk).alert('close');
-        }, 5000);
+        alert_type = "alert-danger";
+        alert_text = "Ce cours n'a pas pu être approuvé. Réessayez plus tard !";
+        alert_id = "notiffail_" + pk;
+
+        createNotif(alert_id, alert_type, alert_text);
     });
+}
+
+
+function createNotif(alert_id, alert_type, alert_text){
+    var new_notif = $("#notification_template").clone().children()[0];
+    new_notif.setAttribute("id", alert_id);
+    new_notif.classList.add(alert_type)
+    new_notif.children[1].innerText = alert_text;
+    $("#notification_div").append(new_notif);
+
+    setTimeout(function(){
+        $("#" + alert_id).alert('close');
+    }, 5000);
 }

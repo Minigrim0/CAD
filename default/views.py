@@ -14,24 +14,18 @@ def home(request):
     Returns:
         render: A render of the home page
     """
-    home = Article.objects.filter(name="Accueil")
-    info = Article.objects.filter(name="Info")
-    video = Article.objects.filter(name="Video")
-    coaches = Article.objects.filter(name="Coaches")
-    about = Article.objects.filter(name="About")
-    contact = Article.objects.filter(name="Contact")
 
-    dico = {
-        "a_home": home[0],
-        "a_info": info[0],
-        "a_video": video[0],
-        "a_coaches": coaches[0],
-        "a_about": about[0],
-        "a_contact": contact[0],
+    context = {
+        "a_home": Article.objects.filter(name="Accueil")[0],
+        "a_info": Article.objects.filter(name="Info")[0],
+        "a_video": Article.objects.filter(name="Video")[0],
+        "a_coaches": Article.objects.filter(name="Coaches")[0],
+        "a_about": Article.objects.filter(name="About")[0],
+        "a_contact": Article.objects.filter(name="Contact")[0],
         "view_title": "cours à domicile",
     }
 
-    return render(request, "index.html", dico)
+    return render(request, "index.html", context)
 
 
 def contactView(request):

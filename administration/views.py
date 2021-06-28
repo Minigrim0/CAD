@@ -161,7 +161,7 @@ def transactions(request):
     Returns:
         HttpResponse: The render of the transaction view
     """
-    transactions = Transaction.objects.all().order_by("date")
+    transaction_list = Transaction.objects.all().order_by("date")
     view_title = "Transactions effectuées"
 
     return render(request, "transactions.html", locals())
@@ -296,10 +296,10 @@ def student_requests(request):
     Returns:
         HttpResponse: The render of the requests page
     """
-    student_requests = (
+    opened_student_requests = (
         StudentRequest.objects.all().exclude(is_closed=True).order_by("-id")
     )
-    student_requests_closed = (
+    closed_student_requests = (
         StudentRequest.objects.all().exclude(is_closed=False).order_by("-id")
     )
 
