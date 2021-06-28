@@ -116,13 +116,7 @@ def pay_later(request):
     """
     user = request.user
 
-    # token manquant ou non valide
-    if user is None:
-        return HttpResponseRedirect(reverse("Error_view"))
-
-    # Si le compte est déjà confirmé,
-    # l'utilisateur ne doit plus accéder à cette page
-    if user.profile.confirmed_account:
+    if user is None or user.profile.confirmed_account:
         return HttpResponseRedirect(reverse("Error_view"))
 
     newNotif = Notification(user=user)
@@ -155,16 +149,9 @@ def thanks(request):
     user = request.user
 
     # token manquant ou non valide
-    if user is None or user.profile.account_type != "a":
+    if user is None or user.profile.account_type != "a" or user.profile.studentaccount.confirmedAccount:
         return HttpResponseRedirect(reverse("Error_view"))
 
-    # Si le compte est déjà confirmé, l'utilisateur ne doit plus accéder
-    # à cette page
-    if user.profile.studentaccount.confirmedAccount:
-        return HttpResponseRedirect(reverse("Error_view"))
-
-    # L'utilisateur a confirmé son compte
-    # Compte vérifié et confirmé
     studa = user.profile.studentaccount
     studa.confirmedAccount = True
     studa.save()
@@ -179,4 +166,5 @@ def thanks(request):
         "Merci d'avoir complété votre inscription! \
         Nous allons de ce pas chercher un coach pour vous!",
     )
+
     return HttpResponseRedirect(reverse("home"))
