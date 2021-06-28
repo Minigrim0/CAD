@@ -17,9 +17,6 @@ from inscription.decorators import mustnt_be_logged_in
 def registerUserView(request):
     """The view allowing a user to register as either a coach or a student
 
-    Args:
-        request (request): request object needed by all the views
-
     Raises:
         HttpResponseBadRequest: In case the GET parameter specifying the type of account isn't correct
 
@@ -66,12 +63,6 @@ def registerUserView(request):
 @login_required
 def confirmation_view(request):
     """A view to verify the email address of the user
-
-    Args:
-        request (request): request object needed by all the views
-
-    Returns:
-        [type]: [description]
     """
     token = request.GET.get("key", "")
     user = utils.getUser(token)
@@ -109,12 +100,20 @@ def confirmation_view(request):
 
 
 def paymentView(request):
+    """A view to show payment details
+    """
     user = request.user
     view_title = "Paiement"
     return render(request, "payment.html", locals())
 
 
 def pay_later(request):
+    """A view used to allow users to pay their invoice later
+
+    Returns:
+        HttpResponseRedirect: to the error view in case an error occurs (No token, already confirmed account) 
+        HttpResponseRedirect: to the home page, with a notification to remind the user to pay
+    """
     user = request.user
 
     # token manquant ou non valide
@@ -147,6 +146,12 @@ def pay_later(request):
 
 
 def thanks(request):
+    """Final view for the inscription, creates a studentRequest in case the user is a student
+
+    Returns:
+        HttpResponseRedirect: To the error view in case an error occured (No token, already confirmed account)
+        HttpResponseRedirect: The the home page with a notification to inform the user that everythong went well
+    """
     user = request.user
 
     # token manquant ou non valide
