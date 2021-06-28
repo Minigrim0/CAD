@@ -1,13 +1,14 @@
 from datetime import datetime
 
 from default.models import Mail
+from django.shortcuts import render
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from inscription.utils import getUser
-from users.models import FollowElement, Notification, Transaction, StudentRequest
+from users.models import FollowElement, Transaction, StudentRequest
 
 import administration.utils as utils
 
@@ -134,7 +135,7 @@ def modify_balance(request):
     new_balance = float(student.profile.studentaccount.balance)
     if new_balance < 0 and float(tran.amount) < 0:
         mail = Mail.objects.get(role="d")
-        mail.send(student)
+        mail.send(student, bcc=["cadcours@cadcoursadomicile.com"])
 
     return JsonResponse({"new_balance": new_balance})
 
@@ -166,7 +167,7 @@ def activate(request):
         HttpResponse: A response indicating success if nothing went wrong
     """
     userid = request.GET.get("userid", -1)
-    active = True if request.GET.get("active", "false") == "true" else False
+    active = request.GET.get("active", "false") == "true"
     usr = get_object_or_404(User, id=userid)
 
     usr.is_active = active
@@ -199,3 +200,15 @@ def approve_course(request):
         course.delete()
 
     return HttpResponse("Success")
+
+
+@staff_member_required
+@require_http_methods(["GET"])
+def request_informations(request):
+    id = request.GET.get("id", None)
+    student_request = get_object_or_404(StudentRequest, id=id)
+    rendered = render(request, "student_request_section.html", {"student_request": student_request})
+
+    return JsonResponse({
+        "content": rendered.content.decode("utf-8"),
+    })

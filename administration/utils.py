@@ -162,9 +162,9 @@ def thanksCoaches(coaches, student):
     )
     for coach in coaches:
         if (
-            CoachRequestThrough.objects.get(
+            CoachRequestThrough.objects.filter(
                 coach=coach, request__student=student.profile.user
-            ).has_accepted
+            ).last().has_accepted
             is True
         ):
             new_notif = Notification(

@@ -231,7 +231,7 @@ def login_view(request):
     if not request.user.is_authenticated:
         return HttpResponseRedirect(reverse("login_view"))
 
-    next = request.GET.get("next", "")
-    if next != "":
-        return HttpResponseRedirect(next)
+    nextPage = request.GET.get("next", "")
+    if nextPage != "":
+        return HttpResponseRedirect(nextPage)
     return HttpResponseRedirect(reverse("home"))
