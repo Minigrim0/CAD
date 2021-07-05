@@ -12,7 +12,7 @@ def chooseLocation(request):
 def password_reset_done(request):
     messages.success(
         request,
-        "Votre mot de passe a bien été réinitialisé, vous pouvez vous connecter avec votre nouveau mot de passe"
+        "Votre mot de passe a bien été réinitialisé, vous pouvez vous connecter avec votre nouveau mot de passe",
     )
 
-    return HttpResponseRedirect(reverse('home'))
+    return HttpResponseRedirect(reverse("home"))

@@ -274,7 +274,9 @@ def send_confirmation_email(request):
 
     send_confirmation_mail(request.user)
     messages.add_message(
-        request, messages.SUCCESS, "Un nouvel email de vérification a été envoyé, "
-        "n'oubliez pas de vérifier les spams !"
+        request,
+        messages.SUCCESS,
+        "Un nouvel email de vérification a été envoyé, "
+        "n'oubliez pas de vérifier les spams !",
     )
     return HttpResponseRedirect(reverse("home"))

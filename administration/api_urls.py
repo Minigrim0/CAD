@@ -12,5 +12,5 @@ urlpatterns = [
     path("requests/create/", api.create_new_request, name="request_new_coach"),
     path("users/setcoach/", api.set_new_coach, name="set_new_coach"),
     path("courses/approve/", api.approve_course, name="approve_course"),
-    path("requests/details/", api.request_informations, name="request_details")
+    path("requests/details/", api.request_informations, name="request_details"),
 ]

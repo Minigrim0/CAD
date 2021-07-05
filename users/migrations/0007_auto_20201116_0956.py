@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0006_auto_20201113_2211'),
+        ("users", "0006_auto_20201113_2211"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='followelement',
-            name='endHour',
-            field=models.TimeField(default='12:00', verbose_name='Heure de fin'),
+            model_name="followelement",
+            name="endHour",
+            field=models.TimeField(default="12:00", verbose_name="Heure de fin"),
         ),
         migrations.AlterField(
-            model_name='followelement',
-            name='startHour',
-            field=models.TimeField(default='10:00', verbose_name='Heure de début'),
+            model_name="followelement",
+            name="startHour",
+            field=models.TimeField(default="10:00", verbose_name="Heure de début"),
         ),
     ]
