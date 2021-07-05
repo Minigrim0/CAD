@@ -111,6 +111,14 @@ def welcomeUser(request, user):
     newNotif.content = content
     newNotif.author = author
     newNotif.save()
+    send_confirmation_mail(user)
 
+
+def send_confirmation_mail(user: User):
+    """Sends the confirmation email to the user
+
+    Args:
+        user (User): The user to send the email to
+    """
     mail = Mail.objects.get(id=1)
     mail.send(user)
