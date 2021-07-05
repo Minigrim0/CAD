@@ -16,14 +16,15 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login
 
 from administration.utils import populate_data
-from .models import Notification, StudentRequest, StudentAccount, FollowElement
-from .forms import (
+from users.models import Notification, StudentRequest, StudentAccount, FollowElement
+from users.forms import (
     StudentReadOnlyForm,
     BaseReadOnly,
     CoachReadOnlyForm,
     addFollowElementForm,
 )
 from inscription.decorators import mustnt_be_logged_in
+from inscription.utils import send_confirmation_mail
 
 
 def user_home(request):
@@ -234,4 +235,20 @@ def login_view(request):
     nextPage = request.GET.get("next", "")
     if nextPage != "":
         return HttpResponseRedirect(nextPage)
+    return HttpResponseRedirect(reverse("home"))
+
+
+@login_required
+def send_confirmation_email(request):
+    """Resends a confirmation email in case the user didn't receive the confirmation email"""
+    if request.user.profile.verifiedAccount:
+        messages.add_message(
+            request, messages.ERROR, "Vous avez déjà confirmé votre adresse mail !"
+        )
+
+    send_confirmation_mail(request.user)
+    messages.add_message(
+        request, messages.SUCCESS, "Un nouvel email de vérification a été envoyé, "
+        "n'oubliez pas de vérifier les spams !"
+    )
     return HttpResponseRedirect(reverse("home"))
