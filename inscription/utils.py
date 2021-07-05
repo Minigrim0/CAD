@@ -84,18 +84,26 @@ def registerUser(form, usertype):
     return user
 
 
-def getUser(token):
+def getUser(token: str) -> User:
+    """Finds the user corresponding to the secret_key and returns it
+
+    Args:
+        token (str): The token from which to retreive the user
+
+    Returns:
+        User: A user. Defaults to None
+    """
     profile = Profile.objects.filter(secret_key=token)
     if profile.count() == 1:
         return profile.first().user
     return None
 
 
-def welcomeUser(request, user):
+def welcomeUser(request, user: User):
     """Welcomes the new user, by sending him an email and a notification
 
     Args:
-        user (django.contrib.auth.models.User): The new user
+        user (User): The new user
     """
 
     author = "L'équipe CAD"
