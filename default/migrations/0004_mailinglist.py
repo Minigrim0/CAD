@@ -8,16 +8,30 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('default', '0003_message_seen'),
+        ("default", "0003_message_seen"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='mailingList',
+            name="mailingList",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100)),
-                ('users', models.ManyToManyField(to=settings.AUTH_USER_MODEL, verbose_name='Utilisateurs intéréssés')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "users",
+                    models.ManyToManyField(
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Utilisateurs intéréssés",
+                    ),
+                ),
             ],
         ),
     ]

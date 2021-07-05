@@ -1,29 +1,23 @@
-{% extends 'base.html' %}
-
-{% load static %}
-
-{% block navlinks %}
+{% extends 'base.html' %} {% load static %} {% block navlinks %}
 <ul class="navbar-nav text-left">
-    <li class="nav-item">
-        <a href="{% url 'home' %}" class="nav-link">
-            accueil
-        </a>
-    </li>
+  <li class="nav-item">
+    <a href="{% url 'home' %}" class="nav-link"> accueil </a>
+  </li>
 </ul>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div class="container-fluid p-0">
-    <section class="resume-section p-3 p-lg-5 d-flex align-items-center" id="home">
-        <div class="w-100">
-            {% include 'messages.html' %}
-            <h1 class="mb-0">
-                403 <span class="text-primary">Interdit</span>!
-            </h1>
-            <p class="lead mb-5">
-                Le jeton de validité n'est plus à jour, veuillez recharger la page précédante et réessayer!
-            </p>
-        </div>
-    </section>
+  <section
+    class="resume-section p-3 p-lg-5 d-flex align-items-center"
+    id="home"
+  >
+    <div class="w-100">
+      {% include 'messages.html' %}
+      <h1 class="mb-0">403 <span class="text-primary">Interdit</span>!</h1>
+      <p class="lead mb-5">
+        Le jeton de validité n'est plus à jour, veuillez recharger la page
+        précédante et réessayer!
+      </p>
+    </div>
+  </section>
 </div>
 {% endblock %}

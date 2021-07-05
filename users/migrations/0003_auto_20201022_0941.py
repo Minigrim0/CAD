@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_studentrequest_finalschedule'),
+        ("users", "0002_studentrequest_finalschedule"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='followelement',
-            name='approved',
+            model_name="followelement",
+            name="approved",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='followelement',
-            name='coachBeenPaid',
+            model_name="followelement",
+            name="coachBeenPaid",
             field=models.BooleanField(default=False),
         ),
     ]
