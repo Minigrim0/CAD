@@ -17,9 +17,6 @@ from inscription.decorators import mustnt_be_logged_in
 def registerUserView(request):
     """The view allowing a user to register as either a coach or a student
 
-    Args:
-        request (request): request object needed by all the views
-
     Raises:
         HttpResponseBadRequest: In case the GET parameter specifying the type of account isn't correct
 

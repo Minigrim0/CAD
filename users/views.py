@@ -99,9 +99,13 @@ def addFollowElement(request):
 
 
 @login_required
-def send_notif(request):
-    if request.method == "POST":
+def send_notif(request) -> HttpResponse:
+    """Sends a notification to the concerned user
 
+    Returns:
+        HttpResponse: A small message indicating the status of the request
+    """
+    if request.method == "POST":
         user = User.objects.get(username=request.POST["user"])
         notif = Notification()
         notif.user = user
@@ -121,7 +125,15 @@ def send_notif(request):
 
 
 @login_required
-def remove_notif(request):
+def remove_notif(request) -> HttpResponse:
+    """Removes a notification
+
+    Raises:
+        Http404: In case the notification doesn't exist
+
+    Returns:
+        HttpResponse: A message indicating the request went well
+    """
     if request.method != "POST":
         return ErrorView(request)
 
@@ -135,7 +147,12 @@ def remove_notif(request):
 
 
 @login_required
-def disconnect(request):
+def disconnect(request) -> HttpResponseRedirect:
+    """Disconnects the user
+
+    Returns:
+        HttpResponseRedirect: A redirection to the home page
+    """
     logout(request)
 
     messages.add_message(request, messages.WARNING, "Vous avez été déconnecté")
@@ -143,11 +160,15 @@ def disconnect(request):
 
 
 @login_required
-def requestView(request):
+def requestView(request) -> HttpResponse:
+    """Shows a request to a coach
+
+    Returns:
+        HttpReponse: The request page or an error if the user cannot access the page
+    """
     request_id = request.GET.get("id", 0)
 
-    allowed = request.user.profile.account_type == "b"
-    if request.user.is_authenticated and allowed:
+    if request.user.profile.account_type == "b":
         student_request = StudentRequest.objects.get(id=request_id)
         student = student_request.student
         coaches = [
@@ -163,7 +184,12 @@ def requestView(request):
 
 
 @login_required
-def acceptRequest(request):
+def acceptRequest(request) -> HttpResponse:
+    """Accepts the request given as post parameter
+
+    Returns:
+        HttpResponse: A message indicating the request went well
+    """
     if request.method != "POST":
         return HttpResponseBadRequest("Invalid method : Request must type be 'POST'")
 
@@ -185,9 +211,11 @@ def acceptRequest(request):
     return HttpResponse("Success")
 
 
-def get_users(request):
-    """
-    returns the users linked to the email provided
+def get_users(request) -> JsonResponse:
+    """Returns the users linked to the email provided
+
+    Returns:
+        JsonResponse: a dictionnary containing the name of the users with the given email address
     """
     if request.method != "POST":
         return HttpResponseBadRequest("Invalid method : Request type must be 'POST'")
@@ -206,9 +234,7 @@ def get_users(request):
 
 @mustnt_be_logged_in(action="connecter")
 def login_view(request):
-    """
-    Allows a user to connect to his account
-    """
+    """Allows a user to connect to his account"""
     if request.method != "POST":
         view_title = "Connectez vous"
         return render(request, "connexion.html", locals())
