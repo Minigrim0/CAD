@@ -115,6 +115,7 @@ class OtherAdminForm(BaseRegistration):
         )
 
     def clean(self):
+        """Cleans the parents form as admin"""
         super().clean(admin=True)
 
 

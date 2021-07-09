@@ -1,6 +1,7 @@
 import hashlib
 
 from django.contrib.auth.models import User
+from django.forms import Form
 from django.shortcuts import reverse
 
 import cad.settings as settings
@@ -8,7 +9,14 @@ from users.models import CoachAccount, Profile, StudentAccount, Notification
 from default.models import Mail
 
 
-def registerProfile(user, form, account_type="Etudiant"):
+def registerProfile(user: User, form: Form, account_type: str = "Etudiant"):
+    """Registers information about a profile
+
+    Args:
+        user (User): The user the profile belongs to
+        form (Form): The form containing the data to fill the profile with
+        account_type (str, optional): The type of account the profile will be for. Defaults to "Etudiant".
+    """
     profile = Profile(user=user)
     profile.phone_number = form.cleaned_data["phone_number"]
     profile.account_type = account_type
@@ -27,7 +35,13 @@ def registerProfile(user, form, account_type="Etudiant"):
     profile.save()
 
 
-def studentRegister(user, form):
+def studentRegister(user: User, form: Form):
+    """Registers a student account
+
+    Args:
+        user (User): The user the student account belongs to
+        form (Form): The form containing the data
+    """
     student_profile = StudentAccount(profile=user.profile)
 
     student_profile.tutor_name = form.cleaned_data["tutor_name"]
@@ -43,7 +57,13 @@ def studentRegister(user, form):
     student_profile.save()
 
 
-def coachRegister(user, form):
+def coachRegister(user: User, form: Form):
+    """Registers a coach accounr
+
+    Args:
+        user (User): The user the coach account belongs to
+        form (Form): The form containing the data
+    """
     coach_profile = CoachAccount(profile=user.profile)
     coach_profile.school = form.cleaned_data["school"]
     coach_profile.French_level = form.cleaned_data["french_level"]
@@ -55,12 +75,12 @@ def coachRegister(user, form):
     coach_profile.save()
 
 
-def registerUser(form, usertype):
+def registerUser(form: Form, usertype: str):
     """Generates a user from a form values
 
     Args:
-        form (Form): [A form (either StudentForm or Coach form, both inheriting from BaseRegisterForm)]
-
+        form (Form): A form (either StudentForm or Coach form, both inheriting from BaseRegisterForm)
+        usertype (str): The type of account the user has
     Returns:
         user: the user newly created
     """
@@ -98,7 +118,7 @@ def getUser(token: str) -> User:
     return None
 
 
-def welcomeUser(request, user: User):
+def welcomeUser(user: User):
     """Welcomes the new user, by sending him an email and a notification
 
     Args:

@@ -1,6 +1,6 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
@@ -20,7 +20,7 @@ from users.models import FollowElement, StudentRequest, Transaction
 
 
 @staff_member_required
-def adminPage(request):
+def adminPage(request) -> HttpResponse:
     """The home view of the administration of the website
 
     Args:
@@ -42,7 +42,7 @@ def adminPage(request):
 
 
 @staff_member_required
-def mailAdminView(request):
+def mailAdminView(request) -> HttpResponse:
     """Mail modification view in the administration
 
     Args:
@@ -67,7 +67,7 @@ def mailAdminView(request):
 
 
 @staff_member_required
-def articleAdminView(request):
+def articleAdminView(request) -> HttpResponse:
     """Articles modification view in the administration
 
     Args:
@@ -92,7 +92,7 @@ def articleAdminView(request):
 
 
 @staff_member_required
-def mailAdminCreate(request):
+def mailAdminCreate(request) -> HttpResponse:
     """Mail creation view in the administration
 
     Args:
@@ -119,7 +119,7 @@ def mailAdminCreate(request):
 
 
 @staff_member_required
-def courses(request):
+def courses(request) -> HttpResponse:
     """A view rendering all the courses that happened on the website
 
     Args:
@@ -152,7 +152,7 @@ def courses(request):
 
 
 @staff_member_required
-def transactions(request):
+def transactions(request) -> HttpResponse:
     """A view rendering all the transactions that happened on the website
 
     Args:
@@ -168,7 +168,7 @@ def transactions(request):
 
 
 @staff_member_required
-def user_list(request):
+def user_list(request) -> HttpResponse:
     """A view rendering users' basic information based on certain queries
 
     Args:
@@ -202,7 +202,7 @@ def user_list(request):
 
 
 @staff_member_required
-def user_admin_view(request):
+def user_admin_view(request) -> HttpResponse:
     """A view rendering every information about a certain user
 
     Args:
@@ -246,7 +246,7 @@ def user_admin_view(request):
 
 
 @staff_member_required
-def message_list(request):
+def message_list(request) -> HttpResponse:
     """A view rendering a list of every messages received from the contact form
 
     Args:
@@ -268,7 +268,7 @@ def message_list(request):
 
 
 @staff_member_required
-def message_admin_view(request):
+def message_admin_view(request) -> HttpResponse:
     """A view rendering every information about a certain message sent from the contact form
 
     Args:
@@ -287,7 +287,7 @@ def message_admin_view(request):
 
 
 @staff_member_required
-def student_requests(request):
+def student_requests(request) -> HttpResponse:
     """A view rendering informations about every student request
 
     Args:

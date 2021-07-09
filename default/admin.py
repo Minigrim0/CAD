@@ -16,7 +16,15 @@ class ArticleAdmin(admin.ModelAdmin):
     fields = ("name", "title", "subtitle", "content")
 
     @staticmethod
-    def content_preview(article):
+    def content_preview(article: Article) -> str:
+        """Renders a short version of the article
+
+        Args:
+            article (Article): The article to render a shortened version of
+
+        Returns:
+            str: The shortened version of the article
+        """
         text = article.title[0:ARTICLE_DISPLAY_SIZE]
         if len(article.title) > ARTICLE_DISPLAY_SIZE:
             return text + "..."

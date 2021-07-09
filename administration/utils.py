@@ -47,9 +47,7 @@ def modifyUser(username: str, form: Form):
 
 
 def modifyStudent(student_account: StudentAccount, data):
-    """
-    Modifies a student profile according to the given form
-    """
+    """Modifies a student profile according to the given form"""
     student_account.NeedsVisit = data["NeedsVisit"]
     student_account.comments = data["comments"]
     student_account.tutor_firstName = data["tutor_firstName"]

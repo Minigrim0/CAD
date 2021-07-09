@@ -76,6 +76,11 @@ class Profile(models.Model):
 
     @property
     def courses(self):
+        """Returns a string containing the diffrent courses of this profile
+
+        Returns:
+            str: The courses, comma separated
+        """
         msg = ""
         if self.Maths_course:
             msg += "Maths, "
@@ -158,6 +163,11 @@ class StudentAccount(models.Model):
 
     @property
     def balance(self):
+        """Returns the balance of the student account base on previous transactions
+
+        Returns:
+            int: The calculated balance
+        """
         transactions = Transaction.objects.filter(student=self)
         balance = sum(transaction.amount for transaction in transactions)
         return round(balance, 2)
@@ -200,9 +210,15 @@ class CoachAccount(models.Model):
 
     @property
     def nb_students(self):
+        """Returns the amount of students the coach has
+
+        Returns:
+            int: The amount of students
+        """
         return self.students.count()
 
     def schedule(self, studentRequest):
+        """Returns the schedule of the coach for the given Student Request"""
         if studentRequest.coachrequestthrough_set.filter(coach=self).count() == 1:
             return studentRequest.coachrequestthrough_set.get(coach=self).coachschedule
 
@@ -211,6 +227,8 @@ class CoachAccount(models.Model):
 
 
 class CoachRequestThrough(models.Model):
+    """The in between model for the coach account to the request"""
+
     request = models.ForeignKey("users.StudentRequest", on_delete=models.CASCADE)
     coach = models.ForeignKey("users.CoachAccount", on_delete=models.CASCADE)
 
@@ -219,10 +237,7 @@ class CoachRequestThrough(models.Model):
 
 
 class StudentRequest(models.Model):
-    """
-    Modèle StudentRequest:
-        => Représente une recherche de coach de la part d'un etudiant
-    """
+    """A request for a coach from a student"""
 
     # represents the user who made the request
     student = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -241,11 +256,7 @@ class StudentRequest(models.Model):
 
 
 class Notification(models.Model):
-    """
-    Notification:
-        => Represents a niotification sent to a user
-        May be sent by email as well
-    """
+    """Represents a notification sent to a user"""
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     author = models.CharField(
@@ -261,6 +272,7 @@ class Notification(models.Model):
     read = models.BooleanField(default=False)
 
     def send_as_mail(self):
+        """Sends the notification to the concerned user by email"""
         mail = Mail(
             name="notification - {}".format(self.title),
             subject="Nouvelle notification - {}".format(self.title),
@@ -273,10 +285,7 @@ class Notification(models.Model):
 
 
 class FollowElement(models.Model):
-    """
-    FollowElement Model:
-        => Represents course given by a coach to a student
-    """
+    """Represents course given by a coach to a student"""
 
     student = models.ForeignKey(User, blank=True, on_delete=models.PROTECT)
     coach = models.ForeignKey(
@@ -295,7 +304,8 @@ class FollowElement(models.Model):
     approved = models.BooleanField(default=False)
 
     @property
-    def duration(self):
+    def duration(self) -> int:
+        """Returns the duration of the course"""
         time = datetime.combine(datetime.today(), self.endHour) - datetime.combine(
             datetime.today(), self.startHour
         )
@@ -303,10 +313,7 @@ class FollowElement(models.Model):
 
 
 class Transaction(models.Model):
-    """
-    Transaction:
-        => Represents a movement of currency (hours), may be linked to a course
-    """
+    """Represents a movement of currency (hours), may be linked to a course"""
 
     student = models.ForeignKey(StudentAccount, on_delete=models.CASCADE)
     amount = models.FloatField(blank=False, default=0)

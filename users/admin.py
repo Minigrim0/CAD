@@ -21,7 +21,8 @@ class ProfileAdmin(admin.ModelAdmin):
     search_fields = ("user",)
 
     @staticmethod
-    def courses(profile):
+    def courses(profile: Profile) -> str:
+        """Shows the course given or seeked by a profile"""
         return profile.courses
 
 
@@ -46,15 +47,18 @@ class CoachAdmin(admin.ModelAdmin):
     )
 
     @staticmethod
-    def first_name(coachaccount):
+    def first_name(coachaccount: CoachAccount) -> str:
+        """Shows the first name of the coach account"""
         return coachaccount.profile.user.first_name
 
     @staticmethod
-    def last_name(coachaccount):
+    def last_name(coachaccount: CoachAccount) -> str:
+        """Shows the last name of the coach account"""
         return coachaccount.profile.user.last_name
 
     @staticmethod
-    def email(coachaccount):
+    def email(coachaccount: CoachAccount) -> str:
+        """Shows the email address of the coach account"""
         return coachaccount.profile.user.email
 
 
@@ -65,14 +69,17 @@ class StudentAdmin(admin.ModelAdmin):
 
     @staticmethod
     def first_name(studentaccount):
+        """Shows the first name of the student account"""
         return studentaccount.profile.user.first_name
 
     @staticmethod
     def last_name(studentaccount):
+        """Shows the last name of the student account"""
         return studentaccount.profile.user.last_name
 
     @staticmethod
     def email(studentaccount):
+        """Shows the email of the student account"""
         return studentaccount.profile.user.email
 
 

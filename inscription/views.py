@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, HttpResponseBadRequest
+from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -14,7 +14,7 @@ from inscription.decorators import mustnt_be_logged_in
 
 
 @mustnt_be_logged_in(action="inscrire")
-def registerUserView(request):
+def registerUserView(request) -> HttpResponse:
     """The view allowing a user to register as either a coach or a student
 
     Raises:
@@ -49,7 +49,7 @@ def registerUserView(request):
                     messages.SUCCESS,
                     "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.",
                 )
-                utils.welcomeUser(request, user)
+                utils.welcomeUser(user)
                 return HttpResponseRedirect(reverse("home"))
     else:
         form = StudentRegisterForm() if userType == "a" else CoachRegisterForm()
@@ -60,14 +60,14 @@ def registerUserView(request):
 
 
 @login_required
-def confirmation_view(request):
+def confirmation_view(request) -> HttpResponseRedirect:
     """A view to verify the email address of the user
 
     Args:
         request (request): request object needed by all the views
 
     Returns:
-        [type]: [description]
+        HttpResponseRedirect: A redirection to the home page or to an error view
     """
     token = request.GET.get("key", "")
     user = utils.getUser(token)
@@ -104,13 +104,23 @@ def confirmation_view(request):
     return HttpResponseRedirect(reverse("home"))
 
 
-def paymentView(request):
+def paymentView(request) -> HttpResponse:
+    """Displays the page that asks the user to pay his forst two hours
+
+    Returns:
+        HttpResponse: The rendered payment template
+    """
     user = request.user
     view_title = "Paiement"
     return render(request, "payment.html", locals())
 
 
-def pay_later(request):
+def pay_later(request) -> HttpResponseRedirect:
+    """In case the user cannot pay directly
+
+    Returns:
+        HttpResponseRedirect: A redirection to the home page or to an error view
+    """
     user = request.user
 
     # token manquant ou non valide
@@ -142,7 +152,12 @@ def pay_later(request):
     return HttpResponseRedirect(reverse("home"))
 
 
-def thanks(request):
+def thanks(request) -> HttpResponseRedirect:
+    """Creates a notification that thanks the user for having paid his first two hours
+
+    Returns:
+        HttpResponseRedirect: A redirection to either the home or an error page
+    """
     user = request.user
 
     # token manquant ou non valide
