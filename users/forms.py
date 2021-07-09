@@ -9,13 +9,9 @@ from crispy_forms.layout import Layout, Fieldset, Submit, Row, Column, Field
 from cad.settings import CRISPY_TEMPLATE_PACK
 from users.models import FollowElement
 
-from django.shortcuts import reverse
-
 
 class TableForm(Field):
-    """
-    Renders several choice fields as a table of radio buttons
-    """
+    """Renders several choice fields as a table of radio buttons"""
 
     def render(
         self,

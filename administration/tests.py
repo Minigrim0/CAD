@@ -166,7 +166,7 @@ class UserTestCase(TestCase):
         self.assertEqual(coach3.notification_set.count(), 0)
         self.assertEqual(coach4.notification_set.count(), 0)
 
-        thanksCoaches(other_coaches, student.profile.user)
+        thanksCoaches(other_coaches, student)
 
         self.assertEqual(coach1.notification_set.count(), 1)
         self.assertEqual(coach2.notification_set.count(), 0)
