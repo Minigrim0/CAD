@@ -1,35 +1,22 @@
-{% extends 'base.html' %}
-
-{% load static %}
-{% load crispy_forms_tags %}
-
-{% block navlinks %}
+{% extends 'base.html' %} {% load static %} {% load crispy_forms_tags %} {%
+block navlinks %}
 <ul class="navbar-nav">
-    <li class="nav-item">
-        <a href="{% url 'home' %}" class="nav-link">
-            retour
-        </a>
-    </li>
-    <li class="nav-item">
-        <a href="{% url 'login_view' %}" class="nav-link">
-            connexion
-        </a>
-    </li>
+  <li class="nav-item">
+    <a href="{% url 'home' %}" class="nav-link"> retour </a>
+  </li>
+  <li class="nav-item">
+    <a href="{% url 'login_view' %}" class="nav-link"> connexion </a>
+  </li>
 </ul>
-{% endblock %}
-
-{% block content %}
+{% endblock %} {% block content %}
 <div class="container-fluid p-0">
-    <section class="p-3 p-lg-5 d-flex align-items-center">
-        <div class="col-lg-12">
-            <h1 class="mb-2 text-center">
-                Inscription:
-            </h1>
-            {% include 'messages.html' %}
-            {% crispy form form.helper %}
-        </div>
-    </section>
+  <section class="p-3 p-lg-5 d-flex align-items-center">
+    <div class="col-lg-12">
+      <h1 class="mb-2 text-center">Inscription:</h1>
+      {% include 'messages.html' %} {% crispy form form.helper %}
+    </div>
+  </section>
 
-    <hr class="m-0">
+  <hr class="m-0" />
 </div>
 {% endblock %}

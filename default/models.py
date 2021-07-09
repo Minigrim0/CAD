@@ -76,7 +76,9 @@ class Mail(models.Model):
         content = content.replace("<SCHOOLLEVEL>", str(user.profile.birthDate))
         content = content.replace("<SECRETKEY>", str(user.profile.secret_key))
         if user.profile.account_type == "a":
-            content = content.replace("<BALANCE>", str(user.profile.studentaccount.balance))
+            content = content.replace(
+                "<BALANCE>", str(user.profile.studentaccount.balance)
+            )
         content = content.replace(
             "<CONFIRMLINK>",
             format_html(
@@ -103,9 +105,7 @@ class Mail(models.Model):
                 "title": self.clean_header,
                 "content": self.formatted_content(user),
                 "error_mail": "",
-                "site_see_link": "{}{}".format(
-                    SITE_DOMAIN, reverse("soon_view")
-                ),
+                "site_see_link": "{}{}".format(SITE_DOMAIN, reverse("soon_view")),
             },
         )
 
