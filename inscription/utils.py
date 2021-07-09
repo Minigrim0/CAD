@@ -64,7 +64,6 @@ def registerUser(form, usertype):
     Returns:
         user: the user newly created
     """
-
     username = "{}_{}".format(
         form.cleaned_data["last_name"], form.cleaned_data["first_name"]
     )
@@ -105,7 +104,6 @@ def welcomeUser(request, user: User):
     Args:
         user (User): The new user
     """
-
     author = "L'équipe CAD"
     title = "Bienvenue parmi nous!"
     content = "Au nom de toute l'équipe de CAD, \

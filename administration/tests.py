@@ -122,7 +122,6 @@ class UserTestCase(TestCase):
 
     def test_coach_accept(self):
         """The requests workflow to choose a coach works"""
-
         student = User.objects.get(username="a")
         models.StudentRequest.objects.create(student=student)
 

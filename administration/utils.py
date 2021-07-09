@@ -152,7 +152,6 @@ def thanksCoaches(coaches, student):
     """
     Sends a notification to the coaches who have not been selected for a specific request
     """
-
     author = "L'équipe CAD"
     title = "Merci d'avoir répondu présent"
     content = """Merci d'avoir répondu présent à la requête de {} {}.
@@ -178,7 +177,6 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
     """
     Looks for coaches compatible with the student request
     """
-
     # TODO: Upgrade this part
     coaches = Profile.objects.filter(account_type="b")
     for coach in coaches:

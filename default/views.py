@@ -14,7 +14,6 @@ def home(request):
     Returns:
         render: A render of the home page
     """
-
     context = {
         "a_home": Article.objects.filter(name="Accueil")[0],
         "a_info": Article.objects.filter(name="Info")[0],

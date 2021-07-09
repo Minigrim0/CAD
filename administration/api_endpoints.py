@@ -22,7 +22,6 @@ def create_new_request(request):
         JsonResponse: A Json response containing information about whether the request succeeded or not,
         and information aout the failure if necessary
     """
-
     student = get_object_or_404(User, username=request.POST.get("user", None))
     if StudentRequest.objects.filter(student=student, is_closed=False).count():
         response = {
@@ -45,7 +44,6 @@ def set_new_coach(request):
     Returns:
         JsonResponse: A Json Response containing information about the coach
     """
-
     coach_id = request.POST.get("coach", None)
     finalSchedule = request.POST.get("finalSchedule", None)
 
@@ -82,7 +80,6 @@ def chooseCoach(request):
     Returns:
         HttpResponse: A response containing the text "success" if no error occured (Otherwise an Http500)
     """
-
     query = request.POST
 
     studentrequest = StudentRequest.objects.get(id=query["id"])
@@ -116,7 +113,6 @@ def modify_balance(request):
     Returns:
         JsonResponse: A JsonResponse containing the new balance of the student
     """
-
     student = User.objects.get(username=request.POST["user"])
     isCoachLaunching = StudentRequest.objects.filter(student=student).count() == 0
 
@@ -148,7 +144,6 @@ def sendUnsubscriptionMail(request):
     Returns:
         HttpResponse: A response indicating success if nothing went wrong
     """
-
     user = getUser(request.POST.get("user_key"))
     mail = Mail.objects.get(role="c")
     mail.send(user)
