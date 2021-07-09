@@ -15,6 +15,8 @@ from django.contrib.auth.models import User
 
 
 class Article(models.Model):
+    """The article model"""
+
     name = models.CharField(
         max_length=100, default="Article", verbose_name="Nom de l'article"
     )
@@ -30,6 +32,8 @@ class Article(models.Model):
 
 
 class Mail(models.Model):
+    """The Mail model"""
+
     name = models.CharField(
         max_length=150, default="Mail template", verbose_name="Nom du template"
     )
@@ -143,6 +147,8 @@ class Mail(models.Model):
 
 
 class Message(models.Model):
+    """The Message model"""
+
     subject = models.TextField(null=False, default="No subject")
     content = models.TextField(null=False)
     contact_mail = models.CharField(max_length=250)

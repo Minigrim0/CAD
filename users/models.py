@@ -7,11 +7,7 @@ from default.models import Mail
 
 
 class Profile(models.Model):
-    """
-    Modèle Profile:
-        => Extension du modèle User, est utilisé pour sauvegarder les infos
-        autant des profils étudiants que des profils coach
-    """
+    """The extension of the user model"""
 
     levels = [
         ("a", "Primaire"),
@@ -107,7 +103,7 @@ class Profile(models.Model):
 
 
 class StudentAccount(models.Model):
-    # Student
+    """A student account, depending on a profile"""
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
     tutor_name = models.CharField(
@@ -179,13 +175,14 @@ class StudentAccount(models.Model):
 
 
 class CoachAccount(models.Model):
+    """A coach account depending on a profile"""
+
     coach_states = [
         ("a", "----"),
         ("b", "Engagé"),
         ("c", "Refusé"),
     ]
 
-    # Coach
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
     school = models.CharField(null=True, blank=True, default="None", max_length=50, verbose_name="Ecole")

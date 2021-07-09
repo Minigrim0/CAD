@@ -11,6 +11,8 @@ from users.models import (
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
+    """The admin of the profile model"""
+
     list_display = (
         "user",
         "verifiedAccount",
@@ -28,6 +30,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 @admin.register(CoachAccount)
 class CoachAdmin(admin.ModelAdmin):
+    """The admin of the coach account model"""
 
     list_display = (
         "first_name",
@@ -64,6 +67,7 @@ class CoachAdmin(admin.ModelAdmin):
 
 @admin.register(StudentAccount)
 class StudentAdmin(admin.ModelAdmin):
+    """The admin of the student account model"""
 
     list_display = ("first_name", "last_name", "email")
 
@@ -85,6 +89,8 @@ class StudentAdmin(admin.ModelAdmin):
 
 @admin.register(StudentRequest)
 class StudentRequestAdmin(admin.ModelAdmin):
+    """The admin of the student request model"""
+
     list_display = (
         "student",
         "is_closed",
@@ -93,11 +99,15 @@ class StudentRequestAdmin(admin.ModelAdmin):
 
 @admin.register(FollowElement)
 class FollowElementAdmin(admin.ModelAdmin):
+    """The admin of the follow element model"""
+
     list_display = ("id", "student", "coach", "date")
     list_filter = ("id", "student", "coach")
 
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
+    """The admin of the transaction model"""
+
     list_display = ("id", "student", "amount", "admin", "date")
     list_filter = ("id", "student", "amount", "admin", "date")

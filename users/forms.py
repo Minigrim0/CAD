@@ -54,6 +54,8 @@ class TableForm(Field):
 
 
 class BaseRegistration(forms.Form):
+    """The base registration form"""
+
     first_name = forms.CharField(max_length=30, required=True, label="Prénom")
     last_name = forms.CharField(max_length=150, required=True, label="Nom")
     password = forms.CharField(
@@ -103,6 +105,8 @@ class BaseRegistration(forms.Form):
 
 
 class StudentRegisterForm(BaseRegistration):
+    """The student registration form"""
+
     levels = [
         ("a", "Primaire"),
         ("b", "1ère humanité"),
@@ -217,6 +221,8 @@ class StudentRegisterForm(BaseRegistration):
 
 
 class CoachRegisterForm(BaseRegistration):
+    """The coach registration form"""
+
     levels = [
         ("h", "Primaire"),
         ("i", "Humanité"),
@@ -307,6 +313,8 @@ class CoachRegisterForm(BaseRegistration):
 
 
 class StudentReadOnlyForm(StudentRegisterForm):
+    """The student readonly form"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -362,6 +370,8 @@ class StudentReadOnlyForm(StudentRegisterForm):
 
 
 class CoachReadOnlyForm(CoachRegisterForm):
+    """The coach readonly form"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -412,6 +422,8 @@ class CoachReadOnlyForm(CoachRegisterForm):
 
 
 class BaseReadOnly(BaseRegistration):
+    """The base readonly form"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -449,7 +461,11 @@ class BaseReadOnly(BaseRegistration):
 
 
 class addFollowElementForm(forms.ModelForm):
+    """The follow element form"""
+
     class Meta:
+        """The meta class of the follow element form"""
+
         model = FollowElement
         exclude = ("approved", "coach", "student")
 

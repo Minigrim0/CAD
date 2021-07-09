@@ -7,6 +7,8 @@ ARTICLE_DISPLAY_SIZE = 75
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
+    """The admin of the article model"""
+
     list_display = ("name", "date", "content_preview")
     list_filter = ("name", "date")
     date_hierachy = "date"
@@ -35,6 +37,8 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Mail)
 class MailAdmin(admin.ModelAdmin):
+    """The admin of the Mail model"""
+
     list_display = ("id", "name", "subject", "role")
     list_filter = ("id", "name", "subject", "role")
     ordering = ("-id",)
@@ -45,6 +49,8 @@ class MailAdmin(admin.ModelAdmin):
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
+    """The admin of the Message model"""
+
     list_display = ("id", "subject", "contact_mail", "seen")
     list_filter = ("id", "subject", "contact_mail", "seen")
     ordering = ("-id",)
@@ -58,18 +64,11 @@ class MessageAdmin(admin.ModelAdmin):
 
 @admin.register(MailingList)
 class MailingListAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "name",
-    )
-    list_filter = (
-        "id",
-        "name",
-    )
+    """The admin of the Mailing list model"""
+
+    list_display = ("id", "name",)
+    list_filter = ("id", "name",)
     ordering = ("-id",)
     search_fields = ("name",)
 
-    fields = (
-        "name",
-        "users",
-    )
+    fields = ("name", "users",)

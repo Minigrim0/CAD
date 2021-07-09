@@ -3,6 +3,8 @@ from django.urls import reverse
 
 
 class HomeSitemap(Sitemap):
+    """The site map of the home section of the site"""
+
     priority = 0.6
     changefreq = "never"
 
