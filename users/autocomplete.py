@@ -5,6 +5,8 @@ from django.db.models import QuerySet
 
 
 class CoachAutocomplete(autocomplete.Select2QuerySetView):
+    """The autocomplete field to find a new coach"""
+
     def get_queryset(self) -> QuerySet:
         """Returns a queryset with results filtered from the query"""
         qs = User.objects.filter(profile__account_type="b")
