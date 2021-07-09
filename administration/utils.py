@@ -194,7 +194,6 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
         student (Profile): The student that is looking for a coach
         request (StudentRequest): The request the coaches will see
     """
-    # TODO: Upgrade this part
     coaches = Profile.objects.filter(account_type="b")
     for coach in coaches:
         if coach.coachaccount.confirmedAccount != "b":
