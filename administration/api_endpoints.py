@@ -202,8 +202,12 @@ def approve_course(request) -> HttpResponse:
 def request_informations(request) -> JsonResponse:
     id = request.GET.get("id", None)
     student_request = get_object_or_404(StudentRequest, id=id)
-    rendered = render(request, "student_request_section.html", {"student_request": student_request})
+    rendered = render(
+        request, "student_request_section.html", {"student_request": student_request}
+    )
 
-    return JsonResponse({
-        "content": rendered.content.decode("utf-8"),
-    })
+    return JsonResponse(
+        {
+            "content": rendered.content.decode("utf-8"),
+        }
+    )
