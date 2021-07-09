@@ -104,6 +104,7 @@ class Profile(models.Model):
 
 class StudentAccount(models.Model):
     """A student account, depending on a profile"""
+
     profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
 
     tutor_name = models.CharField(
