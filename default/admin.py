@@ -5,6 +5,7 @@ from default.models import Article, Mail, Message, MailingList
 ARTICLE_DISPLAY_SIZE = 75
 
 
+@admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ("name", "date", "content_preview")
     list_filter = ("name", "date")
@@ -14,7 +15,8 @@ class ArticleAdmin(admin.ModelAdmin):
 
     fields = ("name", "title", "subtitle", "content")
 
-    def content_preview(self, article):
+    @staticmethod
+    def content_preview(article):
         text = article.title[0:ARTICLE_DISPLAY_SIZE]
         if len(article.title) > ARTICLE_DISPLAY_SIZE:
             return text + "..."
@@ -23,6 +25,7 @@ class ArticleAdmin(admin.ModelAdmin):
     content_preview.short_description = u"Titre de la section"
 
 
+@admin.register(Mail)
 class MailAdmin(admin.ModelAdmin):
     list_display = ("id", "name", "subject", "role")
     list_filter = ("id", "name", "subject", "role")
@@ -32,6 +35,7 @@ class MailAdmin(admin.ModelAdmin):
     fields = (("name", "subject"), ("content"), "role")
 
 
+@admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
     list_display = ("id", "subject", "contact_mail", "seen")
     list_filter = ("id", "subject", "contact_mail", "seen")
@@ -44,6 +48,7 @@ class MessageAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(MailingList)
 class MailingListAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -60,9 +65,3 @@ class MailingListAdmin(admin.ModelAdmin):
         "name",
         "users",
     )
-
-
-admin.site.register(Article, ArticleAdmin)
-admin.site.register(Mail, MailAdmin)
-admin.site.register(Message, MessageAdmin)
-admin.site.register(MailingList, MailingListAdmin)
