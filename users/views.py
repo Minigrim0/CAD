@@ -27,11 +27,13 @@ from inscription.decorators import mustnt_be_logged_in
 from inscription.utils import send_confirmation_mail
 
 
-def user_home(request):
+def user_home(request) -> HttpResponseRedirect:
+    """Redirects to the user home page"""
     return HttpResponseRedirect(reverse("my_account"))
 
 
-def ErrorView(request):
+def ErrorView(request) -> HttpResponseRedirect:
+    """Adds an error messages and redirects to the home page"""
     messages.add_message(
         request, messages.ERROR, "Une erreur est survenue lors du chargement de la page"
     )
@@ -39,7 +41,12 @@ def ErrorView(request):
 
 
 @login_required
-def userView(request):
+def userView(request) -> HttpResponse:
+    """Renders the home page of the user
+
+    Returns:
+        HttpResponse: The rendered template of the user's home page
+    """
     user = request.user
     notifications = user.notification_set.all().order_by("-date_created")
 
@@ -57,7 +64,8 @@ def userView(request):
 
 
 @login_required
-def followView(request):
+def followView(request) -> HttpResponse:
+    """Shows the diffrent courses a student has attended to"""
     a_user = request.user
     followelement_set = a_user.followelement_set.all()
 
@@ -67,6 +75,7 @@ def followView(request):
 
 @login_required
 def studentsView(request):
+    """Shows the students of a coach"""
     coach = request.user.profile.coachaccount
     student_set = coach.students.all()
 
@@ -75,7 +84,8 @@ def studentsView(request):
 
 
 @login_required
-def addFollowElement(request):
+def addFollowElement(request) -> HttpResponse:
+    """Creates a new follow element or displays the form to do it"""
     student_pk = request.GET.get("pk", -1)
     student = get_object_or_404(StudentAccount, pk=student_pk)
 

@@ -18,22 +18,22 @@ class TableForm(Field):
         form,
         form_style,
         context,
-        template_pack=CRISPY_TEMPLATE_PACK,
+        template_pack: str = CRISPY_TEMPLATE_PACK,
         extra_context=None,
         **kwargs
-    ):
-        return '<table class="table" id="gridLang">\
-                <thead>\
-                    <tr>\
-                        <th scope="col" class="col-md-2">/</th>\
-                        {}\
-                    </tr>\
-                </thead>\
-                <tbody>\
-                    {}\
-                </tbody>\
-            </table>\
-            '.format(
+    ) -> str:
+        """Generates the html string of the table
+
+        Returns:
+            str: A rendered table form
+        """
+        return """<table class="table" id="gridLang">
+                <thead>
+                    <tr><th scope="col" class="col-md-2">/</th>{}</tr>
+                </thead>
+                <tbody>{}</tbody>
+            </table>
+            """.format(
             "".join(
                 '<th scope="col" class="col-md-2">{}</th>'.format(choice)
                 for _, choice in form[self.fields[0]].field.choices
@@ -78,6 +78,11 @@ class BaseRegistration(forms.Form):
     )
 
     def clean(self, admin=False):
+        """Cleans the data from the form, adding errors where the data is not correct
+
+        Args:
+            admin (bool, optional): Whether to force the data saving or not. Defaults to False.
+        """
         cleaned_data = super().clean()
         if admin:
             return
@@ -352,6 +357,7 @@ class StudentReadOnlyForm(StudentRegisterForm):
         )
 
     def clean(self):
+        """Cleans the data from the form"""
         super().clean(admin=True)
 
 
@@ -401,6 +407,7 @@ class CoachReadOnlyForm(CoachRegisterForm):
         )
 
     def clean(self):
+        """Cleans the data from the form"""
         super().clean(admin=True)
 
 
@@ -436,7 +443,8 @@ class BaseReadOnly(BaseRegistration):
             ),
         )
 
-    def clean(self, admin=False):
+    def clean(self):
+        """Cleans the data from the form"""
         super().clean(admin=True)
 
 

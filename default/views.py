@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 
@@ -8,11 +8,11 @@ from default.forms import contactForm
 from default.models import Article, Message
 
 
-def home(request):
+def home(request) -> HttpResponse:
     """Home view
 
     Returns:
-        render: A render of the home page
+        HttpResponse: A render of the home page
     """
     context = {
         "a_home": Article.objects.filter(name="Accueil")[0],
@@ -27,7 +27,7 @@ def home(request):
     return render(request, "index.html", context)
 
 
-def contactView(request):
+def contactView(request) -> HttpResponse:
     """Contact view
 
     Returns:
@@ -56,5 +56,10 @@ def contactView(request):
     return render(request, "contact.html", locals())
 
 
-def soon(request):
+def soon(request) -> HttpResponse:
+    """Shows the coming soon page
+
+    Returns:
+        HttpResponse: A render of the soon page
+    """
     return render(request, "soon.html")

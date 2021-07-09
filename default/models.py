@@ -55,7 +55,15 @@ class Mail(models.Model):
         User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE
     )
 
-    def formatted_content(self, user: User):
+    def formatted_content(self, user: User) -> str:
+        """Formats the content of the mail using the pre-defined tags
+
+        Args:
+            user (User): The user this mail is addressed to
+
+        Returns:
+            str: The formatted mail content
+        """
         content = str(self.content)
         content = content.replace("<LASTNAME>", str(user.last_name))
         content = content.replace("<FIRSTNAME>", str(user.first_name))
@@ -79,6 +87,12 @@ class Mail(models.Model):
         return content
 
     def send(self, user: User, bcc=None):
+        """Sends the mail to the given user with the given people in bcc
+
+        Args:
+            user (User): The user to send the mail to
+            bcc ([type], optional): A list of addresses to send the mail to as bcc. Defaults to None.
+        """
         html_message = render_to_string(
             "mail.html",
             {
@@ -116,7 +130,12 @@ class Mail(models.Model):
         self.save()
 
     @property
-    def clean_header(self):
+    def clean_header(self) -> str:
+        """Cleans the subject of the mail
+
+        Returns:
+            str: The cleaned subject
+        """
         return str(self.subject).replace("\n", "")
 
     def __str__(self):
@@ -129,7 +148,12 @@ class Message(models.Model):
     contact_mail = models.CharField(max_length=250)
     seen = models.BooleanField(default=False)
 
-    def rendered(self):
+    def rendered(self) -> str:
+        """Renders a message as html string using the mail template
+
+        Returns:
+            str: The html content of the message as string
+        """
         html_message = render_to_string(
             "mail.html",
             {
@@ -143,6 +167,7 @@ class Message(models.Model):
         return html_message
 
     def send_as_mail(self):
+        """Sends the message as mail to the CAD mailbox"""
         logging.debug(
             "Sending mail : {}\n{}\n\n{}".format(
                 self.subject, self.content, self.contact_mail
@@ -175,5 +200,7 @@ class Message(models.Model):
 
 
 class MailingList(models.Model):
+    """Represents a list of people that will receive a certain selection of email"""
+
     users = models.ManyToManyField(User, verbose_name="Utilisateurs intéréssés")
     name = models.CharField(max_length=100)

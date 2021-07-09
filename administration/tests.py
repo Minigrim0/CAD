@@ -6,6 +6,7 @@ from administration.utils import thanksCoaches, sendNotifToCoaches
 
 class UserTestCase(TestCase):
     def setUp(self):
+        """Sets up an environment for the tests to run in"""
         User.objects.create(username="a", first_name="user", last_name="etudiant")
         User.objects.create(username="b", first_name="user", last_name="coach")
         User.objects.create(username="c", first_name="user", last_name="coach2")
