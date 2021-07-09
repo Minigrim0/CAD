@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0008_auto_20201116_1015'),
+        ("users", "0008_auto_20201116_1015"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='transaction',
-            name='amount',
+            model_name="transaction",
+            name="amount",
             field=models.FloatField(default=0),
         ),
     ]

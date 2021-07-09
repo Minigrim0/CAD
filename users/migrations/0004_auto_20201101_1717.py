@@ -7,23 +7,27 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0003_auto_20201022_0941'),
+        ("users", "0003_auto_20201022_0941"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='followelement',
-            name='endHour',
+            model_name="followelement",
+            name="endHour",
             field=models.TimeField(default=django.utils.timezone.now),
         ),
         migrations.AddField(
-            model_name='followelement',
-            name='startHour',
+            model_name="followelement",
+            name="startHour",
             field=models.TimeField(default=django.utils.timezone.now),
         ),
         migrations.AlterField(
-            model_name='followelement',
-            name='date',
-            field=models.DateField(blank=True, default=django.utils.timezone.now, verbose_name='Date et heure du cours'),
+            model_name="followelement",
+            name="date",
+            field=models.DateField(
+                blank=True,
+                default=django.utils.timezone.now,
+                verbose_name="Date et heure du cours",
+            ),
         ),
     ]
