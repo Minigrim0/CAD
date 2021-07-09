@@ -9,27 +9,32 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('users', '0004_auto_20201101_1717'),
+        ("users", "0004_auto_20201101_1717"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='followelement',
-            name='coachBeenPaid',
+            model_name="followelement",
+            name="coachBeenPaid",
         ),
         migrations.AlterField(
-            model_name='followelement',
-            name='endHour',
-            field=models.TimeField(default='12:00'),
+            model_name="followelement",
+            name="endHour",
+            field=models.TimeField(default="12:00"),
         ),
         migrations.AlterField(
-            model_name='followelement',
-            name='startHour',
-            field=models.TimeField(default='10:00'),
+            model_name="followelement",
+            name="startHour",
+            field=models.TimeField(default="10:00"),
         ),
         migrations.AlterField(
-            model_name='followelement',
-            name='student',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="followelement",
+            name="student",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]
