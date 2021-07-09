@@ -9,6 +9,7 @@ from users.models import (
 )
 
 
+@admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
     list_display = (
         "user",
@@ -19,10 +20,12 @@ class ProfileAdmin(admin.ModelAdmin):
     ordering = ("user",)
     search_fields = ("user",)
 
-    def courses(_, profile):
+    @staticmethod
+    def courses(profile):
         return profile.courses
 
 
+@admin.register(CoachAccount)
 class CoachAdmin(admin.ModelAdmin):
 
     list_display = (
@@ -42,30 +45,38 @@ class CoachAdmin(admin.ModelAdmin):
         "profile__user__email",
     )
 
-    def first_name(_, coachaccount):
+    @staticmethod
+    def first_name(coachaccount):
         return coachaccount.profile.user.first_name
 
-    def last_name(_, coachaccount):
+    @staticmethod
+    def last_name(coachaccount):
         return coachaccount.profile.user.last_name
 
-    def email(_, coachaccount):
+    @staticmethod
+    def email(coachaccount):
         return coachaccount.profile.user.email
 
 
+@admin.register(StudentAccount)
 class StudentAdmin(admin.ModelAdmin):
 
     list_display = ("first_name", "last_name", "email")
 
-    def first_name(_, studentaccount):
+    @staticmethod
+    def first_name(studentaccount):
         return studentaccount.profile.user.first_name
 
-    def last_name(_, studentaccount):
+    @staticmethod
+    def last_name(studentaccount):
         return studentaccount.profile.user.last_name
 
-    def email(_, studentaccount):
+    @staticmethod
+    def email(studentaccount):
         return studentaccount.profile.user.email
 
 
+@admin.register(StudentRequest)
 class StudentRequestAdmin(admin.ModelAdmin):
     list_display = (
         "student",
@@ -73,19 +84,13 @@ class StudentRequestAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(FollowElement)
 class FollowElementAdmin(admin.ModelAdmin):
     list_display = ("id", "student", "coach", "date")
     list_filter = ("id", "student", "coach")
 
 
+@admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
     list_display = ("id", "student", "amount", "admin", "date")
     list_filter = ("id", "student", "amount", "admin", "date")
-
-
-admin.site.register(Profile, ProfileAdmin)
-admin.site.register(StudentAccount, StudentAdmin)
-admin.site.register(CoachAccount, CoachAdmin)
-admin.site.register(StudentRequest, StudentRequestAdmin)
-admin.site.register(FollowElement, FollowElementAdmin)
-admin.site.register(Transaction, TransactionAdmin)
