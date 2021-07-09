@@ -25,7 +25,6 @@ def registerUserView(request):
         could not successfully register
         redirect: a redirection to the home page if the user sucessfully registered
     """
-
     userType = request.GET.get("type", "a")
     if userType not in "ab":
         raise HttpResponseBadRequest("Le type de compte est invalide")
