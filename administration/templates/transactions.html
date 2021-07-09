@@ -1,45 +1,43 @@
-{% extends 'base.html' %}
-{% load static %}
-
-{% block navlinks %}
-    <ul class="navbar-nav">
-        <li class="nav-item">
-            <a href="/administration" class="nav-link">retour</a>
-        </li>
-    </ul>
-{% endblock %}
-
-{% block content %}
-    <div class="container-fluid">
-
-        <section class="p-3 p-lg-5 align-items-center">
-            <div id="container">
-
-                <h2>Transactions effectuées</h2>
-                <table class="table table-bordered">
-                    <thead>
-                        <tr>
-                        <th scope="col">Utilisateur</th>
-                        <th scope="col">Montant (Nb d'heures)</th>
-                        <th scope="col">Commentaire</th>
-                        <th scope="col">Adminisitrateur</th>
-                        <th scope="col">Date (AAAA/MM/JJ)</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for transaction in transaction_list %}
-                            <tr>
-                                <td>{{ transaction.student.profile.user.last_name }} {{ transaction.student.profile.user.first_name }}</td>
-                                <td>{{ transaction.amount }}</td>
-                                <td>{{ transaction.comment }}</td>
-                                <td>{{ transaction.admin.last_name }} {{ transaction.admin.first_name }}</td>
-                                <td>{{ transaction.date|date:"Y/m/d" }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-
-            </div>
-        </section>
+{% extends 'base.html' %} {% load static %} {% block navlinks %}
+<ul class="navbar-nav">
+  <li class="nav-item">
+    <a href="/administration" class="nav-link">retour</a>
+  </li>
+</ul>
+{% endblock %} {% block content %}
+<div class="container-fluid">
+  <section class="p-3 p-lg-5 align-items-center">
+    <div id="container">
+      <h2>Transactions effectuées</h2>
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th scope="col">Utilisateur</th>
+            <th scope="col">Montant (Nb d'heures)</th>
+            <th scope="col">Commentaire</th>
+            <th scope="col">Adminisitrateur</th>
+            <th scope="col">Date (AAAA/MM/JJ)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for transaction in transaction_list %}
+          <tr>
+            <td>
+              {{ transaction.student.profile.user.last_name }} {{
+              transaction.student.profile.user.first_name }}
+            </td>
+            <td>{{ transaction.amount }}</td>
+            <td>{{ transaction.comment }}</td>
+            <td>
+              {{ transaction.admin.last_name }} {{ transaction.admin.first_name
+              }}
+            </td>
+            <td>{{ transaction.date|date:"Y/m/d" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+  </section>
+</div>
 {% endblock %}

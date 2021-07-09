@@ -1,144 +1,148 @@
 var cad = cad || {};
-cad.backupHtmlKey= "backupHtml";
+cad.backupHtmlKey = "backupHtml";
 
-$(document).ready(function(){
-	// cad.hideEdit();
-	var url = new Url();
+$(document).ready(function () {
+  // cad.hideEdit();
+  var url = new Url();
 
-	if ((url.query.edit) && (url.query.edit=="1")){
-		/* $("#editButton").show(); */
-		$("#editButton").css("display", "inline-block");
-	} else {
-		$('#editMenuLayer').hide();
-	}
+  if (url.query.edit && url.query.edit == "1") {
+    /* $("#editButton").show(); */
+    $("#editButton").css("display", "inline-block");
+  } else {
+    $("#editMenuLayer").hide();
+  }
 
-	cad.pageName = cad.getPageName();
+  cad.pageName = cad.getPageName();
 
-	$("#downloadAnchor").click(function(){ $(this).hide(); });
+  $("#downloadAnchor").click(function () {
+    $(this).hide();
+  });
 });
 
-cad.getPageName = function(){
-	var u = new Url;
-	var pathParts = u.path.split('/');
-	var lastPathPart = pathParts[pathParts.length - 1];
-	var pageNameParts = lastPathPart.split('.');
-	var nameIndex = 0;
+cad.getPageName = function () {
+  var u = new Url();
+  var pathParts = u.path.split("/");
+  var lastPathPart = pathParts[pathParts.length - 1];
+  var pageNameParts = lastPathPart.split(".");
+  var nameIndex = 0;
 
-	if (pageNameParts.length > 1){
-		nameIndex = pageNameParts.length - 2;
-	}
+  if (pageNameParts.length > 1) {
+    nameIndex = pageNameParts.length - 2;
+  }
 
-	var pageName = pageNameParts[nameIndex];
+  var pageName = pageNameParts[nameIndex];
 
-	return pageName;
+  return pageName;
 };
 
-cad.prepEdit = function(){
-	if (cad.editing){
-		return;
-	}
+cad.prepEdit = function () {
+  if (cad.editing) {
+    return;
+  }
 
-	cad.showEdit();
-	var editAreas = $(".editArea");
+  cad.showEdit();
+  var editAreas = $(".editArea");
 
-	if ($(editAreas).length == 0){
-		$(".editable").each(function(ix, ele){
-			$(ele).after(
-				'<br class="editDeco" />'+
-				'<textarea class="editArea" for="' + $(ele).attr("id") + '" cols="48" rows="10">'+
-				// cad.contentToInputFormat($(ele).html())+
-				$(ele).html()+
-				'</textarea>'
-			);
+  if ($(editAreas).length == 0) {
+    $(".editable").each(function (ix, ele) {
+      $(ele).after(
+        '<br class="editDeco" />' +
+          '<textarea class="editArea" for="' +
+          $(ele).attr("id") +
+          '" cols="48" rows="10">' +
+          // cad.contentToInputFormat($(ele).html())+
+          $(ele).html() +
+          "</textarea>"
+      );
 
-			$(ele).data(cad.backupHtmlKey, $(ele).html());
-		});
-	} else {
-		$(".editable").each(function(ix, ele){
-			$(ele).html($(ele).data(cad.backupHtmlKey));
-		});
+      $(ele).data(cad.backupHtmlKey, $(ele).html());
+    });
+  } else {
+    $(".editable").each(function (ix, ele) {
+      $(ele).html($(ele).data(cad.backupHtmlKey));
+    });
 
-		$(editAreas).show();
-		$(".editDeco").show();
-	}
+    $(editAreas).show();
+    $(".editDeco").show();
+  }
 };
 
-cad.cancelEdit = function(){
-	$(".editable").each(function(ix, ele){
-		$(ele).html($(ele).data(cad.backupHtmlKey));
-	});
+cad.cancelEdit = function () {
+  $(".editable").each(function (ix, ele) {
+    $(ele).html($(ele).data(cad.backupHtmlKey));
+  });
 
-	$(".editArea, .editDeco").remove();
-	cad.hideEdit();
+  $(".editArea, .editDeco").remove();
+  cad.hideEdit();
 };
 
-cad.testEdit = function(){
-	$(".editArea").each(function(ix, ele){
-		$("#" + $(ele).attr("for")).html(cad.inputToContentFormat($(ele).val(), true));
-	});
+cad.testEdit = function () {
+  $(".editArea").each(function (ix, ele) {
+    $("#" + $(ele).attr("for")).html(
+      cad.inputToContentFormat($(ele).val(), true)
+    );
+  });
 
-	cad.hideEdit();
+  cad.hideEdit();
 };
 
-cad.saveEdit = function(){
-	var downloadFileName = "setTextOf" + cad.properCase(cad.pageName) + '.js';
+cad.saveEdit = function () {
+  var downloadFileName = "setTextOf" + cad.properCase(cad.pageName) + ".js";
 
-	var lines = [];
-	lines.push(
-		'$(document).ready(function(){'
-	);
+  var lines = [];
+  lines.push("$(document).ready(function(){");
 
-	$(".editArea").each(function(ix, ele){
-		lines.push('\t$("#' + $(ele).attr("for") + '").html(');
-		lines.push("\t\t'" + cad.inputToContentFormat($(ele).val()) + "'");
-		lines.push('\t);');
-	});
+  $(".editArea").each(function (ix, ele) {
+    lines.push('\t$("#' + $(ele).attr("for") + '").html(');
+    lines.push("\t\t'" + cad.inputToContentFormat($(ele).val()) + "'");
+    lines.push("\t);");
+  });
 
-	lines.push(
-		'});'
-	);
+  lines.push("});");
 
-	cad.hideEdit();
+  cad.hideEdit();
 
-	var downBlob = new Blob([lines.join('\r')], {type: "text/plain; charset=utf-8"});
-	var URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
-	var blobUrl = URL.createObjectURL(downBlob);
-	$("#downloadAnchor").attr("href", blobUrl);
-	$("#downloadAnchor").attr("download", downloadFileName);
-	$("#downloadAnchor").css("display","inline-block");
+  var downBlob = new Blob([lines.join("\r")], {
+    type: "text/plain; charset=utf-8",
+  });
+  var URL = window.URL || window.webkitURL || window.mozURL || window.msURL;
+  var blobUrl = URL.createObjectURL(downBlob);
+  $("#downloadAnchor").attr("href", blobUrl);
+  $("#downloadAnchor").attr("download", downloadFileName);
+  $("#downloadAnchor").css("display", "inline-block");
 };
 
-cad.showEdit = function(){
-	$("#editButton").hide();
-	$("#downloadAnchor").hide();
-	$("#testEditButton").css("display","inline-block");
-	$("#cancelButton").css("display","inline-block");
-	$("#saveButton").css("display","inline-block");
-	cad.editing = true;
+cad.showEdit = function () {
+  $("#editButton").hide();
+  $("#downloadAnchor").hide();
+  $("#testEditButton").css("display", "inline-block");
+  $("#cancelButton").css("display", "inline-block");
+  $("#saveButton").css("display", "inline-block");
+  cad.editing = true;
 };
 
-cad.hideEdit = function(){
-	$(".editTool").remove();
-	$(".editArea").hide();
-	$(".editDeco").hide();
-	$("#cancelButton").hide();
-	$("#testEditButton").hide();
-	$("#saveButton").hide();
-	$("#downloadAnchor").hide();
-	$("#editButton").css("display","inline-block");
-	cad.editing = false;
+cad.hideEdit = function () {
+  $(".editTool").remove();
+  $(".editArea").hide();
+  $(".editDeco").hide();
+  $("#cancelButton").hide();
+  $("#testEditButton").hide();
+  $("#saveButton").hide();
+  $("#downloadAnchor").hide();
+  $("#editButton").css("display", "inline-block");
+  cad.editing = false;
 };
 
-cad.properCase = function(inputStr){
-	if (!inputStr){
-		return inputStr;
-	}
+cad.properCase = function (inputStr) {
+  if (!inputStr) {
+    return inputStr;
+  }
 
-	if (inputStr.length == 1){
-		return inputStr[0].toUpperCase();
-	}
+  if (inputStr.length == 1) {
+    return inputStr[0].toUpperCase();
+  }
 
-	return inputStr[0].toUpperCase() + inputStr.substr(1).toLowerCase();
+  return inputStr[0].toUpperCase() + inputStr.substr(1).toLowerCase();
 };
 
 /*
@@ -193,26 +197,26 @@ cad.contentToInputFormat = function(innerHtml){
 };
 */
 
-cad.inputToContentFormat = function(input, forTest){
-	var normalized = input.replace(/\r\n/g, "\r").replace(/\n/g, "\r");
+cad.inputToContentFormat = function (input, forTest) {
+  var normalized = input.replace(/\r\n/g, "\r").replace(/\n/g, "\r");
 
-	if (!forTest){
-		normalized = normalized.replace(/'/g, "\\'");
-	}
+  if (!forTest) {
+    normalized = normalized.replace(/'/g, "\\'");
+  }
 
-	var parts = normalized.split("\r");
+  var parts = normalized.split("\r");
 
-	for (var i=parts.length-1; i>=0; i--){
-		if (!parts[i]){
-			parts.splice(i, 1);
-		}
-	}
+  for (var i = parts.length - 1; i >= 0; i--) {
+    if (!parts[i]) {
+      parts.splice(i, 1);
+    }
+  }
 
-	if (parts.length == 0){
-		return "";
-	}
+  if (parts.length == 0) {
+    return "";
+  }
 
-	/*
+  /*
 	if (parts.length == 1){
 		return parts[0];
 	}
@@ -235,6 +239,5 @@ cad.inputToContentFormat = function(input, forTest){
 	}
 	*/
 
-	return parts.join("");
+  return parts.join("");
 };
-
