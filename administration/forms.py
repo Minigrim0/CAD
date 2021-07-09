@@ -20,6 +20,8 @@ class MailForm(forms.ModelForm):
     """A form to create and modify mail objects"""
 
     class Meta:
+        """The meta class of the mail form"""
+
         model = Mail
         fields = ["name", "subject", "content", "role"]
 
@@ -28,6 +30,8 @@ class ArticleForm(forms.ModelForm):
     """A form to create and modify article objects"""
 
     class Meta:
+        """The meta class of the article form"""
+
         model = Article
         fields = ["name", "title", "subtitle", "content"]
         widgets = {
@@ -39,6 +43,8 @@ class TransactionForm(forms.ModelForm):
     """A form to create and modify transaction objects"""
 
     class Meta:
+        """The meta class of the transaction form"""
+
         model = Transaction
         fields = ["amount", "comment"]
 
