@@ -1,74 +1,81 @@
-(function($){
+(function ($) {
+  var testing = false;
+  var pause = 1000;
+  var thisText;
+  var spansArray;
+  var spanClasses = [];
+  var classBasicName = "xm";
+  var magicClass = "xmas";
+  var currentClass;
+  var iteration = 0;
 
-	var testing = false;
-	var pause = 1000;
-	var thisText;
-	var spansArray;
-	var spanClasses=[];
-	var classBasicName = 'xm';
-	var magicClass = 'xmas';
-	var currentClass;
-	var iteration = 0;
+  $.fn.kbxmasPlugin = function (pMagicClass, pPause) {
+    magicClass = pMagicClass || magicClass;
+    pause = pPause || pause;
 
-	$.fn.kbxmasPlugin = function(pMagicClass, pPause){
+    $(this)
+      .find("*")
+      .each(function () {
+        thisText = $(this).text();
 
-		magicClass = pMagicClass || magicClass;
-		pause = pPause || pause;
+        if (thisText !== $(this).html()) return;
 
-		$(this).find('*').each(function(){
-			thisText = $(this).text();
+        spansArray = [];
 
-			if (thisText !== $(this).html())
-				return;
+        for (var i = 0; i < thisText.length; i++) {
+          if (
+            (thisText[i] >= "A" && thisText[i] <= "Z") ||
+            (thisText[i] >= "a" && thisText[i] <= "z")
+          ) {
+            spansArray.push(
+              '<span class="' +
+                classBasicName +
+                thisText[i].toUpperCase() +
+                '">' +
+                thisText[i] +
+                "</span>"
+            );
+          } else {
+            spansArray.push(thisText[i]);
+          }
+        }
 
-			spansArray = [];
+        $(this).html(spansArray.join(""));
+      });
 
-			for (var i=0; i<thisText.length; i++){
-				if ((thisText[i] >= 'A' && thisText[i] <= 'Z') || (thisText[i] >= 'a' && thisText[i] <= 'z')){
-					spansArray.push('<span class="'+classBasicName+thisText[i].toUpperCase()+'">'+thisText[i]+'</span>');
-				} else {
-					spansArray.push(thisText[i]);
-				}
-			}
+    // free memory
+    spansArray = [];
 
-			$(this).html(spansArray.join(''));
-		});
+    for (i = "A".charCodeAt(0); i <= "Z".charCodeAt(0); i++) {
+      spanClasses.push(classBasicName + String.fromCharCode(i));
+    }
 
-		// free memory
-		spansArray = [];
+    currentClass = spanClasses.length - 1;
 
-		for (i='A'.charCodeAt(0); i<='Z'.charCodeAt(0); i++){
-			spanClasses.push(classBasicName+String.fromCharCode(i));
-		}
+    setInterval(function () {
+      setMagicOnChar();
+    }, pause);
 
-		currentClass = spanClasses.length - 1;
+    return this;
+  };
 
-		setInterval(
-			function(){
-				setMagicOnChar();
-			},
-			pause
-		);
+  function setMagicOnChar() {
+    // removeData to prevent memory leaks
+    $("." + magicClass)
+      .removeClass(magicClass)
+      .removeData();
 
-		return this;
-	}
+    currentClass++;
 
-	function setMagicOnChar(){
-		// removeData to prevent memory leaks
-		$('.'+magicClass).removeClass(magicClass).removeData();
+    if (currentClass >= spanClasses.length) {
+      currentClass = 0;
 
-		currentClass++;
+      if (testing) {
+        iteration++;
+        console.log("Iteration " + iteration);
+      }
+    }
 
-		if (currentClass >= spanClasses.length){
-			currentClass = 0;
-
-			if (testing){
-				iteration++;
-				console.log('Iteration '+iteration);
-			}
-		}
-
-		$('.'+spanClasses[currentClass]).addClass(magicClass);
-	}
-
+    $("." + spanClasses[currentClass]).addClass(magicClass);
+  }
 })(jQuery);
