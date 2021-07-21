@@ -102,6 +102,9 @@ def addFollowElement(request) -> HttpResponse:
             course.endHour = form.cleaned_data["endHour"]
             course.comments = form.cleaned_data["comments"]
             course.save()
+            messages.success(
+                request, "Le cours a bien été ajouté !"
+            )
             return HttpResponseRedirect(reverse("my_students"))
     else:
         form = addFollowElementForm()

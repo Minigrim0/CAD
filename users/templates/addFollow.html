@@ -23,3 +23,11 @@
     </section>
 </div>
 {% endblock %}
+
+{% block extra_imports %}
+<script>
+    $( "#id_date" ).datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+</script>
+{% endblock %}
