@@ -1,5 +1,12 @@
 //Makes a request to remove the notification with the specified ID
 //Has to be an id related to the current user's notification
+
+/**
+ * Accepts or denies the student request
+ * @param {int} id the id of the request 
+ * @param {boolean} decision the decision the user made
+ * @param {string} coach the name of the coach who made the decision
+ */
 function acceptRequest(id, decision, coach) {
     schedule = document.getElementById("coach_schedule").value;
     document.getElementById("error_schedule").innerHTML = "";

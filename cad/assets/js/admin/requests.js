@@ -1,13 +1,33 @@
-function showconfirmationmodal(coach_pk, id){
+/**
+ * Shows a confirmation modal to confirm the coach selection
+ * @param {int} coach_pk the pk of the selected coach
+ * @param {int} id the id of the request
+ */
+function showconfirmationmodal(coach_pk, id) {
     $('#Detail' + coach_pk + '_' + id).modal('show');
     $('#tobechosen_' + coach_pk + id).css('display', 'block');
 }
 
+/**
+ * Shows details obout a coach
+ * @param {int} coach_pk the pk of the coach
+ * @param {int} id the id of the student request
+ */
 function showdetailmodal(coach_pk, id){
     $('#Detail' + coach_pk + '_' + id).modal('show');
     $('#tobechosen_' + coach_pk + id).css('display', 'none');
 }
 
+/**
+ * Creates a temporary alert
+ * @param {string} parent the id of the parent DOM element
+ * @param {string} level the type of the alert (danger, warning, success)
+ * @param {int} time the duration of the alert
+ * @param {str} message the message inside the alert
+ * @param {int} id the id of the alert
+ * @param {callback} callback the function to call once the aert is closed
+ * @param {list} args the arguments for the callback
+ */
 function createTempAlert(parent, level, time, message, id, callback=null, args=[]){
     $(parent).append($('<div class="alert alert-' + level + ' fade show" role="alert" id="notif_' + id + '">\
         ' + message + '\
@@ -21,12 +41,20 @@ function createTempAlert(parent, level, time, message, id, callback=null, args=[
     }, time);
 }
 
+/**
+ * Deletes a list of divs
+ * @param {list} divs the list of the divs' ids
+ */
 function deleteDiv(divs=[]){
     for(var x=0;x<divs.length; x++){  // skipcq JS-0502
         $(divs[x]).detach();
     }
 }
 
+/**
+ * Updates the page, deleting the request from opened and showing it in closed
+ * @param {int} id the id of the student request
+ */
 function updateRequestDisplay(id){
     var infoUrl = RequestInformationUrl + "?id=" + id;  // skipcq JS-0502
     $.get(
@@ -47,6 +75,11 @@ function updateRequestDisplay(id){
     )
 }
 
+/**
+ * Allows the administration to choose the coach for a certain student request
+ * @param {int} coach_pk the pk of the coach
+ * @param {int} id the id of the student request
+ */
 function chooseCoach(coach_pk, id) {
     var finalschedule = $('#schedulefor' + coach_pk + id).val();  // skipcq JS-0502
     if(finalschedule == ""){
@@ -77,6 +110,10 @@ function chooseCoach(coach_pk, id) {
     $('#Detail' + coach_pk + '_' + id).modal('hide');
 }
 
+/**
+ * Switch between opened and closed student requests
+ * @param {str} to the panel to switch to
+ */
 function switchTo(to){
     if (to == "open"){
         document.getElementById("Open").style.display = 'block';
