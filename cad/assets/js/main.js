@@ -162,7 +162,7 @@ function checkC_Names() {
 }
 
 function C_validate() {
-    var checked = checkC_Pass();
+    var checked = checkC_Pass();  // skipcq JS-0502
     checked = checkC_Names()       && checked;
     checked = checkC_Coordinates() && checked;
     if (checked) {
