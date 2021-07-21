@@ -210,10 +210,26 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
                         css_class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8",
                     ),
                     HTML(
-                        '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center"><button class="btn btn-primary" type="button" onclick="$(\'#chooseCoach\').modal(\'toggle\');">Choisir un nouveau coach</button></div>'
+                        """
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center">
+                                <button
+                                    class="btn btn-primary"
+                                    type="button"
+                                    onclick="$('#chooseCoach').modal('toggle');"
+                                >
+                                    Choisir un nouveau coach
+                                </button>
+                            </div>
+                        """
                     ),
                     HTML(
-                        '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center"><button class="btn btn-primary" type="button" onclick="reloadCoach()">Rechercher un nouveau coach</button></div>'
+                        """
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center">
+                                <button class="btn btn-primary" type="button" onclick="reloadCoach()">
+                                    Rechercher un nouveau coach
+                                </button>
+                            </div>
+                        """
                     ),
                 ),
                 "balance",
