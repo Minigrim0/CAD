@@ -1,6 +1,6 @@
 function copyKey() {
     /* Get the text field */
-    var copyText = document.getElementById("id_secret_key");
+    var copyText = document.getElementById("id_secret_key");  // skipcq JS-0502
 
     /* Select the text field */
     copyText.select();
@@ -10,8 +10,7 @@ function copyKey() {
     document.execCommand("copy");
 
     /* Alert the copied text */
-
-    var copyText = document.getElementById("buttoncopy");
+    var copyText = document.getElementById("buttoncopy");  // skipcq JS-0502
     copyText.innerHTML = "copié!";
 }
 
@@ -34,7 +33,7 @@ function sendNotif(_user) {
         function(data, status) {
             if (status == "success") {
                 document.getElementById("successSend").style.display = "block";
-                var IntervalID = setInterval(
+                var IntervalID = setInterval(  // skipcq JS-0502
                     function() {
                         document.getElementById("successSend").style.display = "none";
                         $('#SendNotif').modal('toggle')
@@ -42,7 +41,7 @@ function sendNotif(_user) {
                     }, 1500);
             } else {
                 document.getElementById("errorSend").style.display = "block";
-                var IntervalID = setInterval(
+                var IntervalID = setInterval(  // skipcq JS-0502
                     function() {
                         document.getElementById("errorSend").style.display = "none";
                         $('#SendNotif').modal('toggle')
@@ -70,7 +69,7 @@ function updBalance(user, admin) {
             if (status == "success") {
                 document.getElementById("successBalance").style.display = "block";
                 document.getElementById("id_balance").value = data["new_balance"];
-                var IntervalID = setInterval(
+                var IntervalID = setInterval(  // skipcq JS-0502
                     function() {
                         document.getElementById("successBalance").style.display = "none";
                         $('#UpdateBalance').modal('toggle')
@@ -78,7 +77,7 @@ function updBalance(user, admin) {
                     }, 1500);
             } else {
                 document.getElementById("errorBalance").style.display = "block";
-                var IntervalID = setInterval(
+                var IntervalID = setInterval(  // skipcq JS-0502
                     function() {
                         document.getElementById("errorBalance").style.display = "none";
                         $('#UpdateBalance').modal('toggle')
@@ -97,7 +96,6 @@ function unsub(user_key){
             csrfmiddlewaretoken: csrf_token
         },
         function(data, status) {
-            console.log(status);
             if (status == "success") {
                 unsubButton = document.getElementById("unsubbutton");
                 unsubButton.innerHTML = '<p style="color:red;">Proposition de désinscription envoyée</p>';
@@ -161,14 +159,14 @@ function updCoach(){
         return;
     }
     $("#errorNewCoachForm").css("display", "none");
-    var dataArray = $("#newCoachForm").serializeArray();
+    var dataArray = $("#newCoachForm").serializeArray();  // skipcq JS-0502
 
-    var post_data = {
+    var post_data = {  // skipcq JS-0502
         csrfmiddlewaretoken: csrf_token,
         student: user
     }
 
-    for(var x = 0;x<dataArray.length;x++){
+    for(var x = 0;x<dataArray.length;x++){  // skipcq JS-0502
         post_data[dataArray[x]["name"]] = dataArray[x]["value"];
     }
 

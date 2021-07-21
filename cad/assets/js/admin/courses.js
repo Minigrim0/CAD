@@ -2,7 +2,7 @@ function approveCourse(pk, approved){
     if(!approved && !confirm("Êtes vous sûr de vouloir supprimer ce cours ?")) return;
 
     var alert_type;
-    var alert_text = "default-alert";
+    var alert_text = "default-alert";  // skipcq JS-0502
     var alert_id;
 
     $.post(
@@ -37,7 +37,7 @@ function approveCourse(pk, approved){
 
 
 function createNotif(alert_id, alert_type, alert_text){
-    var new_notif = $("#notification_template").clone().children()[0];
+    var new_notif = $("#notification_template").clone().children()[0];  // skipcq JS-0502
     new_notif.setAttribute("id", alert_id);
     new_notif.classList.add(alert_type)
     new_notif.children[1].innerText = alert_text;

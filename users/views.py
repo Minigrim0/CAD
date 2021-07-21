@@ -16,21 +16,24 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login
 
 from administration.utils import populate_data
-from .models import Notification, StudentRequest, StudentAccount, FollowElement
-from .forms import (
+from users.models import Notification, StudentRequest, StudentAccount, FollowElement
+from users.forms import (
     StudentReadOnlyForm,
     BaseReadOnly,
     CoachReadOnlyForm,
     addFollowElementForm,
 )
 from inscription.decorators import mustnt_be_logged_in
+from inscription.utils import send_confirmation_mail
 
 
-def user_home(request):
+def user_home(request) -> HttpResponseRedirect:
+    """Redirects to the user home page"""
     return HttpResponseRedirect(reverse("my_account"))
 
 
-def ErrorView(request):
+def ErrorView(request) -> HttpResponseRedirect:
+    """Adds an error messages and redirects to the home page"""
     messages.add_message(
         request, messages.ERROR, "Une erreur est survenue lors du chargement de la page"
     )
@@ -38,43 +41,51 @@ def ErrorView(request):
 
 
 @login_required
-def userView(request):
+def userView(request) -> HttpResponse:
+    """Renders the home page of the user
+
+    Returns:
+        HttpResponse: The rendered template of the user's home page
+    """
     user = request.user
-    notifications = user.notification_set.all().order_by("-date_created")
+    notifications = user.notification_set.all().order_by("-date_created")  # skipcq PYL-W0641
 
     data = populate_data(user.profile.account_type, user)
     if user.profile.account_type == "a":
-        form = StudentReadOnlyForm(data)
+        form = StudentReadOnlyForm(data)  # skipcq PYL-W0641
     elif user.profile.account_type == "b":
         form = CoachReadOnlyForm(data)
     else:
         data = populate_data("other", user)
         form = BaseReadOnly(data)
 
-    view_title = "Mon compte"
+    view_title = "Mon compte"  # skipcq PYL-W0641
     return render(request, "user.html", locals())
 
 
 @login_required
-def followView(request):
+def followView(request) -> HttpResponse:
+    """Shows the diffrent courses a student has attended to"""
     a_user = request.user
-    followelement_set = a_user.followelement_set.all()
+    followelement_set = a_user.followelement_set.all()  # skipcq PYL-W0641
 
-    view_title = "Mon suivi"
+    view_title = "Mon suivi"  # skipcq PYL-W0641
     return render(request, "follow.html", locals())
 
 
 @login_required
 def studentsView(request):
+    """Shows the students of a coach"""
     coach = request.user.profile.coachaccount
-    student_set = coach.students.all()
+    student_set = coach.students.all()  # skipcq PYL-W0641
 
-    view_title = "Mes étudiants"
+    view_title = "Mes étudiants"  # skipcq PYL-W0641
     return render(request, "students.html", locals())
 
 
 @login_required
-def addFollowElement(request):
+def addFollowElement(request) -> HttpResponse:
+    """Creates a new follow element or displays the form to do it"""
     student_pk = request.GET.get("pk", -1)
     student = get_object_or_404(StudentAccount, pk=student_pk)
 
@@ -93,14 +104,18 @@ def addFollowElement(request):
     else:
         form = addFollowElementForm()
 
-    view_title = "Ajouter un cours"
+    view_title = "Ajouter un cours"  # skipcq PYL-W0641
     return render(request, "addFollow.html", locals())
 
 
 @login_required
-def send_notif(request):
-    if request.method == "POST":
+def send_notif(request) -> HttpResponse:
+    """Sends a notification to the concerned user
 
+    Returns:
+        HttpResponse: A small message indicating the status of the request
+    """
+    if request.method == "POST":
         user = User.objects.get(username=request.POST["user"])
         notif = Notification()
         notif.user = user
@@ -120,7 +135,15 @@ def send_notif(request):
 
 
 @login_required
-def remove_notif(request):
+def remove_notif(request) -> HttpResponse:
+    """Removes a notification
+
+    Raises:
+        Http404: In case the notification doesn't exist
+
+    Returns:
+        HttpResponse: A message indicating the request went well
+    """
     if request.method != "POST":
         return ErrorView(request)
 
@@ -134,7 +157,12 @@ def remove_notif(request):
 
 
 @login_required
-def disconnect(request):
+def disconnect(request) -> HttpResponseRedirect:
+    """Disconnects the user
+
+    Returns:
+        HttpResponseRedirect: A redirection to the home page
+    """
     logout(request)
 
     messages.add_message(request, messages.WARNING, "Vous avez été déconnecté")
@@ -142,27 +170,36 @@ def disconnect(request):
 
 
 @login_required
-def requestView(request):
+def requestView(request) -> HttpResponse:
+    """Shows a request to a coach
+
+    Returns:
+        HttpReponse: The request page or an error if the user cannot access the page
+    """
     request_id = request.GET.get("id", 0)
 
-    allowed = request.user.profile.account_type == "b"
-    if request.user.is_authenticated and allowed:
+    if request.user.profile.account_type == "b":
         student_request = StudentRequest.objects.get(id=request_id)
-        student = student_request.student
-        coaches = [
+        student = student_request.student  # skipcq PYL-W0641
+        coaches = [  # skipcq PYL-W0641
             coach.profile.user.username for coach in student_request.coaches.all()
         ]
         coach = request.user
 
-        coach_schedule = coach.profile.coachaccount.schedule(student_request)
+        coach_schedule = coach.profile.coachaccount.schedule(student_request)  # skipcq PYL-W0641
 
-        view_title = "Requête"
+        view_title = "Requête"  # skipcq PYL-W0641
         return render(request, "requests.html", locals())
     return ErrorView(request)
 
 
 @login_required
-def acceptRequest(request):
+def acceptRequest(request) -> HttpResponse:
+    """Accepts the request given as post parameter
+
+    Returns:
+        HttpResponse: A message indicating the request went well
+    """
     if request.method != "POST":
         return HttpResponseBadRequest("Invalid method : Request must type be 'POST'")
 
@@ -184,9 +221,11 @@ def acceptRequest(request):
     return HttpResponse("Success")
 
 
-def get_users(request):
-    """
-    returns the users linked to the email provided
+def get_users(request) -> JsonResponse:
+    """Returns the users linked to the email provided
+
+    Returns:
+        JsonResponse: a dictionnary containing the name of the users with the given email address
     """
     if request.method != "POST":
         return HttpResponseBadRequest("Invalid method : Request type must be 'POST'")
@@ -205,11 +244,9 @@ def get_users(request):
 
 @mustnt_be_logged_in(action="connecter")
 def login_view(request):
-    """
-    Allows a user to connect to his account
-    """
+    """Allows a user to connect to his account"""
     if request.method != "POST":
-        view_title = "Connectez vous"
+        view_title = "Connectez vous"  # skipcq PYL-W0641
         return render(request, "connexion.html", locals())
 
     form = request.POST
@@ -234,4 +271,20 @@ def login_view(request):
     nextPage = request.GET.get("next", "")
     if nextPage != "":
         return HttpResponseRedirect(nextPage)
+    return HttpResponseRedirect(reverse("home"))
+
+
+@login_required
+def send_confirmation_email(request):
+    """Resends a confirmation email in case the user didn't receive the confirmation email"""
+    if request.user.profile.verifiedAccount:
+        messages.add_message(
+            request, messages.ERROR, "Vous avez déjà confirmé votre adresse mail !"
+        )
+
+    send_confirmation_mail(request.user)
+    messages.add_message(
+        request, messages.SUCCESS, "Un nouvel email de vérification a été envoyé, "
+        "n'oubliez pas de vérifier les spams !"
+    )
     return HttpResponseRedirect(reverse("home"))
