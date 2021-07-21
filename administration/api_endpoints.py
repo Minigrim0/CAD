@@ -120,7 +120,8 @@ def modify_balance(request) -> JsonResponse:
     tran.amount = request.POST["amout_add"]
     tran.admin = User.objects.get(username=request.POST["approver"])
     tran.comment = "{} du solde via l'administration".format(
-        "augmetation" if request.POST["amout_add"] > 0 else "diminution")
+        "augmetation" if request.POST["amout_add"] > 0 else "diminution"
+    )
     tran.save()
 
     if isCoachLaunching:
@@ -205,8 +206,12 @@ def request_informations(request) -> JsonResponse:
     """Returns information about a student request, to put it in the closed student requests"""
     id = request.GET.get("id", None)
     student_request = get_object_or_404(StudentRequest, id=id)
-    rendered = render(request, "student_request_section.html", {"student_request": student_request})
+    rendered = render(
+        request, "student_request_section.html", {"student_request": student_request}
+    )
 
-    return JsonResponse({
-        "content": rendered.content.decode("utf-8"),
-    })
+    return JsonResponse(
+        {
+            "content": rendered.content.decode("utf-8"),
+        }
+    )
