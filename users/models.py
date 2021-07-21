@@ -219,6 +219,7 @@ class CoachAccount(models.Model):
         """Returns the schedule of the coach for the given Student Request"""
         if studentRequest.coachrequestthrough_set.filter(coach=self).count() == 1:
             return studentRequest.coachrequestthrough_set.get(coach=self).coachschedule
+        return ""
 
     def __str__(self):
         return "{} {}".format(self.profile.user.first_name, self.profile.user.last_name)
