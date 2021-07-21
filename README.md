@@ -15,17 +15,18 @@ source source.sh env.dev.sh
 ```
 
 ## ToDo:
-* [X] Add messages to the site admin
-* [X] Fix visible email addresses
-* [X] Use html/css in mails
-* [X] create a cron job to store the log files once a days, and remove those who are older than 3(?) months
-* [X] Fix workflow when engaging coaches
-* [X] Write tests
-* [X] Verify requests choosing
-* [X] Send notifications by mail
-* [X] Final schedule by admin
-* [X] Start and End hours in followElements
-* [X] Add admin filtering in lists
-* [ ] setup CI/CD
-* [X] Test coach swap
-* [X] Add password retrieving
+
+- [x] Add messages to the site admin
+- [x] Fix visible email addresses
+- [x] Use html/css in mails
+- [x] create a cron job to store the log files once a days, and remove those who are older than 3(?) months
+- [x] Fix workflow when engaging coaches
+- [x] Write tests
+- [x] Verify requests choosing
+- [x] Send notifications by mail
+- [x] Final schedule by admin
+- [x] Start and End hours in followElements
+- [x] Add admin filtering in lists
+- [ ] setup CI/CD
+- [x] Test coach swap
+- [x] Add password retrieving
