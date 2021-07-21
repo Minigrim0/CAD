@@ -130,7 +130,9 @@ def welcomeUser(user: User):
         nous vous souhaitons la bienvenue! \
         N'oubliez pas que vous pouvez nous contacter \
         si vous avez le moindre souci via ce \
-        <a href='{}/{}'>formulaire</a>!".format(settings.SITE_DOMAIN, reverse("contact_view"))
+        <a href='{}/{}'>formulaire</a>!".format(
+        settings.SITE_DOMAIN, reverse("contact_view")
+    )
 
     newNotif = Notification(user=user)
     newNotif.title = title

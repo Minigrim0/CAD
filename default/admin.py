@@ -66,9 +66,18 @@ class MessageAdmin(admin.ModelAdmin):
 class MailingListAdmin(admin.ModelAdmin):
     """The admin of the Mailing list model"""
 
-    list_display = ("id", "name",)
-    list_filter = ("id", "name",)
+    list_display = (
+        "id",
+        "name",
+    )
+    list_filter = (
+        "id",
+        "name",
+    )
     ordering = ("-id",)
     search_fields = ("name",)
 
-    fields = ("name", "users",)
+    fields = (
+        "name",
+        "users",
+    )

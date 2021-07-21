@@ -9,12 +9,14 @@ def mustnt_be_logged_in(action="inscrire"):
     Args:
         action (str, optional): The action the user is trying to do. Defaults to "inscrire".
     """
+
     def decorator(func: callable):
         """The decorator in itself
 
         Args:
             func (callable): [description]
         """
+
         def wrapper(*args, **kwargs):
             """The wrapper of the function
 
