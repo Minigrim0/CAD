@@ -13,6 +13,9 @@ enabled = true
 [[analyzers]]
 name = "javascript"
 enabled = true
+exclude_patterns = [
+  "cad/assets/old_site/**"
+]
 
 [[transformers]]
 name = "black"
