@@ -13,6 +13,8 @@ from inscription.decorators import mustnt_be_logged_in
 from users.models import Notification, StudentRequest
 from users.forms import StudentRegisterForm, CoachRegisterForm
 
+from cad.settings import SITE_DOMAIN
+
 
 @mustnt_be_logged_in(action="inscrire")
 def registerUserView(request) -> HttpResponse:
@@ -131,18 +133,18 @@ def pay_later(request) -> HttpResponseRedirect:
     newNotif = Notification(user=user)
     newNotif.author = "L'équipe CAD"
     newNotif.title = "Paiement en attente"
-    newNotif.content = "N'oubliez pas de <a href='/connexion/payment\
-        /'>payer</a> vos cours! Nous vous enverrons un rappel\
-        dans 2 jours si nous n'avons rien reçu d'ici là"
+    newNotif.content = (
+        f"N'oubliez pas de <a href='{SITE_DOMAIN}{reverse('paymentView')}'>payer</a> "
+        "vos cours! Nous vous enverrons un rappel dans 2 jours si nous n'avons rien reçu d'ici là"
+    )
     newNotif.save()
     user.profile.save()
 
     messages.add_message(
         request,
         messages.WARNING,
-        "Votre paiement a été annulé, n'oubliez pas \
-        de le compléter au plus vite, afin de pouvoir commencer a suivre des \
-        cours avec nos coaches!",
+        "Votre paiement a été annulé, n'oubliez pas de le compléter au plus vite, afin de "
+        "pouvoir commencer a suivre des cours avec nos coaches!",
     )
 
     return HttpResponseRedirect(reverse("home"))
@@ -153,7 +155,7 @@ def thanks(request) -> HttpResponseRedirect:
 
     Returns:
         HttpResponseRedirect: To the error view in case an error occured (No token, already confirmed account)
-        HttpResponseRedirect: The the home page with a notification to inform the user that everythong went well
+        HttpResponseRedirect: The the home page with a notification to inform the user that everything went well
     """
     user = request.user
 
@@ -172,8 +174,7 @@ def thanks(request) -> HttpResponseRedirect:
     messages.add_message(
         request,
         messages.SUCCESS,
-        "Merci d'avoir complété votre inscription! \
-        Nous allons de ce pas chercher un coach pour vous!",
+        "Merci d'avoir complété votre inscription! Nous allons de ce pas chercher un coach pour vous!",
     )
 
     return HttpResponseRedirect(reverse("home"))
