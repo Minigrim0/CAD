@@ -13,6 +13,11 @@ $(document).ready(
     }
 )
 
+/**
+ * Activate or deactivate a user
+ * @param {int} user_id the id of the user to (de)activate
+ * @param {bool} active whether the user should be activated or not
+ */
 function activate(user_id, active){
     var Url = ActivateUserUrl + "?userid=" + user_id + "&active=" + active;  // skipcq JS-0502
     var message = "Voulez vous réellement ";  // skipcq JS-0502
@@ -45,6 +50,9 @@ function activate(user_id, active){
     );
 }
 
+/**
+ * Modifies the target url to search for what the user put in the search field
+ */
 function doSearch(){
     var url = new URL(document.location);  // skipcq JS-0502
     value = document.getElementById('searchbar').value;

@@ -1,3 +1,7 @@
+/**
+ * Deletes a notification
+ * @param {int} notif_id the id of the notification to delete 
+ */
 function del_notif(notif_id) {
   $.post(
     UrlNotif,

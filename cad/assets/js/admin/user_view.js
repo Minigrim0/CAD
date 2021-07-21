@@ -1,4 +1,7 @@
-//Makes a request to create a notification for a specified user
+/**
+ * Makes a request to create a notification for a specified user
+ * @param {string} _user the user to make a notification for
+ */
 function sendNotif(_user) {
     _title = document.getElementById("notifTitle").value;
     _content = document.getElementById("notifContent").value;
@@ -35,7 +38,11 @@ function sendNotif(_user) {
     );
 }
 
-
+/**
+ * Updates the balance of a student
+ * @param {string} user the user to add balance to
+ * @param {string} admin the administrator that initiated the balance modification
+ */
 function updBalance(user, admin) {
     amout_add = document.getElementById("new_balance").value;
     isFirst = document.getElementById("isFirstPayment").checked;
@@ -71,7 +78,10 @@ function updBalance(user, admin) {
     );
 }
 
-
+/**
+ * Proposes the user to unsub from the website
+ * @param {string} user_key the user key
+ */
 function unsub(user_key){
     $.post(
         UrlUnsub, {
@@ -90,7 +100,9 @@ function unsub(user_key){
     );
 }
 
-
+/**
+ * Starts a new coach research (Creates a new student Request)
+ */
 function reloadCoach(){
     if(!confirm("Êtes vous sûr de vouloir relancer une recherche ?")) return;
 
@@ -134,7 +146,9 @@ function reloadCoach(){
     });
 }
 
-
+/**
+ * Update the coach by choosing a new coach from the coach list
+ */
 function updCoach(){
     if(!$("#newCoachForm").valid()){
         $("#id_coach-error").css("display", "none");

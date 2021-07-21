@@ -1,6 +1,8 @@
 var id;
 
-//Makes a request to create a notification for a specified user
+/**
+ * Gets the user using the given email address, launching adequate animation afterwards
+ */
 function getUsers() {
     email = document.getElementById("email_input").value;
 
@@ -45,6 +47,11 @@ function getUsers() {
     );
 }
 
+/**
+ * Lets the user choose which account hes wants to connect to
+ * @param {string} username the username of the chosen account
+ * @param {string} user_name the username of the chosen account
+ */
 function chooseUser(username, user_name){
     // Fill his username in the form field
     document.getElementById("user_name").innerHTML = user_name;
@@ -53,8 +60,9 @@ function chooseUser(username, user_name){
     id = setInterval(choicetopassword, 1000);
 }
 
-// Animations
-
+/**
+ * Makes the transition animation from email to password
+ */
 function emailtopassword() {
     document.getElementById("askmail").style.display = "none";
     document.getElementById("formlogin").classList.add("bounceInRight");
@@ -62,6 +70,9 @@ function emailtopassword() {
     clearInterval(id);
 }
 
+/**
+ * Makes the transition animation from choice to password
+ */
 function choicetopassword() {
     document.getElementById("chooseAccountContainer").style.display = "none";
     document.getElementById("formlogin").classList.add("bounceInRight");
@@ -69,6 +80,9 @@ function choicetopassword() {
     clearInterval(id);
 }
 
+/**
+ * Makes the transition animation from email to choice
+ */
 function emailtochoice() {
     document.getElementById("askmail").style.display = "none";
     document.getElementById("chooseAccountContainer").classList.add("bounceInRight");
@@ -76,6 +90,9 @@ function emailtochoice() {
     clearInterval(id);
 }
 
+/**
+ * Deletes the shake class to stop the animation
+ */
 function delShake(){
     document.getElementById("askmail").classList.remove("shake");
     clearInterval(id);
