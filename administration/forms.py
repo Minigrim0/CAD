@@ -100,14 +100,6 @@ class OtherAdminForm(BaseRegistration):
                 ),
                 "address",
                 "phone_number",
-                bforms.FieldWithButtons(
-                    "secret_key",
-                    HTML(
-                        '<button type="button" id="buttoncopy" class="btn btn-primary" name="Save" onclick="copyKey()"> \
-                            copier\
-                        </button>'
-                    ),
-                ),
                 "verifiedAccount",
             ),
             bforms.FormActions(
@@ -312,14 +304,6 @@ class CoachAdminForm(CoachRegisterForm, OtherAdminForm):
                 ),
                 "IBAN",
                 "confirmedAccount",
-                bforms.FieldWithButtons(
-                    "secret_key",
-                    HTML(
-                        '<button type="button" id="buttoncopy" class="btn btn-primary" name="Save" onclick="copyKey()"> \
-                            copier\
-                        </button>'
-                    ),
-                ),
                 "verifiedAccount",
             ),
             bforms.FormActions(
