@@ -79,13 +79,13 @@ class BaseRegistration(forms.Form):
         required=True, max_length=25, label="numéro de téléphone"
     )
 
-    def clean(self, admin=False):
+    def clean(self, admin=False, *args, **kwargs):
         """Cleans the data from the form, adding errors where the data is not correct
 
         Args:
             admin (bool, optional): Whether to force the data saving or not. Defaults to False.
         """
-        cleaned_data = super().clean()
+        cleaned_data = super().clean(*args, **kwargs)
         if admin:
             return
         password = cleaned_data.get("password")
@@ -364,9 +364,9 @@ class StudentReadOnlyForm(StudentRegisterForm):
             ),
         )
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
         """Cleans the data from the form"""
-        super().clean(admin=True)
+        super().clean(admin=True, *args, **kwargs)
 
 
 class CoachReadOnlyForm(CoachRegisterForm):
@@ -416,9 +416,9 @@ class CoachReadOnlyForm(CoachRegisterForm):
             )
         )
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
         """Cleans the data from the form"""
-        super().clean(admin=True)
+        super().clean(admin=True, *args, **kwargs)
 
 
 class BaseReadOnly(BaseRegistration):
@@ -455,9 +455,9 @@ class BaseReadOnly(BaseRegistration):
             ),
         )
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
         """Cleans the data from the form"""
-        super().clean(admin=True)
+        super().clean(admin=True, *args, **kwargs)
 
 
 class addFollowElementForm(forms.ModelForm):
