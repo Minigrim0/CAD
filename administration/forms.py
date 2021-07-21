@@ -120,9 +120,9 @@ class OtherAdminForm(BaseRegistration):
             ),
         )
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
         """Cleans the parents form as admin"""
-        super().clean(admin=True)
+        super().clean(admin=True, *args, **kwargs)
 
 
 class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
