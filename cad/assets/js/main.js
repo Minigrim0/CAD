@@ -70,7 +70,7 @@ function checkNames() {
 }
 
 function validate() {
-    var checked = checkPass();
+    var checked = checkPass();  // skipcq JS-0502
     checked = checkNames()       && checked;
     checked = checkCoordinates() && checked;
     document.getElementById("registerErrors").innerHTML = "";
@@ -148,8 +148,8 @@ function checkC_Coordinates() {
 }
 
 function checkC_Names() {
-    var lastName = document.getElementById("C_lastName").value != "";
-    var firstName = document.getElementById("C_firstName").value != "";
+    var lastName = document.getElementById("C_lastName").value != "";  // skipcq JS-0502
+    var firstName = document.getElementById("C_firstName").value != "";  // skipcq JS-0502
 
     if (!lastName) {
         document.getElementById("C_notGoodLastName").innerHTML = "Ce champ est obligatoire!";
