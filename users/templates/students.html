@@ -58,5 +58,36 @@
             </table>
         </div>
     </section>
+
+    <section class="p-3 p-lg-5 align-items-center">
+        <div id="container">
+            <h2>Cours donnés</h2>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                    <th scope="col">Date</th>
+                    <th scope="col">Commentaires</th>
+                    <th scope="col">Élève</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for followelement in followelement_set %}
+                        <tr>
+                            <td>{{ followelement.date|date:"d/m/Y" }} de {{ followelement.startHour }} à {{ followelement.endHour }}</td>
+                            <td>{{ followelement.comments|safe }}</td>
+                            <td>{{ followelement.student.first_name }} {{ followelement.student.last_name }}</td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>Vous n'avez encore donné aucun cours</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
 </div>
 {% endblock %}
