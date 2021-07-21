@@ -31,7 +31,7 @@ function getUsers() {
                     document.getElementById("nbraccounts").innerHTML = data['users'].length;
                     
                     choose_div = document.getElementById("chooseAccount");
-                    for(var user_id=0;user_id<data["users"].length;user_id++){
+                    for(var user_id=0;user_id<data["users"].length;user_id++){  // skipcq JS-0502
                         choose_div.innerHTML += "<button class='btn btn-primary' onclick='chooseUser(\""
                         + data["users"][user_id][1] + "\", \"" + data["users"][user_id][0]
                         + "\")'>Se connecter en tant que " + data["users"][user_id][0] + "</button><br/>"
