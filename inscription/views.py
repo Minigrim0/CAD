@@ -119,7 +119,7 @@ def pay_later(request) -> HttpResponseRedirect:
     """In case the user cannot pay directly
 
     Returns:
-        HttpResponseRedirect: to the error view in case an error occurs (No token, already confirmed account) 
+        HttpResponseRedirect: to the error view in case an error occurs (No token, already confirmed account)
         HttpResponseRedirect: to the home page, with a notification to remind the user to pay
     """
     user = request.user
@@ -157,7 +157,11 @@ def thanks(request) -> HttpResponseRedirect:
     user = request.user
 
     # token manquant ou non valide
-    if user is None or user.profile.account_type != "a" or user.profile.studentaccount.confirmedAccount:
+    if (
+        user is None
+        or user.profile.account_type != "a"
+        or user.profile.studentaccount.confirmedAccount
+    ):
         return HttpResponseRedirect(reverse("Error_view"))
 
     studa = user.profile.studentaccount
