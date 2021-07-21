@@ -2,6 +2,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.forms import Form
+from cad.settings import SITE_DOMAIN
 
 from users.models import (
     Profile,
@@ -168,11 +169,13 @@ def thanksCoaches(coaches: list, student: StudentAccount):
     """
     author = "L'équipe CAD"
     title = "Merci d'avoir répondu présent"
-    content = """Merci d'avoir répondu présent à la requête de {} {}.
-    Malheureusement, vous n'avez pas été choisi pour donner cours à
-    cet étudiant. Mais ne vous en faites pas, votre tour viendra!""".format(
-        student.profile.user.first_name, student.profile.user.last_name
+    content = (
+        "Merci d'avoir répondu présent à la requête de "
+        f"{student.profile.user.first_name} {student.profile.user.last_name}. "
+        "Malheureusement, vous n'avez pas été choisi pour donner cours à "
+        "cet étudiant. Mais ne vous en faites pas, votre tour viendra!"
     )
+
     for coach in coaches:
         if (
             CoachRequestThrough.objects.filter(
@@ -211,17 +214,16 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
 
         if compatible:
             newNotif = Notification(user=coach.user)
-            newNotif.author = "{} {}".format(
-                student.user.first_name, student.user.last_name
-            )
+            newNotif.author = f"{student.user.first_name} {student.user.last_name}"
+
             newNotif.title = "Recherche de coach"
-            newNotif.content = "Vos matières/niveaux correspondent avec "
-            newNotif.content += f"{student.user.first_name} {student.user.last_name} "
-            newNotif.content += "!\nVous pouvez cliquer "
-            newNotif.content += (
-                f"<a href='{reverse('request_view')}?id={request.id}'>ici</a>"
+            newNotif.content = (
+                "Vos matières/niveaux correspondent avec "
+                f"{student.user.first_name} {student.user.last_name} !\nVous pouvez cliquer "
+                f"<a href='{SITE_DOMAIN}{reverse('request_view')}?id={request.id}'>ici</a> "
+                "pour voir le profil de l'etudiant"
             )
-            newNotif.content += " pour voir le profil de l'etudiant"
+
             newNotif.save()
             newNotif.send_as_mail()
             coach.save()
@@ -247,11 +249,13 @@ def advert_actors(student: StudentAccount, coach: CoachAccount, finalSchedule: s
     """
     author = "L'équipe CAD"
     title = "Félicitations!"
-    content = "Vous avez été choisi pour enseigner à {} {}! Vous pouvez \
-    vous rendre sur votre profil pour retrouver les coordonées de cet \
-    étudiant. L'horaire final est le suivant :\n {}".format(
-        student.profile.user.first_name, student.profile.user.last_name, finalSchedule
+    content = (
+        f"Vous avez été choisi pour enseigner à {student.profile.user.first_name} "
+        f"{student.profile.user.last_name}! Vous pouvez vous rendre sur votre "
+        f"<a href='{SITE_DOMAIN}{reverse('my_students')}'>profil</a> pour retrouver "
+        f"les coordonées de cet étudiant. L'horaire final est le suivant :\n {finalSchedule}"
     )
+
     coachNotif = Notification(
         user=coach.profile.user, author=author, title=title, content=content
     )
@@ -260,8 +264,11 @@ def advert_actors(student: StudentAccount, coach: CoachAccount, finalSchedule: s
 
     author = "L'équipe CAD"
     title = "Nous avons trouvé un coach pour vous!"
-    content = "Un coach a été choisi par l'équipe pour vous donner cours. L'horaire choisit est le suivant :"
-    content += f"\n {finalSchedule}"
+    content = (
+        "Un coach a été choisi par l'équipe pour vous donner cours. L'horaire choisit est le suivant :"
+        f"\n {finalSchedule}"
+    )
+
     studentNotif = Notification(
         user=student.profile.user, author=author, title=title, content=content
     )
