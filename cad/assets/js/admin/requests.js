@@ -15,20 +15,20 @@ function createTempAlert(parent, level, time, message, id, callback=null, args=[
 
     setTimeout(function(){
         $("#notif_" + id).alert('close');
-        if(callback != null){
+        if(callback !== null){
             callback(args);
         }
     }, time);
 }
 
 function deleteDiv(divs=[]){
-    for(var x=0;x<divs.length; x++){
+    for(var x=0;x<divs.length; x++){  // skipcq JS-0502
         $(divs[x]).detach();
     }
 }
 
 function updateRequestDisplay(id){
-    var infoUrl = RequestInformationUrl + "?id=" + id;
+    var infoUrl = RequestInformationUrl + "?id=" + id;  // skipcq JS-0502
     $.get(
         infoUrl
     ).done(
@@ -36,7 +36,7 @@ function updateRequestDisplay(id){
             $("#closed_request_" + id).empty();
             createTempAlert("#closed_request_" + id, "success", 5000, "Le coach a bien été choisi", id, deleteDiv, ["#closed_request_" + id]);
 
-            var closedList = document.getElementById("ClosedRequestsList");
+            var closedList = document.getElementById("ClosedRequestsList");  // skipcq JS-0502
             closedList.innerHTML = data["content"] + closedList.innerHTML;
         }
     ).fail(
@@ -48,7 +48,7 @@ function updateRequestDisplay(id){
 }
 
 function chooseCoach(coach_pk, id) {
-    var finalschedule = $('#schedulefor' + coach_pk + id).val()
+    var finalschedule = $('#schedulefor' + coach_pk + id).val();  // skipcq JS-0502
     if(finalschedule == ""){
         $('#errorschedule' + coach_pk + id).text("Ce champ est obligatoire");
         $('#errorschedule' + coach_pk + id).css("display", "block");

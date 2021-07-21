@@ -4,8 +4,23 @@ from django.urls import reverse
 
 
 def mustnt_be_logged_in(action="inscrire"):
-    def decorator(func):
+    """A decorator indicating the user should be anonymous to access the content
+
+    Args:
+        action (str, optional): The action the user is trying to do. Defaults to "inscrire".
+    """
+    def decorator(func: callable):
+        """The decorator in itself
+
+        Args:
+            func (callable): [description]
+        """
         def wrapper(*args, **kwargs):
+            """The wrapper of the function
+
+            Returns:
+                ?: The result of the wrapped function
+            """
             request = args[0]
             if request.user.is_authenticated:
                 messages.warning(

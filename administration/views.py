@@ -1,6 +1,6 @@
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
@@ -20,7 +20,7 @@ from users.models import FollowElement, StudentRequest, Transaction
 
 
 @staff_member_required
-def adminPage(request):
+def adminPage(request) -> HttpResponse:
     """The home view of the administration of the website
 
     Args:
@@ -32,17 +32,17 @@ def adminPage(request):
     nbr_accounts = User.objects.all().count()
     nbr_students = User.objects.filter(profile__account_type="a").count()
     nbr_coaches = User.objects.filter(profile__account_type="b").count()
-    nbr_other = nbr_accounts - nbr_students - nbr_coaches
-    nbr_requests = StudentRequest.objects.all().exclude(is_closed=True).count()
-    nbr_messages = Message.objects.filter(seen=False).count()
+    nbr_other = nbr_accounts - nbr_students - nbr_coaches  # skipcq PYL-W0641
+    nbr_requests = StudentRequest.objects.all().exclude(is_closed=True).count()  # skipcq PYL-W0641
+    nbr_messages = Message.objects.filter(seen=False).count()  # skipcq PYL-W0641
 
-    view_title = "Administration"
+    view_title = "Administration"  # skipcq PYL-W0641
 
     return render(request, "admin.html", locals())
 
 
 @staff_member_required
-def mailAdminView(request):
+def mailAdminView(request) -> HttpResponse:
     """Mail modification view in the administration
 
     Args:
@@ -60,14 +60,14 @@ def mailAdminView(request):
         mail.role = form["role"]
         mail.save()
 
-    mails = [MailForm(instance=mail) for mail in Mail.objects.all().exclude(role="i")]
-    view_title = "Mails"
+    mails = [MailForm(instance=mail) for mail in Mail.objects.all().exclude(role="i")]  # skipcq PYL-W0641
+    view_title = "Mails"  # skipcq PYL-W0641
 
     return render(request, "mailsAdmin.html", locals())
 
 
 @staff_member_required
-def articleAdminView(request):
+def articleAdminView(request) -> HttpResponse:
     """Articles modification view in the administration
 
     Args:
@@ -85,14 +85,14 @@ def articleAdminView(request):
             article.content = form.cleaned_data["content"].replace("\r", " ")
             article.save()
 
-    articles = [ArticleForm(instance=article) for article in Article.objects.all()]
-    view_title = "Articles"
+    articles = [ArticleForm(instance=article) for article in Article.objects.all()]  # skipcq PYL-W0641
+    view_title = "Articles"  # skipcq PYL-W0641
 
     return render(request, "articlesAdmin.html", locals())
 
 
 @staff_member_required
-def mailAdminCreate(request):
+def mailAdminCreate(request) -> HttpResponse:
     """Mail creation view in the administration
 
     Args:
@@ -113,13 +113,13 @@ def mailAdminCreate(request):
         return HttpResponseRedirect(reverse("mails_admin"))
 
     form = MailForm()
-    view_title = "Créer un mail"
+    view_title = "Créer un mail"  # skipcq PYL-W0641
 
     return render(request, "mailsAdminCreate.html", locals())
 
 
 @staff_member_required
-def courses(request):
+def courses(request) -> HttpResponse:
     """A view rendering all the courses that happened on the website
 
     Args:
@@ -131,7 +131,11 @@ def courses(request):
     view_title = "Cours donnés"
 
     sorter = request.GET.get("sort_by", "-date")
-    if sorter not in ["date", "-date", "approved", "-approved", "student__username", "-student__username", "coach__username", "-coach__username"]:
+    if (
+        sorter not in [
+            "date", "-date", "approved", "-approved", "student__username",
+            "-student__username", "coach__username", "-coach__username"]
+    ):
         sorter = "date"
 
     courses_list = FollowElement.objects.all().order_by(sorter)
@@ -152,7 +156,7 @@ def courses(request):
 
 
 @staff_member_required
-def transactions(request):
+def transactions(request) -> HttpResponse:
     """A view rendering all the transactions that happened on the website
 
     Args:
@@ -161,14 +165,14 @@ def transactions(request):
     Returns:
         HttpResponse: The render of the transaction view
     """
-    transaction_list = Transaction.objects.all().order_by("date")
-    view_title = "Transactions effectuées"
+    transaction_list = Transaction.objects.all().order_by("date")  # skipcq PYL-W0641
+    view_title = "Transactions effectuées"  # skipcq PYL-W0641
 
     return render(request, "transactions.html", locals())
 
 
 @staff_member_required
-def user_list(request):
+def user_list(request) -> HttpResponse:
     """A view rendering users' basic information based on certain queries
 
     Args:
@@ -197,12 +201,12 @@ def user_list(request):
     if query != "":
         users = users.filter(username__icontains=query)
 
-    view_title = "Utilisateurs"
+    view_title = "Utilisateurs"  # skipcq PYL-W0641
     return render(request, "user_list.html", locals())
 
 
 @staff_member_required
-def user_admin_view(request):
+def user_admin_view(request) -> HttpResponse:
     """A view rendering every information about a certain user
 
     Args:
@@ -245,7 +249,7 @@ def user_admin_view(request):
 
 
 @staff_member_required
-def message_list(request):
+def message_list(request) -> HttpResponse:
     """A view rendering a list of every messages received from the contact form
 
     Args:
@@ -256,18 +260,18 @@ def message_list(request):
     """
     status = request.GET.get("status", "")
     if status == "unread":
-        messages = Message.objects.filter(seen=False)
+        messages = Message.objects.filter(seen=False)  # skipcq PYL-W0641
     elif status == "read":
         messages = Message.objects.filter(seen=True)
     else:
         messages = Message.objects.all()
 
-    view_title = "Messages"
+    view_title = "Messages"  # skipcq PYL-W0641
     return render(request, "message_list.html", locals())
 
 
 @staff_member_required
-def message_admin_view(request):
+def message_admin_view(request) -> HttpResponse:
     """A view rendering every information about a certain message sent from the contact form
 
     Args:
@@ -281,12 +285,12 @@ def message_admin_view(request):
     message.seen = True
     message.save()
 
-    view_title = "Messages"
+    view_title = "Messages"  # skipcq PYL-W0641
     return render(request, "message_admin_view.html", locals())
 
 
 @staff_member_required
-def student_requests(request):
+def student_requests(request) -> HttpResponse:
     """A view rendering informations about every student request
 
     Args:
@@ -295,12 +299,12 @@ def student_requests(request):
     Returns:
         HttpResponse: The render of the requests page
     """
-    opened_student_requests = (
+    opened_student_requests = (  # skipcq PYL-W0641
         StudentRequest.objects.all().exclude(is_closed=True).order_by("-id")
     )
-    closed_student_requests = (
+    closed_student_requests = (  # skipcq PYL-W0641
         StudentRequest.objects.all().exclude(is_closed=False).order_by("-id")
     )
 
-    view_title = "Requêtes"
+    view_title = "Requêtes"  # skipcq PYL-W0641
     return render(request, "requestsAdmin.html", locals())

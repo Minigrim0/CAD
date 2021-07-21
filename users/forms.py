@@ -9,35 +9,31 @@ from crispy_forms.layout import Layout, Fieldset, Submit, Row, Column, Field
 from cad.settings import CRISPY_TEMPLATE_PACK
 from users.models import FollowElement
 
-from django.shortcuts import reverse
-
 
 class TableForm(Field):
-    """
-    Renders several choice fields as a table of radio buttons
-    """
+    """Renders several choice fields as a table of radio buttons"""
 
     def render(
         self,
         form,
         form_style,
         context,
-        template_pack=CRISPY_TEMPLATE_PACK,
+        template_pack: str = CRISPY_TEMPLATE_PACK,
         extra_context=None,
         **kwargs
-    ):
-        return '<table class="table" id="gridLang">\
-                <thead>\
-                    <tr>\
-                        <th scope="col" class="col-md-2">/</th>\
-                        {}\
-                    </tr>\
-                </thead>\
-                <tbody>\
-                    {}\
-                </tbody>\
-            </table>\
-            '.format(
+    ) -> str:
+        """Generates the html string of the table
+
+        Returns:
+            str: A rendered table form
+        """
+        return """<table class="table" id="gridLang">
+                <thead>
+                    <tr><th scope="col" class="col-md-2">/</th>{}</tr>
+                </thead>
+                <tbody>{}</tbody>
+            </table>
+            """.format(
             "".join(
                 '<th scope="col" class="col-md-2">{}</th>'.format(choice)
                 for _, choice in form[self.fields[0]].field.choices
@@ -58,6 +54,8 @@ class TableForm(Field):
 
 
 class BaseRegistration(forms.Form):
+    """The base registration form"""
+
     first_name = forms.CharField(max_length=30, required=True, label="Prénom")
     last_name = forms.CharField(max_length=150, required=True, label="Nom")
     password = forms.CharField(
@@ -81,8 +79,13 @@ class BaseRegistration(forms.Form):
         required=True, max_length=25, label="numéro de téléphone"
     )
 
-    def clean(self, admin=False):
-        cleaned_data = super().clean()
+    def clean(self, admin=False, *args, **kwargs):  # skipcq PYL-W0221
+        """Cleans the data from the form, adding errors where the data is not correct
+
+        Args:
+            admin (bool, optional): Whether to force the data saving or not. Defaults to False.
+        """
+        cleaned_data = super().clean(*args, **kwargs)
         if admin:
             return
         password = cleaned_data.get("password")
@@ -102,6 +105,8 @@ class BaseRegistration(forms.Form):
 
 
 class StudentRegisterForm(BaseRegistration):
+    """The student registration form"""
+
     levels = [
         ("a", "Primaire"),
         ("b", "1ère humanité"),
@@ -216,6 +221,8 @@ class StudentRegisterForm(BaseRegistration):
 
 
 class CoachRegisterForm(BaseRegistration):
+    """The coach registration form"""
+
     levels = [
         ("h", "Primaire"),
         ("i", "Humanité"),
@@ -306,6 +313,8 @@ class CoachRegisterForm(BaseRegistration):
 
 
 class StudentReadOnlyForm(StudentRegisterForm):
+    """The student readonly form"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -355,11 +364,14 @@ class StudentReadOnlyForm(StudentRegisterForm):
             ),
         )
 
-    def clean(self):
-        super().clean(admin=True)
+    def clean(self, *args, **kwargs):  # skipcq PYL-W0221
+        """Cleans the data from the form"""
+        super().clean(admin=True, *args, **kwargs)
 
 
 class CoachReadOnlyForm(CoachRegisterForm):
+    """The coach readonly form"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -404,11 +416,14 @@ class CoachReadOnlyForm(CoachRegisterForm):
             )
         )
 
-    def clean(self):
-        super().clean(admin=True)
+    def clean(self, *args, **kwargs):  # skipcq PYL-W0221
+        """Cleans the data from the form"""
+        super().clean(admin=True, *args, **kwargs)
 
 
 class BaseReadOnly(BaseRegistration):
+    """The base readonly form"""
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -440,12 +455,17 @@ class BaseReadOnly(BaseRegistration):
             ),
         )
 
-    def clean(self, admin=False):
-        super().clean(admin=True)
+    def clean(self, *args, **kwargs):  # skipcq PYL-W0221
+        """Cleans the data from the form"""
+        super().clean(admin=True, *args, **kwargs)
 
 
 class addFollowElementForm(forms.ModelForm):
+    """The follow element form"""
+
     class Meta:
+        """The meta class of the follow element form"""
+
         model = FollowElement
         exclude = ("approved", "coach", "student")
 
