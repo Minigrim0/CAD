@@ -55,7 +55,7 @@ def registerUserView(request) -> HttpResponse:
     else:
         form = StudentRegisterForm() if userType == "a" else CoachRegisterForm()
 
-    view_title = "Inscription - Etudiant" if userType == "a" else "Inscription - Coach"
+    view_title = "Inscription - Etudiant" if userType == "a" else "Inscription - Coach"  # skipcq PYL-W0641
 
     return render(request, "inscription.html", locals())
 
@@ -111,8 +111,8 @@ def paymentView(request) -> HttpResponse:
     Returns:
         HttpResponse: The rendered payment template
     """
-    user = request.user
-    view_title = "Paiement"
+    user = request.user  # skipcq PYL-W0641
+    view_title = "Paiement"  # skipcq PYL-W0641
     return render(request, "payment.html", locals())
 
 

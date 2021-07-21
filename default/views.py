@@ -52,7 +52,7 @@ def contactView(request) -> HttpResponse:
     else:
         form = contactForm()
 
-    view_title = "Formulaire de contact"
+    view_title = "Formulaire de contact"  # skipcq PYL-W0641
     return render(request, "contact.html", locals())
 
 

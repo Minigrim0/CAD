@@ -32,11 +32,11 @@ def adminPage(request) -> HttpResponse:
     nbr_accounts = User.objects.all().count()
     nbr_students = User.objects.filter(profile__account_type="a").count()
     nbr_coaches = User.objects.filter(profile__account_type="b").count()
-    nbr_other = nbr_accounts - nbr_students - nbr_coaches
-    nbr_requests = StudentRequest.objects.all().exclude(is_closed=True).count()
-    nbr_messages = Message.objects.filter(seen=False).count()
+    nbr_other = nbr_accounts - nbr_students - nbr_coaches  # skipcq PYL-W0641
+    nbr_requests = StudentRequest.objects.all().exclude(is_closed=True).count()  # skipcq PYL-W0641
+    nbr_messages = Message.objects.filter(seen=False).count()  # skipcq PYL-W0641
 
-    view_title = "Administration"
+    view_title = "Administration"  # skipcq PYL-W0641
 
     return render(request, "admin.html", locals())
 
@@ -60,8 +60,8 @@ def mailAdminView(request) -> HttpResponse:
         mail.role = form["role"]
         mail.save()
 
-    mails = [MailForm(instance=mail) for mail in Mail.objects.all().exclude(role="i")]
-    view_title = "Mails"
+    mails = [MailForm(instance=mail) for mail in Mail.objects.all().exclude(role="i")]  # skipcq PYL-W0641
+    view_title = "Mails"  # skipcq PYL-W0641
 
     return render(request, "mailsAdmin.html", locals())
 
@@ -85,8 +85,8 @@ def articleAdminView(request) -> HttpResponse:
             article.content = form.cleaned_data["content"].replace("\r", " ")
             article.save()
 
-    articles = [ArticleForm(instance=article) for article in Article.objects.all()]
-    view_title = "Articles"
+    articles = [ArticleForm(instance=article) for article in Article.objects.all()]  # skipcq PYL-W0641
+    view_title = "Articles"  # skipcq PYL-W0641
 
     return render(request, "articlesAdmin.html", locals())
 
@@ -113,7 +113,7 @@ def mailAdminCreate(request) -> HttpResponse:
         return HttpResponseRedirect(reverse("mails_admin"))
 
     form = MailForm()
-    view_title = "Créer un mail"
+    view_title = "Créer un mail"  # skipcq PYL-W0641
 
     return render(request, "mailsAdminCreate.html", locals())
 
@@ -165,8 +165,8 @@ def transactions(request) -> HttpResponse:
     Returns:
         HttpResponse: The render of the transaction view
     """
-    transaction_list = Transaction.objects.all().order_by("date")
-    view_title = "Transactions effectuées"
+    transaction_list = Transaction.objects.all().order_by("date")  # skipcq PYL-W0641
+    view_title = "Transactions effectuées"  # skipcq PYL-W0641
 
     return render(request, "transactions.html", locals())
 
@@ -201,7 +201,7 @@ def user_list(request) -> HttpResponse:
     if query != "":
         users = users.filter(username__icontains=query)
 
-    view_title = "Utilisateurs"
+    view_title = "Utilisateurs"  # skipcq PYL-W0641
     return render(request, "user_list.html", locals())
 
 
@@ -260,13 +260,13 @@ def message_list(request) -> HttpResponse:
     """
     status = request.GET.get("status", "")
     if status == "unread":
-        messages = Message.objects.filter(seen=False)
+        messages = Message.objects.filter(seen=False)  # skipcq PYL-W0641
     elif status == "read":
         messages = Message.objects.filter(seen=True)
     else:
         messages = Message.objects.all()
 
-    view_title = "Messages"
+    view_title = "Messages"  # skipcq PYL-W0641
     return render(request, "message_list.html", locals())
 
 
@@ -285,7 +285,7 @@ def message_admin_view(request) -> HttpResponse:
     message.seen = True
     message.save()
 
-    view_title = "Messages"
+    view_title = "Messages"  # skipcq PYL-W0641
     return render(request, "message_admin_view.html", locals())
 
 
@@ -299,12 +299,12 @@ def student_requests(request) -> HttpResponse:
     Returns:
         HttpResponse: The render of the requests page
     """
-    opened_student_requests = (
+    opened_student_requests = (  # skipcq PYL-W0641
         StudentRequest.objects.all().exclude(is_closed=True).order_by("-id")
     )
-    closed_student_requests = (
+    closed_student_requests = (  # skipcq PYL-W0641
         StudentRequest.objects.all().exclude(is_closed=False).order_by("-id")
     )
 
-    view_title = "Requêtes"
+    view_title = "Requêtes"  # skipcq PYL-W0641
     return render(request, "requestsAdmin.html", locals())
