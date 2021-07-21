@@ -79,7 +79,7 @@ class BaseRegistration(forms.Form):
         required=True, max_length=25, label="numéro de téléphone"
     )
 
-    def clean(self, admin=False, *args, **kwargs):
+    def clean(self, admin=False, *args, **kwargs):  # skipcq PYL-W0221
         """Cleans the data from the form, adding errors where the data is not correct
 
         Args:
@@ -364,7 +364,7 @@ class StudentReadOnlyForm(StudentRegisterForm):
             ),
         )
 
-    def clean(self, *args, **kwargs):
+    def clean(self, *args, **kwargs):  # skipcq PYL-W0221
         """Cleans the data from the form"""
         super().clean(admin=True, *args, **kwargs)
 
@@ -416,7 +416,7 @@ class CoachReadOnlyForm(CoachRegisterForm):
             )
         )
 
-    def clean(self, *args, **kwargs):
+    def clean(self, *args, **kwargs):  # skipcq PYL-W0221
         """Cleans the data from the form"""
         super().clean(admin=True, *args, **kwargs)
 
@@ -455,7 +455,7 @@ class BaseReadOnly(BaseRegistration):
             ),
         )
 
-    def clean(self, *args, **kwargs):
+    def clean(self, *args, **kwargs):  # skipcq PYL-W0221
         """Cleans the data from the form"""
         super().clean(admin=True, *args, **kwargs)
 
