@@ -78,6 +78,8 @@ def studentsView(request):
     """Shows the students of a coach"""
     coach = request.user.profile.coachaccount
     student_set = coach.students.all()  # skipcq PYL-W0641
+    followelement_set = FollowElement.objects.filter(  # skipcq PYL-W0641
+        coach=request.user).order_by("-date", "-endHour")
 
     view_title = "Mes étudiants"  # skipcq PYL-W0641
     return render(request, "students.html", locals())
