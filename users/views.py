@@ -48,18 +48,18 @@ def userView(request) -> HttpResponse:
         HttpResponse: The rendered template of the user's home page
     """
     user = request.user
-    notifications = user.notification_set.all().order_by("-date_created")
+    notifications = user.notification_set.all().order_by("-date_created")  # skipcq PYL-W0641
 
     data = populate_data(user.profile.account_type, user)
     if user.profile.account_type == "a":
-        form = StudentReadOnlyForm(data)
+        form = StudentReadOnlyForm(data)  # skipcq PYL-W0641
     elif user.profile.account_type == "b":
         form = CoachReadOnlyForm(data)
     else:
         data = populate_data("other", user)
         form = BaseReadOnly(data)
 
-    view_title = "Mon compte"
+    view_title = "Mon compte"  # skipcq PYL-W0641
     return render(request, "user.html", locals())
 
 
@@ -67,9 +67,9 @@ def userView(request) -> HttpResponse:
 def followView(request) -> HttpResponse:
     """Shows the diffrent courses a student has attended to"""
     a_user = request.user
-    followelement_set = a_user.followelement_set.all()
+    followelement_set = a_user.followelement_set.all()  # skipcq PYL-W0641
 
-    view_title = "Mon suivi"
+    view_title = "Mon suivi"  # skipcq PYL-W0641
     return render(request, "follow.html", locals())
 
 
@@ -77,9 +77,9 @@ def followView(request) -> HttpResponse:
 def studentsView(request):
     """Shows the students of a coach"""
     coach = request.user.profile.coachaccount
-    student_set = coach.students.all()
+    student_set = coach.students.all()  # skipcq PYL-W0641
 
-    view_title = "Mes étudiants"
+    view_title = "Mes étudiants"  # skipcq PYL-W0641
     return render(request, "students.html", locals())
 
 
@@ -104,7 +104,7 @@ def addFollowElement(request) -> HttpResponse:
     else:
         form = addFollowElementForm()
 
-    view_title = "Ajouter un cours"
+    view_title = "Ajouter un cours"  # skipcq PYL-W0641
     return render(request, "addFollow.html", locals())
 
 
@@ -180,15 +180,15 @@ def requestView(request) -> HttpResponse:
 
     if request.user.profile.account_type == "b":
         student_request = StudentRequest.objects.get(id=request_id)
-        student = student_request.student
-        coaches = [
+        student = student_request.student  # skipcq PYL-W0641
+        coaches = [  # skipcq PYL-W0641
             coach.profile.user.username for coach in student_request.coaches.all()
         ]
         coach = request.user
 
-        coach_schedule = coach.profile.coachaccount.schedule(student_request)
+        coach_schedule = coach.profile.coachaccount.schedule(student_request)  # skipcq PYL-W0641
 
-        view_title = "Requête"
+        view_title = "Requête"  # skipcq PYL-W0641
         return render(request, "requests.html", locals())
     return ErrorView(request)
 
@@ -246,7 +246,7 @@ def get_users(request) -> JsonResponse:
 def login_view(request):
     """Allows a user to connect to his account"""
     if request.method != "POST":
-        view_title = "Connectez vous"
+        view_title = "Connectez vous"  # skipcq PYL-W0641
         return render(request, "connexion.html", locals())
 
     form = request.POST
