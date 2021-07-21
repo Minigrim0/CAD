@@ -39,7 +39,7 @@ function getUsers() {
                     id = setInterval(emailtochoice, 500);
                 }
             } else {
-                console.log("error");
+                // Add visual error
             }
         }
     );

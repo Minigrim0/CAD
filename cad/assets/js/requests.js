@@ -19,11 +19,12 @@ function acceptRequest(id, decision, coach) {
             csrfmiddlewaretoken: csrfToken,
         },
         function(data, status) {
-            console.log(data);
-            console.log(status);
+            if (status == "success") {
+                document.getElementById("buttons").style.display = "none";
+                document.getElementById("dejarepondu").innerHTML = '<p style="color:red;">Merci d\'avoir répondu à cette requête</p>';
+            } else {
+                document.getElementById("dejarepondu").innerHTML = '<p style="color:red;">Une erreur est survenue, veuillez réessayer plus tard</p>';
+            }
         }
     );
-    // TODO: Error Handling
-    document.getElementById("buttons").style.display = "none";
-    document.getElementById("dejarepondu").innerHTML = '<p style="color:red;">Merci d\'avoir répondu à cette requête</p>';
 }

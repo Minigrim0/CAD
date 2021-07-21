@@ -97,7 +97,6 @@ function unsub(user_key){
             csrfmiddlewaretoken: csrf_token
         },
         function(data, status) {
-            console.log(status);
             if (status == "success") {
                 unsubButton = document.getElementById("unsubbutton");
                 unsubButton.innerHTML = '<p style="color:red;">Proposition de désinscription envoyée</p>';

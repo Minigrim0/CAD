@@ -7,9 +7,9 @@ function del_notif(notif_id) {
     },
     function (data, status) {
       if (status == "success") {
-        console.log("request successfully sent");
+        // Add visual confirmation
       } else {
-        console.log("request failed...");
+        // Add visual error
       }
     }
   );
