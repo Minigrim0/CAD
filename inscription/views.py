@@ -28,7 +28,7 @@ def registerUserView(request) -> HttpResponse:
     """
     userType = request.GET.get("type", "a")
     if userType not in "ab":
-        raise HttpResponseBadRequest("Le type de compte est invalide")
+        return HttpResponseBadRequest("Le type de compte est invalide")
 
     if request.method == "POST":
         form = (
