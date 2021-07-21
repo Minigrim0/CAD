@@ -17,15 +17,11 @@ from django.contrib.auth.models import User
 class Article(models.Model):
     """The article model"""
 
-    name = models.CharField(
-        max_length=100, default="Article", verbose_name="Nom de l'article"
-    )
+    name = models.CharField(max_length=100, default="Article", verbose_name="Nom de l'article")
     title = models.TextField(null=True)
     subtitle = models.TextField(null=True)
     content = models.TextField(null=True)
-    date = models.DateTimeField(
-        auto_now_add=True, auto_now=False, verbose_name="Date de modification"
-    )
+    date = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="Date de modification")
 
     def __str__(self):
         return self.name
@@ -34,12 +30,8 @@ class Article(models.Model):
 class Mail(models.Model):
     """The Mail model"""
 
-    name = models.CharField(
-        max_length=150, default="Mail template", verbose_name="Nom du template"
-    )
-    subject = models.CharField(
-        max_length=150, default="CAD - Cours à domicile", verbose_name="Sujet"
-    )
+    name = models.CharField(max_length=150, default="Mail template", verbose_name="Nom du template")
+    subject = models.CharField(max_length=150, default="CAD - Cours à domicile", verbose_name="Sujet")
     content = models.TextField(default="None", verbose_name="Contenu")
 
     choices = (
@@ -55,9 +47,7 @@ class Mail(models.Model):
     )
 
     role = models.CharField(max_length=1, choices=choices, verbose_name="Role du mail")
-    to = models.ForeignKey(
-        User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE
-    )
+    to = models.ForeignKey(User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE)
 
     def formatted_content(self, user: User) -> str:
         """Formats the content of the mail using the pre-defined tags
@@ -128,7 +118,6 @@ class Mail(models.Model):
 
         # Duplicates the email, setting it as "sent" email
         self.pk = None
-        self.id = Mail.objects.count() + 1
         self.role = "i"
         self.to = user
         self.save()
