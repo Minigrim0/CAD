@@ -1,20 +1,3 @@
-function copyKey() {
-    /* Get the text field */
-    var copyText = document.getElementById("id_secret_key");  // skipcq JS-0502
-
-    /* Select the text field */
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); /*For mobile devices*/
-
-    /* Copy the text inside the text field */
-    document.execCommand("copy");
-
-    /* Alert the copied text */
-    var copyText = document.getElementById("buttoncopy");  // skipcq JS-0502
-    copyText.innerHTML = "copié!";
-}
-
-
 //Makes a request to create a notification for a specified user
 function sendNotif(_user) {
     _title = document.getElementById("notifTitle").value;
