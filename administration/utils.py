@@ -237,19 +237,20 @@ def create_studentRequest(student: User):
     sendNotifToCoaches(student.profile, request)
 
 
-def advert_actors(student: StudentAccount, coach: CoachAccount):
+def advert_actors(student: StudentAccount, coach: CoachAccount, finalSchedule: str):
     """Sends a mail to both the student and the coach to advert them the request
 
     Args:
         student (StudentAccount): The student for whom a coach has been chosen
         coach (CoachAccount): The coach chosen for the student
+        finalSchedule (str): The schedule chosen by the administration
     """
     author = "L'équipe CAD"
     title = "Félicitations!"
     content = "Vous avez été choisi pour enseigner à {} {}! Vous pouvez \
     vous rendre sur votre profil pour retrouver les coordonées de cet \
-    étudiant.".format(
-        student.profile.user.first_name, student.profile.user.last_name
+    étudiant. L'horaire final est le suivant :\n {}".format(
+        student.profile.user.first_name, student.profile.user.last_name, finalSchedule
     )
     coachNotif = Notification(
         user=coach.profile.user, author=author, title=title, content=content
@@ -259,7 +260,8 @@ def advert_actors(student: StudentAccount, coach: CoachAccount):
 
     author = "L'équipe CAD"
     title = "Nous avons trouvé un coach pour vous!"
-    content = "Un coach a été choisi par l'équipe pour vous donner cours."
+    content = "Un coach a été choisi par l'équipe pour vous donner cours. L'horaire choisit est le suivant :"
+    content += f"\n {finalSchedule}"
     studentNotif = Notification(
         user=student.profile.user, author=author, title=title, content=content
     )

@@ -98,7 +98,7 @@ def chooseCoach(request) -> HttpResponse:
     student.coach = coach
     student.save()
 
-    utils.advert_actors(student, coach)
+    utils.advert_actors(student, coach, finalschedule)
 
     utils.thanksCoaches(other_coaches, student)
 

@@ -232,9 +232,8 @@ def user_admin_view(request) -> HttpResponse:
     else:
         form = OtherAdminForm(data)
 
-    if request.method == "POST":
-        if form.is_valid():
-            modifyUser(username, form)
+    if request.method == "POST" and form.is_valid():
+        modifyUser(username, form)
 
     view_title = "{} {}".format(user.last_name, user.first_name)
     context.update({"form": form, "form_user": user, "view_title": view_title})
