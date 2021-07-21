@@ -120,7 +120,7 @@ class OtherAdminForm(BaseRegistration):
             ),
         )
 
-    def clean(self, *args, **kwargs):
+    def clean(self, *args, **kwargs):  # skipcq PYL-W0221
         """Cleans the parents form as admin"""
         super().clean(admin=True, *args, **kwargs)
 
