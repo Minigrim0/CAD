@@ -119,6 +119,8 @@ def modify_balance(request) -> JsonResponse:
     tran = Transaction(student=student.profile.studentaccount)
     tran.amount = request.POST["amout_add"]
     tran.admin = User.objects.get(username=request.POST["approver"])
+    tran.comment = "{} du solde via l'administration".format(
+        "augmetation" if request.POST["amout_add"] > 0 else "diminution")
     tran.save()
 
     if isCoachLaunching:
