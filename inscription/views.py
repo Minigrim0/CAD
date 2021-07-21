@@ -6,11 +6,12 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from default.models import Mail
+
 from inscription import utils
+from inscription.decorators import mustnt_be_logged_in
+
 from users.models import Notification, StudentRequest
 from users.forms import StudentRegisterForm, CoachRegisterForm
-
-from inscription.decorators import mustnt_be_logged_in
 
 
 @mustnt_be_logged_in(action="inscrire")
