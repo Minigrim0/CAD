@@ -1,6 +1,9 @@
 version = 1
 
-exclude_patterns = ["*/migrations/**"]
+exclude_patterns = [
+  "*/migrations/**", 
+  "cad/assets/old_site/**"
+]
 
 [[analyzers]]
 name = "python"
@@ -13,6 +16,3 @@ enabled = true
 [[analyzers]]
 name = "javascript"
 enabled = true
-exclude_patterns = [
-  "cad/assets/old_site/**"
-]
