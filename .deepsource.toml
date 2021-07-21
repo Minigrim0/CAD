@@ -17,7 +17,17 @@ enabled = true
 [[transformers]]
 name = "black"
 enabled = true
+exclude_patterns = [
+  "*.md",
+  "*.sh",
+  "*.js"
+]
 
 [[transformers]]
 name = "prettier"
 enabled = true
+exclude_patterns = [
+  "*.md",
+  "*.sh",
+  "*.js"
+]
