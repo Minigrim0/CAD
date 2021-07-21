@@ -15,7 +15,7 @@ function createTempAlert(parent, level, time, message, id, callback=null, args=[
 
     setTimeout(function(){
         $("#notif_" + id).alert('close');
-        if(callback != null){
+        if(callback !== null){
             callback(args);
         }
     }, time);
