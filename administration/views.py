@@ -131,7 +131,11 @@ def courses(request) -> HttpResponse:
     view_title = "Cours donnés"
 
     sorter = request.GET.get("sort_by", "-date")
-    if sorter not in ["date", "-date", "approved", "-approved", "student__username", "-student__username", "coach__username", "-coach__username"]:
+    if (
+        sorter not in [
+            "date", "-date", "approved", "-approved", "student__username",
+            "-student__username", "coach__username", "-coach__username"]
+    ):
         sorter = "date"
 
     courses_list = FollowElement.objects.all().order_by(sorter)
