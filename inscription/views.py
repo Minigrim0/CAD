@@ -120,7 +120,7 @@ def pay_later(request) -> HttpResponseRedirect:
     """In case the user cannot pay directly
 
     Returns:
-        HttpResponseRedirect: to the error view in case an error occurs (No token, already confirmed account) 
+        HttpResponseRedirect: to the error view in case an error occurs (No token, already confirmed account)
         HttpResponseRedirect: to the home page, with a notification to remind the user to pay
     """
     user = request.user
