@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.forms import Form
+from cad.settings import SITE_DOMAIN
 
 from users.models import (
     Profile,
@@ -12,9 +14,12 @@ from users.models import (
 )
 
 
-def modifyUser(username, form):
-    """
-    Modifies a user and his profile according to the given form
+def modifyUser(username: str, form: Form):
+    """Modifies a user and his profile according to the given form
+
+    Args:
+        username (str): The username of the user to modify
+        form (Form): [description]
     """
     user = get_object_or_404(User, username=username)
     cleaned_data = form.cleaned_data
@@ -42,43 +47,50 @@ def modifyUser(username, form):
     profile.save()
 
 
-def modifyStudent(student_account, cleaned_data):
-    """
-    Modifies a student profile according to the given form
-    """
-    student_account.NeedsVisit = cleaned_data["NeedsVisit"]
-    student_account.comments = cleaned_data["comments"]
-    student_account.tutor_firstName = cleaned_data["tutor_firstName"]
-    student_account.tutor_name = cleaned_data["tutor_name"]
-    student_account.wanted_schedule = cleaned_data["wanted_schedule"]
-    student_account.zip = cleaned_data["zip"]
-    student_account.ville = cleaned_data["ville"]
-    student_account.zip = cleaned_data["zip"]
-    student_account.resp_phone_number1 = cleaned_data["resp_phone_number1"]
-    student_account.resp_phone_number2 = cleaned_data["resp_phone_number2"]
-    student_account.resp_phone_number3 = cleaned_data["resp_phone_number3"]
+def modifyStudent(student_account: StudentAccount, data):
+    """Modifies a student profile according to the given form"""
+    student_account.NeedsVisit = data["NeedsVisit"]
+    student_account.comments = data["comments"]
+    student_account.tutor_firstName = data["tutor_firstName"]
+    student_account.tutor_name = data["tutor_name"]
+    student_account.wanted_schedule = data["wanted_schedule"]
+    student_account.zip = data["zip"]
+    student_account.ville = data["ville"]
+    student_account.zip = data["zip"]
+    student_account.resp_phone_number1 = data["resp_phone_number1"]
+    student_account.resp_phone_number2 = data["resp_phone_number2"]
+    student_account.resp_phone_number3 = data["resp_phone_number3"]
 
     student_account.save()
 
 
-def modifyCoach(coach_account, cleaned_data):
+def modifyCoach(coach_account: CoachAccount, data: dict):
+    """Modifies a coach profile according to the given form
+
+    Args:
+        coach_account (CoachAccount): The coach account to modify
+        data (dict): The data
     """
-    Modifies a coach profile according to the given form
-    """
-    coach_account.school = cleaned_data["school"]
-    coach_account.IBAN = cleaned_data["IBAN"]
-    coach_account.nationalRegisterID = cleaned_data["nationalRegisterID"]
-    coach_account.French_level = cleaned_data["french_level"]
-    coach_account.English_level = cleaned_data["english_level"]
-    coach_account.Dutch_level = cleaned_data["dutch_level"]
-    coach_account.confirmedAccount = cleaned_data["confirmedAccount"]
+    coach_account.school = data["school"]
+    coach_account.IBAN = data["IBAN"]
+    coach_account.nationalRegisterID = data["nationalRegisterID"]
+    coach_account.French_level = data["french_level"]
+    coach_account.English_level = data["english_level"]
+    coach_account.Dutch_level = data["dutch_level"]
+    coach_account.confirmedAccount = data["confirmedAccount"]
 
     coach_account.save()
 
 
-def populate_data(usertype, user):
-    """
-    Populates a form according to the user's data
+def populate_data(usertype: str, user: User) -> dict:
+    """Populates a form according to the user's data
+
+    Args:
+        usertype (str): The type of the user (a, b or c)
+        user (User): The user in itself
+
+    Returns:
+        dict: The populated data
     """
     data = {
         "first_name": user.first_name,
@@ -148,18 +160,22 @@ def populate_data(usertype, user):
     return data
 
 
-def thanksCoaches(coaches, student):
-    """
-    Sends a notification to the coaches who have not been selected for a specific request
-    """
+def thanksCoaches(coaches: list, student: StudentAccount):
+    """Sends a notification to the coaches who have not been selected for a specific request
 
+    Args:
+        coaches (list): The coaches that have not been selected for the request
+        student (StudentAccount): The student that was looking for a coach
+    """
     author = "L'équipe CAD"
     title = "Merci d'avoir répondu présent"
-    content = """Merci d'avoir répondu présent à la requête de {} {}.
-    Malheureusement, vous n'avez pas été choisi pour donner cours à
-    cet étudiant. Mais ne vous en faites pas, votre tour viendra!""".format(
-        student.profile.user.first_name, student.profile.user.last_name
+    content = (
+        "Merci d'avoir répondu présent à la requête de "
+        f"{student.profile.user.first_name} {student.profile.user.last_name}. "
+        "Malheureusement, vous n'avez pas été choisi pour donner cours à "
+        "cet étudiant. Mais ne vous en faites pas, votre tour viendra!"
     )
+
     for coach in coaches:
         if (
             CoachRequestThrough.objects.filter(
@@ -175,11 +191,12 @@ def thanksCoaches(coaches, student):
 
 
 def sendNotifToCoaches(student: Profile, request: StudentRequest):
-    """
-    Looks for coaches compatible with the student request
-    """
+    """Looks for coaches compatible with the student request
 
-    # TODO: Upgrade this part
+    Args:
+        student (Profile): The student that is looking for a coach
+        request (StudentRequest): The request the coaches will see
+    """
     coaches = Profile.objects.filter(account_type="b")
     for coach in coaches:
         if coach.coachaccount.confirmedAccount != "b":
@@ -197,17 +214,16 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
 
         if compatible:
             newNotif = Notification(user=coach.user)
-            newNotif.author = "{} {}".format(
-                student.user.first_name, student.user.last_name
-            )
+            newNotif.author = f"{student.user.first_name} {student.user.last_name}"
+
             newNotif.title = "Recherche de coach"
-            newNotif.content = "Vos matières/niveaux correspondent avec "
-            newNotif.content += f"{student.user.first_name} {student.user.last_name} "
-            newNotif.content += "!\nVous pouvez cliquer "
-            newNotif.content += (
-                f"<a href='{reverse('request_view')}?id={request.id}'>ici</a>"
+            newNotif.content = (
+                "Vos matières/niveaux correspondent avec "
+                f"{student.user.first_name} {student.user.last_name} !\nVous pouvez cliquer "
+                f"<a href='{SITE_DOMAIN}{reverse('request_view')}?id={request.id}'>ici</a> "
+                "pour voir le profil de l'etudiant"
             )
-            newNotif.content += " pour voir le profil de l'etudiant"
+
             newNotif.save()
             newNotif.send_as_mail()
             coach.save()
@@ -233,11 +249,13 @@ def advert_actors(student: StudentAccount, coach: CoachAccount, finalSchedule: s
     """
     author = "L'équipe CAD"
     title = "Félicitations!"
-    content = "Vous avez été choisi pour enseigner à {} {}! Vous pouvez \
-    vous rendre sur votre profil pour retrouver les coordonées de cet \
-    étudiant. L'horaire final est le suivant :\n {}".format(
-        student.profile.user.first_name, student.profile.user.last_name, finalSchedule
+    content = (
+        f"Vous avez été choisi pour enseigner à {student.profile.user.first_name} "
+        f"{student.profile.user.last_name}! Vous pouvez vous rendre sur votre "
+        f"<a href='{SITE_DOMAIN}{reverse('my_students')}'>profil</a> pour retrouver "
+        f"les coordonées de cet étudiant. L'horaire final est le suivant :\n {finalSchedule}"
     )
+
     coachNotif = Notification(
         user=coach.profile.user, author=author, title=title, content=content
     )
@@ -246,8 +264,11 @@ def advert_actors(student: StudentAccount, coach: CoachAccount, finalSchedule: s
 
     author = "L'équipe CAD"
     title = "Nous avons trouvé un coach pour vous!"
-    content = "Un coach a été choisi par l'équipe pour vous donner cours. L'horaire choisit est le suivant :"
-    content += f"\n {finalSchedule}"
+    content = (
+        "Un coach a été choisi par l'équipe pour vous donner cours. L'horaire choisit est le suivant :"
+        f"\n {finalSchedule}"
+    )
+
     studentNotif = Notification(
         user=student.profile.user, author=author, title=title, content=content
     )

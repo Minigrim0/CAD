@@ -1,3 +1,7 @@
+/**
+ * Deletes a notification
+ * @param {int} notif_id the id of the notification to delete 
+ */
 function del_notif(notif_id) {
   $.post(
     UrlNotif,
@@ -7,9 +11,9 @@ function del_notif(notif_id) {
     },
     function (data, status) {
       if (status == "success") {
-        console.log("request successfully sent");
+        // Add visual confirmation
       } else {
-        console.log("request failed...");
+        // Add visual error
       }
     }
   );

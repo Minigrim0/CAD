@@ -1,6 +1,7 @@
 import hashlib
 
 from django.contrib.auth.models import User
+from django.forms import Form
 from django.shortcuts import reverse
 
 import cad.settings as settings
@@ -8,7 +9,14 @@ from users.models import CoachAccount, Profile, StudentAccount, Notification
 from default.models import Mail
 
 
-def registerProfile(user, form, account_type="Etudiant"):
+def registerProfile(user: User, form: Form, account_type: str = "Etudiant"):
+    """Registers information about a profile
+
+    Args:
+        user (User): The user the profile belongs to
+        form (Form): The form containing the data to fill the profile with
+        account_type (str, optional): The type of account the profile will be for. Defaults to "Etudiant".
+    """
     profile = Profile(user=user)
     profile.phone_number = form.cleaned_data["phone_number"]
     profile.account_type = account_type
@@ -27,7 +35,13 @@ def registerProfile(user, form, account_type="Etudiant"):
     profile.save()
 
 
-def studentRegister(user, form):
+def studentRegister(user: User, form: Form):
+    """Registers a student account
+
+    Args:
+        user (User): The user the student account belongs to
+        form (Form): The form containing the data
+    """
     student_profile = StudentAccount(profile=user.profile)
 
     student_profile.tutor_name = form.cleaned_data["tutor_name"]
@@ -43,7 +57,13 @@ def studentRegister(user, form):
     student_profile.save()
 
 
-def coachRegister(user, form):
+def coachRegister(user: User, form: Form):
+    """Registers a coach accounr
+
+    Args:
+        user (User): The user the coach account belongs to
+        form (Form): The form containing the data
+    """
     coach_profile = CoachAccount(profile=user.profile)
     coach_profile.school = form.cleaned_data["school"]
     coach_profile.French_level = form.cleaned_data["french_level"]
@@ -55,16 +75,15 @@ def coachRegister(user, form):
     coach_profile.save()
 
 
-def registerUser(form, usertype):
+def registerUser(form: Form, usertype: str):
     """Generates a user from a form values
 
     Args:
-        form (Form): [A form (either StudentForm or Coach form, both inheriting from BaseRegisterForm)]
-
+        form (Form): A form (either StudentForm or Coach form, both inheriting from BaseRegisterForm)
+        usertype (str): The type of account the user has
     Returns:
         user: the user newly created
     """
-
     username = "{}_{}".format(
         form.cleaned_data["last_name"], form.cleaned_data["first_name"]
     )
@@ -84,33 +103,48 @@ def registerUser(form, usertype):
     return user
 
 
-def getUser(token):
+def getUser(token: str) -> User:
+    """Finds the user corresponding to the secret_key and returns it
+
+    Args:
+        token (str): The token from which to retreive the user
+
+    Returns:
+        User: A user. Defaults to None
+    """
     profile = Profile.objects.filter(secret_key=token)
     if profile.count() == 1:
         return profile.first().user
     return None
 
 
-def welcomeUser(request, user):
+def welcomeUser(user: User):
     """Welcomes the new user, by sending him an email and a notification
 
     Args:
-        user (django.contrib.auth.models.User): The new user
+        user (User): The new user
     """
-
     author = "L'équipe CAD"
     title = "Bienvenue parmi nous!"
     content = "Au nom de toute l'équipe de CAD, \
         nous vous souhaitons la bienvenue! \
         N'oubliez pas que vous pouvez nous contacter \
         si vous avez le moindre souci via ce \
-        <a href='{}/{}'>formulaire</a>!".format(settings.SITE_DOMAIN, reverse("contact_view"))
+        <a href='{}{}'>formulaire</a>!".format(settings.SITE_DOMAIN, reverse("contact_view"))
 
     newNotif = Notification(user=user)
     newNotif.title = title
     newNotif.content = content
     newNotif.author = author
     newNotif.save()
+    send_confirmation_mail(user)
 
+
+def send_confirmation_mail(user: User):
+    """Sends the confirmation email to the user
+
+    Args:
+        user (User): The user to send the email to
+    """
     mail = Mail.objects.get(id=1)
     mail.send(user)

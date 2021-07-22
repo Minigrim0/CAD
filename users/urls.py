@@ -17,4 +17,5 @@ urlpatterns = [
     path("user-autocomplete/", CoachAutocomplete.as_view(), name="coach-autocomplete"),
     path("login/", views.login_view, name="login_view"),
     path("usermail/", views.get_users, name="get_users_mail"),
+    path("mail/resend", views.send_confirmation_email, name="resend_confirm_mail"),
 ]

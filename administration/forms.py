@@ -17,19 +17,21 @@ from users.forms import (
 
 
 class MailForm(forms.ModelForm):
-    """A form to create and modify mail objects
-    """
+    """A form to create and modify mail objects"""
 
     class Meta:
+        """The meta class of the mail form"""
+
         model = Mail
         fields = ["name", "subject", "content", "role"]
 
 
 class ArticleForm(forms.ModelForm):
-    """A form to create and modify article objects
-    """
+    """A form to create and modify article objects"""
 
     class Meta:
+        """The meta class of the article form"""
+
         model = Article
         fields = ["name", "title", "subtitle", "content"]
         widgets = {
@@ -38,17 +40,17 @@ class ArticleForm(forms.ModelForm):
 
 
 class TransactionForm(forms.ModelForm):
-    """A form to create and modify transaction objects
-    """
+    """A form to create and modify transaction objects"""
 
     class Meta:
+        """The meta class of the transaction form"""
+
         model = Transaction
         fields = ["amount", "comment"]
 
 
 class newCoachForm(forms.Form):
-    """A form to select the final coach and schedule for a student request
-    """
+    """A form to select the final coach and schedule for a student request"""
 
     coach = forms.ModelChoiceField(
         queryset=User.objects.filter(profile__account_type="b"),
@@ -61,8 +63,8 @@ class newCoachForm(forms.Form):
 
 
 class OtherAdminForm(BaseRegistration):
-    """A form to see and modify accounts that are neither coach nor student accounts as administrator
-    """
+    """A form to see and modify accounts that are neither coach nor student accounts as administrator"""
+
     verifiedAccount = forms.BooleanField(
         required=False, label="A vérifié son addresse mail"
     )
@@ -98,14 +100,6 @@ class OtherAdminForm(BaseRegistration):
                 ),
                 "address",
                 "phone_number",
-                bforms.FieldWithButtons(
-                    "secret_key",
-                    HTML(
-                        '<button type="button" id="buttoncopy" class="btn btn-primary" name="Save" onclick="copyKey()"> \
-                            copier\
-                        </button>'
-                    ),
-                ),
                 "verifiedAccount",
             ),
             bforms.FormActions(
@@ -118,13 +112,13 @@ class OtherAdminForm(BaseRegistration):
             ),
         )
 
-    def clean(self):
-        super().clean(admin=True)
+    def clean(self, *args, **kwargs):  # skipcq PYL-W0221
+        """Cleans the parents form as admin"""
+        super().clean(admin=True, *args, **kwargs)
 
 
 class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
-    """A form to see and modify student accounts as administrator
-    """
+    """A form to see and modify student accounts as administrator"""
 
     coach = forms.CharField(
         widget=forms.TextInput(
@@ -208,10 +202,26 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
                         css_class="form-group col-xs-12 col-sm-12 col-md-12 col-lg-8 col-xl-8",
                     ),
                     HTML(
-                        '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center"><button class="btn btn-primary" type="button" onclick="$(\'#chooseCoach\').modal(\'toggle\');">Choisir un nouveau coach</button></div>'
+                        """
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center">
+                                <button
+                                    class="btn btn-primary"
+                                    type="button"
+                                    onclick="$('#chooseCoach').modal('toggle');"
+                                >
+                                    Choisir un nouveau coach
+                                </button>
+                            </div>
+                        """
                     ),
                     HTML(
-                        '<div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center"><button class="btn btn-primary" type="button" onclick="reloadCoach()">Rechercher un nouveau coach</button></div>'
+                        """
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-2 col-xl-2 justify-content-center">
+                                <button class="btn btn-primary" type="button" onclick="reloadCoach()">
+                                    Rechercher un nouveau coach
+                                </button>
+                            </div>
+                        """
                     ),
                 ),
                 "balance",
@@ -235,8 +245,8 @@ class StudentAdminForm(StudentRegisterForm, OtherAdminForm):
 
 
 class CoachAdminForm(CoachRegisterForm, OtherAdminForm):
-    """A form to see and modify coach accounts as administrator
-    """
+    """A form to see and modify coach accounts as administrator"""
+
     coach_states = [
         ("a", "----"),
         ("b", "Engagé"),
@@ -294,14 +304,6 @@ class CoachAdminForm(CoachRegisterForm, OtherAdminForm):
                 ),
                 "IBAN",
                 "confirmedAccount",
-                bforms.FieldWithButtons(
-                    "secret_key",
-                    HTML(
-                        '<button type="button" id="buttoncopy" class="btn btn-primary" name="Save" onclick="copyKey()"> \
-                            copier\
-                        </button>'
-                    ),
-                ),
                 "verifiedAccount",
             ),
             bforms.FormActions(

@@ -1,41 +1,33 @@
-# -*- coding: utf-8 -*-
-
 import logging
 
 from django.db import models
 from django.shortcuts import reverse
 from django.utils.html import format_html
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.contrib.auth.models import User
 
 from cad.settings import EMAIL_HOST_USER, SITE_DOMAIN, DEBUG
 
-from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
-
-from django.contrib.auth.models import User
-
 
 class Article(models.Model):
-    name = models.CharField(
-        max_length=100, default="Article", verbose_name="Nom de l'article"
-    )
+    """The article model"""
+
+    name = models.CharField(max_length=100, default="Article", verbose_name="Nom de l'article")
     title = models.TextField(null=True)
     subtitle = models.TextField(null=True)
     content = models.TextField(null=True)
-    date = models.DateTimeField(
-        auto_now_add=True, auto_now=False, verbose_name="Date de modification"
-    )
+    date = models.DateTimeField(auto_now_add=True, auto_now=False, verbose_name="Date de modification")
 
     def __str__(self):
         return self.name
 
 
 class Mail(models.Model):
-    name = models.CharField(
-        max_length=150, default="Mail template", verbose_name="Nom du template"
-    )
-    subject = models.CharField(
-        max_length=150, default="CAD - Cours à domicile", verbose_name="Sujet"
-    )
+    """The Mail model"""
+
+    name = models.CharField(max_length=150, default="Mail template", verbose_name="Nom du template")
+    subject = models.CharField(max_length=150, default="CAD - Cours à domicile", verbose_name="Sujet")
     content = models.TextField(default="None", verbose_name="Contenu")
 
     choices = (
@@ -51,11 +43,17 @@ class Mail(models.Model):
     )
 
     role = models.CharField(max_length=1, choices=choices, verbose_name="Role du mail")
-    to = models.ForeignKey(
-        User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE
-    )
+    to = models.ForeignKey(User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE)
 
-    def formatted_content(self, user: User):
+    def formatted_content(self, user: User) -> str:
+        """Formats the content of the mail using the pre-defined tags
+
+        Args:
+            user (User): The user this mail is addressed to
+
+        Returns:
+            str: The formatted mail content
+        """
         content = str(self.content)
         content = content.replace("<LASTNAME>", str(user.last_name))
         content = content.replace("<FIRSTNAME>", str(user.first_name))
@@ -79,6 +77,12 @@ class Mail(models.Model):
         return content
 
     def send(self, user: User, bcc=None):
+        """Sends the mail to the given user with the given people in bcc
+
+        Args:
+            user (User): The user to send the mail to
+            bcc ([type], optional): A list of addresses to send the mail to as bcc. Defaults to None.
+        """
         html_message = render_to_string(
             "mail.html",
             {
@@ -110,13 +114,17 @@ class Mail(models.Model):
 
         # Duplicates the email, setting it as "sent" email
         self.pk = None
-        self.id = Mail.objects.count() + 1
         self.role = "i"
         self.to = user
         self.save()
 
     @property
-    def clean_header(self):
+    def clean_header(self) -> str:
+        """Cleans the subject of the mail
+
+        Returns:
+            str: The cleaned subject
+        """
         return str(self.subject).replace("\n", "")
 
     def __str__(self):
@@ -124,12 +132,19 @@ class Mail(models.Model):
 
 
 class Message(models.Model):
+    """The Message model"""
+
     subject = models.TextField(null=False, default="No subject")
     content = models.TextField(null=False)
     contact_mail = models.CharField(max_length=250)
     seen = models.BooleanField(default=False)
 
-    def rendered(self):
+    def rendered(self) -> str:
+        """Renders a message as html string using the mail template
+
+        Returns:
+            str: The html content of the message as string
+        """
         html_message = render_to_string(
             "mail.html",
             {
@@ -143,6 +158,7 @@ class Message(models.Model):
         return html_message
 
     def send_as_mail(self):
+        """Sends the message as mail to the CAD mailbox"""
         logging.debug(
             "Sending mail : {}\n{}\n\n{}".format(
                 self.subject, self.content, self.contact_mail
@@ -175,5 +191,7 @@ class Message(models.Model):
 
 
 class MailingList(models.Model):
+    """Represents a list of people that will receive a certain selection of email"""
+
     users = models.ManyToManyField(User, verbose_name="Utilisateurs intéréssés")
     name = models.CharField(max_length=100)

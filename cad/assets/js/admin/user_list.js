@@ -1,9 +1,9 @@
 $(document).ready(
     function(){
-        var url = new URL(document.location);
+        var url = new URL(document.location);  // skipcq JS-0502
         value = document.getElementById('searchbar').value = url.searchParams.get('q');
 
-        var input = document.getElementById("searchbar");
+        var input = document.getElementById("searchbar");  // skipcq JS-0502
         input.addEventListener("keyup", function(event) {
             if (event.keyCode === 13) { // Enter
                 event.preventDefault();
@@ -13,15 +13,15 @@ $(document).ready(
     }
 )
 
+/**
+ * Activate or deactivate a user
+ * @param {int} user_id the id of the user to (de)activate
+ * @param {bool} active whether the user should be activated or not
+ */
 function activate(user_id, active){
-    var Url = ActivateUserUrl + "?userid=" + user_id + "&active=" + active;
-    var message = "Voulez vous réellement ";
-    if(active == "true"){
-        message += "réactiver cet utilisateur ?"
-    }
-    else{
-        message += "désactiver cet utilisateur ?"
-    }
+    var Url = ActivateUserUrl + "?userid=" + user_id + "&active=" + active;  // skipcq JS-0502
+    var message = "Voulez vous réellement ";  // skipcq JS-0502
+    message += active == "true" ? "réactiver cet utilisateur ?" : "désactiver cet utilisateur ?";
 
     if(!confirm(message)) {
         return
@@ -50,8 +50,11 @@ function activate(user_id, active){
     );
 }
 
+/**
+ * Modifies the target url to search for what the user put in the search field
+ */
 function doSearch(){
-    var url = new URL(document.location);
+    var url = new URL(document.location);  // skipcq JS-0502
     value = document.getElementById('searchbar').value;
     url.searchParams.set('q', value);
     value = document.getElementById('searchbutton').href = url;
