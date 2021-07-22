@@ -1,22 +1,7 @@
-function copyKey() {
-    /* Get the text field */
-    var copyText = document.getElementById("id_secret_key");
-
-    /* Select the text field */
-    copyText.select();
-    copyText.setSelectionRange(0, 99999); /*For mobile devices*/
-
-    /* Copy the text inside the text field */
-    document.execCommand("copy");
-
-    /* Alert the copied text */
-
-    var copyText = document.getElementById("buttoncopy");
-    copyText.innerHTML = "copié!";
-}
-
-
-//Makes a request to create a notification for a specified user
+/**
+ * Makes a request to create a notification for a specified user
+ * @param {string} _user the user to make a notification for
+ */
 function sendNotif(_user) {
     _title = document.getElementById("notifTitle").value;
     _content = document.getElementById("notifContent").value;
@@ -34,7 +19,7 @@ function sendNotif(_user) {
         function(data, status) {
             if (status == "success") {
                 document.getElementById("successSend").style.display = "block";
-                var IntervalID = setInterval(
+                var IntervalID = setInterval(  // skipcq JS-0502
                     function() {
                         document.getElementById("successSend").style.display = "none";
                         $('#SendNotif').modal('toggle')
@@ -42,7 +27,7 @@ function sendNotif(_user) {
                     }, 1500);
             } else {
                 document.getElementById("errorSend").style.display = "block";
-                var IntervalID = setInterval(
+                var IntervalID = setInterval(  // skipcq JS-0502
                     function() {
                         document.getElementById("errorSend").style.display = "none";
                         $('#SendNotif').modal('toggle')
@@ -53,7 +38,11 @@ function sendNotif(_user) {
     );
 }
 
-
+/**
+ * Updates the balance of a student
+ * @param {string} user the user to add balance to
+ * @param {string} admin the administrator that initiated the balance modification
+ */
 function updBalance(user, admin) {
     amout_add = document.getElementById("new_balance").value;
     isFirst = document.getElementById("isFirstPayment").checked;
@@ -70,7 +59,7 @@ function updBalance(user, admin) {
             if (status == "success") {
                 document.getElementById("successBalance").style.display = "block";
                 document.getElementById("id_balance").value = data["new_balance"];
-                var IntervalID = setInterval(
+                var IntervalID = setInterval(  // skipcq JS-0502
                     function() {
                         document.getElementById("successBalance").style.display = "none";
                         $('#UpdateBalance').modal('toggle')
@@ -78,7 +67,7 @@ function updBalance(user, admin) {
                     }, 1500);
             } else {
                 document.getElementById("errorBalance").style.display = "block";
-                var IntervalID = setInterval(
+                var IntervalID = setInterval(  // skipcq JS-0502
                     function() {
                         document.getElementById("errorBalance").style.display = "none";
                         $('#UpdateBalance').modal('toggle')
@@ -89,7 +78,10 @@ function updBalance(user, admin) {
     );
 }
 
-
+/**
+ * Proposes the user to unsub from the website
+ * @param {string} user_key the user key
+ */
 function unsub(user_key){
     $.post(
         UrlUnsub, {
@@ -97,7 +89,6 @@ function unsub(user_key){
             csrfmiddlewaretoken: csrf_token
         },
         function(data, status) {
-            console.log(status);
             if (status == "success") {
                 unsubButton = document.getElementById("unsubbutton");
                 unsubButton.innerHTML = '<p style="color:red;">Proposition de désinscription envoyée</p>';
@@ -109,7 +100,9 @@ function unsub(user_key){
     );
 }
 
-
+/**
+ * Starts a new coach research (Creates a new student Request)
+ */
 function reloadCoach(){
     if(!confirm("Êtes vous sûr de vouloir relancer une recherche ?")) return;
 
@@ -153,7 +146,9 @@ function reloadCoach(){
     });
 }
 
-
+/**
+ * Update the coach by choosing a new coach from the coach list
+ */
 function updCoach(){
     if(!$("#newCoachForm").valid()){
         $("#id_coach-error").css("display", "none");
@@ -161,14 +156,14 @@ function updCoach(){
         return;
     }
     $("#errorNewCoachForm").css("display", "none");
-    var dataArray = $("#newCoachForm").serializeArray();
+    var dataArray = $("#newCoachForm").serializeArray();  // skipcq JS-0502
 
-    var post_data = {
+    var post_data = {  // skipcq JS-0502
         csrfmiddlewaretoken: csrf_token,
         student: user
     }
 
-    for(var x = 0;x<dataArray.length;x++){
+    for(var x = 0;x<dataArray.length;x++){  // skipcq JS-0502
         post_data[dataArray[x]["name"]] = dataArray[x]["value"];
     }
 

@@ -5,7 +5,10 @@ from default.models import Article, Mail, Message, MailingList
 ARTICLE_DISPLAY_SIZE = 75
 
 
+@admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
+    """The admin of the article model"""
+
     list_display = ("name", "date", "content_preview")
     list_filter = ("name", "date")
     date_hierachy = "date"
@@ -14,7 +17,16 @@ class ArticleAdmin(admin.ModelAdmin):
 
     fields = ("name", "title", "subtitle", "content")
 
-    def content_preview(self, article):
+    @staticmethod
+    def content_preview(article: Article) -> str:
+        """Renders a short version of the article
+
+        Args:
+            article (Article): The article to render a shortened version of
+
+        Returns:
+            str: The shortened version of the article
+        """
         text = article.title[0:ARTICLE_DISPLAY_SIZE]
         if len(article.title) > ARTICLE_DISPLAY_SIZE:
             return text + "..."
@@ -23,7 +35,10 @@ class ArticleAdmin(admin.ModelAdmin):
     content_preview.short_description = u"Titre de la section"
 
 
+@admin.register(Mail)
 class MailAdmin(admin.ModelAdmin):
+    """The admin of the Mail model"""
+
     list_display = ("id", "name", "subject", "role")
     list_filter = ("id", "name", "subject", "role")
     ordering = ("-id",)
@@ -32,7 +47,10 @@ class MailAdmin(admin.ModelAdmin):
     fields = (("name", "subject"), ("content"), "role")
 
 
+@admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
+    """The admin of the Message model"""
+
     list_display = ("id", "subject", "contact_mail", "seen")
     list_filter = ("id", "subject", "contact_mail", "seen")
     ordering = ("-id",)
@@ -44,25 +62,13 @@ class MessageAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(MailingList)
 class MailingListAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "name",
-    )
-    list_filter = (
-        "id",
-        "name",
-    )
+    """The admin of the Mailing list model"""
+
+    list_display = ("id", "name",)
+    list_filter = ("id", "name",)
     ordering = ("-id",)
     search_fields = ("name",)
 
-    fields = (
-        "name",
-        "users",
-    )
-
-
-admin.site.register(Article, ArticleAdmin)
-admin.site.register(Mail, MailAdmin)
-admin.site.register(Message, MessageAdmin)
-admin.site.register(MailingList, MailingListAdmin)
+    fields = ("name", "users",)

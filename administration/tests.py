@@ -5,7 +5,10 @@ from administration.utils import thanksCoaches, sendNotifToCoaches
 
 
 class UserTestCase(TestCase):
+    """Tests different scenarios with users"""
+
     def setUp(self):
+        """Sets up an environment for the tests to run in"""
         User.objects.create(username="a", first_name="user", last_name="etudiant")
         User.objects.create(username="b", first_name="user", last_name="coach")
         User.objects.create(username="c", first_name="user", last_name="coach2")
@@ -122,7 +125,6 @@ class UserTestCase(TestCase):
 
     def test_coach_accept(self):
         """The requests workflow to choose a coach works"""
-
         student = User.objects.get(username="a")
         models.StudentRequest.objects.create(student=student)
 
@@ -167,7 +169,7 @@ class UserTestCase(TestCase):
         self.assertEqual(coach3.notification_set.count(), 0)
         self.assertEqual(coach4.notification_set.count(), 0)
 
-        thanksCoaches(other_coaches, student.profile.user)
+        thanksCoaches(other_coaches, student)
 
         self.assertEqual(coach1.notification_set.count(), 1)
         self.assertEqual(coach2.notification_set.count(), 0)

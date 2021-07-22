@@ -15,14 +15,13 @@ import administration.utils as utils
 
 @staff_member_required
 @require_http_methods(["POST"])
-def create_new_request(request):
+def create_new_request(request) -> JsonResponse:
     """Generates a new studentRequest if the student has no pending request
 
     Returns:
         JsonResponse: A Json response containing information about whether the request succeeded or not,
         and information aout the failure if necessary
     """
-
     student = get_object_or_404(User, username=request.POST.get("user", None))
     if StudentRequest.objects.filter(student=student, is_closed=False).count():
         response = {
@@ -39,13 +38,12 @@ def create_new_request(request):
 
 @staff_member_required
 @require_http_methods(["POST"])
-def set_new_coach(request):
+def set_new_coach(request) -> JsonResponse:
     """Force a new coach for a student. The endpoint creates a finished request in order to make things work properly
 
     Returns:
         JsonResponse: A Json Response containing information about the coach
     """
-
     coach_id = request.POST.get("coach", None)
     finalSchedule = request.POST.get("finalSchedule", None)
 
@@ -76,13 +74,12 @@ def set_new_coach(request):
 
 @staff_member_required
 @require_http_methods(["POST"])
-def chooseCoach(request):
+def chooseCoach(request) -> HttpResponse:
     """Selects the given coach from the studentRequest as the one chosen by the administration
 
     Returns:
         HttpResponse: A response containing the text "success" if no error occured (Otherwise an Http500)
     """
-
     query = request.POST
 
     studentrequest = StudentRequest.objects.get(id=query["id"])
@@ -110,19 +107,21 @@ def chooseCoach(request):
 
 @staff_member_required
 @require_http_methods(["POST"])
-def modify_balance(request):
+def modify_balance(request) -> JsonResponse:
     """Creates a transaction from or to the student's account, updating its balance
 
     Returns:
         JsonResponse: A JsonResponse containing the new balance of the student
     """
-
     student = User.objects.get(username=request.POST["user"])
     isCoachLaunching = StudentRequest.objects.filter(student=student).count() == 0
 
     tran = Transaction(student=student.profile.studentaccount)
     tran.amount = request.POST["amout_add"]
     tran.admin = User.objects.get(username=request.POST["approver"])
+    tran.comment = "{} du solde via l'administration".format(
+        "augmetation" if request.POST["amout_add"] > 0 else "diminution"
+    )
     tran.save()
 
     if isCoachLaunching:
@@ -142,13 +141,12 @@ def modify_balance(request):
 
 @staff_member_required
 @require_http_methods(["POST"])
-def sendUnsubscriptionMail(request):
+def sendUnsubscriptionMail(request) -> HttpResponse:
     """Sends an email proposing a user to unsubscribe from the website (If the account is not confirmed)
 
     Returns:
         HttpResponse: A response indicating success if nothing went wrong
     """
-
     user = getUser(request.POST.get("user_key"))
     mail = Mail.objects.get(role="c")
     mail.send(user)
@@ -160,7 +158,7 @@ def sendUnsubscriptionMail(request):
 
 
 @staff_member_required
-def activate(request):
+def activate(request) -> HttpResponse:
     """Either activate a deactivated user of deactivate an active user
 
     Returns:
@@ -177,7 +175,7 @@ def activate(request):
 
 @staff_member_required
 @require_http_methods(["POST"])
-def approve_course(request):
+def approve_course(request) -> HttpResponse:
     """Marks a course as approved by the administration or deletes it
 
     Returns:
@@ -204,11 +202,16 @@ def approve_course(request):
 
 @staff_member_required
 @require_http_methods(["GET"])
-def request_informations(request):
+def request_informations(request) -> JsonResponse:
+    """Returns information about a student request, to put it in the closed student requests"""
     id = request.GET.get("id", None)
     student_request = get_object_or_404(StudentRequest, id=id)
-    rendered = render(request, "student_request_section.html", {"student_request": student_request})
+    rendered = render(
+        request, "student_request_section.html", {"student_request": student_request}
+    )
 
-    return JsonResponse({
-        "content": rendered.content.decode("utf-8"),
-    })
+    return JsonResponse(
+        {
+            "content": rendered.content.decode("utf-8"),
+        }
+    )

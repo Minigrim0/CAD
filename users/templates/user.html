@@ -28,7 +28,7 @@
         <div class="container-fluid">
             {% if not user.profile.verifiedAccount %}
             <div class="alert alert-warning text-center" role="alert">
-                N'oubliez pas de vérifier vos mails pour confirmer votre compte!
+                N'oubliez pas de vérifier vos mails pour confirmer votre compte! (Rien reçu ? <a href="{% url "resend_confirm_mail" %}">cliquez ici</a>)
             </div>
             {% endif %}
 
