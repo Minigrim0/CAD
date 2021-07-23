@@ -74,7 +74,7 @@
 
 {% block extra_imports %}
 <script>
-    const Url = "{% url "manage_request" %}";
+    const Url = "{% url "api:users:manage_request" %}";
     const csrfToken = '{{ csrf_token }}';
 </script>
 <script src="{% static "js/requests.js" %}"></script>

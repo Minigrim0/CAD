@@ -85,7 +85,7 @@
 
 {% block extra_imports %}
 <script>
-    const UrlNotif = "{% url "rm_notif" %}";
+    const UrlNotif = "{% url "api:users:rm_notif" %}";
     const csrf_token = '{{ csrf_token }}';
 </script>
 <script src="{% static "js/user_home.js" %}"></script>
