@@ -3,7 +3,7 @@ from django.urls import path
 import administration.api_endpoints as api
 
 
-app_name = "api"
+app_name = "adminapi"
 urlpatterns = [
     path("users/activate/", api.activate, name="activate_user"),
     path("users/unsubscribe/", api.sendUnsubscriptionMail, name="unsubscribe"),

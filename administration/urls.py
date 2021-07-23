@@ -16,5 +16,4 @@ urlpatterns = [
     path("courses/", views.courses, name="given_courses"),
     path("messages/", views.message_admin_view, name="message_admin_view"),
     path("messages/all/", views.message_list, name="messagelist"),
-    path("api/", include("administration.api_urls", namespace="api")),
 ]
