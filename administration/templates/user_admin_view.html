@@ -175,11 +175,11 @@
 {{ new_coach_form.media }}
 
 <script>
-    const UrlNotif = "{% url 'send_notif' %}";
-    const UrlBalance = "{% url 'api:modify_balance' %}";
-    const UrlUnsub = "{% url 'api:unsubscribe' %}";
-    const new_coach_url = "{% url 'api:request_new_coach' %}";
-    const newCoachUrl = "{% url 'api:set_new_coach' %}";
+    const UrlNotif = "{% url 'api:users:send_notif' %}";
+    const UrlBalance = "{% url 'api:adminapi:modify_balance' %}";
+    const UrlUnsub = "{% url 'api:adminapi:unsubscribe' %}";
+    const new_coach_url = "{% url 'api:adminapi:request_new_coach' %}";
+    const newCoachUrl = "{% url 'api:adminapi:set_new_coach' %}";
 
     const csrf_token = "{{ csrf_token }}";
     const user = "{{ form_user.username }}";

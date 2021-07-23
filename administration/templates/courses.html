@@ -206,7 +206,7 @@
 
 <script>
     const csrfToken = "{{csrf_token}}";
-    const approveCourseUrl = "{% url 'api:approve_course' %}";
+    const approveCourseUrl = "{% url 'api:adminapi:approve_course' %}";
 
     function setParameter(param, value){
         var url = new URL(window.location);

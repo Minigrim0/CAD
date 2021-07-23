@@ -54,8 +54,8 @@
 
     <script>
         const csrfToken = '{{ csrf_token }}';
-        const SelectCoachUrl = "{% url 'api:request_select_coach' %}";
-        const RequestInformationUrl = "{% url 'api:request_details' %}"
+        const SelectCoachUrl = "{% url 'api:adminapi:request_select_coach' %}";
+        const RequestInformationUrl = "{% url 'api:adminapi:request_details' %}"
     </script>
     <script src="{% static "js/admin/requests.js" %}" ></script>
 </div>
