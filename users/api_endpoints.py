@@ -3,9 +3,11 @@ import logging
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, Http404, HttpResponseBadRequest, JsonResponse
 
-from users.models import Notification
+from users.models import Notification, StudentRequest
+from users.views import ErrorView
 
 
 def get_users(request) -> JsonResponse:
