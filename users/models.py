@@ -102,7 +102,7 @@ class Profile(models.Model):
             if student.school_level in "abcdefg":
                 return score
             return 0
-        elif self.school_level == "h":
+        if self.school_level == "h":
             if student.school_level == "a":
                 return score
             return 0
