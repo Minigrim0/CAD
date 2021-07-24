@@ -101,10 +101,12 @@ class Profile(models.Model):
         if self.school_level == "i":
             if student.school_level in "abcdefg":
                 return score
+            return 0
         elif self.school_level == "h":
             if student.school_level == "a":
                 return score
-        return 0
+            return 0
+        return score
 
     @property
     def courses(self):
