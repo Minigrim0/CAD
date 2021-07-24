@@ -22,6 +22,7 @@ def findRequestsForCoach(coach: CoachAccount):
         f"<li><a href='{request.fullUrl}'>{request.student.first_name} {request.student.last_name}</a></li>"
         for request in available_requests
     )
+    newNotif.content += "</ul>"
 
     newNotif.save()
     newNotif.send_as_mail()
