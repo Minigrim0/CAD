@@ -201,7 +201,7 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
         student (Profile): The student that is looking for a coach
         request (StudentRequest): The request the coaches will see
     """
-    coaches = Profile.objects.filter(account_type="b", coachaccount__confirmedaccount="b")
+    coaches = Profile.objects.filter(account_type="b", coachaccount__confirmedAccount="b")
     for coach in coaches:
         if coach.isCompatible(request.student.profile):
             newNotif = Notification(user=coach.user)
