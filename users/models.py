@@ -64,7 +64,7 @@ class Profile(models.Model):
     )
     verifiedAccount = models.BooleanField(default=False, verbose_name="A vérifié son addresse mail")
     # Represents school level for student
-    # Represents either if coach give course to humanité or primaire
+    # Represents whether the coach gives course to humanité or primaire
     school_level = models.CharField(
         null=True,
         blank=True,
@@ -109,7 +109,7 @@ class Profile(models.Model):
         return score  # Coach school level is both
 
     @property
-    def courses(self):
+    def courses(self) -> str:
         """Returns a string containing the diffrent courses of this profile
 
         Returns:
@@ -163,7 +163,7 @@ class StudentAccount(models.Model):
     comments = models.TextField(null=True, blank=True, verbose_name="Commentaires", default="Aucun commentaire")
     wanted_schedule = models.TextField(null=True, blank=True, default="", verbose_name="Horaire")
     unsub_proposal = models.BooleanField(default=False, verbose_name="Proposition de désinscription envoyée")
-    # User has payed the two first hours of course
+
     coach = models.ForeignKey(
         "users.CoachAccount",
         null=True,
@@ -197,11 +197,11 @@ class StudentAccount(models.Model):
     )
 
     @property
-    def balance(self):
+    def balance(self) -> float:
         """Returns the balance of the student account base on previous transactions
 
         Returns:
-            int: The calculated balance
+            int: The calculated balance (In hours)
         """
         transactions = Transaction.objects.filter(student=self)
         balance = sum(transaction.amount for transaction in transactions)
