@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path
 from users.autocomplete import CoachAutocomplete
 import users.views as views
 
@@ -14,5 +14,4 @@ urlpatterns = [
     path("user-autocomplete/", CoachAutocomplete.as_view(), name="coach-autocomplete"),
     path("login/", views.login_view, name="login_view"),
     path("mail/resend", views.send_confirmation_email, name="resend_confirm_mail"),
-    path("api/", include("users.api_urls", namespace="api")),
 ]
