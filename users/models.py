@@ -106,7 +106,7 @@ class Profile(models.Model):
             if student.school_level == "a":
                 return score
             return 0
-        return score
+        return score  # Coach school level is both
 
     @property
     def courses(self):
