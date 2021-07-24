@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, HttpResponse
@@ -5,6 +7,8 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.core.paginator import Paginator
+
+from djqscsv import render_to_csv_response
 
 from administration.forms import (
     ArticleForm,
@@ -308,3 +312,16 @@ def student_requests(request) -> HttpResponse:
 
     view_title = "Requêtes"  # skipcq PYL-W0641
     return render(request, "requestsAdmin.html", locals())
+
+
+@staff_member_required
+def download_courses(request):
+    before = int(request.GET.get("before", 30))
+    qs = FollowElement.objects.filter(
+        date__gte=datetime.now()-timedelta(days=before), approved=True
+    ).values(
+        'date', 'startHour', 'endHour',
+        'student__first_name', 'student__last_name',
+        'coach__first_name', 'coach__last_name',
+        'comments')
+    return render_to_csv_response(qs)
