@@ -73,17 +73,38 @@ class Profile(models.Model):
         verbose_name="Niveau scolaire",
     )
 
-    def isCompatible(self, student):
-        bMaths = self.Maths_course == student.Maths_course
-        bChimie = self.Chimie_course == student.Chimie_course
-        bPhysique = self.Physique_course == student.Physique_course
-        bFrancais = self.Francais_course == student.Francais_course
-        compatible = bMaths or bChimie or bPhysique or bFrancais
+    def isCompatible(self, student) -> bool:
+        """Checks if the current coach is compatible with the given student (Both profile models)
+
+        Args:
+            student (Profile): The student profile to compare the coach to
+
+        Returns:
+            bool: Whether the coach and students are compatible or not
+        """
+        return self.relationScore(student) > 0
+
+    def relationScore(self, student) -> int:
+        """Calculates the matching score of the student and the coach
+
+        Args:
+            student (Profile): the profile of the student
+
+        Returns:
+            int: The score of the relation, the higher, the better
+        """
+        bMaths = (self.Maths_course is True) and (student.Maths_course is True)
+        bChimie = (self.Chimie_course is True) and (student.Chimie_course is True)
+        bPhysique = (self.Physique_course is True) and (student.Physique_course is True)
+        bFrancais = (self.Francais_course is True) and (student.Francais_course is True)
+        score = bMaths + bChimie + bPhysique + bFrancais
         if self.school_level == "i":
-            compatible = compatible and student.school_level in "abcdefg"
+            if student.school_level in "abcdefg":
+                return score
         elif self.school_level == "h":
-            compatible = compatible and (student.school_level == "a")
-        return compatible
+            if student.school_level == "a":
+                return score
+        return 0
 
     @property
     def courses(self):
