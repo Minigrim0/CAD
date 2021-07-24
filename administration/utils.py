@@ -201,22 +201,9 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
         student (Profile): The student that is looking for a coach
         request (StudentRequest): The request the coaches will see
     """
-    coaches = Profile.objects.filter(account_type="b")
+    coaches = Profile.objects.filter(account_type="b", coachaccount__confirmedaccount="b")
     for coach in coaches:
-        if coach.coachaccount.confirmedAccount != "b":
-            continue
-        bMaths = coach.Maths_course == student.Maths_course
-        bChimie = coach.Chimie_course == student.Chimie_course
-        bPhysique = coach.Physique_course == student.Physique_course
-        bFrancais = coach.Francais_course == student.Francais_course
-        compatible = bMaths or bChimie or bPhysique or bFrancais
-        if coach.school_level == "i":
-            same_study_lev = student.school_level in "abcdefg"
-            compatible = compatible and same_study_lev
-        elif coach.school_level == "h":
-            compatible = compatible and (student.school_level == "a")
-
-        if compatible:
+        if coach.isCompatible(request.student):
             newNotif = Notification(user=coach.user)
             newNotif.author = f"{student.user.first_name} {student.user.last_name}"
 

@@ -70,6 +70,18 @@ class Profile(models.Model):
         verbose_name="Niveau scolaire",
     )
 
+    def isCompatible(self, student):
+        bMaths = self.Maths_course == student.Maths_course
+        bChimie = self.Chimie_course == student.Chimie_course
+        bPhysique = self.Physique_course == student.Physique_course
+        bFrancais = self.Francais_course == student.Francais_course
+        compatible = bMaths or bChimie or bPhysique or bFrancais
+        if self.school_level == "i":
+            compatible = compatible and student.school_level in "abcdefg"
+        elif self.school_level == "h":
+            compatible = compatible and (student.school_level == "a")
+        return compatible
+
     @property
     def courses(self):
         """Returns a string containing the diffrent courses of this profile
