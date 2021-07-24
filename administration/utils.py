@@ -12,6 +12,7 @@ from users.models import (
     CoachAccount,
     StudentAccount,
 )
+import users.utils
 
 
 def modifyUser(username: str, form: Form):
@@ -65,7 +66,8 @@ def modifyStudent(student_account: StudentAccount, data):
 
 
 def modifyCoach(coach_account: CoachAccount, data: dict):
-    """Modifies a coach profile according to the given form
+    """Modifies a coach profile according to the given form,
+    Can launch the procedure to find open studentRequests for the coach
 
     Args:
         coach_account (CoachAccount): The coach account to modify
@@ -77,6 +79,8 @@ def modifyCoach(coach_account: CoachAccount, data: dict):
     coach_account.French_level = data["french_level"]
     coach_account.English_level = data["english_level"]
     coach_account.Dutch_level = data["dutch_level"]
+    if coach_account.confirmedAccount == "a" and data["confirmedAccount"] == "b":  # The coach is hired
+        users.utils.findRequestsForCoach(coach_account)
     coach_account.confirmedAccount = data["confirmedAccount"]
 
     coach_account.save()
