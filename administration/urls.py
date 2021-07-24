@@ -1,5 +1,4 @@
 from django.urls import path
-from django.conf.urls import include
 
 import administration.views as views
 
@@ -14,6 +13,7 @@ urlpatterns = [
     path("mails/", views.mailAdminView, name="mails_admin"),
     path("mails/create/", views.mailAdminCreate, name="createMail"),
     path("courses/", views.courses, name="given_courses"),
+    path("courses/download", views.download_courses, name="download_courses"),
     path("messages/", views.message_admin_view, name="message_admin_view"),
     path("messages/all/", views.message_list, name="messagelist"),
 ]
