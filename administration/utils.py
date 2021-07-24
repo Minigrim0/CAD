@@ -12,6 +12,7 @@ from users.models import (
     CoachAccount,
     StudentAccount,
 )
+import users.utils
 
 
 def modifyUser(username: str, form: Form):
@@ -65,7 +66,8 @@ def modifyStudent(student_account: StudentAccount, data):
 
 
 def modifyCoach(coach_account: CoachAccount, data: dict):
-    """Modifies a coach profile according to the given form
+    """Modifies a coach profile according to the given form,
+    Can launch the procedure to find open studentRequests for the coach
 
     Args:
         coach_account (CoachAccount): The coach account to modify
@@ -77,6 +79,8 @@ def modifyCoach(coach_account: CoachAccount, data: dict):
     coach_account.French_level = data["french_level"]
     coach_account.English_level = data["english_level"]
     coach_account.Dutch_level = data["dutch_level"]
+    if coach_account.confirmedAccount == "a" and data["confirmedAccount"] == "b":  # The coach is hired
+        users.utils.findRequestsForCoach(coach_account)
     coach_account.confirmedAccount = data["confirmedAccount"]
 
     coach_account.save()
@@ -197,22 +201,9 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
         student (Profile): The student that is looking for a coach
         request (StudentRequest): The request the coaches will see
     """
-    coaches = Profile.objects.filter(account_type="b")
+    coaches = Profile.objects.filter(account_type="b", coachaccount__confirmedAccount="b")
     for coach in coaches:
-        if coach.coachaccount.confirmedAccount != "b":
-            continue
-        bMaths = coach.Maths_course == student.Maths_course
-        bChimie = coach.Chimie_course == student.Chimie_course
-        bPhysique = coach.Physique_course == student.Physique_course
-        bFrancais = coach.Francais_course == student.Francais_course
-        compatible = bMaths or bChimie or bPhysique or bFrancais
-        if coach.school_level == "i":
-            same_study_lev = student.school_level in "abcdefg"
-            compatible = compatible and same_study_lev
-        elif coach.school_level == "h":
-            compatible = compatible and (student.school_level == "a")
-
-        if compatible:
+        if coach.isCompatible(request.student.profile):
             newNotif = Notification(user=coach.user)
             newNotif.author = f"{student.user.first_name} {student.user.last_name}"
 
