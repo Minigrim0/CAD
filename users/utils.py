@@ -10,7 +10,7 @@ def findRequestsForCoach(coach: CoachAccount):
     requests = StudentRequest.objects.filter(is_closed=False)
     available_requests = []
     for request in requests:
-        if coach.profile.isCompatible(request.student):
+        if coach.profile.isCompatible(request.student.profile):
             available_requests.append(request)
 
     newNotif = Notification(user=coach.profile.user)
