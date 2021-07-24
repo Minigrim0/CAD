@@ -1,6 +1,9 @@
 from django import utils
+from django.shortcuts import reverse
 from django.contrib.auth.models import User
 from django.db import models
+
+from cad.settings import SITE_DOMAIN
 
 from datetime import datetime
 from default.models import Mail
@@ -264,6 +267,10 @@ class StudentRequest(models.Model):
         "users.CoachAccount", blank=True, null=True, on_delete=models.SET_NULL
     )
     finalschedule = models.TextField(null=True, blank=True)
+
+    @property
+    def fullUrl(self):
+        return f"{SITE_DOMAIN}{reverse('request_view')}?id={self.id}"
 
 
 class Notification(models.Model):
