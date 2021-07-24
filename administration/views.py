@@ -318,7 +318,7 @@ def student_requests(request) -> HttpResponse:
 def download_courses(request):
     before = int(request.GET.get("before", 30))
     qs = FollowElement.objects.filter(
-        date__gte=datetime.now()-timedelta(days=before), approved=True
+        date__gte=datetime.now() - timedelta(days=before), approved=True
     ).values(
         'date', 'startHour', 'endHour',
         'student__first_name', 'student__last_name',
