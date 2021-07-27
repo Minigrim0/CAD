@@ -310,7 +310,7 @@ def student_requests(request) -> HttpResponse:
         StudentRequest.objects.all().exclude(is_closed=False).order_by("-id")
     )
 
-    view_title = "Requêtes"  # skipcq PYL-W0641
+    view_title = "Missions"  # skipcq PYL-W0641
     return render(request, "requestsAdmin.html", locals())
 
 

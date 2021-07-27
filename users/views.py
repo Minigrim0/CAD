@@ -140,7 +140,7 @@ def requestView(request) -> HttpResponse:
 
         coach_schedule = coach.profile.coachaccount.schedule(student_request)  # skipcq PYL-W0641
 
-        view_title = "Requête"  # skipcq PYL-W0641
+        view_title = "Mission"  # skipcq PYL-W0641
         return render(request, "requests.html", locals())
     return ErrorView(request)
 
