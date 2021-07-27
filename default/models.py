@@ -46,7 +46,7 @@ class Mail(models.Model):
     role = models.CharField(max_length=1, choices=choices, verbose_name="Role du mail")
     to = models.ForeignKey(User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE)
 
-    def formatted_content(self, user: User, student: User = None, final_schedule: str = None) -> str:
+    def formatted_content(self, user: User, student: User = None, final_schedule: str = None, request=None) -> str:
         """Formats the content of the mail using the pre-defined tags
 
         Args:
@@ -68,6 +68,13 @@ class Mail(models.Model):
             content = content.replace("<STUDENT_LAST_NAME>", str(student.first_name))
         if final_schedule is not None:
             content = content.replace("<REQUEST_SCHEDULE>", str(final_schedule))
+        if request is not None:
+            content = content.replace(
+                "<REQUESTLINK>",
+                format_html(
+                    "<a href='{0}'>{0}</a>".format(f"{SITE_DOMAIN}{reverse('request_view')}?id={request.id}")
+                )
+            )
 
         content = content.replace(
             "<COACH_STUDENT_LIST>",

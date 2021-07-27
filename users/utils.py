@@ -16,8 +16,8 @@ def findRequestsForCoach(coach: CoachAccount):
     newNotif = Notification(user=coach.profile.user)
     newNotif.author = "L'équipe CAD"
 
-    newNotif.title = "Nous avons trouvé une liste de requêtes disponibles pour vous"
-    newNotif.content = "Vous pouvez visiter les requêtes ci-dessous afin de commencer votre parcours de coach ! <ul>"
+    newNotif.title = "Nous avons trouvé une liste de missions disponibles pour vous"
+    newNotif.content = "Vous pouvez visiter les missions ci-dessous afin de commencer votre parcours de coach ! <ul>"
     newNotif.content += "".join(
         f"<li><a href='{request.fullUrl}'>{request.student.first_name} {request.student.last_name}</a></li>"
         for request in available_requests
