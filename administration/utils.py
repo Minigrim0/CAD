@@ -2,7 +2,9 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.forms import Form
+
 from cad.settings import SITE_DOMAIN
+from default.models import Mail
 
 from users.models import (
     Profile,
@@ -230,7 +232,7 @@ def create_studentRequest(student: User):
     sendNotifToCoaches(student.profile, request)
 
 
-def advert_actors(student: StudentAccount, coach: CoachAccount, finalSchedule: str):
+def advert_actors(student: StudentAccount, coach: CoachAccount, final_schedule: str):
     """Sends a mail to both the student and the coach to advert them the request
 
     Args:
@@ -238,30 +240,15 @@ def advert_actors(student: StudentAccount, coach: CoachAccount, finalSchedule: s
         coach (CoachAccount): The coach chosen for the student
         finalSchedule (str): The schedule chosen by the administration
     """
-    author = "L'équipe CAD"
-    title = "Félicitations!"
-    content = (
-        f"Vous avez été choisi pour enseigner à {student.profile.user.first_name} "
-        f"{student.profile.user.last_name}! Vous pouvez vous rendre sur votre "
-        f"<a href='{SITE_DOMAIN}{reverse('my_students')}'>profil</a> pour retrouver "
-        f"les coordonées de cet étudiant. L'horaire final est le suivant :\n {finalSchedule}"
-    )
+    missionAttributionMail = Mail.objects.get(role="f")
+    missionAttributionMail.send(student=student, final_schedule=final_schedule)
 
-    coachNotif = Notification(
-        user=coach.profile.user, author=author, title=title, content=content
-    )
-    coachNotif.save()
-    coachNotif.send_as_mail()
+    planningMail = Mail.objects.get(role="j")
+    planningMail.send(final_schedule=final_schedule)
 
     author = "L'équipe CAD"
     title = "Nous avons trouvé un coach pour vous!"
     content = (
         "Un coach a été choisi par l'équipe pour vous donner cours. L'horaire choisit est le suivant :"
-        f"\n {finalSchedule}"
+        f"\n {final_schedule}"
     )
-
-    studentNotif = Notification(
-        user=student.profile.user, author=author, title=title, content=content
-    )
-    studentNotif.save()
-    studentNotif.send_as_mail()
