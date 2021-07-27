@@ -146,6 +146,9 @@ class StudentRegisterForm(BaseRegistration):
     courses = forms.MultipleChoiceField(
         choices=courses_choices, required=True, label="Cours désirés"
     )
+    phone_number = forms.CharField(
+        required=False, max_length=25, label="numéro de téléphone de l'étudiant"
+    )
     resp_phone_number1 = forms.CharField(
         required=True, label="numéro de téléphone d'un responsable 1", max_length=25
     )
