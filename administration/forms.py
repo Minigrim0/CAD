@@ -23,7 +23,7 @@ class MailForm(forms.ModelForm):
         """The meta class of the mail form"""
 
         model = Mail
-        fields = ["name", "subject", "content", "role"]
+        fields = ["name", "subject", "content"]
 
 
 class ArticleForm(forms.ModelForm):
