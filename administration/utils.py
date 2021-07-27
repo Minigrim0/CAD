@@ -173,15 +173,8 @@ def thanksCoaches(coaches: list, student: StudentAccount):
         coaches (list): The coaches that have not been selected for the request
         student (StudentAccount): The student that was looking for a coach
     """
-    author = "L'équipe CAD"
-    title = "Merci d'avoir répondu présent"
-    content = (
-        "Merci d'avoir répondu présent à la requête de "
-        f"{student.profile.user.first_name} {student.profile.user.last_name}. "
-        "Malheureusement, vous n'avez pas été choisi pour donner cours à "
-        "cet étudiant. Mais ne vous en faites pas, votre tour viendra!"
-    )
 
+    mail = Mail.objects.get(role="g")
     for coach in coaches:
         if (
             CoachRequestThrough.objects.filter(
@@ -189,11 +182,7 @@ def thanksCoaches(coaches: list, student: StudentAccount):
             ).last().has_accepted
             is True
         ):
-            new_notif = Notification(
-                user=coach.profile.user, author=author, title=title, content=content
-            )
-            new_notif.save()
-            new_notif.send_as_mail()
+            mail.send(user=coach, student=student.profile.user)
 
 
 def sendNotifToCoaches(student: Profile, request: StudentRequest):
@@ -207,7 +196,7 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
     for coach in coaches:
         if coach.isCompatible(request.student.profile):
             mail = Mail.objects.get(role="e")
-            mail.send(request=request)
+            mail.send(coach.user, request=request)
 
 
 def create_studentRequest(student: User):
@@ -229,7 +218,7 @@ def advert_actors(student: StudentAccount, coach: CoachAccount, final_schedule: 
         finalSchedule (str): The schedule chosen by the administration
     """
     missionAttributionMail = Mail.objects.get(role="f")
-    missionAttributionMail.send(student=student, final_schedule=final_schedule)
+    missionAttributionMail.send(user=coach.profile.user, student=student, final_schedule=final_schedule)
 
     planningMail = Mail.objects.get(role="j")
-    planningMail.send(final_schedule=final_schedule)
+    planningMail.send(user=student.profile.user, final_schedule=final_schedule)
