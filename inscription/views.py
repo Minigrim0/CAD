@@ -50,7 +50,8 @@ def registerUserView(request) -> HttpResponse:
                 messages.add_message(
                     request,
                     messages.SUCCESS,
-                    "Votre compte a bien été créé! Consultez votre boite mail pour confirmer votre compte.",
+                    "Votre compte a bien été créé! Consultez votre boite mail pour confirmer "
+                    "votre compte. (Pensez à vérifier vos spams !)",
                 )
                 utils.welcomeUser(user)
                 return HttpResponseRedirect(reverse("home"))
