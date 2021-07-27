@@ -40,6 +40,7 @@ class Mail(models.Model):
         ("g", "mission attribuée à un autre coach"),
         ("h", "Template non automatique"),
         ("i", "Message envoyé"),
+        ("j", "Coach trouvé"),
     )
 
     role = models.CharField(max_length=1, choices=choices, verbose_name="Role du mail")
