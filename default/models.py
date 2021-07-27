@@ -31,22 +31,22 @@ class Mail(models.Model):
     content = models.TextField(default="None", verbose_name="Contenu")
 
     choices = (
-        ("a", "verification de l'adresse mail"),
-        ("b", "mail de bienvenue"),
-        ("c", "proposition desinscription"),
-        ("d", "solde dangereux"),
-        ("e", "proposition de mission"),
-        ("f", "attribution de mission"),
-        ("g", "mission attribuée à un autre coach"),
+        ("a", "verification de l'adresse mail (coach et élèvre)"),
+        ("b", "mail de bienvenue (élève)"),
+        ("c", "proposition desinscription (élève)"),
+        ("d", "solde dangereux (élève)"),
+        ("e", "proposition de mission (coach)"),
+        ("f", "attribution de mission (coach)"),
+        ("g", "mission attribuée à un autre coach (coach)"),
         ("h", "Template non automatique"),
         ("i", "Message envoyé"),
-        ("j", "Coach trouvé"),
+        ("j", "Votre planning de cours (élève)"),
     )
 
     role = models.CharField(max_length=1, choices=choices, verbose_name="Role du mail")
     to = models.ForeignKey(User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE)
 
-    def formatted_content(self, user: User) -> str:
+    def formatted_content(self, user: User, student: User = None, final_schedule: str = None) -> str:
         """Formats the content of the mail using the pre-defined tags
 
         Args:
@@ -62,6 +62,19 @@ class Mail(models.Model):
         content = content.replace("<COURSES>", str(user.profile.courses))
         content = content.replace("<SCHOOLLEVEL>", str(user.profile.birthDate))
         content = content.replace("<SECRETKEY>", str(user.profile.secret_key))
+
+        if student is not None:
+            content = content.replace("<STUDENT_FIRST_NAME>", str(student.first_name))
+            content = content.replace("<STUDENT_LAST_NAME>", str(student.first_name))
+        if final_schedule is not None:
+            content = content.replace("<REQUEST_SCHEDULE>", str(final_schedule))
+
+        content = content.replace(
+            "<COACH_STUDENT_LIST>",
+            format_html(
+                "<a href='{0}'>{0}</a>".format(f"{SITE_DOMAIN}{reverse('my_students')}"))
+        )
+
         if user.profile.account_type == "a":
             content = content.replace("<BALANCE>", str(user.profile.studentaccount.balance))
         content = content.replace(
@@ -77,7 +90,7 @@ class Mail(models.Model):
         content = content.replace("\n", "<br/>")
         return content
 
-    def send(self, user: User, bcc=None):
+    def send(self, user: User, bcc=None, *args, **kwargs):
         """Sends the mail to the given user with the given people in bcc
 
         Args:
@@ -88,7 +101,7 @@ class Mail(models.Model):
             "mail.html",
             {
                 "title": self.clean_header,
-                "content": self.formatted_content(user),
+                "content": self.formatted_content(user, *args, **kwargs),
                 "error_mail": "",
                 "site_see_link": "{}{}".format(
                     SITE_DOMAIN, reverse("soon_view")
