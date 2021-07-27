@@ -146,5 +146,5 @@ def send_confirmation_mail(user: User):
     Args:
         user (User): The user to send the email to
     """
-    mail = Mail.objects.get(id=1)
+    mail = Mail.objects.get(role="a")
     mail.send(user)
