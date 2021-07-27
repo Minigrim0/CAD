@@ -63,6 +63,7 @@ def followView(request) -> HttpResponse:
     a_user = request.user
     followelement_set = a_user.followelement_set.all()  # skipcq PYL-W0641
 
+    balance = request.user.profile.studentaccount.balance
     view_title = "Mon suivi"  # skipcq PYL-W0641
     return render(request, "follow.html", locals())
 
