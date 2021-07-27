@@ -206,20 +206,8 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
     coaches = Profile.objects.filter(account_type="b", coachaccount__confirmedAccount="b")
     for coach in coaches:
         if coach.isCompatible(request.student.profile):
-            newNotif = Notification(user=coach.user)
-            newNotif.author = f"{student.user.first_name} {student.user.last_name}"
-
-            newNotif.title = "Recherche de coach"
-            newNotif.content = (
-                "Vos matières/niveaux correspondent avec "
-                f"{student.user.first_name} {student.user.last_name} !\nVous pouvez cliquer "
-                f"<a href='{SITE_DOMAIN}{reverse('request_view')}?id={request.id}'>ici</a> "
-                "pour voir le profil de l'etudiant"
-            )
-
-            newNotif.save()
-            newNotif.send_as_mail()
-            coach.save()
+            mail = Mail.objects.get(role="e")
+            mail.send(request=request)
 
 
 def create_studentRequest(student: User):
@@ -245,10 +233,3 @@ def advert_actors(student: StudentAccount, coach: CoachAccount, final_schedule: 
 
     planningMail = Mail.objects.get(role="j")
     planningMail.send(final_schedule=final_schedule)
-
-    author = "L'équipe CAD"
-    title = "Nous avons trouvé un coach pour vous!"
-    content = (
-        "Un coach a été choisi par l'équipe pour vous donner cours. L'horaire choisit est le suivant :"
-        f"\n {final_schedule}"
-    )
