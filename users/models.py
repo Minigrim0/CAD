@@ -304,7 +304,7 @@ class Notification(models.Model):
         blank=True, null=True, max_length=50, verbose_name="Auteur de la notification"
     )
     title = models.CharField(
-        blank=True, null=True, max_length=50, verbose_name="Titre de la notification"
+        blank=True, null=True, max_length=100, verbose_name="Titre de la notification"
     )
     content = models.TextField(
         blank=True, null=True, verbose_name="Contenu de la notification"
