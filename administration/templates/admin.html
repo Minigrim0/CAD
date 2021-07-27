@@ -65,7 +65,7 @@
     </div>
     <li class="nav-item justify-content-between align-items-center">
         <a href="{% url "requests_admin" %}" class="nav-link">
-            Requêtes
+            Missions
             <span class="badge badge-primary badge-pill">{{ nbr_requests }}</span>
         </a>
     </li>
@@ -153,7 +153,7 @@
                     Un compte est <span style="color: red;">créé</span> une fois que l'étudiant à rempli le formulaire d'inscription.
                     Il reçoit à ce moment-là un mail, avec un lien unique, lui permettant de <span style="color: red;">vérifier</span> son compte.
                     Ce lien l'emmènera vers une page qui lui demandera de payer soit 100 soit 50€ (en fonction de s'il a choisi d'avoir une visite pédagogique).
-                    Une fois le montant payé, son compte est <span style="color: red;">vérifié</span> et une requête est créée afin de lui trouver un coach.
+                    Une fois le montant payé, son compte est <span style="color: red;">vérifié</span> et une mission est créée afin de lui trouver un coach.
                     <a href="#requests">(VOIR SECTION REQUETE)</a>
                 </p>
                 <p style="text-decoration: underline;font-weight: bold;">
@@ -163,27 +163,25 @@
                         Il reçoit à ce moment-là un mail, avec un lien unique, lui permettant de <span style="color: red;">vérifier</span> son compte.
                         Une fois qu'il a cliqué sur ce lien, son compte est vérifié. Les administrateurs entreront ensuite en contact avec lui pour décider
                         d'un entretien. Ils pourront ensuite <span style="color: green;">engager</span> ou non ce coach, ce qui lui permettra par la suite de 
-                        recevoir des requêtes d'étudiants.
+                        recevoir des missions d'étudiants.
                     </p>
                 </p>
             </div>
 
             <hr class="mb-1">
             <h3 class="mb-2" id="requests">
-                Requêtes:
+                Missions:
             </h3>
             <div class="col-lg-10 text-justify">
                 <p>
-                    Les requêtes représentent les recherches de coach par les étudiants.
+                    Les missions représentent les recherches de coach par les étudiants.
                     Pour les créer, l'étudiant doit payer ses deux premières heures de cours.
-                    Ensuite, en ajoutant sur la balance de l'étudiant le montant payé, l'administrateur en charge pourra,
-                    en cochant la case "<span style="font-style: bold;">Payment pour les premières heures de cours</span>",
-                    <span style="color: red;">créer</span> une requête pour l'étudiant en question.
+                    Lorsqu'un administrateur ajoutera pour la première fois des heures de cours a un étudiant, une requête de mission sera automatiquement créée.
                     <br>
-                    Les requêtes ne sont envoyées qu'au coaches correspondant aux critères de recherche. Un coach proposant des cours de maths ne recevra pas
-                    de requête concernant un élève qui désire des cours de francais par exemple.
+                    Les missions ne sont envoyées qu'au coaches correspondant aux critères de recherche. Un coach proposant des cours de maths ne recevra pas
+                    de mission concernant un élève qui désire des cours de francais par exemple.
                     <br>
-                    L'administrateur peut, lorsqu'il le souhaite, clôturer la requête, en choisissant quel coach donnera cours à l'élève. Ce coach recevra une
+                    L'administrateur peut, lorsqu'il le souhaite, clôturer la requête de mission, en choisissant quel coach donnera cours à l'élève. Ce coach recevra une
                     notification l'avertissant qu'il a été choisi, et les autres une notification les remerciant de s'être proposés.
                 </p>
             </div>
