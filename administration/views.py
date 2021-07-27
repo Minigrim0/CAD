@@ -316,9 +316,14 @@ def student_requests(request) -> HttpResponse:
 
 @staff_member_required
 def download_courses(request):
-    before = int(request.GET.get("before", 30))
+    from_date = request.GET["from"]
+    to_date = request.GET["to"]
+
+    from_date = datetime.strptime(from_date, "%d/%m/%Y")
+    to_date = datetime.strptime(to_date, "%d/%m/%Y")
+
     qs = FollowElement.objects.filter(
-        date__gte=datetime.now() - timedelta(days=before), approved=True
+        date__gte=from_date, date__lt=to_date, approved=True
     ).values(
         'date', 'startHour', 'endHour',
         'student__first_name', 'student__last_name',

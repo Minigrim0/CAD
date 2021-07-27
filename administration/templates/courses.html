@@ -17,7 +17,7 @@
 
                 <h2>Cours donnés</h2>
                 <div class="col-12 text-center row">
-                    <div class="pagination row-element col-6">
+                    <div class="pagination row-element col-4">
                         <span class="step-links">
                             {% if page_obj.has_previous %}
                                 <a onClick="setParameter('page', 1)" class="text-primary">
@@ -42,11 +42,9 @@
                             {% endif %}
                         </span>
                     </div>
-                    <div class="row-element col-6 text-right">
-                        Télécharger
-                        <a class="btn btn-primary" href="{% url "download_courses" %}?before=30">30 jours</a>
-                        <a class="btn btn-primary" href="{% url "download_courses" %}?before=60">60 jours</a>
-                        <a class="btn btn-primary" href="{% url "download_courses" %}?before=90">90 jours</a>
+                    <div class="row-element col-8 text-right">
+                        Télécharger de <input id="from_date" type="text" /> à <input id="to_date" type="text" />
+                        <button class="btn btn-primary" onClick="exportCSV()">exporter</button>
                     </div>
                 </div>
                 <table class="table table-bordered">
@@ -212,6 +210,7 @@
 <script>
     const csrfToken = "{{csrf_token}}";
     const approveCourseUrl = "{% url 'api:adminapi:approve_course' %}";
+    const exportURL = "{% url 'download_courses' %}"
 
     function setParameter(param, value){
         var url = new URL(window.location);
@@ -223,6 +222,14 @@
         var new_url = url.toString();
         window.location = new_url;
     }
+
+    $( "#from_date" ).datepicker({
+        dateFormat: "dd/mm/yy"
+    });
+
+    $( "#to_date" ).datepicker({
+        dateFormat: "dd/mm/yy"
+    });
 </script>
 <script src="{% static "js/admin/courses.js" %}"></script>
 {% endblock %}
