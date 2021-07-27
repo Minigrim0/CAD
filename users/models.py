@@ -340,7 +340,7 @@ class FollowElement(models.Model):
 
     # comments of the coach about the course represented by this FollowElement
     comments = models.TextField(
-        default="Pas de commentaires", verbose_name="Commentaires du cours"
+        default="Pas de commentaires", verbose_name="Matière(s) vue(s) au cours"
     )
     approved = models.BooleanField(default=False)
 
