@@ -2,7 +2,9 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.forms import Form
+
 from cad.settings import SITE_DOMAIN
+from default.models import Mail
 
 from users.models import (
     Profile,
@@ -12,6 +14,7 @@ from users.models import (
     CoachAccount,
     StudentAccount,
 )
+import users.utils
 
 
 def modifyUser(username: str, form: Form):
@@ -65,7 +68,8 @@ def modifyStudent(student_account: StudentAccount, data):
 
 
 def modifyCoach(coach_account: CoachAccount, data: dict):
-    """Modifies a coach profile according to the given form
+    """Modifies a coach profile according to the given form,
+    Can launch the procedure to find open studentRequests for the coach
 
     Args:
         coach_account (CoachAccount): The coach account to modify
@@ -77,6 +81,8 @@ def modifyCoach(coach_account: CoachAccount, data: dict):
     coach_account.French_level = data["french_level"]
     coach_account.English_level = data["english_level"]
     coach_account.Dutch_level = data["dutch_level"]
+    if coach_account.confirmedAccount == "a" and data["confirmedAccount"] == "b":  # The coach is hired
+        users.utils.findRequestsForCoach(coach_account)
     coach_account.confirmedAccount = data["confirmedAccount"]
 
     coach_account.save()
@@ -167,15 +173,8 @@ def thanksCoaches(coaches: list, student: StudentAccount):
         coaches (list): The coaches that have not been selected for the request
         student (StudentAccount): The student that was looking for a coach
     """
-    author = "L'équipe CAD"
-    title = "Merci d'avoir répondu présent"
-    content = (
-        "Merci d'avoir répondu présent à la requête de "
-        f"{student.profile.user.first_name} {student.profile.user.last_name}. "
-        "Malheureusement, vous n'avez pas été choisi pour donner cours à "
-        "cet étudiant. Mais ne vous en faites pas, votre tour viendra!"
-    )
 
+    mail = Mail.objects.get(role="g")
     for coach in coaches:
         if (
             CoachRequestThrough.objects.filter(
@@ -183,11 +182,7 @@ def thanksCoaches(coaches: list, student: StudentAccount):
             ).last().has_accepted
             is True
         ):
-            new_notif = Notification(
-                user=coach.profile.user, author=author, title=title, content=content
-            )
-            new_notif.save()
-            new_notif.send_as_mail()
+            mail.send(user=coach, student=student.profile.user)
 
 
 def sendNotifToCoaches(student: Profile, request: StudentRequest):
@@ -197,36 +192,11 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
         student (Profile): The student that is looking for a coach
         request (StudentRequest): The request the coaches will see
     """
-    coaches = Profile.objects.filter(account_type="b")
+    coaches = Profile.objects.filter(account_type="b", coachaccount__confirmedAccount="b")
     for coach in coaches:
-        if coach.coachaccount.confirmedAccount != "b":
-            continue
-        bMaths = coach.Maths_course == student.Maths_course
-        bChimie = coach.Chimie_course == student.Chimie_course
-        bPhysique = coach.Physique_course == student.Physique_course
-        bFrancais = coach.Francais_course == student.Francais_course
-        compatible = bMaths or bChimie or bPhysique or bFrancais
-        if coach.school_level == "i":
-            same_study_lev = student.school_level in "abcdefg"
-            compatible = compatible and same_study_lev
-        elif coach.school_level == "h":
-            compatible = compatible and (student.school_level == "a")
-
-        if compatible:
-            newNotif = Notification(user=coach.user)
-            newNotif.author = f"{student.user.first_name} {student.user.last_name}"
-
-            newNotif.title = "Recherche de coach"
-            newNotif.content = (
-                "Vos matières/niveaux correspondent avec "
-                f"{student.user.first_name} {student.user.last_name} !\nVous pouvez cliquer "
-                f"<a href='{SITE_DOMAIN}{reverse('request_view')}?id={request.id}'>ici</a> "
-                "pour voir le profil de l'etudiant"
-            )
-
-            newNotif.save()
-            newNotif.send_as_mail()
-            coach.save()
+        if coach.isCompatible(request.student.profile):
+            mail = Mail.objects.get(role="e")
+            mail.send(coach.user, request=request)
 
 
 def create_studentRequest(student: User):
@@ -239,7 +209,7 @@ def create_studentRequest(student: User):
     sendNotifToCoaches(student.profile, request)
 
 
-def advert_actors(student: StudentAccount, coach: CoachAccount, finalSchedule: str):
+def advert_actors(student: StudentAccount, coach: CoachAccount, final_schedule: str):
     """Sends a mail to both the student and the coach to advert them the request
 
     Args:
@@ -247,30 +217,8 @@ def advert_actors(student: StudentAccount, coach: CoachAccount, finalSchedule: s
         coach (CoachAccount): The coach chosen for the student
         finalSchedule (str): The schedule chosen by the administration
     """
-    author = "L'équipe CAD"
-    title = "Félicitations!"
-    content = (
-        f"Vous avez été choisi pour enseigner à {student.profile.user.first_name} "
-        f"{student.profile.user.last_name}! Vous pouvez vous rendre sur votre "
-        f"<a href='{SITE_DOMAIN}{reverse('my_students')}'>profil</a> pour retrouver "
-        f"les coordonées de cet étudiant. L'horaire final est le suivant :\n {finalSchedule}"
-    )
+    missionAttributionMail = Mail.objects.get(role="f")
+    missionAttributionMail.send(user=coach.profile.user, student=student, final_schedule=final_schedule)
 
-    coachNotif = Notification(
-        user=coach.profile.user, author=author, title=title, content=content
-    )
-    coachNotif.save()
-    coachNotif.send_as_mail()
-
-    author = "L'équipe CAD"
-    title = "Nous avons trouvé un coach pour vous!"
-    content = (
-        "Un coach a été choisi par l'équipe pour vous donner cours. L'horaire choisit est le suivant :"
-        f"\n {finalSchedule}"
-    )
-
-    studentNotif = Notification(
-        user=student.profile.user, author=author, title=title, content=content
-    )
-    studentNotif.save()
-    studentNotif.send_as_mail()
+    planningMail = Mail.objects.get(role="j")
+    planningMail.send(user=student.profile.user, final_schedule=final_schedule)

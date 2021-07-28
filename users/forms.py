@@ -136,15 +136,21 @@ class StudentRegisterForm(BaseRegistration):
     )
     comments = forms.CharField(required=False, label="Remarques éventuelles")
     wanted_schedule = forms.CharField(
-        required=True, widget=forms.Textarea, label="Horaire"
+        required=True,
+        widget=forms.Textarea,
+        label="Horaire (Précisez le nombre de cours de 2h par semaine désirés ainsi "
+        "que les jours et plages horaires auxquels l'élève est libre)"
     )
     zip = forms.CharField(max_length=4, required=True, label="Code Postal")
     ville = forms.CharField(max_length=50, required=True, label="Ville")
     NeedsVisit = forms.BooleanField(
-        required=False, label="Désire une visite pédagogique ?"
+        required=False, label="Désirez-vous une visite pédagogique ? (50€ supplémentaires)"
     )
     courses = forms.MultipleChoiceField(
         choices=courses_choices, required=True, label="Cours désirés"
+    )
+    phone_number = forms.CharField(
+        required=False, max_length=25, label="numéro de téléphone de l'étudiant"
     )
     resp_phone_number1 = forms.CharField(
         required=True, label="numéro de téléphone d'un responsable 1", max_length=25

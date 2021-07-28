@@ -120,7 +120,7 @@ def modify_balance(request) -> JsonResponse:
     tran.amount = request.POST["amout_add"]
     tran.admin = User.objects.get(username=request.POST["approver"])
     tran.comment = "{} du solde via l'administration".format(
-        "augmetation" if request.POST["amout_add"] > 0 else "diminution"
+        "augmetation" if int(request.POST["amout_add"]) > 0 else "diminution"
     )
     tran.save()
 
@@ -132,9 +132,9 @@ def modify_balance(request) -> JsonResponse:
         utils.create_studentRequest(student)
 
     new_balance = float(student.profile.studentaccount.balance)
-    if new_balance < 0 and float(tran.amount) < 0:
+    if new_balance <= 0 and float(tran.amount) <= 0:
         mail = Mail.objects.get(role="d")
-        mail.send(student, bcc=["cadcours@cadcoursadomicile.com"])
+        mail.send(student, bcc=["no-reply@cadcoursadomicile.com"])
 
     return JsonResponse({"new_balance": new_balance})
 
