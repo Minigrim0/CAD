@@ -1,6 +1,9 @@
 from django import utils
+from django.shortcuts import reverse
 from django.contrib.auth.models import User
 from django.db import models
+
+from cad.settings import SITE_DOMAIN
 
 from datetime import datetime
 from default.models import Mail
@@ -61,7 +64,7 @@ class Profile(models.Model):
     )
     verifiedAccount = models.BooleanField(default=False, verbose_name="A vérifié son addresse mail")
     # Represents school level for student
-    # Represents either if coach give course to humanité or primaire
+    # Represents whether the coach gives course to humanité or primaire
     school_level = models.CharField(
         null=True,
         blank=True,
@@ -70,8 +73,43 @@ class Profile(models.Model):
         verbose_name="Niveau scolaire",
     )
 
+    def isCompatible(self, student) -> bool:
+        """Checks if the current coach is compatible with the given student (Both profile models)
+
+        Args:
+            student (Profile): The student profile to compare the coach to
+
+        Returns:
+            bool: Whether the coach and students are compatible or not
+        """
+        return self.relationScore(student) > 0
+
+    def relationScore(self, student) -> int:
+        """Calculates the matching score of the student and the coach
+
+        Args:
+            student (Profile): the profile of the student
+
+        Returns:
+            int: The score of the relation, the higher, the better
+        """
+        bMaths = (self.Maths_course is True) and (student.Maths_course is True)
+        bChimie = (self.Chimie_course is True) and (student.Chimie_course is True)
+        bPhysique = (self.Physique_course is True) and (student.Physique_course is True)
+        bFrancais = (self.Francais_course is True) and (student.Francais_course is True)
+        score = bMaths + bChimie + bPhysique + bFrancais
+        if self.school_level == "i":
+            if student.school_level in "abcdefg":
+                return score
+            return 0
+        if self.school_level == "h":
+            if student.school_level == "a":
+                return score
+            return 0
+        return score  # Coach school level is both
+
     @property
-    def courses(self):
+    def courses(self) -> str:
         """Returns a string containing the diffrent courses of this profile
 
         Returns:
@@ -125,7 +163,7 @@ class StudentAccount(models.Model):
     comments = models.TextField(null=True, blank=True, verbose_name="Commentaires", default="Aucun commentaire")
     wanted_schedule = models.TextField(null=True, blank=True, default="", verbose_name="Horaire")
     unsub_proposal = models.BooleanField(default=False, verbose_name="Proposition de désinscription envoyée")
-    # User has payed the two first hours of course
+
     coach = models.ForeignKey(
         "users.CoachAccount",
         null=True,
@@ -159,11 +197,11 @@ class StudentAccount(models.Model):
     )
 
     @property
-    def balance(self):
+    def balance(self) -> float:
         """Returns the balance of the student account base on previous transactions
 
         Returns:
-            int: The calculated balance
+            int: The calculated balance (In hours)
         """
         transactions = Transaction.objects.filter(student=self)
         balance = sum(transaction.amount for transaction in transactions)
@@ -253,6 +291,10 @@ class StudentRequest(models.Model):
     )
     finalschedule = models.TextField(null=True, blank=True)
 
+    @property
+    def fullUrl(self):
+        return f"{SITE_DOMAIN}{reverse('request_view')}?id={self.id}"
+
 
 class Notification(models.Model):
     """Represents a notification sent to a user"""
@@ -262,7 +304,7 @@ class Notification(models.Model):
         blank=True, null=True, max_length=50, verbose_name="Auteur de la notification"
     )
     title = models.CharField(
-        blank=True, null=True, max_length=50, verbose_name="Titre de la notification"
+        blank=True, null=True, max_length=100, verbose_name="Titre de la notification"
     )
     content = models.TextField(
         blank=True, null=True, verbose_name="Contenu de la notification"
@@ -298,7 +340,7 @@ class FollowElement(models.Model):
 
     # comments of the coach about the course represented by this FollowElement
     comments = models.TextField(
-        default="Pas de commentaires", verbose_name="Commentaires du cours"
+        default="Pas de commentaires", verbose_name="Matière(s) vue(s) au cours"
     )
     approved = models.BooleanField(default=False)
 
