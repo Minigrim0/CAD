@@ -33,15 +33,15 @@ services:
       - static_volume:/srv/collected_static
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.web.entrypoints=http"
-      - "traefik.http.routers.web.rule=Host(`dev.cadcours.com`)"
+      - "traefik.http.routers.web-dev.entrypoints=http"
+      - "traefik.http.routers.web-dev.rule=Host(`dev.cadcours.com`)"
       - "traefik.http.middlewares.web-https-redirect.redirectscheme.scheme=https"
-      - "traefik.http.routers.web.middlewares=web-https-redirect"
-      - "traefik.http.routers.web-secure.entrypoints=https"
-      - "traefik.http.routers.web-secure.rule=Host(`dev.cadcours.com`)"
-      - "traefik.http.routers.web-secure.tls=true"
-      - "traefik.http.routers.web-secure.tls.certresolver=http"
-      - "traefik.http.routers.web-secure.service=nginx-cad-dev@docker"
+      - "traefik.http.routers.web-dev.middlewares=web-https-redirect"
+      - "traefik.http.routers.web-dev-secure.entrypoints=https"
+      - "traefik.http.routers.web-dev-secure.rule=Host(`dev.cadcours.com`)"
+      - "traefik.http.routers.web-dev-secure.tls=true"
+      - "traefik.http.routers.web-dev-secure.tls.certresolver=http"
+      - "traefik.http.routers.web-dev-secure.service=nginx-cad-dev@docker"
       - "traefik.docker.network=traefik-proxy"
     depends_on:
       - web
