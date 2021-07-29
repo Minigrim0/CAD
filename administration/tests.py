@@ -71,55 +71,26 @@ class UserTestCase(TestCase):
         coach_account4.confirmedAccount = "b"
         coach_account4.save()
 
-    def test_user_courses(self):
-        """User courses render correctly"""
-        student = User.objects.get(username="a")
-        coach = User.objects.get(username="b")
-        self.assertEqual(student.profile.courses, "Maths, Francais")
-        self.assertEqual(coach.profile.courses, "Maths, Chimie, ")
-
-    def test_user_notification(self):
-        """User correctly receives notification"""
-        student = User.objects.get(username="a")
-        notif = models.Notification.objects.create(user=student)
-        notif.title = "Title"
-        notif.content = "content"
-        notif.author = "sender"
-        notif.save()
-
-        self.assertEqual(student.notification_set.count(), 1)
-
-    def test_student_balance(self):
-        """The student's balance is correctly calculated"""
-        student = User.objects.get(username="a")
-
-        transaction = models.Transaction.objects.create(
-            student=student.profile.studentaccount
-        )
-        transaction.amount = 20
-        transaction.save()
-
-        self.assertEqual(student.profile.studentaccount.balance, 20)
-
-        transaction = models.Transaction.objects.create(
-            student=student.profile.studentaccount
-        )
-        transaction.amount = -10
-        transaction.save()
-
-        self.assertEqual(student.profile.studentaccount.balance, 10)
-
-    def test_student_request(self):
-        """The requests notify the expected coaches"""
-        student = User.objects.get(username="a")
-        models.StudentRequest.objects.create(student=student)
-        request = models.StudentRequest.objects.first()
         Mail.objects.create(
             role="e",
             name="Mission trouvée",
             subject="On a trouvé une mission",
             content="Mission pour <STUDENT_FIRST_NAME> <STUDENT_LAST_NAME>"
         )
+
+        Mail.objects.create(
+            role="g",
+            name="Dommaaage",
+            subject="C'est pas pour toi mon pote",
+            content="La mission de <STUDENT_FIRST_NAME> <STUDENT_LAST_NAME> elle est pas pour toi"
+        )
+
+    def test_student_request(self):
+        """The requests notify the expected coaches"""
+        student = User.objects.get(username="a")
+        models.StudentRequest.objects.create(student=student)
+        request = models.StudentRequest.objects.first()
+
         sendNotifToCoaches(student.profile, request)
 
         coach1 = User.objects.get(username="b")

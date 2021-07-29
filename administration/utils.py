@@ -166,7 +166,7 @@ def populate_data(usertype: str, user: User) -> dict:
     return data
 
 
-def thanksCoaches(coaches: list, student: StudentAccount):
+def thanksCoaches(coaches: [CoachAccount], student: StudentAccount):
     """Sends a notification to the coaches who have not been selected for a specific request
 
     Args:
@@ -182,7 +182,7 @@ def thanksCoaches(coaches: list, student: StudentAccount):
             ).last().has_accepted
             is True
         ):
-            mail.send(user=coach, student=student.profile.user)
+            mail.send(user=coach.profile.user, student=student.profile.user)
 
 
 def sendNotifToCoaches(student: Profile, request: StudentRequest):
