@@ -1,4 +1,4 @@
 User-Agent: *
 Disallow: /admin/
 Disallow: /administration/
-Sitemap: https://newsite.cadcoursadomicile.com/sitemap.xml
+Sitemap: https://www.cadcours.com/sitemap.xml
