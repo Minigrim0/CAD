@@ -46,7 +46,9 @@ class Mail(models.Model):
     role = models.CharField(max_length=1, choices=choices, verbose_name="Role du mail")
     to = models.ForeignKey(User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE)
 
-    def _sendAsNotif(self, user, title, content):
+    @staticmethod
+    def _sendAsNotif(user, title, content):
+        """Sends the mail as a notification"""
         from users.models import Notification
 
         Notification.objects.create(
@@ -107,7 +109,7 @@ class Mail(models.Model):
         content = content.replace("\n", "<br/>")
         return content
 
-    def send(self, user: User, bcc=None, **kwargs):
+    def send(self, user: User, bcc: [str] = None, notification: bool = False, **kwargs):
         """Sends the mail to the given user with the given people in bcc
 
         Args:
@@ -145,11 +147,12 @@ class Mail(models.Model):
         else:
             logging.warning(f"Mail {self.id} not sent because settings.DEBUG is True")
 
-        self._sendAsNotif(
-            user=user,
-            title=self.clean_header,
-            content=formatted_content
-        )
+        if notification:
+            self._sendAsNotif(
+                user=user,
+                title=self.clean_header,
+                content=formatted_content
+            )
 
         # Duplicates the email, setting it as "sent" email
         self.pk = None
