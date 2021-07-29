@@ -91,7 +91,7 @@ class UserTestCase(TestCase):
         models.StudentRequest.objects.create(student=student)
         request = models.StudentRequest.objects.first()
 
-        sendNotifToCoaches(student.profile, request)
+        sendNotifToCoaches(request)
 
         coach1 = User.objects.get(username="b")
         coach2 = User.objects.get(username="c")

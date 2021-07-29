@@ -168,9 +168,9 @@ def thanks(request) -> HttpResponseRedirect:
     studa.confirmedAccount = True
     studa.save()
 
-    StudentRequest.objects.create(student=user)
+    studentRequest = StudentRequest.objects.create(student=user)
 
-    utils.sendNotifToCoaches(user.profile)
+    utils.sendNotifToCoaches(studentRequest)
 
     messages.add_message(
         request,

@@ -107,14 +107,14 @@ class Mail(models.Model):
         content = content.replace("\n", "<br/>")
         return content
 
-    def send(self, user: User, bcc=None, *args, **kwargs):
+    def send(self, user: User, bcc=None, **kwargs):
         """Sends the mail to the given user with the given people in bcc
 
         Args:
             user (User): The user to send the mail to
             bcc ([str], optional): A list of addresses to send the mail to as bcc. Defaults to None.
         """
-        formatted_content = self.formatted_content(user, *args, **kwargs)
+        formatted_content = self.formatted_content(user, **kwargs)
 
         html_message = render_to_string(
             "mail.html",
