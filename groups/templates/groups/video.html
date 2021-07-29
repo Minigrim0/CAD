@@ -1,0 +1,27 @@
+{% extends "groups/base.html" %}
+
+{% load static %}
+
+{% block content %}
+	{% include "groups/navbar.html" %}
+	{% include "groups/top_ribbon.html" %}
+	<div class="hlayer" id="editMenuLayer">
+		<a class="underButton editButton" id="downloadAnchor">télécharger le code</a>
+		<a href="javascript:cad.prepEdit();" class="underButton editButton" id="editButton">éditer</a>
+		<a href="javascript:cad.testEdit();" class="underButton editButton" id="testEditButton">tester</a>
+		<a href="javascript:cad.saveEdit();" class="underButton editButton" id="saveButton">sauvegarder</a>
+		<a href="javascript:cad.cancelEdit();" class="underButton editButton" id="cancelButton">annuler l'édition</a>
+	</div>
+	<div class="hlayer" id="content">
+		<script src="{% static "groups/scripts/setTextOfVideo.js" %}" type="text/javascript"></script>
+		<div class="contentLayer centerTitle editable" id="videoTitle"></div>
+		<div id="videoHolder" class="contentLayer">
+			<div class="leftPart">
+				<iframe width="420" height="315" src="https://www.youtube.com/embed/WOQaK7NHY-4?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>
+			</div>
+			<div class="rightPart leftContent editable" id="pasEnMontrant"></div>
+		</div>
+		<div id="bosseDeMath" class="contentLayer leftContent _columntext editable"></div>
+	</div>
+	{% include "groups/bottom_menu.html" %}
+{% endblock %}

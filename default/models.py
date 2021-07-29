@@ -46,6 +46,18 @@ class Mail(models.Model):
     role = models.CharField(max_length=1, choices=choices, verbose_name="Role du mail")
     to = models.ForeignKey(User, null=True, verbose_name="Envoyé à", on_delete=models.CASCADE)
 
+    @staticmethod
+    def _sendAsNotif(user, title, content):
+        """Sends the mail as a notification"""
+        from users.models import Notification
+
+        Notification.objects.create(
+            user=user,
+            author="L'équipe CAD",
+            title=title,
+            content=content
+        )
+
     def formatted_content(self, user: User, student: User = None, final_schedule: str = None, request=None) -> str:
         """Formats the content of the mail using the pre-defined tags
 
@@ -97,18 +109,20 @@ class Mail(models.Model):
         content = content.replace("\n", "<br/>")
         return content
 
-    def send(self, user: User, bcc=None, *args, **kwargs):
+    def send(self, user: User, bcc: [str] = None, notification: bool = False, **kwargs):
         """Sends the mail to the given user with the given people in bcc
 
         Args:
             user (User): The user to send the mail to
-            bcc ([type], optional): A list of addresses to send the mail to as bcc. Defaults to None.
+            bcc ([str], optional): A list of addresses to send the mail to as bcc. Defaults to None.
         """
+        formatted_content = self.formatted_content(user, **kwargs)
+
         html_message = render_to_string(
             "mail.html",
             {
                 "title": self.clean_header,
-                "content": self.formatted_content(user, *args, **kwargs),
+                "content": formatted_content,
                 "error_mail": "",
                 "site_see_link": "{}{}".format(
                     SITE_DOMAIN, reverse("soon_view")
@@ -131,7 +145,14 @@ class Mail(models.Model):
         if not DEBUG:
             msg.send()
         else:
-            logging.warning(f"Mail {self.id} not send because settings.DEBUG is True")
+            logging.warning(f"Mail {self.id} not sent because settings.DEBUG is True")
+
+        if notification:
+            self._sendAsNotif(
+                user=user,
+                title=self.clean_header,
+                content=formatted_content
+            )
 
         # Duplicates the email, setting it as "sent" email
         self.pk = None

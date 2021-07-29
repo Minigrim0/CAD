@@ -1,0 +1,44 @@
+{% extends "groups/base.html" %}
+
+{% load static %}
+
+{% block content %}
+	<script type="text/javascript" src="{% static "groups/scripts/initEditLinks.js" %}"></script>
+	<div class="hlayer">
+		<div id="menuBlock">
+			<div class="menuHLayer">
+				<a class="menuItem" href="index.htm?ts=2020-01-30T17:44:05.574Z"><div class="ib"><div class="cell">ACCUEIL</div></div></a>
+				<a class="menuItem" href="cours.htm?ts=2020-01-30T17:44:05.574Z"><div class="ib"><div class="cell">INFO SUR LES COURS</div></div></a>
+				<a class="menuItem" href="pourquoi.htm?ts=2020-01-30T17:44:05.574Z"><div class="ib"><div class="cell">POURQUOI NOUS</div></div></a>
+				<a class="menuItem" href="video.htm?ts=2020-01-30T17:44:05.574Z"><div class="ib"><div class="cell">VIDEO EXPLICATIVE</div></div></a>
+				<!-- a class="menuItem" href="stage.htm?ts=2020-01-30T17:44:05.574Z"><div class="ib"><div class="cell">STAGE</div></div></a -->
+				<a class="menuItem" href="contact.htm?ts=2020-01-30T17:44:05.574Z"><div class="ib"><div class="cell">CONTACT</div></div></a>
+			</div>
+			<div class="menuHLayer">
+				<div id="buttonsUnderMenu">
+					<a href="prendrecours.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+					<a href="https://docs.google.com/forms/d/1nNZ4vkz2evBNMm8SR7SCHw-N-qPbwgQYiPHryletXhE/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+					<a href="plusdinfos.htm?ts=2020-01-30T17:44:05.574Z" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+					<a href="https://docs.google.com/forms/d/1Nu8qP_sOHuuT89_JjmoeLcM_j6V5pCoZujaPsTOMHeI/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+				</div>
+			</div>
+		</div>
+		<a href="coachinscription.htm?ts=2020-01-30T17:44:05.574Z" class="underButton" id="butDevenirCoach">
+			Devenir Coach !
+		</a>
+	</div>
+	<div class="contentLayer leftContent">
+		<p>
+			Les liens et boutons ci-dessus donnent accès aux pages du site, pourvues d'un bouton "Éditer". 
+		</p>
+		<p>
+			En éditant, prenez garde de ne pas modifier ou virer le contenu inclus dans des '&lt;' et '&gt;', comme &lt;div class="..."&gt; etc. - sauf si vous savez très bien ce que vous faites.
+		</p>
+		<p>
+			De toute façon, avant d'initialiser le téléchargement du code pour le contenu modifié, vous pouvez toujours contrôler si la page se montrera encore décemment en utilisant le bouton "tester". 
+		</p>
+		<p>
+			Bon succès avec l'édition !
+		</p>
+	</div>
+{% endblock %}

@@ -316,6 +316,7 @@ def student_requests(request) -> HttpResponse:
 
 @staff_member_required
 def download_courses(request):
+    """Downloads the courses that occured between two given dates"""
     from_date = request.GET["from"]
     to_date = request.GET["to"]
 

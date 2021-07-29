@@ -166,14 +166,13 @@ def populate_data(usertype: str, user: User) -> dict:
     return data
 
 
-def thanksCoaches(coaches: list, student: StudentAccount):
+def thanksCoaches(coaches: [CoachAccount], student: StudentAccount):
     """Sends a notification to the coaches who have not been selected for a specific request
 
     Args:
         coaches (list): The coaches that have not been selected for the request
         student (StudentAccount): The student that was looking for a coach
     """
-
     mail = Mail.objects.get(role="g")
     for coach in coaches:
         if (
@@ -182,10 +181,10 @@ def thanksCoaches(coaches: list, student: StudentAccount):
             ).last().has_accepted
             is True
         ):
-            mail.send(user=coach, student=student.profile.user)
+            mail.send(user=coach.profile.user, student=student.profile.user, notification=True)
 
 
-def sendNotifToCoaches(student: Profile, request: StudentRequest):
+def sendNotifToCoaches(request: StudentRequest):
     """Looks for coaches compatible with the student request
 
     Args:
@@ -196,7 +195,7 @@ def sendNotifToCoaches(student: Profile, request: StudentRequest):
     for coach in coaches:
         if coach.isCompatible(request.student.profile):
             mail = Mail.objects.get(role="e")
-            mail.send(coach.user, request=request)
+            mail.send(coach.user, request=request, notification=True)
 
 
 def create_studentRequest(student: User):
@@ -206,7 +205,7 @@ def create_studentRequest(student: User):
         student (User): The user object to create a request to
     """
     request = StudentRequest.objects.create(student=student)
-    sendNotifToCoaches(student.profile, request)
+    sendNotifToCoaches(request)
 
 
 def advert_actors(student: StudentAccount, coach: CoachAccount, final_schedule: str):
@@ -218,7 +217,8 @@ def advert_actors(student: StudentAccount, coach: CoachAccount, final_schedule: 
         finalSchedule (str): The schedule chosen by the administration
     """
     missionAttributionMail = Mail.objects.get(role="f")
-    missionAttributionMail.send(user=coach.profile.user, student=student, final_schedule=final_schedule)
+    missionAttributionMail.send(
+        user=coach.profile.user, student=student, final_schedule=final_schedule, notification=True)
 
     planningMail = Mail.objects.get(role="j")
-    planningMail.send(user=student.profile.user, final_schedule=final_schedule)
+    planningMail.send(user=student.profile.user, final_schedule=final_schedule, notification=True)
