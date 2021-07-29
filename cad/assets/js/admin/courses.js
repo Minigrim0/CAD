@@ -40,6 +40,7 @@ function approveCourse(pk, approved) {
     });
 }
 
+
 /**
  * Creates a notification that lasts 5 seconds
  * @param {int} alert_id the id of the alert
@@ -59,6 +60,9 @@ function createNotif(alert_id, alert_type, alert_text) {
 }
 
 
+/**
+ * Builds the url according to the form and to date fields
+ */
 function exportCSV() {
     var from = $("#from_date").val();
     var to = $("#to_date").val();
