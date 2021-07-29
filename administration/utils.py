@@ -173,7 +173,6 @@ def thanksCoaches(coaches: [CoachAccount], student: StudentAccount):
         coaches (list): The coaches that have not been selected for the request
         student (StudentAccount): The student that was looking for a coach
     """
-
     mail = Mail.objects.get(role="g")
     for coach in coaches:
         if (
@@ -185,7 +184,7 @@ def thanksCoaches(coaches: [CoachAccount], student: StudentAccount):
             mail.send(user=coach.profile.user, student=student.profile.user)
 
 
-def sendNotifToCoaches(student: Profile, request: StudentRequest):
+def sendNotifToCoaches(request: StudentRequest):
     """Looks for coaches compatible with the student request
 
     Args:
@@ -206,7 +205,7 @@ def create_studentRequest(student: User):
         student (User): The user object to create a request to
     """
     request = StudentRequest.objects.create(student=student)
-    sendNotifToCoaches(student.profile, request)
+    sendNotifToCoaches(request)
 
 
 def advert_actors(student: StudentAccount, coach: CoachAccount, final_schedule: str):
