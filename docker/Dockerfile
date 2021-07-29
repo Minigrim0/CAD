@@ -10,10 +10,10 @@ RUN apt install -y libpq-dev build-essential netcat
 
 RUN pip install --upgrade pip
 
-COPY ./requirements.txt .
+COPY ../requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY . .
+COPY .. .
 
 ENTRYPOINT ["./entrypoint.sh"]
 CMD ["gunicorn", "cad.wsgi:application", "--bind", "0.0.0.0:8000"]
