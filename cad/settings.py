@@ -18,14 +18,6 @@ from sentry_sdk.integrations.django import DjangoIntegration
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-logging.basicConfig(
-    filename="{}/logs/cad.log".format(BASE_DIR),
-    level=logging.DEBUG,
-    filemode="w+",
-    format="%(asctime)s %(levelname)-8s %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
-
 SECRET_KEY = os.environ.get("SECRET_KEY", "defaultsecretkey")
 
 DEBUG = int(os.environ.get("DEBUG", default=0))
@@ -53,6 +45,7 @@ INSTALLED_APPS = [
     "administration",
     "crispy_forms",
     "old_site",
+    "groups",
     "bootstrap4",
     "django_extensions",
     "dal_select2",

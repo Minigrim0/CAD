@@ -1,0 +1,31 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="keywords" content="cours particuliers, problème scolaire, maths, physique, chimie, français, mathématiques, professeur, coach, bruxelles, belgique, Soutien scolaire, Cours particuliers, cherche soutien scolaire, réussite scolaire, professeurs particuliers, recherche professeurs particuliers, aide élèves secondaire" />
+        <meta name="abstract" content="Premier réseau belge spécialisé en cours particuliers en Maths, Physique, Chimie et Français" />
+        <meta name="revisit-after" content="1 day" />
+        <title>C.A.D. | {{ page_title }}</title>
+        <link href="{% static "groups/fonts/fonts.css" %}" rel="stylesheet" type="text/css" charset="utf-8"/>
+        <link href="{% static "groups/fonts/fontello.css" %}" rel="stylesheet" type="text/css" charset="utf-8"/>
+        <link href="{% static "groups/large.css" %}" rel="stylesheet" type="text/css" charset="utf-8" media="(min-width:913px)"/>
+        <link href="{% static "groups/small.css" %}" rel="stylesheet" type="text/css" charset="utf-8" media="(max-width:912px)"/>
+        <script src="{% static "groups/scripts/jquery-1.11.3.min.js" %}" type="text/javascript"></script>
+        <script src="{% static "groups/scripts/url.min.js" %}" type="text/javascript"></script>
+        <script src="{% static "groups/scripts/prepareEdit.js" %}" type="text/javascript"></script>
+    </head>
+    <body>
+        <div id="emScale"></div>
+        <div id="emScale10"></div>
+        <div id="pxScale"></div>
+        <div id="pxScale10"></div>
+        <div id="mainFrame">
+            {% block content %}
+            {% endblock %}
+        </div>
+        <div id="emptyBottom" />
+    </body>
+</html>
