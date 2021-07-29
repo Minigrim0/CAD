@@ -3,7 +3,7 @@ version: '3.7'
 services:
   web:
     build:
-      context: ./
+      context: ../
       dockerfile: Dockerfile
     volumes:
       - static_volume:/srv/collected_static
