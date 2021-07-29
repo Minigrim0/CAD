@@ -10,7 +10,7 @@ services:
     expose:
       - 8000
     env_file:
-      - ./.env.prod
+      - ./credentials/.env.prod
     depends_on:
       - db
     networks:
@@ -22,13 +22,13 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./.env.prod.db
+      - ./credentials/.env.prod.db
     networks:
       - private
     restart: unless-stopped
 
   nginx:
-    build: ./nginx
+    build: ../nginx
     volumes:
       - static_volume:/srv/collected_static
     labels:
