@@ -134,7 +134,7 @@ def modify_balance(request) -> JsonResponse:
     new_balance = float(student.profile.studentaccount.balance)
     if new_balance <= 0 and float(tran.amount) <= 0:
         mail = Mail.objects.get(role="d")
-        mail.send(student, bcc=["no-reply@cadcoursadomicile.com"])
+        mail.send(student, bcc=["no-reply@cadcoursadomicile.com"], notification=True)
 
     return JsonResponse({"new_balance": new_balance})
 

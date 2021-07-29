@@ -181,7 +181,7 @@ def thanksCoaches(coaches: [CoachAccount], student: StudentAccount):
             ).last().has_accepted
             is True
         ):
-            mail.send(user=coach.profile.user, student=student.profile.user)
+            mail.send(user=coach.profile.user, student=student.profile.user, notification=True)
 
 
 def sendNotifToCoaches(request: StudentRequest):
@@ -195,7 +195,7 @@ def sendNotifToCoaches(request: StudentRequest):
     for coach in coaches:
         if coach.isCompatible(request.student.profile):
             mail = Mail.objects.get(role="e")
-            mail.send(coach.user, request=request)
+            mail.send(coach.user, request=request, notification=True)
 
 
 def create_studentRequest(student: User):
@@ -217,7 +217,8 @@ def advert_actors(student: StudentAccount, coach: CoachAccount, final_schedule: 
         finalSchedule (str): The schedule chosen by the administration
     """
     missionAttributionMail = Mail.objects.get(role="f")
-    missionAttributionMail.send(user=coach.profile.user, student=student, final_schedule=final_schedule)
+    missionAttributionMail.send(
+        user=coach.profile.user, student=student, final_schedule=final_schedule, notification=True)
 
     planningMail = Mail.objects.get(role="j")
-    planningMail.send(user=student.profile.user, final_schedule=final_schedule)
+    planningMail.send(user=student.profile.user, final_schedule=final_schedule, notification=True)
