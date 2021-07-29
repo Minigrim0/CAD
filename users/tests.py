@@ -8,6 +8,7 @@ class UserTestCase(TestCase):
     """Tests things related to the user models"""
 
     def setUp(self):
+        """Sets up an environment for the tests to occur"""
         User.objects.create(username="a", first_name="user", last_name="etudiant")
         User.objects.create(username="b", first_name="user", last_name="coach")
 
