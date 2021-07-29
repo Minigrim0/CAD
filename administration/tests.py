@@ -1,6 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+
+from default.models import Mail
 import users.models as models
+
 from administration.utils import thanksCoaches, sendNotifToCoaches
 
 
@@ -111,6 +114,12 @@ class UserTestCase(TestCase):
         student = User.objects.get(username="a")
         models.StudentRequest.objects.create(student=student)
         request = models.StudentRequest.objects.first()
+        Mail.objects.create(
+            role="e",
+            name="Mission trouvée",
+            subject="On a trouvé une mission",
+            content="Mission pour <STUDENT_FIRST_NAME> <STUDENT_LAST_NAME>"
+        )
         sendNotifToCoaches(student.profile, request)
 
         coach1 = User.objects.get(username="b")

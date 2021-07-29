@@ -1,0 +1,31 @@
+{% extends "groups/base.html" %}
+
+{% load static %}
+
+{% block content %}
+	{% include "groups/navbar.html" %}
+	{% include "groups/top_ribbon.html" %}
+	<div class="hlayer" id="editMenuLayer">
+		<a class="underButton editButton" id="downloadAnchor">télécharger le code</a>
+		<a href="javascript:cad.prepEdit();" class="underButton editButton" id="editButton">éditer</a>
+		<a href="javascript:cad.testEdit();" class="underButton editButton" id="testEditButton">tester</a>
+		<a href="javascript:cad.saveEdit();" class="underButton editButton" id="saveButton">sauvegarder</a>
+		<a href="javascript:cad.cancelEdit();" class="underButton editButton" id="cancelButton">annuler l'édition</a>
+	</div>
+	<div class="hlayer" id="content">
+		<script src="{% static "groups/scripts/setTextOfCours.js" %}" type="text/javascript"></script>
+		<div class="contentLayer">
+			<div class="leftPart" id="coursInfoLeft">
+				<div class="leftTitle editable" id="coursTitle"></div>
+				<div class="leftContent editable" id="coursPropList"></div>
+			</div>
+			<div class="rightPart">
+				<img src="{% static "groups/images/cad01blackBackTransp.png" %}">
+			</div>
+		</div>
+		<div class="contentLayer leftTitle editable" id="coursTitleComment"></div>
+		<div class="contentLayer leftContent _columntext editable" id="coursText02"></div>
+		<div class="contentLayer slogan editable" id="coursSlogan"></div>
+	</div>
+	{% include "groups/bottom_menu.html" %}
+{% endblock %}

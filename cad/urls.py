@@ -13,6 +13,7 @@ sitemaps = {
 
 urlpatterns = [
     path("bruxelles/", include("old_site.urls")),
+    path("groups/", include("groups.urls")),
     # path("namur/", include("default.urls")),
     # path("administration/", include("administration.urls")),
     # path("inscription/", include("inscription.urls")),
