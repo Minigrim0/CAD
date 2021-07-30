@@ -2,11 +2,11 @@ from django.shortcuts import render
 from django.http import Http404
 
 
-def old(request, name="index.htm"):
+def old(request, name="index.html"):
     """Renders a template from the old site
 
     Args:
-        name (str, optional): The name of the template to render. Defaults to "index.htm".
+        name (str, optional): The name of the template to render. Defaults to "index.html".
 
     Raises:
         Http404: In case the template could not be found

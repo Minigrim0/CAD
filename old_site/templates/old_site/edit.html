@@ -1,0 +1,66 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+<HEAD>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="keywords" content="cours particuliers, cours à domicile, problème scolaire, maths, physique, chimie, français, mathématiques, professeur, coach, bruxelles, belgique, Soutien scolaire, Cours particuliers à domicile, cherche soutien scolaire à domicile, réussite scolaire, professeurs à domicile, professeurs particuliers, recherche professeurs particuliers, aide élèves secondaire" />
+	<meta name="abstract" content="Premier réseau belge spécialisé en cours particuliers en Maths, Physique, Chimie et Français" />
+	<meta name="revisit-after" content="1 day" />
+	<title>Cours à domicile - C.A.D. | Édition des pages</title>
+	<link href="{% static "old_site/fonts/fonts.css" %}" rel="stylesheet" type="text/css" charset="utf-8"/>
+	<link href="{% static "old_site/fonts/fontello.css" %}" rel="stylesheet" type="text/css" charset="utf-8"/>
+	<link href="{% static "old_site/large.css" %}" rel="stylesheet" type="text/css" charset="utf-8" media="(min-width:913px)"/>
+	<link href="{% static "old_site/small.css" %}" rel="stylesheet" type="text/css" charset="utf-8" media="(max-width:912px)"/>
+	<script src="{% static "scripts/jquery-1.11.3.min.js" %}" type="text/javascript"></script>
+	<script src="{% static "scripts/url.min.js" %}" type="text/javascript"></script>
+	<script src="{% static "scripts/prepareEdit.js" %}" type="text/javascript"></script>
+</HEAD>
+<BODY>
+	<div id="emScale"></div>
+	<div id="emScale10"></div>
+	<div id="pxScale"></div>
+	<div id="pxScale10"></div>
+	<div id="mainFrame">
+		<script type="text/javascript" src="scripts/initEditLinks.js"></script>
+		<div class="hlayer">
+			<div id="menuBlock">
+				<div class="menuHLayer">
+					<a class="menuItem" href="{% url "old_site" "index.html" %}"><div class="ib"><div class="cell">ACCUEIL</div></div></a>
+					<a class="menuItem" href="{% url "old_site" "cours.html" %}"><div class="ib"><div class="cell">INFO SUR LES COURS</div></div></a>
+					<a class="menuItem" href="{% url "old_site" "pourquoi.html" %}"><div class="ib"><div class="cell">POURQUOI NOUS</div></div></a>
+					<a class="menuItem" href="{% url "old_site" "video.html" %}"><div class="ib"><div class="cell">VIDEO EXPLICATIVE</div></div></a>
+					<a class="menuItem" href="{% url "old_site" "engage.html" %}"><div class="ib"><div class="cell">CAD ENGAGE</div></div></a>
+					<a class="menuItem" href="{% url "old_site" "contact.html" %}"><div class="ib"><div class="cell">CONTACT</div></div></a>
+				</div>
+				<div class="menuHLayer">
+					<div id="buttonsUnderMenu">
+						<a href="{% url "old_site" "prendrecours.html" %}" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+						<a href="https://docs.google.com/forms/d/1WlXDDVnXEt_gCU6yC7NZCfskyf2yWoGIchxc4XOKX9I/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+						<a href="{% url "old_site" "plusdinfos.html" %}" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+						<a href="https://docs.google.com/forms/d/1MNbXNLgCLKgglls0fVrjclXUxt5ohGfPMmP93ofArMA/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+					</div>
+				</div>
+			</div>
+			<a href="{% url "old_site" "coachinscription.html" %}" class="underButton" id="butDevenirCoach">
+				Devenir Coach !
+			</a>
+		</div>
+		<div class="contentLayer leftContent">
+			<p>
+				Les liens et boutons ci-dessus donnent accès aux pages du site, pourvues d'un bouton "Éditer". 
+			</p>
+			<p>
+				En éditant, prenez garde de ne pas modifier ou virer le contenu inclus dans des '&lt;' et '&gt;', comme &lt;div class="..."&gt; etc. - sauf si vous savez très bien ce que vous faites.
+			</p>
+			<p>
+				De toute façon, avant d'initialiser le téléchargement du code pour le contenu modifié, vous pouvez toujours contrôler si la page se montrera encore décemment en utilisant le bouton "tester". 
+			</p>
+			<p>
+				Bon succès avec l'édition !
+			</p>
+		</div>
+	</div>
+	<div id="emptyBottom"/>
+</BODY>
+</HTML>

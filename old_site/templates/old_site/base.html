@@ -25,32 +25,32 @@
 		<div class="hlayer" id="topMenuLayer">
 			<div id="menuBlock">
 							<div class="menuHLayer">
-				<a class="menuItem" href="/bruxelles/index.htm"><div class="ib"><div class="cell">ACCUEIL</div></div></a>
-				<a class="menuItem" href="/bruxelles/cours.htm"><div class="ib"><div class="cell">INFO SUR LES COURS</div></div></a>
-				<a class="menuItem" href="/bruxelles/pourquoi.htm"><div class="ib"><div class="cell">POURQUOI NOUS</div></div></a>
-				<a class="menuItem" href="/bruxelles/video.htm"><div class="ib"><div class="cell">VIDEO EXPLICATIVE</div></div></a>
-				<a class="menuItem" href="/bruxelles/engage.htm"><div class="ib"><div class="cell">CAD ENGAGE</div></div></a>
-				<a class="menuItem" href="/bruxelles/contact.htm"><div class="ib"><div class="cell">CONTACT</div></div></a>
+				<a class="menuItem" href="{% url "old_site" "index.html" %}"><div class="ib"><div class="cell">ACCUEIL</div></div></a>
+				<a class="menuItem" href="{% url "old_site" "cours.html" %}"><div class="ib"><div class="cell">INFO SUR LES COURS</div></div></a>
+				<a class="menuItem" href="{% url "old_site" "pourquoi.html" %}"><div class="ib"><div class="cell">POURQUOI NOUS</div></div></a>
+				<a class="menuItem" href="{% url "old_site" "video.html" %}"><div class="ib"><div class="cell">VIDEO EXPLICATIVE</div></div></a>
+				<a class="menuItem" href="{% url "old_site" "engage.html" %}"><div class="ib"><div class="cell">CAD ENGAGE</div></div></a>
+				<a class="menuItem" href="{% url "old_site" "contact.html" %}"><div class="ib"><div class="cell">CONTACT</div></div></a>
 			</div>
 			<div class="menuHLayer">
 				<div id="buttonsUnderMenu">
-						<a href="/bruxelles/prendrecours.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
-	<a href="https://docs.google.com/forms/d/1WlXDDVnXEt_gCU6yC7NZCfskyf2yWoGIchxc4XOKX9I/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
-	<a href="/bruxelles/plusdinfos.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
-	<a href="https://docs.google.com/forms/d/1MNbXNLgCLKgglls0fVrjclXUxt5ohGfPMmP93ofArMA/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+					<a href="{% url "old_site" "prendrecours.html" %}" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+					<a href="https://docs.google.com/forms/d/1WlXDDVnXEt_gCU6yC7NZCfskyf2yWoGIchxc4XOKX9I/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+					<a href="{% url "old_site" "plusdinfos.html" %}" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+					<a href="https://docs.google.com/forms/d/1MNbXNLgCLKgglls0fVrjclXUxt5ohGfPMmP93ofArMA/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
 				</div>
 			</div>
 			</div>
 		</div>
 		<div class="hlayer" id="topRibbon">
 			<div class="groupInRibbon" id="underButtonsInRibbon">
-					<a href="/bruxelles/prendrecours.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
-	<a href="https://docs.google.com/forms/d/1WlXDDVnXEt_gCU6yC7NZCfskyf2yWoGIchxc4XOKX9I/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
-	<a href="/bruxelles/plusdinfos.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
-	<a href="https://docs.google.com/forms/d/1MNbXNLgCLKgglls0fVrjclXUxt5ohGfPMmP93ofArMA/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+				<a href="{% url "old_site" "prendrecours.html" %}" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+				<a href="https://docs.google.com/forms/d/1WlXDDVnXEt_gCU6yC7NZCfskyf2yWoGIchxc4XOKX9I/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+				<a href="{% url "old_site" "plusdinfos.html" %}" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+				<a href="https://docs.google.com/forms/d/1MNbXNLgCLKgglls0fVrjclXUxt5ohGfPMmP93ofArMA/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
 			</div>
 			<div class="groupInRibbon" id="menuIconHolder">
-				<a href="/bruxelles/menu.htm"><span class="icon-menu"/></a>
+				<a href="{% url "old_site" "menu.html" %}"><span class="icon-menu"/></a>
 			</div>
 		</div>
 		<div class="hlayer" id="editMenuLayer">
@@ -64,19 +64,19 @@
         {% endblock %}
 		<div class="hlayer" id="bottomMenuLayer">
             <div class="menuHLayer">
-    <a class="menuItem" href="/bruxelles/index.htm"><div class="ib"><div class="cell">ACCUEIL</div></div></a>
-    <a class="menuItem" href="/bruxelles/cours.htm"><div class="ib"><div class="cell">INFO SUR LES COURS</div></div></a>
-    <a class="menuItem" href="/bruxelles/pourquoi.htm"><div class="ib"><div class="cell">POURQUOI NOUS</div></div></a>
-    <a class="menuItem" href="/bruxelles/video.htm"><div class="ib"><div class="cell">VIDEO EXPLICATIVE</div></div></a>
-    <a class="menuItem" href="/bruxelles/engage.htm"><div class="ib"><div class="cell">CAD ENGAGE</div></div></a>
-    <a class="menuItem" href="/bruxelles/contact.htm"><div class="ib"><div class="cell">CONTACT</div></div></a>
+    <a class="menuItem" href="{% url "old_site" "index.html" %}"><div class="ib"><div class="cell">ACCUEIL</div></div></a>
+    <a class="menuItem" href="{% url "old_site" "cours.html" %}"><div class="ib"><div class="cell">INFO SUR LES COURS</div></div></a>
+    <a class="menuItem" href="{% url "old_site" "pourquoi.html" %}"><div class="ib"><div class="cell">POURQUOI NOUS</div></div></a>
+    <a class="menuItem" href="{% url "old_site" "video.html" %}"><div class="ib"><div class="cell">VIDEO EXPLICATIVE</div></div></a>
+    <a class="menuItem" href="{% url "old_site" "engage.html" %}"><div class="ib"><div class="cell">CAD ENGAGE</div></div></a>
+    <a class="menuItem" href="{% url "old_site" "contact.html" %}"><div class="ib"><div class="cell">CONTACT</div></div></a>
 </div>
 <div class="menuHLayer">
     <div id="buttonsUnderMenu">
-            <a href="/bruxelles/prendrecours.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
-<a href="https://docs.google.com/forms/d/1WlXDDVnXEt_gCU6yC7NZCfskyf2yWoGIchxc4XOKX9I/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
-<a href="/bruxelles/plusdinfos.htm" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
-<a href="https://docs.google.com/forms/d/1MNbXNLgCLKgglls0fVrjclXUxt5ohGfPMmP93ofArMA/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+            <a href="{% url "old_site" "prendrecours.html" %}" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+			<a href="https://docs.google.com/forms/d/1WlXDDVnXEt_gCU6yC7NZCfskyf2yWoGIchxc4XOKX9I/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPrendreCours"></div></div></a>
+			<a href="{% url "old_site" "plusdinfos.html" %}" class="underButton linkUsingIframe"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
+			<a href="https://docs.google.com/forms/d/1MNbXNLgCLKgglls0fVrjclXUxt5ohGfPMmP93ofArMA/viewform" class="underButton directLink"><div class="ib"><div class="cell txtPlusDInfos"></div></div></a>
     </div>
 </div>
 </div>
