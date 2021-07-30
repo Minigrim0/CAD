@@ -22,7 +22,7 @@ urlpatterns = [
         {"sitemaps": sitemaps},
         name="django.contrib.sitemaps.views.sitemap",
     ),
-    path("", views.chooseLocation),
+    path("", views.chooseLocation, name="root"),
 ]
 
 if settings.FULL_DEPLOY:
