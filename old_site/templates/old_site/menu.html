@@ -26,12 +26,12 @@
 			<a class="menuItem icon-left-big" href="javascript:window.history.go(-1);"></a>
 		</div>
 		<div class="menuHLayer">
-			<a class="menuItem" href="index.htm?ts=2018-12-22T18:52:58.350Z"><div class="ib"><div class="cell">ACCUEIL</div></div></a>
-			<a class="menuItem" href="cours.htm?ts=2018-12-22T18:52:58.350Z"><div class="ib"><div class="cell">INFO SUR LES COURS</div></div></a>
-			<a class="menuItem" href="pourquoi.htm?ts=2018-12-22T18:52:58.350Z"><div class="ib"><div class="cell">POURQUOI NOUS</div></div></a>
-			<a class="menuItem" href="video.htm?ts=2018-12-22T18:52:58.350Z"><div class="ib"><div class="cell">VIDEO EXPLICATIVE</div></div></a>
-			<a class="menuItem" href="engage.htm?ts=2018-12-22T18:52:58.350Z"><div class="ib"><div class="cell">CAD ENGAGE</div></div></a>
-			<a class="menuItem" href="contact.htm?ts=2018-12-22T18:52:58.350Z"><div class="ib"><div class="cell">CONTACT</div></div></a>
+			<a class="menuItem" href="{% url "old_site" "index.html" %}"><div class="ib"><div class="cell">ACCUEIL</div></div></a>
+			<a class="menuItem" href="{% url "old_site" "cours.html" %}"><div class="ib"><div class="cell">INFO SUR LES COURS</div></div></a>
+			<a class="menuItem" href="{% url "old_site" "pourquoi.html" %}"><div class="ib"><div class="cell">POURQUOI NOUS</div></div></a>
+			<a class="menuItem" href="{% url "old_site" "video.html" %}"><div class="ib"><div class="cell">VIDEO EXPLICATIVE</div></div></a>
+			<a class="menuItem" href="{% url "old_site" "engage.html" %}"><div class="ib"><div class="cell">CAD ENGAGE</div></div></a>
+			<a class="menuItem" href="{% url "old_site" "contact.html" %}"><div class="ib"><div class="cell">CONTACT</div></div></a>
 		</div>
 		<div class="menuHLayer">
 			<div id="buttonsUnderMenu">
@@ -42,7 +42,7 @@
 			</div>
 		</div>
 		<div class="centerText">
-			<img src="{% statis "old_site/images/cad02blackBackSmall.png" %}"/>
+			<img src="{% static "old_site/images/cad02blackBackSmall.png" %}"/>
 		</div>
 	</div>
 	<div id="emptyBottom"/>
