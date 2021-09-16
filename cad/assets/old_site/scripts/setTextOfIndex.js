@@ -12,7 +12,7 @@ $(document).ready(function(){
 		'COURS EN PETITS GROUPES (dès 7,80€/h)'
 	);
 	$("#rightCellText").html(
-		'Nous organisons une étude dirigée pour le primaire et secondaire. Vous pouvez travailler avec l\'aide d\'un professeur qui vous guide dans votre étude afin de vous encadrer au mieux.<br><br>ADRESSE ET HORAIRE DES COURS <br>-Everna (Rue Saint-Vincent 30 à 1140 Evere)<br>-de Rinck (Place de la Vaillance 7 à 1070 Anderlecht)<br>-Pianofabriek (Rue du Fort 35 à 1060 St Gilles)<br>-Communa (Rue du Monténégro 144 à 1190 Forest)<br><br>HORAIREles samedis de 10:40 à 12:20.<br>Inscrivez-vous en ligne en cliquant sur <u> <a href="/bruxelles/prendrecours.html">prendre cours</a></u>'
+		'Nous organisons une étude dirigée pour le primaire et secondaire. Vous pouvez travailler avec l\'aide d\'un professeur qui vous guide dans votre étude afin de vous encadrer au mieux.<br><br>ADRESSE ET HORAIRE DES COURS <br>-Everna (Rue Saint-Vincent 30 à 1140 Evere)<br>-de Rinck (Place de la Vaillance 7 à 1070 Anderlecht)<br>-Pianofabriek (Rue du Fort 35 à 1060 St Gilles)<br>-Communa (Rue du Monténégro 144 à 1190 Forest)<br><br>HORAIRE<br>les samedis de 10:40 à 12:20.<br>Inscrivez-vous en ligne en cliquant sur <u> <a href="/bruxelles/prendrecours.html">prendre cours</a></u>'
 	);
 	$("#indexSlogan").html(
 		'Préparez-vous à la réussite !'
