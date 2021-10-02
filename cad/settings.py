@@ -33,8 +33,6 @@ if not DEBUG and SENTRY_DSN is not None:
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", default="127.0.0.1").split(" ")
 logging.warning("Allowed hosts : {}".format("\n   ".join(ALLOWED_HOSTS)))
 
-FULL_DEPLOY = os.environ.get("FULL_DEPLOY", "1") == "1"
-
 # Application definition
 
 INSTALLED_APPS = [

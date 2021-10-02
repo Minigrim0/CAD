@@ -23,15 +23,11 @@ urlpatterns = [
         name="django.contrib.sitemaps.views.sitemap",
     ),
     path("", views.chooseLocation, name="root"),
+    path("namur/", include("default.urls")),
+    path("administration/", include("administration.urls")),
+    path("inscription/", include("inscription.urls")),
+    path("users/", include("users.urls")),
+    path('auth/reset/done/', views.password_reset_done),
+    path('auth/', include('django.contrib.auth.urls')),
+    path('api/', include('cad.api_urls', namespace="api")),
 ]
-
-if settings.FULL_DEPLOY:
-    urlpatterns.extend([
-        path("namur/", include("default.urls")),
-        path("administration/", include("administration.urls")),
-        path("inscription/", include("inscription.urls")),
-        path("users/", include("users.urls")),
-        path('auth/reset/done/', views.password_reset_done),
-        path('auth/', include('django.contrib.auth.urls')),
-        path('api/', include('cad.api_urls', namespace="api")),
-    ])
