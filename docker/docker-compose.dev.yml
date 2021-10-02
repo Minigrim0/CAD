@@ -28,7 +28,9 @@ services:
     restart: unless-stopped
 
   nginx:
-    build: ../nginx
+    build:
+      context: ../nginx
+      dockerfile: Dockerfile.dev
     volumes:
       - static_volume:/srv/collected_static
     labels:
