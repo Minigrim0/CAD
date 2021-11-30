@@ -1,0 +1,24 @@
+[tool.poetry]
+name = "cad"
+version = "1.0.0"
+description = "CADcours - le premier réseau belge spécialisé en math, chimie, physique et français dès 7,80€/h"
+authors = ["minigrim0 <grimauflorent@gmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+Django = "^3.2.9"
+
+[tool.poetry.dev-dependencies]
+rope = "^0.22.0"
+black = "^21.11b1"
+pyproject-flake8 = "^0.0.1-alpha.2"
+
+[tool.flake8]
+exclude = [".git", "migrations", ]
+max-line-length = 119
+extend-ignore = ["F401", ]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

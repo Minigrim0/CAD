@@ -1,10 +1,10 @@
-ve*/
-Articles.backup/*
+# Python and django files
 db.sqlite3
-*/__pycache__/*
+__pycache__
 *.sql
-core
+
+# Environment files
+.env*
+
+# Text Editor
 .vscode
-static/
-logs/*.log
-*.pyc
